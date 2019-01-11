@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-01-12T04:33:52+08:00</updated><id>http://localhost:4000/feed.xml</id><entry><title type="html">Hello Pages</title><link href="http://localhost:4000/2018/01/12/Hello-Pages.html" rel="alternate" type="text/html" title="Hello Pages" /><published>2018-01-12T00:00:00+08:00</published><updated>2018-01-12T00:00:00+08:00</updated><id>http://localhost:4000/2018/01/12/Hello%20Pages</id><content type="html" xml:base="http://localhost:4000/2018/01/12/Hello-Pages.html">&lt;h1 id=&quot;hello-pages&quot;&gt;Hello Pages&lt;/h1&gt;
+
+&lt;p&gt;入驻 Github Pages。&lt;/p&gt;
+
+&lt;p&gt;常写文章，多总结，深入思考，少些浮躁。&lt;/p&gt;</content><author><name></name></author><summary type="html">Hello Pages</summary></entry></feed>
