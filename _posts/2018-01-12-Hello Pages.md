@@ -1,9 +1,7 @@
 ---
 title: Hello Pages
-layout: posts
+layout: post
 ---
-
-# Hello Pages
 
 入驻 Github Pages。
 
