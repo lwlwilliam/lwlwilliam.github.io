@@ -8,5 +8,6 @@ description: Love sports, love programming, love life.
 theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-paginate
 paginate: 5
 paginate_path: "page:num"
