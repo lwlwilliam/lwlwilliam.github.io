@@ -6,3 +6,7 @@ description: Love sports, love programming, love life.
 
 # 页面配置
 theme: minima
+plugins:
+  - jekyll-feed
+paginate: 5
+paginate_path: "page:num"
