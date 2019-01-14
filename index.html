@@ -10,7 +10,7 @@ layout: default
         <span class="post-meta">{{ post.date | date: "%b %d, %y" }}</span>
         <h3><a class="post-link" href="{{ post.url }}">{{ post.title }}</a></h3>
     </li>
-{% endfor %}
+    {% endfor %}
 </ul>
 
 <!-- Pagination links -->
@@ -24,7 +24,7 @@ layout: default
     {% endif %}
     <span class="page_number ">
     Page: {{ paginator.page }} of {{ paginator.total_pages }}
-  </span>
+    </span>
     {% if paginator.next_page %}
     <a href="{{ paginator.next_page_path }}" class="next">Next</a>
     {% else %}
