@@ -1,6 +1,7 @@
 ---
 title: error 类型 Error() 方法的无限递归
 layout: default
+categories: [Go]
 ---
 
 # error 类型 Error() 方法的无限递归

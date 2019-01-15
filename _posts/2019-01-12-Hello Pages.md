@@ -1,6 +1,7 @@
 ---
 title: Hello Pages
 layout: default
+categories: [others]
 ---
 
 ## Hello Pages
