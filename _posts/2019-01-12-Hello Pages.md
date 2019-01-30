@@ -4,7 +4,7 @@ layout: default
 categories: [others]
 ---
 
-## Hello Pages
+# Hello Pages
 
 入驻 Github Pages。
 
