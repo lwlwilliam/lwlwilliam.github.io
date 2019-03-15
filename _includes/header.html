@@ -13,9 +13,9 @@
 
             <div class="trigger">
                 {% for page in site.pages reversed %}
-                    {% if page.dir == "/" %}
+                    {% unless page.dir contains "page" %}
                         <a class="page-link" href="{{ page.link }}">{{ page.title }}</a>
-                    {% endif %}
+                    {% endunless %}
                 {% endfor %}
             </div>
         </nav>
