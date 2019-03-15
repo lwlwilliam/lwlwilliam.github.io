@@ -1,7 +1,7 @@
 ---
 title: Contact
 layout: default
-permalink: /contact/
+link: /contact/
 ---
 
-Email: [lwlwilliam.a@gmail.com](mailto:lwlwilliam.a@gmail.com)
+Email: [{{ site.data.personal.email }}](mailto:{{ site.data.personal.email }})

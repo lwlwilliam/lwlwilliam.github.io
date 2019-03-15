@@ -1,7 +1,7 @@
 ---
 title: About
 layout: default
-permalink: /about/
+link: /about/
 ---
 
-Love sports, love programming, love life.
+{{ site.data.personal.about }}
