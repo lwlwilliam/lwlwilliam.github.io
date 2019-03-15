@@ -1,7 +1,8 @@
 ---
 title: About
 layout: default
-link: /about/
+permalink: /about/
+path: /about/
 ---
 
 {{ site.data.personal.about }}
