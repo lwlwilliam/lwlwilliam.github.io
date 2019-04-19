@@ -1,5 +1,5 @@
 ---
-title: 使用 socket 理解 HTTP
+title: 通过 Socket 理解 HTTP
 layout: default
 categories: [计算机网络]
 ---
