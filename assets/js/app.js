@@ -20,10 +20,14 @@
     function activateTab() {
       if(['/tags.html', '/categories.html'].indexOf(window.location.pathname) > -1) {
         var hash = window.location.hash;
-        if(hash)
-          $('.tab-pane').length && $('a[href="' + hash + '"]').tab('show');
-        else
-          $('.tab-pane').length && $($('.cat-tag-menu li a')[0]).tab('show');
+        if(hash) {
+            // 中文分类的问题
+            hash = decodeURI(hash);
+            $('.tab-pane').length && $('a[href="' + hash + '"]').tab('show');
+        } else {
+            console.log(234234);
+            $('.tab-pane').length && $($('.cat-tag-menu li a')[0]).tab('show');
+        }
       }
     }
 
