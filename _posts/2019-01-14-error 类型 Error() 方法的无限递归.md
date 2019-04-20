@@ -1,10 +1,8 @@
 ---
 title: error 类型 Error() 方法的无限递归
-layout: default
+layout: post
 categories: [Go]
 ---
-
-# error 类型 Error() 方法的无限递归
 
 在 Go 语言中使用 error 值来表示错误状态。事实上，error 类型是内置的接口，定义如下：
 
