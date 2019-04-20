@@ -6,15 +6,7 @@
 
 	<div class="col-sm-10">
 	 <span class="post-date">
-	   {% assign d = page.date | date: "%d" | plus:'0' %}
-	   {{ page.date | date: "%B" }} 
-	   {% case d %}
-	     {% when 1 or 21 or 31 %}{{ d }}st,
-	     {% when 2 or 22 %}{{ d }}nd,
-	     {% when 3 or 23 %}{{ d }}rd,
-	     {% else %}{{ d }}th,
-	   {% endcase %}
-	   {{ page.date | date: "%Y" }}
+		{{ page.date | date: "%b" }} {{ page.date | date: "%d" }}, {{ page.date | date: "%Y" }}
 	 </span>
 	  <div class="article_body">
 	  {{ content }}
@@ -71,6 +63,7 @@
 
 		<hr>
 
+        <!--
 		<div>
       <section class="share col-sm-6">
         <h4 class="section-title">Share Post</h4>
@@ -97,6 +90,7 @@
         <p class="author-bio">{{site.data.personal.bio}}</p>
       </section>
     </div>
+    -->
 
     <div class="clearfix"></div>
 
