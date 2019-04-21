@@ -163,8 +163,10 @@ comments: false
 
     page.onblur = function() {
         pagenum = Number(page.value);
-        if (pagenum > 0 && pagenum <= lastpage) {
+        if (pagenum > 1 && pagenum <= lastpage) {
             location.href = siteurl + '/page' + pagenum;
+        } else if (pagenum == 1) {
+            location.href = siteurl;
         }
     }
 </script>
