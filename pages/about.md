@@ -6,4 +6,6 @@ permalink: /about/
 ---
 
 {{ site.data.personal.description }}
+
+
 {{ site.data.personal.about }}

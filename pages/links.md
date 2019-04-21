@@ -8,8 +8,7 @@ menu: 链接
 permalink: /links/
 ---
 
-> God made relatives. Thank God we can choose our friends.
 
 {% for link in site.data.links %}
-* [{{ link.name }}]({{ link.url }})
+* <a href='{{ link.url }}' target='_blank'>{{ link.name }}</a>
 {% endfor %}
