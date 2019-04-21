@@ -64,6 +64,7 @@ comments: false
     </div>
     <div class="pagination text-align">
       <div class="btn-group">
+          <!--
         {% if paginator.previous_page %}
           {% if paginator.previous_page == 1 %}
               <a href="{{ site.url }}/" class="btn btn-outline">&laquo;</a>
@@ -90,8 +91,80 @@ comments: false
         {% else %}
             <button disabled="disabled" href="javascript:;" class="btn btn-outline">&raquo;</button>
         {% endif %}
+        -->
+
+
+            {% if 1 != paginator.page %}
+                <a href="{{ site.url }}"  class="btn btn-outline">First</a>
+            {% else %}
+                <button disabled="disabled" href="javascript:;" class="btn btn-outline">First</button>
+            {% endif %}
+
+            {% if paginator.previous_page %}
+                {% if paginator.previous_page == 1 %}
+                    <a href="{{ site.url }}/" class="btn btn-outline">Prev</a>
+                {% else %}
+                    <a href="{{ site.url }}/page{{paginator.previous_page}}" class="btn btn-outline">Prev</a>
+                {% endif %}
+            {% else %}
+                <button disabled="disabled" href="javascript:;" class="btn btn-outline">Prev</button>
+            {% endif %}
+
+            <!--
+            {% assign min = paginator.page | minus: 2 %}
+            {% if min < 1 %}
+            {% assign min = 1 %}
+            {% endif %}
+
+            {% assign max = paginator.page | plus: 2 %}
+            {% if max > paginator.total_pages %}
+            {% assign max = paginator.total_pages %}
+            {% endif %}
+
+            {% for count in (min..max) %}
+                {% if count == paginator.page %}
+                    <a href="javascript:;"  class="active btn btn-outline">{{count}}</a>
+                {% else %}
+                    <a href="{{ site.url }}/page{{count}}"  class="btn btn-outline">{{count}}</a>
+                {% endif %}
+            {% endfor %}
+            -->
+            <a href="javascript:;" class="active btn btn-outline">{{ paginator.page }}</a>
+
+            {% if paginator.next_page %}
+                <a href="{{ site.url }}/page{{paginator.next_page}}"  class="btn btn-outline">Next</a>
+            {% else %}
+                <button disabled="disabled" href="javascript:;" class="btn btn-outline">Next</button>
+            {% endif %}
+
+            {% if paginator.total_pages != paginator.page %}
+                <a href="{{ site.url }}/page{{paginator.total_pages}}" data-page="{{ paginator.total_pages }}" id="lastpage" class="btn btn-outline">Last</a>
+            {% else %}
+                <button disabled="disabled" href="javascript:;" data-page="{{ paginator.total_pages }}" id="lastpage" class="btn btn-outline">Last</button>
+            {% endif %}
+
+          &nbsp;<input type="number" id="pagenum" max="999" style="width: 50px" placeholder="Page">
+          <input type="hidden" id="siteurl" value="{{ site.url }}">
         </div>
     </div>
     <!-- /pagination -->
 </section>
 <!-- /section.content -->
+<script>
+    var page = document.getElementById('pagenum');
+    var lastpage = Number(document.getElementById('lastpage').getAttribute('data-page'));
+    var siteurl = document.getElementById('siteurl').value;
+
+    page.onkeyup = function() {
+        if (page.value.length > 3) {
+            page.value = page.value.replace(/^(\d{3}).*?$/g, '$1');
+        }
+    }
+
+    page.onblur = function() {
+        pagenum = Number(page.value);
+        if (pagenum > 0 && pagenum <= lastpage) {
+            location.href = siteurl + '/page' + pagenum;
+        }
+    }
+</script>
