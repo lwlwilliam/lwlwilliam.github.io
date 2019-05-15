@@ -1,20 +1,26 @@
-- name: 阮一峰
+- name: ruanyifeng
   url: http://www.ruanyifeng.com/blog/archives.html
 
-- name: 惠新宸
-  url: http://www.laruence.com/
+- name: tutorialspoint
+  url: http://www.tutorialspoint.com/
 
-- name: Go 语言中文网
-  url: https://studygolang.com/
+- name: MDN web docs
+  url: https://developer.mozilla.org/zh-CN/docs/Web
 
-- name: https://yourbasic.org/
-  url: https://yourbasic.org/
-
-- name: Regex Online
+- name: regex
   url: https://rubular.com/
 
-- name: Visualgo
+- name: visualgo
   url: https://visualgo.net/en
+
+- name: leetcode
+  url: https://leetcode.com/
+
+- name: studygolang
+  url: https://studygolang.com/
 
 - name: https://colobu.com/
   url: https://colobu.com/
+
+- name: https://yourbasic.org/
+  url: https://yourbasic.org/
