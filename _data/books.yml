@@ -1,0 +1,59 @@
+2017:
+
+  - name: 精通正则表达式(第 3 版)
+    remark: [Jeffrey E.F. Friedl 电子工业出版社]
+  - name: 鸟哥的 Linux 私房菜：基础学习篇(第 3 版)
+    remark: [鸟哥 王世江 人民邮电出版社]
+  - name: C Primer Plus(第 6 版)
+    remark: [Stephen Prata 人民邮电出版社]
+  - name: The Linux Command Line
+    remark: [William E. Shotts Jr.]
+  - name: JavaScript 高级程序设计(第 3 版)
+    remark: [Nicholas C.Zakas 人民邮电出版社]
+
+2018:
+
+  - name: The C Programming Language(第 2 版)
+    remark: [Brian W. Kernighan, Dennis M. Ritchie 机械工业出版社]
+  - name: PHP 核心技术与最佳实践
+    remark: [列旭松 陈文 机械工业出版社]
+  - name: Go 语言实战
+    remark: [William Kennedy, Brian Ketelsen, Erik St. Martin 人民邮电出版社]
+  - name: The Way To Go
+    remark: [Ivo Balbaert]
+  - name: Go 语言编程
+    remark: [许式伟 吕桂华 人民邮电出版社]
+  - name: 图解 HTTP
+    remark: [上野宣 人民邮电出版社]
+  - name: UNIX 网络编程(第 3 版)
+    remark: [W. Richard Stevens, Bill Fenner, Andrew M.Rudoff 人民邮电出版社]
+  - name: 深入理解计算机系统(第 3 版)
+    remark: [Randal E. Bryant, David R. O'Hallaron 机械工业出版社]
+  - name: UNIX 环境高级编程(第 3 版)
+    remark: [W. Richard Stevens, Stephen A.Rago 人民邮电出版社]
+
+2019:
+  - name: The Go Programming Language
+    remark: [Alan A. A. Donovan, Brian W. Kernighan]
+  - name: 现代操作系统(第 3 版)
+    remark: [Andrew S. Tanenbaum 机械工业出版社]
+  - name: HTTP 权限指南
+    remark: [人民邮电出版社]
+  - name: PHP 与 MySQL 高性能应用开发
+    remark: [杜江 机械工业出版社]
+  - name: 计算机是怎样跑起来的
+    remark: [矢泽久雄 人民邮电出版社]
+  - name: 穿越计算机的迷雾
+    remark: [李忠 电子工业出版社]
+  - name: 计算机网络(第 7 版)
+    remark: [谢希仁 编著 电子工业出版社]
+  - name: Writing An Interpreter In Go
+    remark: [Thorsten Ball]
+  - name: Go 并发编程(第 2 版)
+    remark: [郝林 人民邮电出版社]
+  - name: 程序是怎样跑起来的
+    remark: [矢泽久雄 人民邮电出版社]
+  - name: 计算机网络：自顶向下方法(第 5 版影印版)
+    remark: [James F. Kurose, Keith W. Ross 高等教育出版社]
+  - name: 编码：隐匿在计算机软硬件背后的语言
+    remark: [Charles Petzold 电子工业出版社]
