@@ -49,6 +49,8 @@
     remark: [谢希仁 编著 电子工业出版社]
   - name: Writing An Interpreter In Go
     remark: [Thorsten Ball]
+  - name: Go Web 编程
+    remark: [谢孟军 电子工业出版社]
   - name: Go 并发编程(第 2 版)
     remark: [郝林 人民邮电出版社]
   - name: 程序是怎样跑起来的
