@@ -1,7 +1,7 @@
 ---
 title: Hello Pages
 layout: post
-categories: [others]
+categories: [其他]
 ---
 
 入驻 Github Pages。
