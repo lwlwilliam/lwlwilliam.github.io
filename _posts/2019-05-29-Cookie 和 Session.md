@@ -355,7 +355,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 	if r.Method == "GET" {
-		t, _ := template.ParseFiles("./lwlwilliam.github.io/assets/code/sessionDemo/templates/login.gtpl")
+		t, _ := template.ParseFiles("./sessionDemo/templates/login.gtpl")
 		w.Header().Set("Content-Type", "text/html")
 		t.Execute(w, sess.Get("username"))
 		log.Println(sess.Get("username"))
