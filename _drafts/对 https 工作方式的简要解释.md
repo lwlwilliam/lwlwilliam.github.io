@@ -1,0 +1,43 @@
+---
+title: 对 https 工作方式的简要解释
+layout: post
+category: [计算机网络]
+---
+
+> 原文：[Brief(ish) explanation of how https works](https://dev.to/ruidfigueiredo/briefish-explanation-of-how-https-works)
+
+### Diffie-Hellman 算法
+
+对于一个素数`p`来说，当一个数`g`满足以下条件：当`1 <= x <= p-1`时，如果`(g^x) mod p`能产生`[1, p-1]`的`所有数值`，就称 g 是 p 的 generator。例如，对素数 p = 7 来说，g = 3 就是它的 generator。`
+
+```
+3^1 mod 7 = 3
+3^2 mod 7 = 2
+3^3 mod 7 = 6
+3^4 mod 7 = 4
+3^5 mod 7 = 5
+3^6 mod 7 = 1
+```
+
+g = 5 也是它的 generator。
+
+```
+5^1 mod 7 = 5
+5^2 mod 7 = 4
+5^3 mod 7 = 6
+5^4 mod 7 = 2
+5^5 mod 7 = 3
+5^6 mod 7 = 1
+```
+
+举个例子，Alice 和 Bob 都想写信给对方。但是有人在监听他们的通信，于是他们决定使用 Diffie-Hellman 算法来加密通信。
+
+Alice 选择了 g = 3 和 p = 7 ，然后将这两个数发给了 Bob。
+
+Alice 还选了一个小于 p 的数字作为私钥`secretAlice`，例如 4；当 Bob 收到了 Alice 的 p 和 g 值，他也选择了一个小于 p 的数字作为私钥，即`secretBob`，例如 5。
+
+Bob 按照以下公式进行计算：`(g^secretBob) mod p`，也就是`3^5 mod 7 = 5`，然后把这个结果`numberBobSent`发给 Alice；与此同时，Alice 按照以下公式进行计算`(g^secretAlice) mod p`，也就是`3^4 mod 7 = 4`，然后把这个结果`numberAliceSent`发给 Bob。 
+
+Alice 收到 Bob 发过来的`numberBobSent = 5`后，按以下公式进行计算：`(numberBobSent^secretAlice) mod p`，即`5^4 mod 7 = 2`；Bob 收到 Alice 发过来的`numberAliceSent = 4`后，按以下公式进行计算：：`(numberAliceSent^secretBob) mod p`，即`4^5 mod 7 = 2`。
+
+Alice 和 Bob 的共享密钥就是 2。无论是谁都可以获取 p，g，numberAliceSent 和 numberBobSent。其他人都不知道 Alice 和 Bob 的私钥或者共享密钥。现在 Alice 和 Bob 就可以使用他们的共享密钥进行加密解密通信了。
