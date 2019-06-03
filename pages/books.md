@@ -20,7 +20,7 @@ permalink: /books/
 
 {{ assign count = 1 }}
 {% for book in year[1] %}
-{{ forloop.index0 }}.       <span>{{ book.name }}</span> <span style="color:grey;font-size:12px;vertical-align:middle;">[{{ book.remark }}]</span>
+{{ forloop.index0 }}.       <span>{{ book.name }}</span> <span style="color:grey;font-size:12px;vertical-align:middle;">[{{ book.info }}]</span>{% if book.remark %}<span style="color:red;font-size:12px;vertical-align:middle;">【{{ book.remark }}】</span>{% endif %}
 {% endfor %}
 
 
