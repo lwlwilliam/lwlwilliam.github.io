@@ -1,0 +1,33 @@
+---
+title: POP3 简介
+layout: post
+category: [计算机网络]
+---
+
+```bash
+$ telnet pop.qq.com 110
+Trying 59.37.97.57...
+Connected to pop.qq.com.
+Escape character is '^]'.
++OK QQMail POP3 Server v1.0 Service Ready(QQMail v2.0)
+```
+
+```bash
+user 1234567890
++OK
+pass xxxxxxx
++OK
+```
+
+```bash
+list
+1 119
+2 22
+retr 1
++OK
+(data bala bala bala)
+
+.
+dele 2
++OK
+```
