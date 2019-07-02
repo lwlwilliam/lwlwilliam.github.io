@@ -4,6 +4,8 @@ layout: post
 category: [计算机网络]
 ---
 
+SMTP 协议是`push`协议，因此不能用于收邮件。POP3 协议是 Post Office Protocol。
+
 ```bash
 $ telnet pop.qq.com 110
 Trying 59.37.97.57...
