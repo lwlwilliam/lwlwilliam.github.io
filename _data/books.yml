@@ -10,7 +10,7 @@
     info: William E. Shotts Jr.
   - name: JavaScript 高级程序设计(第 3 版)
     info: Nicholas C.Zakas 人民邮电出版社
-    remark: 进行中，其实一起没什么心思看 js
+    remark: 进行中
 
 2018:
 
@@ -73,3 +73,5 @@
     info: 刘欣 电子工业出版社
   - name: 黑客与画家
     info: PAUL GRAHAM 人民邮电出版社
+  - name: Network Programming with Go
+    info: <a href="https://github.com/tumregels/Network-Programming-with-Go" target="_blank">tumregels</a>
