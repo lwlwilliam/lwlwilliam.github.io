@@ -2,6 +2,7 @@
 title: Cookie 和 Session
 layout: post
 category: [计算机网络]
+keywords: Cookie, Session, HTTP, Go
 ---
 
 HTTP 协议是无状态的，用户的每一次请求都是独立的。有时候我们需要知道哪些请求是跟用户相关的，例如，购物车的商品属于哪个用户。web 规范给出的解决方案是经典的 cookie 和 session。cookie 是一种客户端机制，将用户的数据保存到客户端；session 是一种服务端机制，将数据以类似于散列表的结构来保存信息，这是用 PHP 内置函数生成的 session 数据格式：`last_regenerate|i:1550546460;app_id|s:1:"2";`。每个网站访客都会被分配一个唯一的标识符，即 sessionID。

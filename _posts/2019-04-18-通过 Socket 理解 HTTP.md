@@ -2,6 +2,7 @@
 title: 通过 Socket 理解 HTTP
 layout: post
 categories: [计算机网络]
+keywords: Socket, HTTP, Web, Python
 ---
 
 随着基于 web 的软件（web 应用、微服务、REST、SOAP 等）的日益流行，思考其背后的原理总是好的。当我冒险进入 Flask 或者 Django 这样的框架时

@@ -2,6 +2,7 @@
 title: 从 Socket 编程到 HTTP 服务器
 layout: post
 categories: [计算机网络]
+keywords: Socket, HTTP, Web 通信
 ---
 
 > 整理自：[从 Socket 编程到 HTTP 服务器](https://yq.aliyun.com/articles/639943?spm=a2c4e.11163080.searchblog.50.628c2ec1rWwsIi)

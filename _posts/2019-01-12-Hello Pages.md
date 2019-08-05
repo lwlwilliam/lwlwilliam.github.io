@@ -2,6 +2,7 @@
 title: Hello Pages
 layout: post
 categories: [其他]
+keywords: hello
 ---
 
 入驻 Github Pages。
