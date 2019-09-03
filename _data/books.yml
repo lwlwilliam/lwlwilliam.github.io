@@ -75,3 +75,5 @@
     info: PAUL GRAHAM 人民邮电出版社
   - name: Network Programming with Go
     info: <a href="https://github.com/tumregels/Network-Programming-with-Go" target="_blank">tumregels</a>
+  - name: The AWK Programming Language
+    info: Alfred V. Aho, Brian W. Kernighan, Peter J. Weinberger
