@@ -17,7 +17,7 @@ permalink: /books/
 
 > {{ year[0] }}
 
-{{ assign count = 1 }}
+{% assign count = 1 %}
 {% for book in year[1] %}
 <span style="display:inline-block;text-indent:1em;">{{ forloop.index0 }}. </span>
 <span>{{ book.name }}</span> 
