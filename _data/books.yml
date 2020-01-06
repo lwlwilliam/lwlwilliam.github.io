@@ -66,7 +66,6 @@
     remark: 进行中
   - name: 编码：隐匿在计算机软硬件背后的语言
     info: Charles Petzold 电子工业出版社
-    remark: 进行中
   - name: 网络是怎样连接的
     info: 户根勤 人民邮电出版社
   - name: 码农翻身：用故事给技术加点料
@@ -77,3 +76,7 @@
     info: <a href="https://github.com/tumregels/Network-Programming-with-Go" target="_blank">tumregels</a>
   - name: The AWK Programming Language
     info: Alfred V. Aho, Brian W. Kernighan, Peter J. Weinberger
+
+2020:
+  - name: 算法图解
+    info: Aditya Bhargava 人民邮电出版社
