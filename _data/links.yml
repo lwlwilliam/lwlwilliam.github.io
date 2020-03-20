@@ -1,29 +1,29 @@
-- name: ruanyifeng
+- name: RuanYiFeng
   url: http://www.ruanyifeng.com/blog/archives.html
 
-- name: tutorialspoint
+- name: TutorialsPoint
   url: http://www.tutorialspoint.com/
 
 - name: MDN web docs
   url: https://developer.mozilla.org/zh-CN/docs/Web
 
-- name: regex
+- name: Rubular
   url: https://rubular.com/
 
-- name: visualgo
+- name: VisuAlgo
   url: https://visualgo.net/en
 
-- name: leetcode
+- name: LeetCode
   url: https://leetcode.com/
 
-- name: colobu
+- name: Colobu
   url: https://colobu.com/
 
-- name: yourbasic
+- name: YourBasic
   url: https://yourbasic.org/
 
-- name: thorstenball
+- name: Thorsten Ball
   url: https://thorstenball.com/
 
-- name: acme
+- name: ACME
   url: http://www.acme.com/
