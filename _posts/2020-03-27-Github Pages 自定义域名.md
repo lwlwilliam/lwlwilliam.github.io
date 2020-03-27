@@ -1,7 +1,7 @@
 ---
 title: Github Pages 自定义域名
 layout: post
-categories: [计算机原理]
+categories: [计算机网络]
 keys: Github, 域名, DNS
 ---
 
