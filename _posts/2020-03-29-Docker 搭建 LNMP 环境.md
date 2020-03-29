@@ -58,15 +58,26 @@ $ docker pull php:7.1-fpm
         }
     ```
 
-2.	启动容器，安装 mysqli 扩展，并将 php 文件复制到容器对应目录中
+2.	启动容器，安装 mysqli 扩展，将 php 文件复制到容器对应目录中，有以下两种方法，推荐使用第二种，直接挂载数据卷
 
-    ```bash
-    $ docker run -d --name php -p 9000:9000 --link mysql:mysql php:7.1-fpm
-    $ docker exec php docker-php-ext-install mysqli
-    $ docker restart php
-    $ docker exec php mkdir /usr/share/php # 根据自己的实际创建，DOCUMENT_ROOT
-    $ docker cp /workingDirectory/index.php php:/usr/share/php/index.php
-    ```
+    1.  没有数据卷挂载 
+
+        ```bash
+        $ docker run -d --name php -p 9000:9000 --link mysql:mysql php:7.1-fpm
+        $ docker exec php docker-php-ext-install mysqli
+        $ docker restart php
+        $ docker exec php mkdir /usr/share/php # 根据自己的实际创建，DOCUMENT_ROOT
+        $ docker cp /workingDirectory/index.php php:/usr/share/php/index.php
+        ```
+        
+    2.  数据卷挂载，使用`-v`参数将`/var/www/html`目录挂载到容器的`/usr/share/php`中，注意，使用数据卷要加上`privileged=true`，否则很可能会提示没有权限
+    
+        ```bash
+        $ docker run -d --name php -p 9000:9000 --link mysql:mysql -v /var/www/html:/usr/share/php --privileged=true php:7.1-fpm 
+        $ docker exec php docker-php-ext-install mysqli
+        $ docker restart php
+        $ cp /workingDirectory/index.php /var/www/html/index.php
+        ```
 
 ##### Nginx
 
