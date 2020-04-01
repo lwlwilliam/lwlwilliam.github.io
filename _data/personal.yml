@@ -1,9 +1,15 @@
 # 个人信息
 name: William A
-email: lwlwilliam.a@gmail.com
+email: lwlwilliam@foxmail.com
 github: lwlwilliam
 site: https://github.com/lwlwilliam
 establish: 2018
 description: Love sports, love programming, love life.
 about: Interested in network programming.
 avatar: https://avatars1.githubusercontent.com/u/25366940?s=150&v=4
+
+# 评论插件
+comments_provider: gitalk
+gitalk:
+    clientID: ef26baa975fbac82ac52
+    clientSecret: 2ccf1fb00dbced9773c1fa27252534d28af38986
