@@ -1,5 +1,5 @@
 {% if page.comments != false %}
-  {% case site.data.personal.comments_provider %}
+  {% case site.comments_provider %}
     {% when 'gitalk' %}
         <div id="gitalk-container"></div>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
@@ -7,8 +7,8 @@
         <script>
         var gitalk = new Gitalk({
             id: '{{ page.url | truncate: 50, '' }}',
-            clientID: '{{ site.data.personal.gitalk.clientID }}',
-            clientSecret: '{{ site.data.personal.gitalk.clientSecret }}',
+            clientID: '{{ site.gitalk.clientID }}',
+            clientSecret: '{{ site.gitalk.clientSecret }}',
             repo: '{{ site.repository }}',
             owner: '{{ site.author }}',
             admin: ['{{ site.author }}'],

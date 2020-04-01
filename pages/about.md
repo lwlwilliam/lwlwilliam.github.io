@@ -6,7 +6,7 @@ menu: 关于
 permalink: /about/
 ---
 
-{{ site.data.personal.description }}
+{{ site.description }}
 
 
-{{ site.data.personal.about }}
+{{ site.about }}

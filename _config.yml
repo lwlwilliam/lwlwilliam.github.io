@@ -1,26 +1,25 @@
 # ---------------- #
 #   Main Configs   #
 # ---------------- #
-baseurl:
 url: https://github.lwlinux.cn
 date_format: "ordinal"
-title: William A
-subtitle: "Interested in network programming."
-description: "William A"
+name: William A
 keywords: William A, lwlwilliam
-encoding: "utf-8"
+encoding: utf-8
 side_bar_repo_limit: 0
+
+about: Interested in network programming.
+description: Love sports, love programming, love life.
 
 # ---------------- #
 #      Author      #
 # ---------------- #
 author: lwlwilliam
-organization: 
-organization_url: 
-github_username: lwlwilliam
 location: Guangzhou, China
 email: lwlwilliam@foxmail.com
 repository: lwlwilliam.github.io
+repository_url: https://github.com/lwlwilliam/lwlwilliam.github.io
+avatar: https://avatars1.githubusercontent.com/u/25366940?s=150&v=4
 
 # ---------------- #
 #    Navigation    #
@@ -94,6 +93,9 @@ simple_jekyll_search:
     limit: 10
 
 # ---------------- #
-#      Wiki        #
+#     Comments     #
 # ---------------- #
-wiki:
+comments_provider: gitalk
+gitalk:
+    clientID: ef26baa975fbac82ac52
+    clientSecret: 2ccf1fb00dbced9773c1fa27252534d28af38986
