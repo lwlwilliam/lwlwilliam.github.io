@@ -2,7 +2,7 @@
 title: Docker 搭建 LNMP 环境
 layout: post
 categories: [工具]
-keys: Docker, LNMP
+keywords: Docker, LNMP
 ---
 
 ### 下载镜像

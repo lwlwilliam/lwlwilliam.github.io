@@ -1,7 +1,7 @@
 ---
 title: Cookie 和 Session
 layout: post
-category: [计算机网络]
+categories: [计算机网络]
 keywords: Cookie, Session, HTTP, Go
 ---
 

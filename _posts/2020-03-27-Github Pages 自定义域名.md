@@ -2,7 +2,7 @@
 title: Github Pages 自定义域名
 layout: post
 categories: [计算机网络]
-keys: Github, 域名, DNS
+keywords: Github, 域名, DNS
 ---
 
 重新注册了个域名，有时候 web 开发没有域名还真是不方便。一下买了五年，美滋滋，当然顺便也要给 Github Pages 加个自己的烙印的。
