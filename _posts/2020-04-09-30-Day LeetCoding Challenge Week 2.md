@@ -51,6 +51,7 @@ The number of nodes in the given list will be between 1 and 100.
 #### Answer 1
 
 ```go
+// 找到 middleIndex，然后循环到这个索引，该索引所在位置即为所求值
 /**
  * Definition for singly-linked list.
  * type ListNode struct {
@@ -139,6 +140,7 @@ Can you solve it in O(N) time and O(1) space?
 #### Answer 1
 
 ```go
+// 使用栈的概念，每遇到一个 # 符号就 pop 一个字符出来
 func backspaceCompare(S string, T string) bool {
 	if helper(S) == helper(T) {
 		return true
