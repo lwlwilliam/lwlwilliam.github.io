@@ -102,6 +102,6 @@ $ docker pull php:7.1-fpm
 
 至此，基本的环境已经搭建好了。现在测试一下环境能否正常工作。nginx 容器启动时`-p 8080:80`参数指定了宿主机通过`8080`端口访问服务器。可以看到在访问`index.php`时，nginx 正确转发到 php-fpm 中了，mysqli 扩展也能正常工作。docker 下的 LNMP 环境已经搭建完成。
 
-![default](/assets/images/20200329/WX_20200329154835.png)
+![default](/assets/images/2020/0329/WX_20200329154835.png)
 
-![default](/assets/images/20200329/WX_20200329155032.png)
+![default](/assets/images/2020/0329/WX_20200329155032.png)
