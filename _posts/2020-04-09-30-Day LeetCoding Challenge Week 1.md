@@ -148,22 +148,18 @@ Loop again to count all valid elements.
 ```go
 // 先统计出每个元素的个数，再遍历，如果元素+1后仍然存在于 map 中，则计数加上该元素个数
 func countElements(arr []int) int {
-    m := make(map[int]int)
-    for _, v := range arr {
-        if _, ok := m[v]; !ok {
-            m[v] = 1
-        } else {
-            m[v] ++
-        }
-    }
-    
-    count := 0
-    for k, v := range m {
-        if _, ok := m[k+1]; ok {
-            count += v
-        }
-    }
-    
-    return count
+	m := make(map[int]int)
+	for _, v := range arr {
+		m[v]++
+	}
+
+	count := 0
+	for k, v := range m {
+		if _, ok := m[k+1]; ok {
+			count += v
+		}
+	}
+
+	return count
 }
 ```
