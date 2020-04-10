@@ -93,6 +93,13 @@ func middleIndex(head *ListNode) int {
 
 ```go
 // 快慢指针。使用 slow 指针和 fast 指针遍历，fast 指针的 step 是 slow 指针的两倍，当 fast 指针到达列表末尾时，slow 指针肯定就在中间位置
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
 func middleNode(head *ListNode) *ListNode {
 	slow, fast := head, head
 	for fast != nil && fast.Next != nil {
