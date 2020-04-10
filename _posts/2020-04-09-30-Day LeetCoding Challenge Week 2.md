@@ -89,6 +89,21 @@ func middleIndex(head *ListNode) int {
 
 空间复杂度：$$O(n)$$。
 
+#### Answer 2
+
+```go
+// 快慢指针。使用 slow 指针和 fast 指针遍历，fast 指针的 step 是 slow 指针的两倍，当 fast 指针到达列表末尾时，slow 指针肯定就在中间位置
+func middleNode(head *ListNode) *ListNode {
+	slow, fast := head, head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+
+	return slow
+}
+```
+
 ### Backspace String Compare
 
 Given two strings S and T, return if they are equal when both are typed into empty text editors. `#` means a backspace character.
@@ -142,14 +157,10 @@ Can you solve it in O(N) time and O(1) space?
 ```go
 // 使用栈的概念，每遇到一个 # 符号就 pop 一个字符出来
 func backspaceCompare(S string, T string) bool {
-	if helper(S) == helper(T) {
-		return true
-	}
-
-	return false
+	return buildString(S) == buildString(T)
 }
 
-func helper(s string) string {
+func buildString(s string) string {
 	sli := make([]rune, 0)
 	for _, v := range s {
 		if v != '#' {
