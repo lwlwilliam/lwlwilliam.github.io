@@ -1,77 +1,70 @@
 2017:
 
   - name: 精通正则表达式(第 3 版)
-    info: Jeffrey E.F. Friedl 电子工业出版社
+    info: Jeffrey E.F. Friedl / 电子工业出版社
   - name: 鸟哥的 Linux 私房菜：基础学习篇(第 3 版)
-    info: 鸟哥 王世江 人民邮电出版社
+    info: 鸟哥 王世江 / 人民邮电出版社
   - name: C Primer Plus(第 6 版)
-    info: Stephen Prata 人民邮电出版社
+    info: Stephen Prata / 人民邮电出版社
   - name: The Linux Command Line
     info: William E. Shotts Jr.
   - name: JavaScript 高级程序设计(第 3 版)
-    info: Nicholas C.Zakas 人民邮电出版社
-    remark: 进行中
+    info: Nicholas C.Zakas / 人民邮电出版社
 
 2018:
 
   - name: The C Programming Language(第 2 版)
-    info: Brian W. Kernighan, Dennis M. Ritchie 机械工业出版社
+    info: Brian W. Kernighan, Dennis M. Ritchie / 机械工业出版社
   - name: PHP 核心技术与最佳实践
-    info: 列旭松 陈文 机械工业出版社
+    info: 列旭松 陈文 / 机械工业出版社
   - name: Go 语言实战
-    info: William Kennedy, Brian Ketelsen, Erik St. Martin 人民邮电出版社
+    info: William Kennedy, Brian Ketelsen, Erik St. Martin / 人民邮电出版社
   - name: The Way To Go
     info: Ivo Balbaert
   - name: Go 语言编程
-    info: 许式伟 吕桂华 人民邮电出版社
+    info: 许式伟 吕桂华 / 人民邮电出版社
   - name: 图解 HTTP
-    info: 上野宣 人民邮电出版社
+    info: 上野宣 / 人民邮电出版社
   - name: UNIX 网络编程(第 3 版)
-    info: W. Richard Stevens, Bill Fenner, Andrew M.Rudoff 人民邮电出版社
-    remark: 进行中
+    info: W. Richard Stevens, Bill Fenner, Andrew M.Rudoff / 人民邮电出版社
   - name: 深入理解计算机系统(第 3 版)
-    info: Randal E. Bryant, David R. O'Hallaron 机械工业出版社
-    remark: 进行中
+    info: Randal E. Bryant, David R. O'Hallaron / 机械工业出版社
   - name: UNIX 环境高级编程(第 3 版)
-    info: W. Richard Stevens, Stephen A.Rago 人民邮电出版社
-    remark: 进行中
+    info: W. Richard Stevens, Stephen A.Rago / 人民邮电出版社
 
 2019:
   - name: The Go Programming Language
     info: Alan A. A. Donovan, Brian W. Kernighan
   - name: 现代操作系统(第 3 版)
-    info: Andrew S. Tanenbaum 机械工业出版社
+    info: Andrew S. Tanenbaum / 机械工业出版社
   - name: HTTP 权威指南
-    info: 人民邮电出版社
+    info: David Gourley, Brian Totty, Marjorie Sayer, Sailu Reddy, Anshu Aggarwal / 人民邮电出版社
   - name: PHP 与 MySQL 高性能应用开发
-    info: 杜江 机械工业出版社
+    info: 杜江 / 机械工业出版社
   - name: 计算机是怎样跑起来的
-    info: 矢泽久雄 人民邮电出版社
+    info: 矢泽久雄 / 人民邮电出版社
   - name: 穿越计算机的迷雾
-    info: 李忠 电子工业出版社
+    info: 李忠 / 电子工业出版社
   - name: 计算机网络(第 7 版)
-    info: 谢希仁 编著 电子工业出版社
+    info: 谢希仁 / 电子工业出版社
   - name: Writing An Interpreter In Go
     info: Thorsten Ball
-    remark: 进行中
   - name: Go Web 编程
-    info: 谢孟军 电子工业出版社
+    info: 谢孟军 / 电子工业出版社
   - name: Go 并发编程(第 2 版)
-    info: 郝林 人民邮电出版社
-    remark: 进行中
+    info: 郝林 / 人民邮电出版社
   - name: 程序是怎样跑起来的
-    info: 矢泽久雄 人民邮电出版社
+    info: 矢泽久雄 / 人民邮电出版社
   - name: 计算机网络：自顶向下方法(第 5 版影印版)
-    info: James F. Kurose, Keith W. Ross 高等教育出版社
-    remark: 进行中
+    info: James F. Kurose, Keith W. Ross / 高等教育出版社
   - name: 编码：隐匿在计算机软硬件背后的语言
-    info: Charles Petzold 电子工业出版社
+    info: Charles Petzold / 电子工业出版社
   - name: 网络是怎样连接的
-    info: 户根勤 人民邮电出版社
+    info: 户根勤 / 人民邮电出版社
   - name: 码农翻身：用故事给技术加点料
-    info: 刘欣 电子工业出版社
+    info: 刘欣 / 电子工业出版社
   - name: 黑客与画家
-    info: PAUL GRAHAM 人民邮电出版社
+    info: PAUL GRAHAM / 人民邮电出版社
   - name: Network Programming with Go
     info: <a href="https://github.com/tumregels/Network-Programming-with-Go" target="_blank">tumregels</a>
   - name: The AWK Programming Language
@@ -79,10 +72,12 @@
 
 2020:
   - name: 算法图解
-    info: Aditya Bhargava 人民邮电出版社
+    info: Aditya Bhargava / 人民邮电出版社
   - name: HTTP/2 基础教程
-    info: Stephen Ludin, Javier Garza 人民邮电出版社
+    info: Stephen Ludin, Javier Garza / 人民邮电出版社
   - name: Docker 开发实践
-    info: 曾金龙 肖新华 刘清 人民邮电出版社
-  - name: TCP/IP 详解 卷1：协议 
-    info: W. Richard Stevens 机械工业出版社
+    info: 曾金龙 肖新华 刘清 / 人民邮电出版社
+  - name: TCP/IP 详解 卷1：协议
+    info: W. Richard Stevens / 机械工业出版社
+  - name: Go Standard Library Cookbook
+    info: Radomír Sohlich / Packt Publishing
