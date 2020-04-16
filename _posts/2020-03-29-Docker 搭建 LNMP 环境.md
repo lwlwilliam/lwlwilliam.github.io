@@ -84,7 +84,7 @@ $ docker pull php:7.1-fpm
 1.	启动容器，在容器内的`/etc/nginx/conf.d/default.conf`文件中`server`模块内添加如下`location{}`配置，`fastcgi_pass`中的`php`是`--link php:php`启动参数中的连接名称
 
     ```bash
-    $ docker run -d --name nginx -p 8080:80 --link php:php nginx
+    $ docker run -d --name nginx -p 9999:80 --link php:php nginx
     $ docker cp nginx:/etc/nginx/conf.d/default.conf default.conf
     $ vim default.conf
     location ~ \.php$ {
