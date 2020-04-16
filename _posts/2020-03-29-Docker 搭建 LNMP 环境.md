@@ -26,7 +26,11 @@ $ docker pull php:7.1-fpm
 2.	创建测试 mysql 数据；
 
     ```bash
-    $ mysql -h host -u username -p
+    $ docker exec -ti mysql /bin/bash
+    # mysql -h host -u username -p
+    mysql> USE mysql;
+    mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
+    mysql> FLUSH PRIVILEGES;
     mysql> CREATE DATABASE test;
     mysql> USE test;
     mysql> CREATE TABLE a (
