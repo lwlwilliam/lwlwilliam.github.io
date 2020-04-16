@@ -23,7 +23,7 @@ $ docker pull php:7.1-fpm
     $ docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql:5.7
     ```
 
-2.	创建测试 mysql 数据；
+2.	创建测试 mysql 数据
 
     ```bash
     $ docker exec -ti mysql /bin/bash
