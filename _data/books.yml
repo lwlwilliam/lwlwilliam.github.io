@@ -1,36 +1,16 @@
-2017:
-
-  - name: 精通正则表达式(第 3 版)
-    info: Jeffrey E.F. Friedl / 电子工业出版社
-  - name: 鸟哥的 Linux 私房菜：基础学习篇(第 3 版)
-    info: 鸟哥 王世江 / 人民邮电出版社
-  - name: C Primer Plus(第 6 版)
-    info: Stephen Prata / 人民邮电出版社
-  - name: The Linux Command Line
-    info: William E. Shotts Jr.
-  - name: JavaScript 高级程序设计(第 3 版)
-    info: Nicholas C.Zakas / 人民邮电出版社
-
-2018:
-
-  - name: The C Programming Language(第 2 版)
-    info: Brian W. Kernighan, Dennis M. Ritchie / 机械工业出版社
-  - name: PHP 核心技术与最佳实践
-    info: 列旭松 陈文 / 机械工业出版社
-  - name: Go 语言实战
-    info: William Kennedy, Brian Ketelsen, Erik St. Martin / 人民邮电出版社
-  - name: The Way To Go
-    info: Ivo Balbaert
-  - name: Go 语言编程
-    info: 许式伟 吕桂华 / 人民邮电出版社
-  - name: 图解 HTTP
-    info: 上野宣 / 人民邮电出版社
-  - name: UNIX 网络编程(第 3 版)
-    info: W. Richard Stevens, Bill Fenner, Andrew M.Rudoff / 人民邮电出版社
-  - name: 深入理解计算机系统(第 3 版)
-    info: Randal E. Bryant, David R. O'Hallaron / 机械工业出版社
-  - name: UNIX 环境高级编程(第 3 版)
-    info: W. Richard Stevens, Stephen A.Rago / 人民邮电出版社
+2020:
+  - name: 算法图解
+    info: Aditya Bhargava / 人民邮电出版社
+  - name: HTTP/2 基础教程
+    info: Stephen Ludin, Javier Garza / 人民邮电出版社
+  - name: Docker 开发实践
+    info: 曾金龙 肖新华 刘清 / 人民邮电出版社
+  - name: TCP/IP 详解 卷1：协议
+    info: W. Richard Stevens / 机械工业出版社
+  - name: Go Standard Library Cookbook
+    info: Radomír Sohlich / Packt Publishing
+  - name: 树莓派开始，玩转 Linux
+    info: Vamei 周昕梓 / 电子工业出版社
 
 2019:
   - name: The Go Programming Language
@@ -70,14 +50,36 @@
   - name: The AWK Programming Language
     info: Alfred V. Aho, Brian W. Kernighan, Peter J. Weinberger
 
-2020:
-  - name: 算法图解
-    info: Aditya Bhargava / 人民邮电出版社
-  - name: HTTP/2 基础教程
-    info: Stephen Ludin, Javier Garza / 人民邮电出版社
-  - name: Docker 开发实践
-    info: 曾金龙 肖新华 刘清 / 人民邮电出版社
-  - name: TCP/IP 详解 卷1：协议
-    info: W. Richard Stevens / 机械工业出版社
-  - name: Go Standard Library Cookbook
-    info: Radomír Sohlich / Packt Publishing
+2018:
+
+  - name: The C Programming Language(第 2 版)
+    info: Brian W. Kernighan, Dennis M. Ritchie / 机械工业出版社
+  - name: PHP 核心技术与最佳实践
+    info: 列旭松 陈文 / 机械工业出版社
+  - name: Go 语言实战
+    info: William Kennedy, Brian Ketelsen, Erik St. Martin / 人民邮电出版社
+  - name: The Way To Go
+    info: Ivo Balbaert
+  - name: Go 语言编程
+    info: 许式伟 吕桂华 / 人民邮电出版社
+  - name: 图解 HTTP
+    info: 上野宣 / 人民邮电出版社
+  - name: UNIX 网络编程(第 3 版)
+    info: W. Richard Stevens, Bill Fenner, Andrew M.Rudoff / 人民邮电出版社
+  - name: 深入理解计算机系统(第 3 版)
+    info: Randal E. Bryant, David R. O'Hallaron / 机械工业出版社
+  - name: UNIX 环境高级编程(第 3 版)
+    info: W. Richard Stevens, Stephen A.Rago / 人民邮电出版社
+
+2017:
+
+  - name: 精通正则表达式(第 3 版)
+    info: Jeffrey E.F. Friedl / 电子工业出版社
+  - name: 鸟哥的 Linux 私房菜：基础学习篇(第 3 版)
+    info: 鸟哥 王世江 / 人民邮电出版社
+  - name: C Primer Plus(第 6 版)
+    info: Stephen Prata / 人民邮电出版社
+  - name: The Linux Command Line
+    info: William E. Shotts Jr.
+  - name: JavaScript 高级程序设计(第 3 版)
+    info: Nicholas C.Zakas / 人民邮电出版社
