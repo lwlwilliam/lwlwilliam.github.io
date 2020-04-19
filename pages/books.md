@@ -22,7 +22,7 @@ permalink: /books/
 <span style="display:inline-block;text-indent:1em;">{{ forloop.index0 }}. </span>
 <span>{{ book.name }}</span> 
 <span style="color:grey;font-size:12px;vertical-align:middle;">[{{ book.info }}]</span>
-{% if book.remark %}<span style="color:red;font-size:12px;vertical-align:middle;">【{{ book.remark }}】</span>{% endif %}
+<span>{% if book.remark %}&#x2714;{% else %}&#x2757;{% endif %}</span>
 {% endfor %}
 
 {% endfor %}
