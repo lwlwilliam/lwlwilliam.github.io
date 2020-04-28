@@ -13,7 +13,7 @@
     remark: false
   - name: Go Standard Library Cookbook
     info: Radomír Sohlich / Packt Publishing
-    remark: false
+    remark: true
   - name: 树莓派开始，玩转 Linux
     info: Vamei 周昕梓 / 电子工业出版社
     remark: true
