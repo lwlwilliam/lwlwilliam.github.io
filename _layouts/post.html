@@ -14,7 +14,9 @@ layout: default
 -->
 
 <!--懒加载关键-->
-<!--{% assign content = content|replace: '<img src="', '<img style="display:none" class="lazyload" data-src="' %}-->
+{% comment %}
+{% assign content = content|replace: '<img src="', '<img style="display:none" class="lazyload" data-src="' %}
+{% endcomment %}
 
 <section class="collection-head small geopattern" data-pattern-id="{{ page.title | truncate: 15, ''}}">
 <div class="container">
