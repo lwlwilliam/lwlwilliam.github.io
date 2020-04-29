@@ -2,7 +2,7 @@
 #   Main Configs   #
 # ---------------- #
 url: https://github.lwlinux.cn
-cdn: //ali-cdn.lwlinux.cn
+cdn: https://ali-cdn.lwlinux.cn
 date_format: "ordinal"
 title: William A
 keywords: William A, lwlwilliam
