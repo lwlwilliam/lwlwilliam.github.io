@@ -14,9 +14,7 @@ layout: default
 -->
 
 <!--懒加载关键-->
-{% comment %}
 {% assign content = content|replace: '<img src="', '<img style="display:none" class="lazyload" data-src="' %}
-{% endcomment %}
 
 <section class="collection-head small geopattern" data-pattern-id="{{ page.title | truncate: 15, ''}}">
 <div class="container">
@@ -61,7 +59,6 @@ layout: default
 </section>
 <script>
   // 懒加载
-  /*
   $(function () {
     var cdn = '{{ site.cdn }}';
     $.each($('.lazyload'), function (key, value) {
@@ -69,6 +66,5 @@ layout: default
       $(this).show();
     })
   })
-  */
 </script>
 <!-- /section.content -->
