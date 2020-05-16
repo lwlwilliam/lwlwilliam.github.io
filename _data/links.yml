@@ -1,29 +1,14 @@
-- name: RuanYiFeng
-  url: http://www.ruanyifeng.com/blog/archives.html
-
-- name: TutorialsPoint
-  url: http://www.tutorialspoint.com/
-
-- name: MDN web docs
-  url: https://developer.mozilla.org/zh-CN/docs/Web
-
-- name: Rubular
-  url: https://rubular.com/
-
-- name: VisuAlgo
+- name: VisuAlgo - visualising data structures and algorithms through animation
   url: https://visualgo.net/en
 
-- name: LeetCode
-  url: https://leetcode.com/
-
-- name: Colobu
-  url: https://colobu.com/
-
-- name: YourBasic
+- name: Algorithms to Go · YourBasic
   url: https://yourbasic.org/
 
 - name: Thorsten Ball
   url: https://thorstenball.com/
 
-- name: ACME
+- name: ACME Laboratories
   url: http://www.acme.com/
+
+- name: Operating Systems：Three Easy Pieces
+  url: http://pages.cs.wisc.edu/~remzi/OSTEP/
