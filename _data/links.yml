@@ -12,3 +12,6 @@
 
 - name: Operating Systems：Three Easy Pieces
   url: http://pages.cs.wisc.edu/~remzi/OSTEP/
+ 
+- name: The Architecture of Open Source Applications
+  url: http://aosabook.org/
