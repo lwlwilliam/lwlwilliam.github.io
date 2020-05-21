@@ -10,7 +10,7 @@ permalink: /books/
 
 
 
-这些年看过的一些书，部分有难度的未看完。
+这些年看过的一些书，部分未看完。
 
 
 {% for year in site.data.books %}
