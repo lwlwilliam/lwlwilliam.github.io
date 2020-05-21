@@ -17,6 +17,8 @@
   - name: 树莓派开始，玩转 Linux
     info: Vamei 周昕梓 / 电子工业出版社
     remark: true
+  - name: 白帽子讲 Web 安全
+    info: 吴翰清 / 电子工业出版社
 
 2019:
   - name: The Go Programming Language
