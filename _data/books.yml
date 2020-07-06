@@ -20,6 +20,12 @@
   - name: 白帽子讲 Web 安全
     info: 吴翰清 / 电子工业出版社
     remark: true
+  - name: Operating Systems：Three Easy Pieces
+    info: Remzi H Arpaci-Dusseau, Andrea C Arpaci-Dusseau
+    remark: false
+  - name: Python 网络编程（第 3 版）
+    info: Brandon Rhodes, John Goerzen / 人民邮电出版社
+    remark: false
 
 2019:
   - name: The Go Programming Language
