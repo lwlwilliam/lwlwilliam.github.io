@@ -1,15 +1,18 @@
 ---
-title: master-worker 守护多进程模式
+title: Master-Worker 守护多进程模式
 layout: post
 categories: [操作系统, PHP]
-keywords: 守护进程, master-worker 模式
+keywords: 守护进程, Master-Worker 模式
 ---
 
+Master-Worker 模式的核心思想是 Master 进程和 Worker 进程各自分担各自的任务，协同完成信息处理的模式。
 
+Master 进程用于管理维护 Worker 进程，而 Worker 进程则用于处理业务，如维持各自的客户端连接。
+
+以下是用 PHP 实现的简单的 Master-Worker 守护多进程模式。
 
 ```php
 <?php
-
 declare(ticks=1);
 
 class Worker {
@@ -22,6 +25,9 @@ class Worker {
         static::monitor();
     }
 
+    /**
+     * 主进程转为守护进程，这里的要点是 fork 两次，并且设置会话 id。一般情况下 fork 一次就够了，System-V 系统需要特殊处理
+     */
     private static function runMaster() {
         // 确保进程有最大操作权限
         umask(0);
@@ -68,6 +74,9 @@ class Worker {
         exit;
     }
 
+    /*
+     * 创建 Worker 进程
+     */
     private static function runWorker() {
         umask(0);
 
