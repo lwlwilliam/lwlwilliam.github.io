@@ -81,7 +81,7 @@ layout: default
     $.each($('.lazyload'), function (key, value) {
         var that = $(this);
         setTimeout(function (args) {
-            that.prop('style', 'animation:.5s ani linear;-webkit-animation:.5s ani linear;-moz-animation:.5s ani linear;')
+            that.prop('style', 'width: 100%; animation:.5s ani linear;-webkit-animation:.5s ani linear;-moz-animation:.5s ani linear;')
             that.prop('src', cdn + value.getAttribute('data-src'));
         }, 1000);
     })
