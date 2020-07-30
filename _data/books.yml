@@ -22,7 +22,7 @@
     remark: true
   - name: Operating Systems：Three Easy Pieces
     info: Remzi H Arpaci-Dusseau, Andrea C Arpaci-Dusseau
-    remark: false
+    remark: true
   - name: Python 网络编程（第 3 版）
     info: Brandon Rhodes, John Goerzen / 人民邮电出版社
     remark: false
