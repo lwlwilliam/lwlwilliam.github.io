@@ -80,10 +80,15 @@ layout: default
 
     $.each($('.lazyload'), function (key, value) {
         var that = $(this);
-        setTimeout(function (args) {
+        if (/^localhost/.test(location.host)) {
             that.prop('style', 'width: 100%; animation:.5s ani linear;-webkit-animation:.5s ani linear;-moz-animation:.5s ani linear;')
-            that.prop('src', cdn + value.getAttribute('data-src'));
-        }, 1000);
+            that.prop('src', value.getAttribute('data-src'));
+        } else {
+            setTimeout(function (args) {
+                that.prop('style', 'width: 100%; animation:.5s ani linear;-webkit-animation:.5s ani linear;-moz-animation:.5s ani linear;')
+                that.prop('src', cdn + value.getAttribute('data-src'));
+            }, 500);
+        }
     })
 
   })
