@@ -36,7 +36,7 @@ navs:
 
   -
     href: /archives/
-    label: Archieves
+    label: Archives
 
   - href: /books/
     label: Books
@@ -45,9 +45,9 @@ navs:
     href: /links/
     label: Links
 
-#  -
-#    href: /wiki/
-#    label: Wiki
+  -
+    href: /todo/
+    label: Todo
 
   -
     href: /about/

@@ -2,7 +2,7 @@
 layout: page
 title: About
 comments: false
-menu: 关于
+menu: About
 permalink: /about/
 ---
 

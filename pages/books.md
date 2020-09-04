@@ -4,7 +4,7 @@ title: Books
 description: 
 keywords: 阅读清单
 comments: true
-menu: 阅读
+menu: Books
 permalink: /books/
 ---
 
