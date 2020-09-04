@@ -34,27 +34,12 @@
     remark: true
 
 2019:
-  - name: The Go Programming Language
-    info: Alan A. A. Donovan, Brian W. Kernighan
-    remark: true
-  - name: 现代操作系统(第 3 版)
-    info: Andrew S. Tanenbaum / 机械工业出版社
-    remark: true
-  - name: HTTP 权威指南
-    info: David Gourley, Brian Totty, Marjorie Sayer, Sailu Reddy, Anshu Aggarwal / 人民邮电出版社
-    remark: true
+  - name: 计算机网络：自顶向下方法(第 5 版影印版)
+    info: James F. Kurose, Keith W. Ross / 高等教育出版社
+    remark: false
   - name: PHP 与 MySQL 高性能应用开发
     info: 杜江 / 机械工业出版社
     remark: false
-  - name: 计算机是怎样跑起来的
-    info: 矢泽久雄 / 人民邮电出版社
-    remark: true
-  - name: 穿越计算机的迷雾
-    info: 李忠 / 电子工业出版社
-    remark: true
-  - name: 计算机网络(第 7 版)
-    info: 谢希仁 / 电子工业出版社
-    remark: true
   - name: Writing An Interpreter In Go
     info: Thorsten Ball
     remark: false
@@ -64,12 +49,27 @@
   - name: Go 并发编程(第 2 版)
     info: 郝林 / 人民邮电出版社
     remark: false
+  - name: The Go Programming Language
+    info: Alan A. A. Donovan, Brian W. Kernighan
+    remark: true
+  - name: 现代操作系统(第 3 版)
+    info: Andrew S. Tanenbaum / 机械工业出版社
+    remark: true
+  - name: HTTP 权威指南
+    info: David Gourley, Brian Totty, Marjorie Sayer, Sailu Reddy, Anshu Aggarwal / 人民邮电出版社
+    remark: true
+  - name: 计算机是怎样跑起来的
+    info: 矢泽久雄 / 人民邮电出版社
+    remark: true
+  - name: 穿越计算机的迷雾
+    info: 李忠 / 电子工业出版社
+    remark: true
+  - name: 计算机网络(第 7 版)
+    info: 谢希仁 / 电子工业出版社
+    remark: true
   - name: 程序是怎样跑起来的
     info: 矢泽久雄 / 人民邮电出版社
     remark: true
-  - name: 计算机网络：自顶向下方法(第 5 版影印版)
-    info: James F. Kurose, Keith W. Ross / 高等教育出版社
-    remark: false
   - name: 编码：隐匿在计算机软硬件背后的语言
     info: Charles Petzold / 电子工业出版社
     remark: true
@@ -90,13 +90,21 @@
     remark: true
 
 2018:
-
-  - name: The C Programming Language(第 2 版)
-    info: Brian W. Kernighan, Dennis M. Ritchie / 机械工业出版社
-    remark: true
   - name: PHP 核心技术与最佳实践
     info: 列旭松 陈文 / 机械工业出版社
     remark: false
+  - name: UNIX 网络编程(第 3 版)
+    info: W. Richard Stevens, Bill Fenner, Andrew M.Rudoff / 人民邮电出版社
+    remark: false
+  - name: 深入理解计算机系统(第 3 版)
+    info: Randal E. Bryant, David R. O'Hallaron / 机械工业出版社
+    remark: false
+  - name: UNIX 环境高级编程(第 3 版)
+    info: W. Richard Stevens, Stephen A.Rago / 人民邮电出版社
+    remark: false
+  - name: The C Programming Language(第 2 版)
+    info: Brian W. Kernighan, Dennis M. Ritchie / 机械工业出版社
+    remark: true
   - name: Go 语言实战
     info: William Kennedy, Brian Ketelsen, Erik St. Martin / 人民邮电出版社
     remark: true
@@ -109,18 +117,11 @@
   - name: 图解 HTTP
     info: 上野宣 / 人民邮电出版社
     remark: true
-  - name: UNIX 网络编程(第 3 版)
-    info: W. Richard Stevens, Bill Fenner, Andrew M.Rudoff / 人民邮电出版社
-    remark: false
-  - name: 深入理解计算机系统(第 3 版)
-    info: Randal E. Bryant, David R. O'Hallaron / 机械工业出版社
-    remark: false
-  - name: UNIX 环境高级编程(第 3 版)
-    info: W. Richard Stevens, Stephen A.Rago / 人民邮电出版社
-    remark: false
 
 2017:
-
+  - name: JavaScript 高级程序设计(第 3 版)
+    info: Nicholas C.Zakas / 人民邮电出版社
+    remark: false
   - name: 精通正则表达式(第 3 版)
     info: Jeffrey E.F. Friedl / 电子工业出版社
     remark: true
@@ -133,6 +134,3 @@
   - name: The Linux Command Line
     info: William E. Shotts Jr.
     remark: true
-  - name: JavaScript 高级程序设计(第 3 版)
-    info: Nicholas C.Zakas / 人民邮电出版社
-    remark: false
