@@ -1,4 +1,7 @@
 2020:
+  - name: 计算机组成原理教程
+    info: 尹艳辉 王海文 邢军主编 / 华中科技大学出版社
+    remark: true
   - name: PHP 7 底层设计与源码实现
     info: 陈雷 等 / 机械工业出版社
     remark: false
