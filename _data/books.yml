@@ -2,144 +2,190 @@
   - name: 代码整洁之道
     info: Robert C. Martin / 人民邮电出版社
     remark: false
+    collect: true
   - name: Linux 高性能服务器编程
     info: 游双 / 机械工业出版社
-    remark: false
+    remark: true
+    collect: false
   - name: 计算机组成原理教程
     info: 尹艳辉 王海文 邢军主编 / 华中科技大学出版社
     remark: true
+    collect: false
   - name: PHP 7 底层设计与源码实现
     info: 陈雷 等 / 机械工业出版社
     remark: false
+    collect: true
   - name: 数据库系统内幕
     info: Alex Petrov / 机械工业出版社
     remark: false
+    collect: true
   - name: HTTP/2 基础教程
     info: Stephen Ludin, Javier Garza / 人民邮电出版社
     remark: false
+    collect: false
   - name: TCP/IP 详解 卷1：协议
     info: W. Richard Stevens / 机械工业出版社
     remark: false
+    collect: true
   - name: Python 网络编程（第 3 版）
     info: Brandon Rhodes, John Goerzen / 人民邮电出版社
     remark: false
+    collect: true
   - name: Docker 开发实践
     info: 曾金龙 肖新华 刘清 / 人民邮电出版社
     remark: true
+    collect: false
   - name: Go Standard Library Cookbook
     info: Radomír Sohlich / Packt Publishing
     remark: true
+    collect: false
   - name: 树莓派开始，玩转 Linux
     info: Vamei 周昕梓 / 电子工业出版社
     remark: true
+    collect: false
   - name: 白帽子讲 Web 安全
     info: 吴翰清 / 电子工业出版社
     remark: true
+    collect: true
   - name: Operating Systems：Three Easy Pieces
     info: Remzi H Arpaci-Dusseau, Andrea C Arpaci-Dusseau
     remark: true
+    collect: true
   - name: 算法图解
     info: Aditya Bhargava / 人民邮电出版社
     remark: true
+    collect: true
 
 2019:
   - name: 计算机网络：自顶向下方法(第 5 版影印版)
     info: James F. Kurose, Keith W. Ross / 高等教育出版社
     remark: false
+    collect: true
   - name: PHP 与 MySQL 高性能应用开发
     info: 杜江 / 机械工业出版社
     remark: false
+    collect: false
   - name: Writing An Interpreter In Go
     info: Thorsten Ball
     remark: false
+    collect: true
   - name: Go Web 编程
     info: 谢孟军 / 电子工业出版社
     remark: false
+    collect: false
   - name: Go 并发编程(第 2 版)
     info: 郝林 / 人民邮电出版社
     remark: false
+    collect: false
   - name: The Go Programming Language
     info: Alan A. A. Donovan, Brian W. Kernighan
     remark: true
+    collect: false
   - name: 现代操作系统(第 3 版)
     info: Andrew S. Tanenbaum / 机械工业出版社
     remark: true
+    collect: true
   - name: HTTP 权威指南
     info: David Gourley, Brian Totty, Marjorie Sayer, Sailu Reddy, Anshu Aggarwal / 人民邮电出版社
     remark: true
+    collect: true
   - name: 计算机是怎样跑起来的
     info: 矢泽久雄 / 人民邮电出版社
     remark: true
+    collect: true
   - name: 穿越计算机的迷雾
     info: 李忠 / 电子工业出版社
     remark: true
+    collect: false
   - name: 计算机网络(第 7 版)
     info: 谢希仁 / 电子工业出版社
     remark: true
+    collect: false
   - name: 程序是怎样跑起来的
     info: 矢泽久雄 / 人民邮电出版社
     remark: true
+    collect: true
   - name: 编码：隐匿在计算机软硬件背后的语言
     info: Charles Petzold / 电子工业出版社
     remark: true
+    collect: true
   - name: 网络是怎样连接的
     info: 户根勤 / 人民邮电出版社
     remark: true
+    collect: true
   - name: 码农翻身：用故事给技术加点料
     info: 刘欣 / 电子工业出版社
     remark: true
+    collect: true
   - name: 黑客与画家
     info: PAUL GRAHAM / 人民邮电出版社
     remark: true
+    collect: true
   - name: Network Programming with Go
     info: <a href="https://github.com/tumregels/Network-Programming-with-Go" target="_blank">tumregels</a>
     remark: true
+    collect: false
   - name: The AWK Programming Language
     info: Alfred V. Aho, Brian W. Kernighan, Peter J. Weinberger
     remark: true
+    collect: true
 
 2018:
   - name: PHP 核心技术与最佳实践
     info: 列旭松 陈文 / 机械工业出版社
     remark: false
+    collect: true
   - name: UNIX 网络编程(第 3 版)
     info: W. Richard Stevens, Bill Fenner, Andrew M.Rudoff / 人民邮电出版社
     remark: false
+    collect: true
   - name: 深入理解计算机系统(第 3 版)
     info: Randal E. Bryant, David R. O'Hallaron / 机械工业出版社
     remark: false
+    collect: true
   - name: UNIX 环境高级编程(第 3 版)
     info: W. Richard Stevens, Stephen A.Rago / 人民邮电出版社
     remark: false
+    collect: true
   - name: The C Programming Language(第 2 版)
     info: Brian W. Kernighan, Dennis M. Ritchie / 机械工业出版社
     remark: true
+    collect: true
   - name: Go 语言实战
     info: William Kennedy, Brian Ketelsen, Erik St. Martin / 人民邮电出版社
     remark: true
+    collect: false
   - name: The Way To Go
     info: Ivo Balbaert
     remark: true
+    collect: false
   - name: Go 语言编程
     info: 许式伟 吕桂华 / 人民邮电出版社
     remark: true
+    collect: false
   - name: 图解 HTTP
     info: 上野宣 / 人民邮电出版社
     remark: true
+    collect: false
 
 2017:
   - name: JavaScript 高级程序设计(第 3 版)
     info: Nicholas C.Zakas / 人民邮电出版社
     remark: false
+    collect: false
   - name: 精通正则表达式(第 3 版)
     info: Jeffrey E.F. Friedl / 电子工业出版社
     remark: true
+    collect: true
   - name: 鸟哥的 Linux 私房菜：基础学习篇(第 3 版)
     info: 鸟哥 王世江 / 人民邮电出版社
     remark: true
+    collect: true
   - name: C Primer Plus(第 6 版)
     info: Stephen Prata / 人民邮电出版社
     remark: true
+    collect: true
   - name: The Linux Command Line
     info: William E. Shotts Jr.
     remark: true
+    collect: false
