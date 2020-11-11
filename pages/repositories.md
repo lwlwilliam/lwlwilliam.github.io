@@ -1,20 +1,36 @@
 ---
 layout: page
-title: Open Source Projects
+title: Repositories
 keywords: 开源,open-source,GitHub,开源项目
 description: 开源改变世界。
-permalink: /open-source/
+menu: Repositories
+permalink: /repositories/
 comments: false
 ---
 
-{% if site.github.public_repositories == null %}
+<style>
+.language-tag {
+    border: 1px solid;
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    background: #ecf5ff;
+    color: #409eff;
+    border-color: #b3d8ff;
+    border-radius: 2px;
+}
+</style>
+{% if site.github.public_repositories != null %}
 {% assign sorted_repos = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
 
 <section class="container">
+    <!--
     <header class="text-center">
         <h1>Open Source Projects</h1>
         <p class="lead">I have <span class="repo-count">{{ sorted_repos.size }}</span> projects on Github</p>
     </header>
+    -->
     <div class="repo-list">
         <!-- Check here for github metadata -->
         <!-- https://help.github.com/articles/repository-metadata-on-github-pages/ -->
@@ -42,6 +58,7 @@ comments: false
                         <span class="meta-info" title="Last updated：{{ repo.updated_at }}">
                             <span class="octicon octicon-clock"></span>
                             <time datetime="{{ repo.updated_at }}">{{ repo.updated_at | date: '%Y-%m-%d' }}</time>
+                            <span class="language-tag">{{ repo.language }}</span>
                         </span>
                     </div>
                 </div>

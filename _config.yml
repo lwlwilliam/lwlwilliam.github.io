@@ -18,6 +18,7 @@ description: Love sports, love programming, love life.
 author: lwlwilliam
 location: Guangzhou, China
 email: lwlwilliam@foxmail.com
+github_url: https://github.com/lwlwilliam
 repository: lwlwilliam.github.io
 repository_url: https://github.com/lwlwilliam/lwlwilliam.github.io
 avatar: https://avatars1.githubusercontent.com/u/25366940?s=150&v=4
@@ -40,6 +41,9 @@ navs:
 
   - href: /books/
     label: Books
+
+  # - href: /repositories/
+  #   label: Repositories
 
   -
     href: /links/

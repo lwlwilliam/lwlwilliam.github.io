@@ -10,5 +10,5 @@ permalink: /links/
 
 
 {% for link in site.data.links %}
-* <a href='{{ link.url }}' target='_blank'>{{ link.name }}</a>
+<span>&#x1f4ce;&nbsp;&nbsp;</span><a href='{{ link.url }}' target='_blank'>{{ link.name }}</a>
 {% endfor %}

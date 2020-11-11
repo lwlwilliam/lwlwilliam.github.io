@@ -1,14 +1,8 @@
 - name: VisuAlgo - visualising data structures and algorithms through animation
   url: https://visualgo.net/en
 
-- name: Algorithms to Go · YourBasic
-  url: https://yourbasic.org/
-
-- name: Thorsten Ball
-  url: https://thorstenball.com/
-
-- name: ACME Laboratories
-  url: http://www.acme.com/
+- name: Data Structure Visualizations
+  url: https://www.cs.usfca.edu/~galles/visualization/Algorithms.html
 
 - name: Operating Systems：Three Easy Pieces
   url: http://pages.cs.wisc.edu/~remzi/OSTEP/
@@ -16,5 +10,14 @@
 - name: The Architecture of Open Source Applications
   url: http://aosabook.org/
 
-- name: Data Structure Visualizations
-  url: https://www.cs.usfca.edu/~galles/visualization/Algorithms.html
+#- name: ACME Laboratories
+#  url: http://www.acme.com/
+#
+#- name: RFC
+#  url: https://www.rfc-editor.org/rfc-index.html
+#
+#- name: Algorithms to Go · YourBasic
+#  url: https://yourbasic.org/
+#
+#- name: Thorsten Ball
+#  url: https://thorstenball.com/
