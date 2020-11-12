@@ -10,7 +10,7 @@ permalink: /archives/
 
 <style>
 li {
-    list-style-type: "📄  ";
+    list-style-type: "📃  ";
 }
 </style>
 <section class="container posts-content">
