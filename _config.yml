@@ -1,10 +1,10 @@
 # ---------------- #
 #   Main Configs   #
 # ---------------- #
-#url: https://pages.lwlinux.cn
-#cdn: https://pages.lwlinux.cn # https://ali-cdn.lwlinux.cn
-url: "http://localhost:4000"
-cdn: "http://localhost:4000"
+url: https://pages.lwlinux.cn
+cdn: https://pages.lwlinux.cn # https://ali-cdn.lwlinux.cn
+#url: "http://localhost:4000"
+#cdn: "http://localhost:4000"
 date_format: "ordinal"
 title: William A
 keywords: William A, lwlwilliam
