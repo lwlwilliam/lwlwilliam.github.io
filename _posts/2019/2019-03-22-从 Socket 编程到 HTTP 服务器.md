@@ -17,7 +17,7 @@ IP 用来区分主机，端口号用来区分进程。一般来说，服务器�
 号，例如 80，443 等，就是所谓知名端口号；而客户端访问服务器的时候，自己的端口号可以随机生成一个，只要不
 和别的应用冲突即可。
 
-![socket](assets/images/2019/0322/netlayer.webp)
+![socket](/assets/images/2019/0322/netlayer.webp)
 
 Socket 编程要分为客户端和服务器端。对于客户端来说很简单，需要创建一个 socket，然后向服务器发起连接，
 连接上就可以发送，接收数据了，以下是伪代码。
@@ -53,7 +53,7 @@ listenfd 是为了要监听而创建的 socket 描述符，bind() 是为了声�
 的三次握手，至于之前的 listenfd，只是起到一个大门的作用了，意思是说，欢迎敲门，进门后我将为你生成一个
 独一无二的 socket 描述符。
 
-![socket](assets/images/2019/0322/socket.webp)
+![socket](/assets/images/2019/0322/socket.webp)
 
 到这里，似乎有一个漏洞。socket 指的是 ip+port，现在已经有了一个 listenfd 的 socket，端口为 80，
 然后每次客户端发起连接还要创建新的 socket，因为 80 端口已经被占用，难道服务器会为每个连接都创建新的
