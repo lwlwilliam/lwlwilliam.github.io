@@ -12,6 +12,9 @@ side_bar_repo_limit: 0
 about: Just for fun.
 description: Love sports, love programming, love life.
 
+# gitee pages 专属配置
+baseurl: "/lwlwilliam.gitee.io"
+
 # ---------------- #
 #      Author      #
 # ---------------- #
