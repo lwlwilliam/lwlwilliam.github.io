@@ -1,19 +1,19 @@
 # ---------------- #
 #   Main Configs   #
 # ---------------- #
-url: https://github.lwlinux.cn
-cdn: https://github.lwlinux.cn # https://ali-cdn.lwlinux.cn
+#url: https://pages.lwlinux.cn
+#cdn: https://pages.lwlinux.cn # https://ali-cdn.lwlinux.cn
+url: ""
+cdn: ""
 date_format: "ordinal"
 title: William A
 keywords: William A, lwlwilliam
 encoding: utf-8
 side_bar_repo_limit: 0
+gitee: https://lwlwilliam.gitee.io/pages
 
 about: Just for fun.
 description: Love sports, love programming, love life.
-
-# gitee pages 专属配置
-baseurl: "/lwlwilliam.gitee.io"
 
 # ---------------- #
 #      Author      #
@@ -32,7 +32,7 @@ avatar: https://avatars1.githubusercontent.com/u/25366940?s=150&v=4
 navs:
   -
     href: /
-    label: Home
+    label: cd ~
 
   -
     href: /categories/

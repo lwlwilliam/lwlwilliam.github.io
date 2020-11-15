@@ -21,7 +21,8 @@ comments: false
     border-radius: 2px;
 }
 </style>
-{% if site.github.public_repositories != null %}
+{% if 1 == 0 %}
+{% if site.github.public_repositories == null %}
 {% assign sorted_repos = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
 
 <section class="container">
@@ -67,4 +68,5 @@ comments: false
         {% endfor %}
     </div>
 </section>
+{% endif %}
 {% endif %}
