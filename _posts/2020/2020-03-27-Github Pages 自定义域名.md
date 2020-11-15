@@ -11,9 +11,9 @@ keywords: Github, 域名, DNS
 
 如下进入设置页面，将自定义的域名填入`Customer domain`下的输入框中，如果要用 HTTPS 传输，则勾选`Enforce HTTPS`复选框。
 
-![setting](/assets/images/2020/0327/WX_20200327220016.png)
+![setting](assets/images/2020/0327/WX_20200327220016.png)
 
-![pages](/assets/images/2020/0327/WX_20200327220401.png)
+![pages](assets/images/2020/0327/WX_20200327220401.png)
 
 效果就是在仓库中生成了一个 CNAME 文件，文件内容就是自定义的域名。目的就是在前台用户访问 user.github.io 时指向自定义域名（**不知道说得对不对，毕竟现在还不是很专业**）。
 
@@ -21,11 +21,11 @@ keywords: Github, 域名, DNS
 
 前提是你已经拥有一个域名，如果没有就看看好了。我用的是阿里云，其它云服务端操作是一样的。进入添加 DNS 记录的表单。
 
-![add](/assets/images/2020/0327/WX_20200327220930.png)
+![add](assets/images/2020/0327/WX_20200327220930.png)
 
 为 user.github.io 域名添加 CNAME 记录，CNAME 就是别名的意思，添加之后访问自定义域名时，DNS 会将 IP 解析为 user.github.io 对应的 IP。
 
-![record](/assets/images/2020/0327/WX_20200327221025.png)
+![record](assets/images/2020/0327/WX_20200327221025.png)
 
 注意，在设置完成后，需要一段时间 DNS 记录才会生效。用类 Unix 系统的小伙伴可以使用 dig 命令来查看 DNS 记录。如果 DNS 解析生效，命令会返回如下结果，ANSWER SECTION 部分中的有一条记录`github.lwlinux.cn       599     IN      CNAME   lwlwilliam.github.io`，就是以上添加的 DNS CNAME 记录。
 

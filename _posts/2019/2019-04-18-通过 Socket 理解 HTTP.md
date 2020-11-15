@@ -187,7 +187,7 @@ Content-Type: text/html
 为了让这看起来更真实，我们可以将 client_tcp 脚本换成 web 浏览器。再次运行 server_tcp_http 脚本，现在用浏览器访问[http://localhost:10000/](http://localhost:10000/)。
 浏览器现在可以理解 HTTP 消息并渲染 HTML。
 
-![browser](/assets/images/2019/0418/WX20190418-155340.png)
+![browser](assets/images/2019/0418/WX20190418-155340.png)
 
 
 还可以修改 server_tcp_http 脚本用来解析`GET`和`POST`请求（以及其它 HTTP 方法），但这超出了本文的范围。Python 提供了很多库来简化 HTTP 通信，而
