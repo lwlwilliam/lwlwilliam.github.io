@@ -34,33 +34,6 @@ menu: cd ~
         }
     }
 </style>
-<script>
-  // ============================================================
-  // 分站
-  var url = '';
-  var ico = '';
-  var text = '';
-
-  var substation_ele = document.getElementsByClassName('substation')[0];
-  var substation_ico_ele = document.getElementsByClassName('substation-ico')[0];
-  var substation_text_ele = document.getElementsByClassName('substation-text')[0];
-
-  switch (document.domain) {
-    case 'lwlwilliam.gitee.io':
-      url = '{{ site.github_substation }}';
-      ico = '{{ site.url }}/github.ico';
-      text = 'Github分站';
-      break;
-    default:
-      url = '{{ site.gitee_substation }}';
-      ico = '{{ site.url }}/gitee.ico';
-      text = 'Gitee分站';
-  }
-
-  substation_ele.href = url;
-  substation_ico_ele.src = ico;
-  substation_text_ele.innerText = '切换到' + text;
-</script>
 <link rel="stylesheet" href="{{ site.cdn }}/assets/css/pages/index.css">
 <section class="banner">
     <div class="collection-head">
