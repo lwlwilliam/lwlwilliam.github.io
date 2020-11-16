@@ -34,6 +34,33 @@ menu: cd ~
         }
     }
 </style>
+<script>
+  // ============================================================
+  // 分站
+  var url = '';
+  var ico = '';
+  var text = '';
+
+  var substation_ele = document.getElementsByClassName('substation')[0];
+  var substation_ico_ele = document.getElementsByClassName('substation-ico')[0];
+  var substation_text_ele = document.getElementsByClassName('substation-text')[0];
+
+  switch (document.domain) {
+    case 'lwlwilliam.gitee.io':
+      url = '{{ site.github_substation }}';
+      ico = '{{ site.url }}/github.ico';
+      text = 'Github分站';
+      break;
+    default:
+      url = '{{ site.gitee_substation }}';
+      ico = '{{ site.url }}/gitee.ico';
+      text = 'Gitee分站';
+  }
+
+  substation_ele.href = url;
+  substation_ico_ele.src = ico;
+  substation_text_ele.innerText = '切换到' + text;
+</script>
 <link rel="stylesheet" href="{{ site.cdn }}/assets/css/pages/index.css">
 <section class="banner">
     <div class="collection-head">
@@ -42,7 +69,11 @@ menu: cd ~
                 <!--<h3 class="collection-header" id="sub-title"><span>{{ site.about }}</span></h3>-->
                 <div class="collection-info">
                     <div class="substation-link">
-                        <a class="substation" target="_blank" href=""><span><img class="substation-ico" src="" alt=""/></span><span class="substation-text"></span></a>
+                      {% if site.url == site.gitee_substation %}
+                        <a class="substation" href="{{ site.github_substation }}"><span><img class="substation-ico" src="{{ site.github_substation }}/github.ico" alt=""/></span><span class="substation-text"> 切换至 Github 分站</span></a>
+                      {% else %}
+                        <a class="substation" href="{{ site.gitee_substation }}"><span><img class="substation-ico" src="{{ site.gitee_substation }}/gitee.ico" alt=""/></span><span class="substation-text"> 切换至 Gitee 分站</span></a>
+                      {% endif %}
                     </div>
 
                     <!--
@@ -104,34 +135,34 @@ menu: cd ~
     </div>
     <div class="pagination text-align">
       <div class="btn-group">
-          <!--
-        {% if paginator.previous_page %}
-          {% if paginator.previous_page == 1 %}
-              <a href="{{ site.url }}/" class="btn btn-outline">&laquo;</a>
-          {% else %}
-              <a href="{{ site.url }}/page{{paginator.previous_page}}"  class="btn btn-outline">&laquo;</a>
-          {% endif %}
-        {% else %}
-            <button disabled="disabled" href="javascript:;" class="btn btn-outline">&laquo;</button>
-        {% endif %}
-        {% if paginator.page == 1 %}
-            <a href="javascript:;" class="active btn btn-outline">1</a>
-        {% else %}
-            <a href="{{ site.url }}/"  class="btn btn-outline">1</a>
-        {% endif %}
-        {% for count in (2..paginator.total_pages) %}
-          {% if count == paginator.page %}
-              <a href="javascript:;"  class="active btn btn-outline">{{count}}</a>
-          {% else %}
-              <a href="{{ site.url }}/page{{count}}"  class="btn btn-outline">{{count}}</a>
-          {% endif %}
-        {% endfor %}
-        {% if paginator.next_page %}
-            <a href="{{ site.url }}/page{{paginator.next_page}}"  class="btn btn-outline">&raquo;</a>
-        {% else %}
-            <button disabled="disabled" href="javascript:;" class="btn btn-outline">&raquo;</button>
-        {% endif %}
-        -->
+            <!--
+            {% if paginator.previous_page %}
+              {% if paginator.previous_page == 1 %}
+                  <a href="{{ site.url }}/" class="btn btn-outline">&laquo;</a>
+              {% else %}
+                  <a href="{{ site.url }}/page{{paginator.previous_page}}"  class="btn btn-outline">&laquo;</a>
+              {% endif %}
+            {% else %}
+                <button disabled="disabled" href="javascript:;" class="btn btn-outline">&laquo;</button>
+            {% endif %}
+            {% if paginator.page == 1 %}
+                <a href="javascript:;" class="active btn btn-outline">1</a>
+            {% else %}
+                <a href="{{ site.url }}/"  class="btn btn-outline">1</a>
+            {% endif %}
+            {% for count in (2..paginator.total_pages) %}
+              {% if count == paginator.page %}
+                  <a href="javascript:;"  class="active btn btn-outline">{{count}}</a>
+              {% else %}
+                  <a href="{{ site.url }}/page{{count}}"  class="btn btn-outline">{{count}}</a>
+              {% endif %}
+            {% endfor %}
+            {% if paginator.next_page %}
+                <a href="{{ site.url }}/page{{paginator.next_page}}"  class="btn btn-outline">&raquo;</a>
+            {% else %}
+                <button disabled="disabled" href="javascript:;" class="btn btn-outline">&raquo;</button>
+            {% endif %}
+            -->
 
 
             {% if 1 != paginator.page %}
@@ -169,6 +200,7 @@ menu: cd ~
                 {% endif %}
             {% endfor %}
             -->
+
             <a href="javascript:;" class="active btn btn-outline">{{ paginator.page }}</a>
 
             {% if paginator.next_page %}
@@ -210,29 +242,4 @@ menu: cd ~
             location.href = siteurl;
         }
     }
-    // ============================================================
-    // 分站
-    var url = '';
-    var ico = '';
-    var text = '';
-
-    var substation_ele = document.getElementsByClassName('substation')[0];
-    var substation_ico_ele = document.getElementsByClassName('substation-ico')[0];
-    var substation_text_ele = document.getElementsByClassName('substation-text')[0];
-
-    switch (document.domain) {
-      case 'lwlwilliam.gitee.io':
-        url = '{{ site.github_substation }}';
-        ico = '{{ site.url }}/github.ico';
-        text = 'Github分站';
-        break;
-      default:
-        url = '{{ site.gitee_substation }}';
-        ico = '{{ site.url }}/gitee.ico';
-        text = 'Gitee分站';
-    }
-
-    substation_ele.href = url;
-    substation_ico_ele.src = ico;
-    substation_text_ele.innerText = '切换到' + text;
 </script>

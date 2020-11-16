@@ -5,6 +5,8 @@
 # 在部署到 github 和 gitee 时需要修改以下两个配置，其它不需要修改
 url: https://pages.lwlinux.cn
 cdn: https://pages.lwlinux.cn # https://ali-cdn.lwlinux.cn
+#url: https://lwlwilliam.gitee.io/pages
+#cdn: https://lwlwilliam.gitee.io/pages
 #url: "http://localhost:4000"
 #cdn: "http://localhost:4000"
 
@@ -13,6 +15,8 @@ title: William A
 keywords: William A, lwlwilliam
 encoding: utf-8
 side_bar_repo_limit: 0
+
+# 分站点
 gitee_substation: https://lwlwilliam.gitee.io/pages
 github_substation: https://pages.lwlinux.cn
 
