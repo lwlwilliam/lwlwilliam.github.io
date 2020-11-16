@@ -4,7 +4,7 @@
 
 # 在部署到 github 和 gitee 时需要修改以下两个配置，其它不需要修改
 #url: https://pages.lwlinux.cn
-#cdn: https://pages.lwlinux.cn # https://ali-cdn.lwlinux.cn
+#cdn: https://pages.lwlinux.cn
 url: https://lwlwilliam.gitee.io/pages
 cdn: https://lwlwilliam.gitee.io/pages
 #url: "http://localhost:4000"
