@@ -6,30 +6,30 @@ menu: cd ~
 ---
 
 <style>
-    .giteelink {
+    .substation-link {
         /*margin-bottom: 8px;*/
     }
-    .gitee {
+    .substation {
         height: 20px;
         line-height: 20px;
         font-size: 18px;
     }
-    .gitee span {
+    .substation span {
         display: inline-block;
         vertical-align: middle;
     }
-    .giteeico {
+    .substation-ico {
         height: 20px;
         vertical-align: middle;
         margin-right: 5px;
     }
     @media all {
-        .gitee {
+        .substation {
             height: 1em;
             line-height: 1em;
             font-size: 1em;
         }
-        .giteeico {
+        .substation-ico {
             height: 1em;
         }
     }
@@ -41,8 +41,8 @@ menu: cd ~
             <div class="collection-title">
                 <!--<h3 class="collection-header" id="sub-title"><span>{{ site.about }}</span></h3>-->
                 <div class="collection-info">
-                    <div class="giteelink">
-                        <a class="gitee" target="_blank" href="{{ site.gitee }}"><span><img class="giteeico" src="{{ site.url }}/gitee.ico" alt=""/></span><span> 国内站</span></a>
+                    <div class="substation-link">
+                        <a class="substation" target="_blank" href=""><span><img class="substation-ico" src="" alt=""/></span><span class="substation-text"></span></a>
                     </div>
 
                     <!--
@@ -191,6 +191,7 @@ menu: cd ~
 </section>
 <!-- /section.content -->
 <script>
+    // 分页
     var page = document.getElementById('pagenum');
     var lastpage = Number(document.getElementById('lastpage').getAttribute('data-page'));
     var siteurl = document.getElementById('siteurl').value;
@@ -209,4 +210,29 @@ menu: cd ~
             location.href = siteurl;
         }
     }
+    // ============================================================
+    // 分站
+    var url = '';
+    var ico = '';
+    var text = '';
+
+    var substation_ele = document.getElementsByClassName('substation')[0];
+    var substation_ico_ele = document.getElementsByClassName('substation-ico')[0];
+    var substation_text_ele = document.getElementsByClassName('substation-text')[0];
+
+    switch (document.domain) {
+      case 'lwlwilliam.github.io':
+        url = '{{ site.url }}';
+        ico = '{{ site.url }}/github.ico';
+        text = 'Github分站';
+        break;
+      default:
+        url = '{{ site.gitee }}';
+        ico = '{{ site.url }}/gitee.ico';
+        text = 'Gitee分站';
+    }
+
+    substation_ele.href = url;
+    substation_ico_ele.src = ico;
+    substation_text_ele.innerText = text;
 </script>
