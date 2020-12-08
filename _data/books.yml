@@ -1,4 +1,8 @@
 2020:
+  - name: Docker 技术入门与实战（第 3 版）
+    info: 杨保华 戴王剑 曹亚仑 / 机械工业出版社
+    remark: true
+    collect: true
   - name: 代码整洁之道
     info: Robert C. Martin / 人民邮电出版社
     remark: false
