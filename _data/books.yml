@@ -1,3 +1,20 @@
+2021:
+  - name: 自制编译器
+    info: 青木峰郎 / 人民邮电出版社
+    remark: false
+    collect: true
+  - name: PHP 内核剖析
+    info: 秦朋 / 电子工业出版社
+    remark: false
+    collect: false
+  - name: 编译原理之美（网络课程）
+    info: 宫文学 / 极客时间
+    remark: true
+    collect: true
+  - name: 编译原理实战课（网络课程）
+    info: 宫文学 / 极客时间
+    remark: false
+    collect: true
 2020:
   - name: Docker 技术入门与实战（第 3 版）
     info: 杨保华 戴王剑 曹亚仑 / 机械工业出版社
