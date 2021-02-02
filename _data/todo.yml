@@ -1,11 +1,11 @@
 - name: 分布式原理
-  remark: 视频 + 书
+  remark: 视频+书
 
 - name: 编译原理
-  remark: 极客
+  remark: 极客+书
 
 - name: 算法与数据结构
-  remark: 极客
+  remark: 极客+书
 
 - name: 复习鸟哥私房菜
   remark:
@@ -13,11 +13,5 @@
 - name: 未读的书单
   remark:
 
-- name: 老李的网络编程专栏
-  remark: UNP + APUE 辅助进食
-
-- name: 通读 workerman 源码及周边
-  remark:
-
-- name: PHP The Right Way
-  remark: 注重规范、单元测试、模拟工作负载等
+- name: 老李的网络编程
+  remark: UNP + APUE + 阅读框架源码辅助进食
