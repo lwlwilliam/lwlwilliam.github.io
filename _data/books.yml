@@ -1,4 +1,16 @@
 2021:
+  - name: Node.js+Webpack开发实战
+    info: 夏磊 / 清华大学出版社
+    remark: true
+    collect: false
+  - name: Go语言高级编程
+    info: 柴树杉 曹春晖 / 人民邮电出版社
+    remark: false
+    collect: true
+  - name: 算法（第4版）
+    info: Robert Sedgewick, Kevin Wayne / 人民邮电出版社
+    remark: false
+    collect: true
   - name: 计算的本质
     info: Tom Stuart / 人民邮电出版社
     remark: false
@@ -17,7 +29,7 @@
     collect: true
   - name: 编译原理实战课（网络课程）
     info: 宫文学 / 极客时间
-    remark: false
+    remark: true
     collect: true
 2020:
   - name: Docker 技术入门与实战（第 3 版）
