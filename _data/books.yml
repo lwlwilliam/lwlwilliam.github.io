@@ -1,4 +1,8 @@
 2021:
+  - name: 数据结构与算法图解
+    info: 杰伊·温格罗 / 人民邮电出版社
+    remark: true
+    collect: true
   - name: Node.js+Webpack开发实战
     info: 夏磊 / 清华大学出版社
     remark: true
