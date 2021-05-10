@@ -1,4 +1,12 @@
 2021:
+  - name: 汇编语言(第3版)
+    info: ISBN 9787302333142
+	remark: true
+	collect: true
+  - name: 代码的未来
+    info: ISBN 9787115317513
+	remark: true
+	collect: true
   - name: 自己动手写Docker
     info: ISBN 9787121317866
     remark: false
