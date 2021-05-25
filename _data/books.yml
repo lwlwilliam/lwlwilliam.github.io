@@ -1,4 +1,8 @@
 2021:
+  - name: 操作系统原理、实现与实践
+    info: ISBN 9787040492453
+    remark: false
+    collect: true
   - name: 汇编语言(第3版)
     info: ISBN 9787302333142
     remark: true
