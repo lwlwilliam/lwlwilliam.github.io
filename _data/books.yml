@@ -1,4 +1,24 @@
 2021:
+  - name: MySQL技术内幕
+    info: ISBN 9787111422068
+    remark: false
+    collect: true
+  - name: 30天自制操作系统
+    info: ISBN 9787115287960
+    remark: false
+    collect: false
+  - name: Linux 内核设计的艺术(第2版)
+    info: ISBN 9787111421764
+    remark: false
+    collect: false
+  - name: 深度探索嵌入式操作系统
+    info: ISBN 9787111514879
+    remark: false
+    collect: false
+  - name: 操作系统真象还原
+    info: ISBN 9787115414342
+    remark: false
+    collect: true
   - name: 操作系统原理、实现与实践
     info: ISBN 9787040492453
     remark: false
@@ -41,7 +61,7 @@
     collect: true
   - name: 自制编译器
     info: ISBN 9787115422187
-    remark: false
+    remark: true
     collect: true
   - name: PHP 内核剖析
     info: ISBN 9787121328107
