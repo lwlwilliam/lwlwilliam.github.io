@@ -1,0 +1,139 @@
+---
+title: WebSocket原理探究
+layout: post
+categories: [计算机网络]
+keywords: WebSocket
+---
+
+WebSocket 究竟是什么东西呢？貌似有人看到 WebSocket 里面有 `Socket` 就以为它跟 Socket 有什么关系。呃，要真说它们有什么关系，也确实有，WebSocket 跟 Socket 之间还隔着一层 HTTP，姑且算是有关系吧。
+
+WebSocket 协议是基于 HTTP 实现的，具体来说，WebSocket 通过 HTTP 实现握手，握手之后就没 HTTP 什么事了（根据现有知识推断，握手之后就跟 HTTP 没关系了）。
+
+为此，我特意写了个 WebSocket 服务，暂时只实现了握手，读写消息还没实现；等后面细看下 WebSocket 帧是怎么处理数据再说。
+
+```go
+package main
+
+import (
+	"crypto/sha1"
+	"encoding/base64"
+	"fmt"
+	"io"
+	"log"
+	"net"
+	"strings"
+)
+
+const Series = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
+
+func main() {
+	S()
+}
+
+func S() {
+	l, err := net.Listen("tcp", ":8888")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("listening %s...", l.Addr())
+
+	for {
+		conn, err := l.Accept()
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		log.Printf("%s accepted...", conn.RemoteAddr())
+
+		go handleS(&conn)
+	}
+}
+
+func handleS(conn *net.Conn) {
+	log.Printf("handling %s...", (*conn).RemoteAddr())
+
+	buf := make([]byte, 1024)
+	// demo 默认一次读完
+	n, err := (*conn).Read(buf)
+	if err != nil {
+		log.Println(err)
+	}
+
+	lines := strings.Split(string(buf[:n]), "\r\n")
+	headers := map[string]string{}
+	for _, line := range lines {
+		// headers
+		row := strings.Split(line, ":")
+		if len(row) == 2 {
+			key := strings.TrimSpace(row[0])
+			val := strings.TrimSpace(row[1])
+			headers[key] = val
+		}
+	}
+
+	_, hasConnection := headers["Connection"]
+	_, hasUpgrade := headers["Upgrade"]
+	if hasConnection && hasUpgrade {
+		// handshake
+		key := headers["Sec-WebSocket-Key"]
+		str := key + Series
+		src := sha1.Sum([]byte(str))
+		dst := base64.StdEncoding.EncodeToString(src[:])
+
+		_, err := (*conn).Write([]byte(fmt.Sprintf("%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n%s%s\r\n\r\n",
+			"HTTP/1.1 101 Switching Protocols",
+			"Connection: Upgrade",
+			"Upgrade: websocket",
+			"Server: Go",
+			"Sec-WebSocket-Version: 13",
+			"Sec-WebSocket-Accept: ",
+			dst)))
+
+		if err != nil {
+			log.Println(err)
+		}
+
+		go handleWebsocket(conn)
+
+	} else {
+		_, err := (*conn).Write([]byte(fmt.Sprintf("%s\r\n%s\r\n%s\r\n\r\n%s",
+			"HTTP/1.1 400 Bad Request",
+			"Server: Go",
+			"Content-Length: 15",
+			"400 Bad Request")))
+		if err != nil {
+			log.Println(err)
+		}
+		// TODO
+		log.Printf("close bad request %s...", (*conn).RemoteAddr())
+		defer (*conn).Close()
+	}
+}
+
+func handleWebsocket(conn *net.Conn) {
+	defer (*conn).Close()
+
+	buf := make([]byte, 1024)
+	for {
+		n, err := (*conn).Read(buf)
+		if err != nil {
+			if err == io.EOF {
+				log.Printf("close websocket %s...", (*conn).RemoteAddr())
+				break
+			}
+
+			log.Println(err)
+			continue
+		}
+
+		for _, v := range buf[:n] {
+			fmt.Printf("%02x ", v)
+		}
+		fmt.Printf("\n")
+	}
+}
+```
+
+简单解释一下以上代码。Socket 代码自不必多说，Accept 连接之后，需要对接收到的消息进行判断，如果有`Connection: Upgrade`和`Upgrade: websocket`请求头的话，则进入 WebSocket 握手处理。WebSocket 握手时，HTTP 报文还会带上`Sec-WebSocket-Key`请求头，这个 Key 值是由客户端随机生成的（也是经过 base64 编码的），我们将这个 Key 拼接上`258EAFA5-E914-47DA-95CA-C5AB0DC85B11`，这个字符串是固定的，用这个串的原因得查一下 RFC 才知道了；接着将拼接之后的字符串进行 sha1 散列，最后再 base64 编码。我们回复握手报文至此已经准备好了，将上面生成的 base64 编码字符中添加到`Sec-WebSocket-Accept`响应头上，其它内容可以固定，当然也可以加上其它响应头，但现在这样的代码足够让实验成功了。
+
+握手成功之后，Accept 建立的连接千万不要 Close，我们后面的 WebSocket 消息就靠它来传输了。另外，这个连接应当要对进来的消息进行校验。
