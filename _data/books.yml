@@ -1,4 +1,12 @@
 2021:
+  - name: 数据库系统概念
+    info: ISBN 9787111375296
+    remark: false
+    collect: false
+  - name: 深入剖析 Kubernetes
+    info: ISBN 9787115560018
+    remark: false
+    collect: false
   - name: MySQL技术内幕
     info: ISBN 9787111422068
     remark: false
@@ -76,6 +84,10 @@
     remark: true
     collect: true
 2020:
+  - name: Go 语言学习笔记
+    info: ISBN 9787121291609
+    remark: true
+    collect: false
   - name: Docker 技术入门与实战(第3版)
     info: ISBN 9787111608523
     remark: true
