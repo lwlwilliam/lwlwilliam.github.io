@@ -1,4 +1,12 @@
 2021:
+  - name: Linux C编程一站式学习
+    info: ISBN 9787121097713
+    remark: true
+    collect: true
+  - name: 程序员的自我修养——链接、装载与库
+    info: ISBN 9787121085116
+    remark: false
+    collect: true
   - name: 数据库系统概念
     info: ISBN 9787111375296
     remark: false
@@ -17,7 +25,7 @@
     collect: false
   - name: Linux 内核设计的艺术(第2版)
     info: ISBN 9787111421764
-    remark: false
+    remark: true
     collect: false
   - name: 深度探索嵌入式操作系统
     info: ISBN 9787111514879
