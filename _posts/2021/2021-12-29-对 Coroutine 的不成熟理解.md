@@ -67,6 +67,34 @@ int main() {
 }
 ```
 
+```c
+#include <stdio.h>
+
+#define crBegin static int state = 0; switch(state) { case 0:
+#define crReturn(i, x) do { state = 1; return x; case 1:; } while (0)
+#define crFinish }
+
+int function(void) {
+    static int i;
+    crBegin;
+    for (i = 0; i < 10; i ++) {
+        crReturn(1, i);
+    }
+    crFinish;
+}
+
+int main() {
+    printf("%d\n", function());
+    printf("task: 1\n");
+    printf("%d\n", function());
+    printf("task: 2\n");
+    printf("%d\n", function());
+    printf("task: 3\n");
+    
+    return 0;
+}
+```
+
 ### 参考
 
 [Coroutines in C](https://www.chiark.greenend.org.uk/~sgtatham/coroutines.html)
