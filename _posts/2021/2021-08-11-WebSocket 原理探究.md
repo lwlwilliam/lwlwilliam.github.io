@@ -1,5 +1,5 @@
 ---
-title: WebSocket原理探究
+title: WebSocket 原理探究
 layout: post
 categories: [计算机网络]
 keywords: WebSocket

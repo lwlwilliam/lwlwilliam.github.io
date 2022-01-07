@@ -95,6 +95,89 @@ int main() {
 }
 ```
 
+### setjmp/longjmp
+
+```c
+#include <stdio.h>
+#include <unistd.h>
+#include <setjmp.h>
+
+typedef int BOOL;
+#define TRUE 1
+#define FALSE 0
+
+typedef struct _Context_ {
+	jmp_buf mainBuf;
+	jmp_buf coBuf;
+} Context;
+
+Context gCtx;
+
+// 恢复
+#define resume()\
+	if (0 == setjmp(gCtx.mainBuf)) \
+	{ \
+		longjmp(gCtx.coBuf, 1); \
+	}
+
+// 挂起
+#define yield()\
+	if (0 == setjmp(gCtx.coBuf)) \
+	{ \
+		longjmp(gCtx.mainBuf, 1); \
+	}
+
+void coroutine_function(void *arg)
+{
+	while (TRUE)
+	{
+		printf("\n*** coroutine: working\n");
+
+		for (int i = 0; i < 10; ++i)
+		{
+			fprintf(stderr, ".");
+			usleep(1000 * 200);
+		}
+		printf("\n*** coroutine: suspend\n");
+		
+		// 让出 CPU
+		yield();
+	}
+}
+
+typedef void (*pf)(void *);
+BOOL go(pf func, void *arg)
+{
+	// 保存主程的跳转点
+	if (0 == setjmp(gCtx.mainBuf))
+	{
+		func(arg);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+int main()
+{
+	go(coroutine_function, NULL);
+
+	while (TRUE)
+	{
+		printf("\n=== main: working\n");
+		// 模拟耗时操作
+		for (int i = 0; i < 10; ++i)
+		{
+			fprintf(stderr, ".");
+			usleep(1000 * 200);
+		}
+		printf("\n=== main: suspend\n");
+		resume();
+	}
+
+	return 0;
+}
+```
+
 ### 参考
 
 [Coroutines in C](https://www.chiark.greenend.org.uk/~sgtatham/coroutines.html)
