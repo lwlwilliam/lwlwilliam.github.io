@@ -34,7 +34,7 @@ permalink: /archives/
         {% if thisyear != 1 %}
             </div>
         {% endif %}
-<blockquote>{{ post.date | date: '%Y' }} [{{ counts[i] }}]</blockquote>
+            <blockquote style="font-size: 1.5rem;">{{ post.date | date: '%Y' }}<span class="title-badge">{{ counts[i] }}</span></blockquote>
         {% if thisyear != 0 %}
             {% assign thisyear = 0 %}
         {% endif %}

@@ -3,6 +3,14 @@
     info: ISBN 9787302162063
     remark: true
     collect: true
+  - name: 大话数据结构
+    info: ISBN 9787302255659
+    remark: false
+    collect: false
+  - name: 编译原理学习与实践指导
+    info: ISBN 9787562836681
+    remark: true
+    collect: false
 2021:
   - name: Linux C编程一站式学习
     info: ISBN 9787121097713
