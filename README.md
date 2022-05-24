@@ -2,7 +2,7 @@
 
 [https://lwlwilliam.github.io](https://lwlwilliam.github.io)
 
-jekyll 使用的模板引擎是 [Liquid](https://shopify.github.io/liquid/)。
+jekyll 使用的模板引擎是 [Liquid](https://shopify.github.io/liquid/) 。
 
 ```bash
 $ cd repoDir
