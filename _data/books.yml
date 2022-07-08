@@ -1,4 +1,12 @@
 2022:
+  - name: 普林斯顿计算机公开课
+    info: ISBN 9787111593102
+    remark: false
+    collect: true
+  - name: 数据结构与算法之美
+    info: ISBN 9787115562050
+    remark: true
+    collect: false
   - name: 大话设计模式
     info: ISBN 9787302162063
     remark: true
