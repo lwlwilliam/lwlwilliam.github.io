@@ -1,4 +1,8 @@
 2022:
+  - name: 编译器设计（第2版）
+    info: ISBN 9787115301949
+    remark: false
+    collect: true
   - name: 普林斯顿计算机公开课
     info: ISBN 9787111593102
     remark: false
@@ -13,8 +17,8 @@
     collect: true
   - name: 大话数据结构
     info: ISBN 9787302255659
-    remark: false
-    collect: false
+    remark: true
+    collect: true
   - name: 编译原理学习与实践指导
     info: ISBN 9787562836681
     remark: true
