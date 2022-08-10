@@ -11,7 +11,7 @@ permalink: /categories/
 <section class="container posts-content">
 {% assign sorted_categories = site.categories | sort %}
 {% for category in sorted_categories %}
-    <blockquote>{{ category | first }}</blockquote>
+    <blockquote style="font-size: 1.5rem;">{{ category | first }}</blockquote>
     <div class="posts-list" id="{{ category[0] }}">
         {% for post in category.last %}
             <div class="posts-list-item">

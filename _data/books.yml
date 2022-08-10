@@ -1,8 +1,32 @@
 2022:
+  - name: PHP Internals Book
+    info: <a href="https://www.phpinternalsbook.com" target="_blank">PHP Internals Book</a>
+    remark: false
+    collect: true
+  - name: 编译器设计（第2版）
+    info: ISBN 9787115301949
+    remark: false
+    collect: true
+  - name: 普林斯顿计算机公开课
+    info: ISBN 9787111593102
+    remark: true
+    collect: true
+  - name: 数据结构与算法之美
+    info: ISBN 9787115562050
+    remark: true
+    collect: false
   - name: 大话设计模式
     info: ISBN 9787302162063
     remark: true
     collect: true
+  - name: 大话数据结构
+    info: ISBN 9787302255659
+    remark: true
+    collect: true
+  - name: 编译原理学习与实践指导
+    info: ISBN 9787562836681
+    remark: true
+    collect: false
 2021:
   - name: Linux C编程一站式学习
     info: ISBN 9787121097713
