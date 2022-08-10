@@ -1,11 +1,15 @@
 2022:
+  - name: PHP Internals Book
+    info: <a href="https://www.phpinternalsbook.com" target="_blank">PHP Internals Book</a>
+    remark: false
+    collect: true
   - name: 编译器设计（第2版）
     info: ISBN 9787115301949
     remark: false
     collect: true
   - name: 普林斯顿计算机公开课
     info: ISBN 9787111593102
-    remark: false
+    remark: true
     collect: true
   - name: 数据结构与算法之美
     info: ISBN 9787115562050
