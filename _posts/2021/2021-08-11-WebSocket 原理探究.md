@@ -15,168 +15,168 @@ WebSocket 协议是基于 HTTP 实现的，具体来说，WebSocket 通过 HTTP 
 package main
 
 import (
-	"crypto/sha1"
-	"encoding/base64"
-	"fmt"
-	"io"
-	"log"
-	"net"
-	"strings"
+    "crypto/sha1"
+    "encoding/base64"
+    "fmt"
+    "io"
+    "log"
+    "net"
+    "strings"
 )
 
 const Series = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 
 func main() {
-	S()
+    S()
 }
 
 func S() {
-	l, err := net.Listen("tcp", "localhost:9999")
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Printf("listening %s...", l.Addr())
+    l, err := net.Listen("tcp", "localhost:9999")
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf("listening %s...", l.Addr())
 
-	for {
-		conn, err := l.Accept()
-		if err != nil {
-			log.Println(err)
-			continue
-		}
-		log.Printf("%s accepted...", conn.RemoteAddr())
+    for {
+        conn, err := l.Accept()
+        if err != nil {
+            log.Println(err)
+            continue
+        }
+        log.Printf("%s accepted...", conn.RemoteAddr())
 
-		go handleS(&conn)
-	}
+        go handleS(&conn)
+    }
 }
 
 func handleS(conn *net.Conn) {
-	log.Printf("handling %s...", (*conn).RemoteAddr())
+    log.Printf("handling %s...", (*conn).RemoteAddr())
 
-	buf := make([]byte, 1024)
-	// demo 默认一次读完
-	n, err := (*conn).Read(buf)
-	if err != nil {
-		log.Println(err)
-	}
+    buf := make([]byte, 1024)
+    // demo 默认一次读完
+    n, err := (*conn).Read(buf)
+    if err != nil {
+        log.Println(err)
+    }
 
-	lines := strings.Split(string(buf[:n]), "\r\n")
-	headers := map[string]string{}
-	for _, line := range lines {
-		// headers
-		row := strings.Split(line, ":")
-		if len(row) == 2 {
-			key := strings.TrimSpace(row[0])
-			val := strings.TrimSpace(row[1])
-			headers[key] = val
-		}
-	}
+    lines := strings.Split(string(buf[:n]), "\r\n")
+    headers := map[string]string{}
+    for _, line := range lines {
+        // headers
+        row := strings.Split(line, ":")
+        if len(row) == 2 {
+            key := strings.TrimSpace(row[0])
+            val := strings.TrimSpace(row[1])
+            headers[key] = val
+        }
+    }
 
-	_, hasConnection := headers["Connection"]
-	_, hasUpgrade := headers["Upgrade"]
-	if hasConnection && hasUpgrade {
-		// handshake
-		key := headers["Sec-WebSocket-Key"]
-		str := key + Series
-		src := sha1.Sum([]byte(str))
-		dst := base64.StdEncoding.EncodeToString(src[:])
+    _, hasConnection := headers["Connection"]
+    _, hasUpgrade := headers["Upgrade"]
+    if hasConnection && hasUpgrade {
+        // handshake
+        key := headers["Sec-WebSocket-Key"]
+        str := key + Series
+        src := sha1.Sum([]byte(str))
+        dst := base64.StdEncoding.EncodeToString(src[:])
 
-		_, err := (*conn).Write([]byte(fmt.Sprintf("%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n%s%s\r\n\r\n",
-			"HTTP/1.1 101 Switching Protocols",
-			"Connection: Upgrade",
-			"Upgrade: websocket",
-			"Server: Go",
-			"Sec-WebSocket-Version: 13",
-			"Sec-WebSocket-Accept: ",
-			dst)))
+        _, err := (*conn).Write([]byte(fmt.Sprintf("%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n%s%s\r\n\r\n",
+            "HTTP/1.1 101 Switching Protocols",
+            "Connection: Upgrade",
+            "Upgrade: websocket",
+            "Server: Go",
+            "Sec-WebSocket-Version: 13",
+            "Sec-WebSocket-Accept: ",
+            dst)))
 
-		if err != nil {
-			log.Println(err)
-		}
+        if err != nil {
+            log.Println(err)
+        }
 
-		go handleWebsocket(conn)
+        go handleWebsocket(conn)
 
-	} else {
-		_, err := (*conn).Write([]byte(fmt.Sprintf("%s\r\n%s\r\n%s\r\n\r\n%s",
-			"HTTP/1.1 400 Bad Request",
-			"Server: Go",
-			"Content-Length: 15",
-			"400 Bad Request")))
-		if err != nil {
-			log.Println(err)
-		}
-		// TODO
-		log.Printf("close bad request %s...", (*conn).RemoteAddr())
-		defer (*conn).Close()
-	}
+    } else {
+        _, err := (*conn).Write([]byte(fmt.Sprintf("%s\r\n%s\r\n%s\r\n\r\n%s",
+            "HTTP/1.1 400 Bad Request",
+            "Server: Go",
+            "Content-Length: 15",
+            "400 Bad Request")))
+        if err != nil {
+            log.Println(err)
+        }
+        // TODO
+        log.Printf("close bad request %s...", (*conn).RemoteAddr())
+        defer (*conn).Close()
+    }
 }
 
 func handleWebsocket(conn *net.Conn) {
-	defer (*conn).Close()
+    defer (*conn).Close()
 
-	buf := make([]byte, 1024)
-	for {
-		n, err := (*conn).Read(buf)
-		if err != nil {
-			if err == io.EOF {
-				log.Printf("close websocket %s...", (*conn).RemoteAddr())
-				break
-			}
+    buf := make([]byte, 1024)
+    for {
+        n, err := (*conn).Read(buf)
+        if err != nil {
+            if err == io.EOF {
+                log.Printf("close websocket %s...", (*conn).RemoteAddr())
+                break
+            }
 
-			log.Println(err)
-			continue
-		}
+            log.Println(err)
+            continue
+        }
 
-		fmt.Printf("recvData: %#x\n", buf[:n])
-		var maskKey []byte
-		for k, v := range buf[:n] {
-			// k 为第 k+1 个字节
-			switch k {
-			case 0:
-				// FIN，1位，0x80 表示结束
-				fmt.Printf("fin: %#x\n", v&0b10000000)
+        fmt.Printf("recvData: %#x\n", buf[:n])
+        var maskKey []byte
+        for k, v := range buf[:n] {
+            // k 为第 k+1 个字节
+            switch k {
+            case 0:
+                // FIN，1位，0x80 表示结束
+                fmt.Printf("fin: %#x\n", v&0b10000000)
 
-				// RSV1/RSV2/RSV3，共3位
-				fmt.Printf("RSV: %#x\n", v&0b01110000)
+                // RSV1/RSV2/RSV3，共3位
+                fmt.Printf("RSV: %#x\n", v&0b01110000)
 
-				// OPCODE，4位，1 表示文本数据；2 表示二进制数据帧
-				fmt.Printf("opcode: %#x\n", v&0b00001111)
-			case 1:
-				// MASK，1位，表示是否使用掩码
-				fmt.Printf("mask: %#x\n", v&0b10000000)
-				// payload len，7位，最大值为 2^7 = 127，如果值为 0-125，则是 payload 的真实长度；如果值为 126，则后面的两字节表示的无符号整才是真正的 payload len；
-				// 如果值为 127，则后面的八字节表示的无符号整数才是真正的 payload len
-				fmt.Printf("payload len: %#x\n", v&0b01111111)
-			case 2:
-				// nothing to do
-			case 3:
-				// nothing to do
-			case 4:
-				// nothing to do
-			case 5:
-				// mask-key，4字节
-				maskKey = buf[2:6]
-				fmt.Printf("mask-key: %#x\n", buf[2:6])
-			case len(buf[:n]) - 1:
-				// payload
-				fmt.Printf("payload: ")
-				//fmt.Printf("%#x\n", buf[6:n])
-				for k, v := range buf[6:n] {
-					fmt.Printf("%c", maskKey[k%4]^byte(v))
-				}
-				fmt.Println()
-			}
-		}
-		fmt.Printf("\n")
+                // OPCODE，4位，1 表示文本数据；2 表示二进制数据帧
+                fmt.Printf("opcode: %#x\n", v&0b00001111)
+            case 1:
+                // MASK，1位，表示是否使用掩码
+                fmt.Printf("mask: %#x\n", v&0b10000000)
+                // payload len，7位，最大值为 2^7 = 127，如果值为 0-125，则是 payload 的真实长度；如果值为 126，则后面的两字节表示的无符号整才是真正的 payload len；
+                // 如果值为 127，则后面的八字节表示的无符号整数才是真正的 payload len
+                fmt.Printf("payload len: %#x\n", v&0b01111111)
+            case 2:
+                // nothing to do
+            case 3:
+                // nothing to do
+            case 4:
+                // nothing to do
+            case 5:
+                // mask-key，4字节
+                maskKey = buf[2:6]
+                fmt.Printf("mask-key: %#x\n", buf[2:6])
+            case len(buf[:n]) - 1:
+                // payload
+                fmt.Printf("payload: ")
+                //fmt.Printf("%#x\n", buf[6:n])
+                for k, v := range buf[6:n] {
+                    fmt.Printf("%c", maskKey[k%4]^byte(v))
+                }
+                fmt.Println()
+            }
+        }
+        fmt.Printf("\n")
 
-		sendPayload := []byte{'w', 'o', 'r', 'l', 'd'}
-		sendData := []byte{
-			0b10000001, 0b00000101,
-		}
+        sendPayload := []byte{'w', 'o', 'r', 'l', 'd'}
+        sendData := []byte{
+            0b10000001, 0b00000101,
+        }
 
-		sendData = append(sendData, sendPayload...)
-		fmt.Printf("sendData: %#x(%s)\n", sendData, sendData)
-		(*conn).Write(sendData)
-	}
+        sendData = append(sendData, sendPayload...)
+        fmt.Printf("sendData: %#x(%s)\n", sendData, sendData)
+        (*conn).Write(sendData)
+    }
 }
 ```
 

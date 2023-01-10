@@ -17,13 +17,13 @@ $ docker pull php:7.1-fpm
 
 ##### MySQL
 
-1.	启动容器，注意要添加 MYSQL_ROOT_PASSWORD 环境变量，用来设置 root 密码
+1.  启动容器，注意要添加 MYSQL_ROOT_PASSWORD 环境变量，用来设置 root 密码
 
     ```bash
     $ docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql:5.7
     ```
 
-2.	创建测试 mysql 数据
+2.  创建测试 mysql 数据
 
     ```bash
     $ docker exec -ti mysql /bin/bash
@@ -47,7 +47,7 @@ $ docker pull php:7.1-fpm
 
 ##### PHP
 
-1.	准备测试 php 文件
+1.  准备测试 php 文件
 
     ```php
     <?php
@@ -62,7 +62,7 @@ $ docker pull php:7.1-fpm
         }
     ```
 
-2.	启动容器，安装 mysqli 扩展，将 php 文件复制到容器对应目录中，有以下两种方法，推荐使用第二种，直接挂载数据卷
+2.  启动容器，安装 mysqli 扩展，将 php 文件复制到容器对应目录中，有以下两种方法，推荐使用第二种，直接挂载数据卷
 
     1.  没有数据卷挂载 
 
@@ -85,7 +85,7 @@ $ docker pull php:7.1-fpm
 
 ##### Nginx
 
-1.	启动容器，在容器内的`/etc/nginx/conf.d/default.conf`文件中`server`模块内添加如下`location{}`配置，`fastcgi_pass`中的`php`是`--link php:php`启动参数中的连接名称
+1.  启动容器，在容器内的`/etc/nginx/conf.d/default.conf`文件中`server`模块内添加如下`location{}`配置，`fastcgi_pass`中的`php`是`--link php:php`启动参数中的连接名称
 
     ```bash
     $ docker run -d --name nginx -p 9999:80 --link php:php nginx
@@ -93,9 +93,9 @@ $ docker pull php:7.1-fpm
     $ vim default.conf
     location ~ \.php$ {
         root            /usr/share/php; # $document_root
-        fastcgi_pass	php:9000; # php 指的是 --link php:php 参数指定的网络名称
-        fastcgi_index	index.php;
-        fastcgi_param	SCRIPT_FILENAME	$document_root$fastcgi_script_name;
+        fastcgi_pass    php:9000; # php 指的是 --link php:php 参数指定的网络名称
+        fastcgi_index   index.php;
+        fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include         fastcgi_params;
     }
     $ docker cp default.conf nginx:/etc/nginx/conf.d/default.conf

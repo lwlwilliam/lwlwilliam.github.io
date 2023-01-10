@@ -43,27 +43,27 @@ int main() {
 #include <stdio.h>
 
 int function(void) {
-	static int i, state = 0;
+    static int i, state = 0;
 
-	switch (state) {
-		case 0: /* start of function */
-			for (i = 0; i < 10; i ++) {
-				state = 1;
-				return i;
-				case 1:; /* resume control straight after the return */
-			}
-	}
+    switch (state) {
+        case 0: /* start of function */
+            for (i = 0; i < 10; i ++) {
+                state = 1;
+                return i;
+                case 1:; /* resume control straight after the return */
+            }
+    }
 }
 
 int main() {
-	printf("%d\n", function());
-	printf("task 1\n");
-	printf("%d\n", function());
-	printf("task 2\n");
-	printf("%d\n", function());
-	printf("task 3\n");
+    printf("%d\n", function());
+    printf("task 1\n");
+    printf("%d\n", function());
+    printf("task 2\n");
+    printf("%d\n", function());
+    printf("task 3\n");
 
-	return 0;
+    return 0;
 }
 ```
 
@@ -107,74 +107,74 @@ typedef int BOOL;
 #define FALSE 0
 
 typedef struct _Context_ {
-	jmp_buf mainBuf;
-	jmp_buf coBuf;
+    jmp_buf mainBuf;
+    jmp_buf coBuf;
 } Context;
 
 Context gCtx;
 
 // 恢复
 #define resume()\
-	if (0 == setjmp(gCtx.mainBuf)) \
-	{ \
-		longjmp(gCtx.coBuf, 1); \
-	}
+    if (0 == setjmp(gCtx.mainBuf)) \
+    { \
+        longjmp(gCtx.coBuf, 1); \
+    }
 
 // 挂起
 #define yield()\
-	if (0 == setjmp(gCtx.coBuf)) \
-	{ \
-		longjmp(gCtx.mainBuf, 1); \
-	}
+    if (0 == setjmp(gCtx.coBuf)) \
+    { \
+        longjmp(gCtx.mainBuf, 1); \
+    }
 
 void coroutine_function(void *arg)
 {
-	while (TRUE)
-	{
-		printf("\n*** coroutine: working\n");
+    while (TRUE)
+    {
+        printf("\n*** coroutine: working\n");
 
-		for (int i = 0; i < 10; ++i)
-		{
-			fprintf(stderr, ".");
-			usleep(1000 * 200);
-		}
-		printf("\n*** coroutine: suspend\n");
-		
-		// 让出 CPU
-		yield();
-	}
+        for (int i = 0; i < 10; ++i)
+        {
+            fprintf(stderr, ".");
+            usleep(1000 * 200);
+        }
+        printf("\n*** coroutine: suspend\n");
+
+        // 让出 CPU
+        yield();
+    }
 }
 
 typedef void (*pf)(void *);
 BOOL go(pf func, void *arg)
 {
-	// 保存主程的跳转点
-	if (0 == setjmp(gCtx.mainBuf))
-	{
-		func(arg);
-		return TRUE;
-	}
-	return FALSE;
+    // 保存主程的跳转点
+    if (0 == setjmp(gCtx.mainBuf))
+    {
+        func(arg);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 int main()
 {
-	go(coroutine_function, NULL);
+    go(coroutine_function, NULL);
 
-	while (TRUE)
-	{
-		printf("\n=== main: working\n");
-		// 模拟耗时操作
-		for (int i = 0; i < 10; ++i)
-		{
-			fprintf(stderr, ".");
-			usleep(1000 * 200);
-		}
-		printf("\n=== main: suspend\n");
-		resume();
-	}
+    while (TRUE)
+    {
+        printf("\n=== main: working\n");
+        // 模拟耗时操作
+        for (int i = 0; i < 10; ++i)
+        {
+            fprintf(stderr, ".");
+            usleep(1000 * 200);
+        }
+        printf("\n=== main: suspend\n");
+        resume();
+    }
 
-	return 0;
+    return 0;
 }
 ```
 

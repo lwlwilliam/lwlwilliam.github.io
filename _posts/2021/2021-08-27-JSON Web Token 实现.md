@@ -72,56 +72,56 @@ secret)
 package main
 
 import (
-	"bytes"
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/base64"
-	"encoding/json"
-	"fmt"
-	"log"
-	"strings"
+    "bytes"
+    "crypto/hmac"
+    "crypto/sha256"
+    "encoding/base64"
+    "encoding/json"
+    "fmt"
+    "log"
+    "strings"
 )
 
 type Header struct {
-	Alg string `json:"alg"`
-	Typ string `json:"typ"`
+    Alg string `json:"alg"`
+    Typ string `json:"typ"`
 }
 
 type Payload struct {
-	Sub  string `json:"sub"`
-	Name string `json:"name"`
-	Iat  int    `json:"iat"`
+    Sub  string `json:"sub"`
+    Name string `json:"name"`
+    Iat  int    `json:"iat"`
 }
 
 func main() {
-	header := Header{
-		"HS256",
-		"JWT",
-	}
-	headerSli, err := json.Marshal(header)
-	if err != nil {
-		log.Fatal(err)
-	}
-	headerStr := base64.RawURLEncoding.EncodeToString(headerSli)
+    header := Header{
+        "HS256",
+        "JWT",
+    }
+    headerSli, err := json.Marshal(header)
+    if err != nil {
+        log.Fatal(err)
+    }
+    headerStr := base64.RawURLEncoding.EncodeToString(headerSli)
 
-	payload := Payload{"1234567890", "John Doe", 1516239022}
-	payloadSli, err := json.Marshal(payload)
-	if err != nil {
-		log.Fatal(err)
-	}
-	payloadStr := base64.RawURLEncoding.EncodeToString(payloadSli)
+    payload := Payload{"1234567890", "John Doe", 1516239022}
+    payloadSli, err := json.Marshal(payload)
+    if err != nil {
+        log.Fatal(err)
+    }
+    payloadStr := base64.RawURLEncoding.EncodeToString(payloadSli)
 
-	hp := bytes.Join([][]byte{[]byte(headerStr), []byte(payloadStr)}, []byte{'.'})
-	secret := []byte("Hello world")
-	h := hmac.New(sha256.New, secret)
-	_, err = h.Write(hp)
-	if err != nil {
-		log.Fatal(err)
-	}
-	signStr := base64.RawURLEncoding.EncodeToString(h.Sum(nil))
+    hp := bytes.Join([][]byte{[]byte(headerStr), []byte(payloadStr)}, []byte{'.'})
+    secret := []byte("Hello world")
+    h := hmac.New(sha256.New, secret)
+    _, err = h.Write(hp)
+    if err != nil {
+        log.Fatal(err)
+    }
+    signStr := base64.RawURLEncoding.EncodeToString(h.Sum(nil))
 
-	jwt := strings.Join([]string{headerStr, payloadStr, signStr}, ".")
-	fmt.Println(jwt)
+    jwt := strings.Join([]string{headerStr, payloadStr, signStr}, ".")
+    fmt.Println(jwt)
 }
 ```
 
