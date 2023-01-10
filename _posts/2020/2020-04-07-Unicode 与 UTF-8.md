@@ -52,21 +52,21 @@ Go 语言中 rune 表示 Unicode 码点。第 10 行代码打印的正是`汉`�
 package main
 
 import (
-	"bytes"
-	"fmt"
+    "bytes"
+    "fmt"
 )
 
 func main() {
-	var r rune = '汉'
-	fmt.Printf("%U\n", r) // U+6C49
-	fmt.Printf("%b\n", r) // 110 1100 0100 1001
+    var r rune = '汉'
+    fmt.Printf("%U\n", r) // U+6C49
+    fmt.Printf("%b\n", r) // 110 1100 0100 1001
 
-	buf := bytes.NewBuffer(nil)
-	buf.WriteRune(r)
+    buf := bytes.NewBuffer(nil)
+    buf.WriteRune(r)
 
-	fmt.Printf("%U\n", buf.Bytes()) // E6B189
-	fmt.Printf("%b\n", buf.Bytes()) // [11100110 10110001 10001001]
-	fmt.Printf("%s\n", buf.Bytes()) // 汉
+    fmt.Printf("%U\n", buf.Bytes()) // E6B189
+    fmt.Printf("%b\n", buf.Bytes()) // [11100110 10110001 10001001]
+    fmt.Printf("%s\n", buf.Bytes()) // 汉
 }
 ```
 

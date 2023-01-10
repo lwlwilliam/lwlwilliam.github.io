@@ -9,7 +9,7 @@ keywords: 递归, Go, error
 
 ```go
 type error interface {
-	Error() string
+    Error() string
 }
 ```
 
@@ -18,8 +18,8 @@ type error interface {
 ```go
 i, err := strconv.Atoi("42")
 if err != nil {
-	fmt.Printf("Could'n convert number: %v.\n", err)
-	return
+    fmt.Printf("Could'n convert number: %v.\n", err)
+    return
 }
 
 fmt.Println("Converted integer:", i)
@@ -41,29 +41,29 @@ func (e ErrNegativeSqrt) Error() string
 package main
 
 import (
-	"fmt"
+    "fmt"
 )
 
 type ErrNegativeSqrt float64
 
 func (e ErrNegativeSqrt) Error() string {
-	// 死循环
-	//return fmt.Sprintf("Could'n convert number: %v.\n", e)
-	
-	return fmt.Sprintf("Could'n convert number: %v.\n", float64(e))
+    // 死循环
+    //return fmt.Sprintf("Could'n convert number: %v.\n", e)
+
+    return fmt.Sprintf("Could'n convert number: %v.\n", float64(e))
 }
 
 func Sqrt(x float64) (float64, error) {
-	if x >= 0 {
-        return 0, nil
-	} else {
-		return 0, ErrNegativeSqrt(x)
-	}
+    if x >= 0 {
+                  return 0, nil
+                  } else {
+        return 0, ErrNegativeSqrt(x)
+    }
 }
 
 func main() {
-	fmt.Println(Sqrt(2))
-	fmt.Println(Sqrt(-2))
+    fmt.Println(Sqrt(2))
+    fmt.Println(Sqrt(-2))
 }
 ```
 
