@@ -102,12 +102,12 @@ var provides = make(map[string]Provider)
 // 注册 session 管理器 provider
 func Register(name string, provider Provider) {
     if provider == nil {
-                           panic("session: Register provider is nil")
-                           }
+        panic("session: Register provider is nil")
+    }
 
     if _, dup := provides[name]; dup {
-     panic("session: Register called twice for provider " + name)
-     }
+        panic("session: Register called twice for provider " + name)
+    }
 
     provides[name] = provider
 }
@@ -123,8 +123,8 @@ type Manager struct {
 func NewManager(provideName, cookieName string, maxLifeTime int64) (*Manager, error) {
     provider, ok := provides[provideName]
     if !ok {
-     return nil, fmt.Errorf("session: unknown provide %q (forgotten import?)", provideName)
-     }
+        return nil, fmt.Errorf("session: unknown provide %q (forgotten import?)", provideName)
+    }
     return &Manager{provider: provider, cookieName: cookieName, maxLifeTime: maxLifeTime}, nil
 }
 
@@ -132,8 +132,8 @@ func NewManager(provideName, cookieName string, maxLifeTime int64) (*Manager, er
 func (manager *Manager) sessionID() string {
     b := make([]byte, 32)
     if _, err := rand.Read(b); err != nil {
-                                              return ""
-                                              }
+        return ""
+    }
     return base64.URLEncoding.EncodeToString(b)
 }
 
@@ -161,8 +161,8 @@ func (manager *Manager) SessionDestroy(w http.ResponseWriter, r *http.Request) {
     cookie, err := r.Cookie(manager.cookieName)
     // 是否需要对 cookie 进行处理
     if err != nil || cookie.Value == "" {
-                                            return
-                                            } else {
+        return
+    } else {
         manager.lock.Lock()
         defer manager.lock.Unlock()
         manager.provider.SessionDestroy(cookie.Value)
