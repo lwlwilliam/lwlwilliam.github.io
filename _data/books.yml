@@ -1,3 +1,12 @@
+2023:
+  - name: Writing A Compiler In Go
+    info: ISBN 9783982016108
+    remark: false
+    collect: true
+  - name: 智慧的疆界：从图灵机到人工智能
+    info: ISBN 9787111610496
+    remark: false
+    collect: false
 2022:
   - name: Python编程：从入门到实践
     info: ISBN 9787115428028
