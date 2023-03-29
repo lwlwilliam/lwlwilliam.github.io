@@ -41,7 +41,7 @@ menu: cd ~
                 <!--<h3 class="collection-header" id="sub-title"><span>{{ site.about }}</span></h3>-->
                 <div class="collection-info">
                     <div class="substation-link">
-                      {% if site.url == site.gitee_substation %}
+                      {% if site.url | replace ':80', '' | replace ':443', '' == site.gitee_substation | replace ':80', '' | replace ':443', '' %}
                         <a class="substation" href="{{ site.github_substation }}"><span><img class="substation-ico" src="{{ site.github_substation }}/github.ico" alt=""/></span><span class="substation-text"> 切换至 Github 分站</span></a>
                       {% else %}
                         <a class="substation" href="{{ site.gitee_substation }}"><span><img class="substation-ico" src="{{ site.gitee_substation }}/gitee.ico" alt=""/></span><span class="substation-text"> 切换至 Gitee 分站</span></a>
