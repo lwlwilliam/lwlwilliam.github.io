@@ -7,6 +7,10 @@
     info: ISBN 9787111610496
     remark: false
     collect: false
+  - name: 数学之美
+    info: ISBN 9787115537973
+    remark: false
+    collect: false
 2022:
   - name: Python编程：从入门到实践
     info: ISBN 9787115428028
