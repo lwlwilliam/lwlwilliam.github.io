@@ -46,9 +46,9 @@ menu: cd ~
                       {%assign target_url = site.gitee_substation | replace: ':80', ''%}
                       {%assign target_url2 = site.gitee_substation | replace: ':443', ''%}
                       {% if origin_url == target_url or origin_url2 == target_url2 %}
-                        <a class="substation" href="{{ site.github_substation }}"><span><img class="substation-ico" src="{{ site.github_substation }}/github.ico" alt=""/></span><span class="substation-text"> 切换至 Github 分站</span></a>
+                        <a class="substation" href="{{ site.github_substation }}"><span><img class="substation-ico" src="{{ site.url }}/github.ico" alt=""/></span><span class="substation-text"> Github 备份站</span></a>
                       {% else %}
-                        <a class="substation" href="{{ site.gitee_substation }}"><span><img class="substation-ico" src="{{ site.gitee_substation }}/gitee.ico" alt=""/></span><span class="substation-text"> 切换至 Gitee 分站</span></a>
+                        <a class="substation" href="{{ site.gitee_substation }}"><span><img class="substation-ico" src="{{ site.url }}/gitee.ico" alt=""/></span><span class="substation-text"> Gitee 备份站</span></a>
                       {% endif %}
                     </div>
 
