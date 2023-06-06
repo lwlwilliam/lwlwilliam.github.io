@@ -1,4 +1,12 @@
 2023:
+  - name: PHP Beyond the Web
+    info: ISBN 9781484224809
+    remark: true
+    collect: true
+  - name: 深入理解 Go 语言
+    info: ISBN 9787302613664
+    remark: true
+    collect: true
   - name: Writing A Compiler In Go
     info: ISBN 9783982016108
     remark: false
