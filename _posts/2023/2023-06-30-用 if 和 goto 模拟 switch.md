@@ -5,7 +5,7 @@ categories: [PHP]
 keywords: PHP,if,else,goto,switch,flow-control,流程控制
 ---
 
-很多编程语言都会有`switch`语句。`switch`作为选择语句的一种，也是可以用`if-else`语句来表示的。在实现了`switch`的大部分编程语言中，通常跟`break`跳转语句配合来进行控制，其一般语法如下：
+很多编程语言都会有`switch`语句。`switch`作为选择语句的一种，也是可以用`if-else`语句来表示。在实现了`switch`的大部分编程语言中，通常跟`break`跳转语句配合来进行控制，其一般语法如下：
 
 ```
 switch (expression) {
