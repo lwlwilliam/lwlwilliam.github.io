@@ -1,4 +1,12 @@
 2023:
+  - name: Hello 算法
+    info: https://www.hello-algo.com
+    remark: true
+    collect: true
+  - name: 零基础入门学习 Python
+    info: ISBN 9787302514084
+    remark: true
+    collect: false
   - name: PHP Beyond the Web
     info: ISBN 9781484224809
     remark: true
