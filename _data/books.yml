@@ -1,6 +1,6 @@
 2023:
   - name: Hello 算法
-    info: https://www.hello-algo.com
+    info: <a href="https://www.hello-algo.com" target="_blank">Hello 算法</a>
     remark: true
     collect: true
   - name: 零基础入门学习 Python
