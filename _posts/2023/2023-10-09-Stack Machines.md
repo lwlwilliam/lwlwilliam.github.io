@@ -9,7 +9,11 @@ keywords: PHP,Stack Machines
 
 ```php
 <?php
+// php 8.2
 
+/**
+ * 操作符优先级以及结合性
+ */
 const operators = [
     '+' => ['precedence' => 0, 'associativity' => 'left'],
     '-' => ['precedence' => 0, 'associativity' => 'left'],
@@ -18,6 +22,11 @@ const operators = [
     '%' => ['precedence' => 1, 'associativity' => 'left'],
 ];
 
+/**
+ * 栈机执行器
+ * @param array $ops
+ * @return mixed|void
+ */
 function execute(array $ops)
 {
     $labels = [];
@@ -77,7 +86,7 @@ function execute(array $ops)
         // 格式：call(printstr)，函数调用
         if (preg_match('/^call\((.+)\)$/', $op, $match)) {
             $label = $match[1];
-            $calls->push($ip);
+            $calls->push([$ip, $vars]);
             $ip = $labels[$label];
             continue;
         }
@@ -124,7 +133,8 @@ function execute(array $ops)
                 $stack->push($stack->top());
                 break;
             case 'ret':
-                $ip = $calls->pop();
+                // 函数 return
+                list($ip, $vars) = $calls->pop();
                 break;
             case '.num':
                 // 输出数字本身
@@ -140,24 +150,31 @@ function execute(array $ops)
     }
 }
 
+/**
+ * shunting yard 算法，将中缀表达式转换为后缀表达式
+ * @param array $tokens
+ * @param array $operators
+ * @return array
+ */
 function shunting_yard(array $tokens, array $operators): array
 {
-    $stack = new SplStack();
+    $stack = new SplStack(); // 优先级低的先入栈
     $output = new SplQueue();
 
     foreach ($tokens as $token) {
         if (is_numeric($token)) {
             $output->enqueue($token);
         } elseif (isset($operators[$token])) {
-            $o1 = $token;
+            $operator1 = $token;
+            // 如果栈上已经存在操作符，且当前操作符比栈顶操作符优先级低，则入队栈顶操作符
             while (
                 has_operator($stack, $operators)
-                && ($o2 = $stack->top())
-                && has_lower_precedence($o1, $o2, $operators)
+                && ($operator2 = $stack->top())
+                && has_lower_precedence($operator1, $operator2, $operators)
             ) {
                 $output->enqueue($stack->pop());
             }
-            $stack->push($o1);
+            $stack->push($operator1);
         } elseif ('(' === $token) {
             $stack->push($token);
         } elseif (')' === $token) {
@@ -187,28 +204,54 @@ function shunting_yard(array $tokens, array $operators): array
     return iterator_to_array($output);
 }
 
+/**
+ * 栈上是否存在操作符
+ * @param SplStack $stack
+ * @param array $operators
+ * @return bool
+ */
 function has_operator(SplStack $stack, array $operators): bool
 {
     return count($stack) > 0 && ($top = $stack->top()) && isset($operators[$top]);
 }
 
-function has_lower_precedence($o1, $o2, array $operators): bool
+/**
+ * 判断操作符 $operator1 是否比 $operator2 优先级低
+ * @param $operator1
+ * @param $operator2
+ * @param array $operators
+ * @return bool
+ */
+function has_lower_precedence($operator1, $operator2, array $operators): bool
 {
-    $op1 = $operators[$o1];
-    $op2 = $operators[$o2];
-    return ('left' === $op1['associativity']
-            && $op1['precedence'] === $op2['precedence'])
-        || $op1['precedence'] < $op2['precedence'];
+    $operator1_info = $operators[$operator1];
+    $operator2_info = $operators[$operator2];
+    return ('left' === $operator1_info['associativity']
+            && $operator1_info['precedence'] === $operator2_info['precedence'])
+        || $operator1_info['precedence'] < $operator2_info['precedence'];
 }
 
+/**
+ * execute 测试函数
+ * @param string $code
+ * @param string $name
+ * @return void
+ */
 function execute_test(string $code = '', string $name = ''): void
 {
     $ops = preg_split('/\s/', preg_replace('/^\s*#.*$/m', '', $code), -1, PREG_SPLIT_NO_EMPTY);
     $res = execute($ops);
+    echo "\nexecute ret: \t";
     print_r($res);
     echo "\n************************************************************\t{$name}\n";
 }
 
+/**
+ * shunting_yard 测试函数
+ * @param string $code
+ * @param string $name
+ * @return void
+ */
 function shunting_yard_test(string $code = '', string $name = ''): void
 {
     $ops = preg_split('/\s/', preg_replace('/^\s*#.*$/m', '', $code), -1, PREG_SPLIT_NO_EMPTY);
@@ -224,7 +267,7 @@ if ($_SERVER['PHP_SELF'] === __FILE__) {
 
 
     // shunting_yard() test
-    $rpn = '2 3 * 1 +';
+    $rpn = '1 + 2 * 3';
     shunting_yard_test($rpn, 'shunting_yard()');
 
 
@@ -360,5 +403,26 @@ jmp(next)
 label(end)
     ';
     execute_test($code, 'variables 2');
+
+
+    // stack frame
+    $code = '
+jmp(start)
+
+88 !var(i)
+
+label(foo)
+    5 !var(i)
+    var(i) .num
+    ret 
+    
+label(start)
+    11 !var(i)
+    call(foo)
+    var(i) .num
+    
+var(i) .num
+    ';
+    execute_test($code, 'stack frame');
 }
 ```
