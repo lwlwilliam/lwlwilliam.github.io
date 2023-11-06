@@ -1,4 +1,8 @@
 2023:
+  - name: Crafting Interpreters
+    info: ISBN 9780990582939
+    remark: false
+    collect: true
   - name: Hello 算法
     info: <a href="https://www.hello-algo.com" target="_blank">Hello 算法</a>
     remark: true
