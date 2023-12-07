@@ -2,16 +2,13 @@
   remark: 视频+书
 
 - name: 编译原理
-  remark: 极客+书
+  remark: crafting interpreters
 
 - name: 算法与数据结构
-  remark: 极客+书
-
-- name: 复习鸟哥私房菜
-  remark:
+  remark: 算法（第4版）
 
 - name: 未读的书单
   remark:
 
-- name: 老李的网络编程
+- name: 网络编程
   remark: UNP + APUE + 阅读框架源码辅助进食
