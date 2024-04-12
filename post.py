@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# 创建博客 markdown 文件脚本，哈哈，一点事情都不想多做
 import os
 import sys
 import time
@@ -20,11 +19,11 @@ try:
     if not os.path.exists(d):
         os.makedirs(d, 0o744, True)
 
-    fd = open(f'{d}{file_name}', 'a+')
+    fd = open(f'{d}{file_name}', 'w')
     fd.write(f'''---
 title: {title}
 layout: post
-categories: [category]
+categories: [{category}]
 keywords: {category}
 ---''')
     fd.close()
