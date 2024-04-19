@@ -1,14 +1,11 @@
-# ---------------- #
-#   Main Configs   #
-# ---------------- #
+# 主要配置
 
-# 在部署到 github 和 gitee 时需要修改以下两个配置，其它不需要修改
-url: https://pages.lwlinux.cn
-cdn: https://pages.lwlinux.cn
-#url: https://www.lwlinux.cn
-#cdn: https://www.lwlinux.cn
-#url: "http://localhost:4000"
-#cdn: "http://localhost:4000"
+# 在部署到 github 时需要修改以下两个配置，其它不需要修改
+#url: https://pages.lwlinux.cn
+#cdn: https://pages.lwlinux.cn
+url: "http://localhost:4000"
+cdn: "http://localhost:4000"
+
 
 date_format: "ordinal"
 title: William A
@@ -16,17 +13,12 @@ keywords: William A, lwlwilliam
 encoding: utf-8
 side_bar_repo_limit: 0
 
-# 分站点
-gitee_substation: https://www.lwlinux.cn
-github_substation: https://pages.lwlinux.cn
-
 
 about: Just for fun.
 description: Love sports, love programming, love life.
 
-# ---------------- #
-#      Author      #
-# ---------------- #
+
+# 作者信息
 author: lwlwilliam
 location: Guangzhou, China
 email: lwlwilliam@foxmail.com
@@ -35,9 +27,8 @@ repository: lwlwilliam.github.io
 repository_url: https://github.com/lwlwilliam/lwlwilliam.github.io
 avatar: https://avatars1.githubusercontent.com/u/25366940?s=150&v=4
 
-# ---------------- #
-#    Navigation    #
-# ---------------- #
+
+# 导航
 navs:
   -
     href: /
@@ -69,19 +60,17 @@ navs:
     href: /about/
     label: About
 
-# ---------------- #
-#       RSS        #
-# ---------------- #
+
+# RSS
 subscribe_rss: /feed.xml
 
-# ---------------- #
-#      Jekyll      #
-# ---------------- #
+
+# Jekyll
 markdown: kramdown
 kramdown:
     input: GFM
 highlighter: rouge
-paginate: 10
+paginate: 5
 lsi: false
 quiet: false
 excerpt_separator: "\n\n"
@@ -100,18 +89,16 @@ collections:
         output: true
         permalink: /wiki/:path/
 
-# ---------------- #
-#      Search      #
-# ---------------- #
+
+# 搜索
 simple_jekyll_search:
     # 是否支持全文搜索
     fulltext: false
     # 最多显示多少条搜索结果
-    limit: 10
+    limit: 5
 
-# ---------------- #
-#     Comments     #
-# ---------------- #
+
+# 评论
 comments_provider: gitalk
 gitalk:
     clientID: ef26baa975fbac82ac52

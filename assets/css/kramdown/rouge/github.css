@@ -1,0 +1,209 @@
+body .columns .column .kramdown .highlight table td { padding: 5px; }
+body .columns .column .kramdown .highlight table pre { margin: 0; }
+body .columns .column .kramdown .highlight .cm {
+  color: #999988;
+  font-style: italic;
+}
+body .columns .column .kramdown .highlight .cp {
+  color: #999999;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .c1 {
+  color: #999988;
+  font-style: italic;
+}
+body .columns .column .kramdown .highlight .cs {
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
+}
+body .columns .column .kramdown .highlight .c, body .columns .column .kramdown .highlight .cd {
+  color: #999988;
+  font-style: italic;
+}
+body .columns .column .kramdown .highlight .err {
+  color: #a61717;
+  background-color: #e3d2d2;
+}
+body .columns .column .kramdown .highlight .gd {
+  color: #000000;
+  background-color: #ffdddd;
+}
+body .columns .column .kramdown .highlight .ge {
+  color: #000000;
+  font-style: italic;
+}
+body .columns .column .kramdown .highlight .gr {
+  color: #aa0000;
+}
+body .columns .column .kramdown .highlight .gh {
+  color: #999999;
+}
+body .columns .column .kramdown .highlight .gi {
+  color: #000000;
+  background-color: #ddffdd;
+}
+body .columns .column .kramdown .highlight .go {
+  color: #888888;
+}
+body .columns .column .kramdown .highlight .gp {
+  color: #555555;
+}
+body .columns .column .kramdown .highlight .gs {
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .gu {
+  color: #aaaaaa;
+}
+body .columns .column .kramdown .highlight .gt {
+  color: #aa0000;
+}
+body .columns .column .kramdown .highlight .kc {
+  color: #000000;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .kd {
+  color: #000000;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .kn {
+  color: #000000;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .kp {
+  color: #000000;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .kr {
+  color: #000000;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .kt {
+  color: #445588;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .k, body .columns .column .kramdown .highlight .kv {
+  color: #000000;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .mf {
+  color: #009999;
+}
+body .columns .column .kramdown .highlight .mh {
+  color: #009999;
+}
+body .columns .column .kramdown .highlight .il {
+  color: #009999;
+}
+body .columns .column .kramdown .highlight .mi {
+  color: #009999;
+}
+body .columns .column .kramdown .highlight .mo {
+  color: #009999;
+}
+body .columns .column .kramdown .highlight .m, body .columns .column .kramdown .highlight .mb, body .columns .column .kramdown .highlight .mx {
+  color: #009999;
+}
+body .columns .column .kramdown .highlight .sb {
+  color: #d14;
+}
+body .columns .column .kramdown .highlight .sc {
+  color: #d14;
+}
+body .columns .column .kramdown .highlight .sd {
+  color: #d14;
+}
+body .columns .column .kramdown .highlight .s2 {
+  color: #d14;
+}
+body .columns .column .kramdown .highlight .se {
+  color: #d14;
+}
+body .columns .column .kramdown .highlight .sh {
+  color: #d14;
+}
+body .columns .column .kramdown .highlight .si {
+  color: #d14;
+}
+body .columns .column .kramdown .highlight .sx {
+  color: #d14;
+}
+body .columns .column .kramdown .highlight .sr {
+  color: #009926;
+}
+body .columns .column .kramdown .highlight .s1 {
+  color: #d14;
+}
+body .columns .column .kramdown .highlight .ss {
+  color: #990073;
+}
+body .columns .column .kramdown .highlight .s {
+  color: #d14;
+}
+body .columns .column .kramdown .highlight .na {
+  color: #008080;
+}
+body .columns .column .kramdown .highlight .bp {
+  color: #999999;
+}
+body .columns .column .kramdown .highlight .nb {
+  color: #0086B3;
+}
+body .columns .column .kramdown .highlight .nc {
+  color: #445588;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .no {
+  color: #008080;
+}
+body .columns .column .kramdown .highlight .nd {
+  color: #3c5d5d;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .ni {
+  color: #800080;
+}
+body .columns .column .kramdown .highlight .ne {
+  color: #990000;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .nf {
+  color: #990000;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .nl {
+  color: #990000;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .nn {
+  color: #555555;
+}
+body .columns .column .kramdown .highlight .nt {
+  color: #000080;
+}
+body .columns .column .kramdown .highlight .vc {
+  color: #008080;
+}
+body .columns .column .kramdown .highlight .vg {
+  color: #008080;
+}
+body .columns .column .kramdown .highlight .vi {
+  color: #008080;
+}
+body .columns .column .kramdown .highlight .nv {
+  color: #008080;
+}
+body .columns .column .kramdown .highlight .ow {
+  color: #000000;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .o {
+  color: #000000;
+  font-weight: bold;
+}
+body .columns .column .kramdown .highlight .w {
+  color: #bbbbbb;
+}
+body .columns .column .kramdown .highlight {
+  background-color: #f6f8fa;
+}
