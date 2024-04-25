@@ -20,3 +20,7 @@ $ bundle exec jekyll serve
 ```
 $ ./post.py 文章标题 分类名称
 ```
+
+#### 使用 mathjax
+
+页面中加上`mathjax: true`配置。
