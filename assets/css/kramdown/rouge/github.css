@@ -206,4 +206,6 @@ body .columns .column .kramdown .highlight .w {
 }
 body .columns .column .kramdown .highlight {
   background-color: #f6f8fa;
+  border-radius: .5em;
+  box-shadow: inset -5px -5px 9px 0px #c7c7c7;
 }
