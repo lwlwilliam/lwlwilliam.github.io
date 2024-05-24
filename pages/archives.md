@@ -44,7 +44,7 @@ permalink: /archives/
     
 <div class="posts-list-item">
     <span class="posts-list-meta">{{ post.date | date:"%m-%d" }}</span>
-    <a class="posts-list-name" href="{{ site.cdn }}{{ post.url }}">{{ post.title }}</a>
+    <a class="posts-list-name" href="{{ site.url }}{{ post.url }}">{{ post.title }}</a>
 </div>
 {% endfor %}
 </div>

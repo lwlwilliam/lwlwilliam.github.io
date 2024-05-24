@@ -55,7 +55,7 @@ menu: cd ~
                 {% for post in paginator.posts %}
                 <li class="repo-list-item">
                     <h3 class="repo-list-name">
-                      <a href="{{ site.cdn }}{{ post.url }}">{{ post.title }}</a>
+                      <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a>
                     </h3>
                     <p class="repo-list-description">
                         {{ post.excerpt | strip_html | strip }}
@@ -67,7 +67,7 @@ menu: cd ~
                         {% for cat in post.categories %}
                         <span class="meta-info">
                           <span class="octicon octicon-file-directory"></span>
-                          <a href="{{ site.cdn }}/categories/#{{ cat }}" title="{{ cat }}">{{ cat }}</a>
+                          <a href="{{ site.url }}/categories/#{{ cat }}" title="{{ cat }}">{{ cat }}</a>
                         </span>
                         {% endfor %}
                     </p>
@@ -82,16 +82,16 @@ menu: cd ~
     <div class="pagination text-align">
       <div class="btn-group">
             {% if 1 != paginator.page %}
-                <a href="{{ site.cdn }}"  class="my-pagination btn btn-outline">First</a>
+                <a href="{{ site.url }}"  class="my-pagination btn btn-outline">First</a>
             {% else %}
                 <button disabled="disabled" href="javascript:;" class="my-pagination btn btn-outline">First</button>
             {% endif %}
 
             {% if paginator.previous_page %}
                 {% if paginator.previous_page == 1 %}
-                    <a href="{{ site.cdn }}/" class="my-pagination btn btn-outline">Prev</a>
+                    <a href="{{ site.url }}/" class="my-pagination btn btn-outline">Prev</a>
                 {% else %}
-                    <a href="{{ site.cdn }}/page{{paginator.previous_page}}/" class="my-pagination btn btn-outline">Prev</a>
+                    <a href="{{ site.url }}/page{{paginator.previous_page}}/" class="my-pagination btn btn-outline">Prev</a>
                 {% endif %}
             {% else %}
                 <button disabled="disabled" href="javascript:;" class="my-pagination btn btn-outline">Prev</button>
@@ -100,19 +100,19 @@ menu: cd ~
             <a href="javascript:;" class="my-pagination active btn btn-outline">{{ paginator.page }}</a>
 
             {% if paginator.next_page %}
-                <a href="{{ site.cdn }}/page{{paginator.next_page}}/"  class="my-pagination btn btn-outline">Next</a>
+                <a href="{{ site.url }}/page{{paginator.next_page}}/"  class="my-pagination btn btn-outline">Next</a>
             {% else %}
                 <button disabled="disabled" href="javascript:;" class="my-pagination btn btn-outline">Next</button>
             {% endif %}
 
             {% if paginator.total_pages != paginator.page %}
-                <a href="{{ site.cdn }}/page{{paginator.total_pages}}/" data-page="{{ paginator.total_pages }}" id="lastpage" class="my-pagination btn btn-outline">Last</a>
+                <a href="{{ site.url }}/page{{paginator.total_pages}}/" data-page="{{ paginator.total_pages }}" id="lastpage" class="my-pagination btn btn-outline">Last</a>
             {% else %}
                 <button disabled="disabled" href="javascript:;" data-page="{{ paginator.total_pages }}" id="lastpage" class="my-pagination btn btn-outline">Last</button>
             {% endif %}
 
           &nbsp;<input type="number" id="pagenum" class="my-pagination" max="999" style="width: 50px" placeholder="Page">
-          <input type="hidden" id="siteurl" value="{{ site.cdn }}">
+          <input type="hidden" id="siteurl" value="{{ site.url }}">
         </div>
     </div>
     <!-- /pagination -->

@@ -59,7 +59,7 @@
     <meta property="og:image" content="{{ page.photo_url }}">
         {% endif %}
     {% endif %}
-    <meta property="og:url" content="{{ site.cdn }}{{ page.url | remove_first:'index.html' }}">
+    <meta property="og:url" content="{{ site.url }}{{ page.url | remove_first:'index.html' }}">
     <meta property="og:site_name" content="{{ site.title }}">
     <meta property="og:type" content="article">
     <meta property="og:locale" content="zh_CN" />
@@ -87,7 +87,7 @@ site.title }}</a></h1>
             </button>
             <nav class="site-header-nav" role="navigation">
                 {% for nav in site.navs %}
-                <a href="{{ site.cdn }}{{ nav.href }}" class="{% if page.menu == nav.label %} selected {% endif %} site-header-nav-item" target="{{ nav.target | default: _self }}" title="{{ nav.label }}">{{ nav.label }}</a>
+                <a href="{{ site.url }}{{ nav.href }}" class="{% if page.menu == nav.label %} selected {% endif %} site-header-nav-item" target="{{ nav.target | default: _self }}" title="{{ nav.label }}">{{ nav.label }}</a>
                 {% endfor %}
             </nav>
         </div>
