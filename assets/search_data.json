@@ -6,7 +6,7 @@
   {% if pg.title != nil %}
     {
       "title"    : "{{ pg.title | escape }}",
-      "url"      : "{{ site.url }}{{ pg.url }}"
+      "url"      : "{{ site.cdn }}{{ pg.url }}"
     } ,
   {% endif %}
   {% endfor %}
@@ -16,7 +16,7 @@
       "title"    : "{{ doc.title | escape }}",
       "category" : "{{ doc.categories[0] | xml_escape }}",
       {% if site.simple_jekyll_search.fulltext %}"content": {{ doc.content | markdownify | strip_html | replace:'"','' | jsonify | replace:'\n',' ' | replace:'   ',' ' | replace:'  ',' ' | replace:'\',' ' }},{% endif %}
-      "url"      : "{{ site.url }}{{ doc.url }}"
+      "url"      : "{{ site.cdn }}{{ doc.url }}"
     } {% unless forloop.last %},{% endunless %}
   {% endfor %}
 ]
