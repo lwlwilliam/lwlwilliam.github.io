@@ -50,9 +50,14 @@ $socket = new React\Socket\SocketServer('127.0.0.1:8080');
 $http->listen($socket);
 ```
 
-分别用以下命令测试：
+分别用以下命令测试（`php`需要更换为自己编译的版本）：
 
 ```bash
 $ php react.php
 $ php -e react.php
 ```
+
+效果如图所示：
+
+![cli_raw](/assets/images/2024/0711/cli_raw.png)
+![cli_html](/assets/images/2024/0711/cli_html.png)
