@@ -1,7 +1,7 @@
 ---
 title: 探索 PHP 源码（二）——调整 phpinfo 在 cli 下的格式
 layout: post
-categories: [PHP]
+categories: [PHP8.2.6-源码探索]
 keywords: PHP,编译原理
 ---
 
