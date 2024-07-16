@@ -28,6 +28,8 @@ sapi_module->phpinfo_as_text = phpinfo_as_text;
 
 定位一下`sapi_module->phpinfo_as_text`这部分代码，即可找到以上代码修改位置，利用一下现有的选项`-e`。接下来就可以`php -e xxx.php`来开启命令行下的`html`格式信息。
 
+如果不想复用其它选项，则麻烦一点，在`const opt_struct OPTIONS[] = {}`中自己加个选项，如`{'k', 0, "phpinfo-as-text"}`，再将以上`case 'e'`中的`phpinfo_as_text = 0`放到新增的`case 'k'`中。
+
 使用`reactphp`测试一下：
 
 ```php
