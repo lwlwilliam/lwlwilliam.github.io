@@ -7,11 +7,11 @@ keywords: session,cookie,url,php,http
 
 由于`HTTP`是无状态的，服务端不知道前一个访问者跟后一个访问者是否为同一人，于是会话机制出现了。`session`和`cookie`几乎总是同时出现的。`cookie`是由服务端创建、由客户端保存的小块数据，在用户再次访问服务时，会带上该服务端对应的`cookie`，服务端比对后就能辨别出用户身份。而在服务端跟`cookie`对应的数据就称为`session`。
 
-从以上描述可以发现，会话中的`cookie`是由服务端生成的，且要唯一识别用户，可称为`session_id`，`PHP`默认通过`cookie`传递`session_id`。`HTTP`协议中有个响应头为`Set-Cookie`就是用来干这话的，`HTTP`响应报文无非就响应头和响应体，不用`Set-Cookie`行不行？当然，自己实现一套`session`机制也是可以的；既然服务端可以通过其它响应头或响应体来传递`session_id`，那客户端是不是也能不通过`Cookie`请求头来传递`session_id`？确实也是可以的。
+从以上描述可以发现，会话中的`cookie`是由服务端生成的且要唯一识别用户，称为`session_id`，`PHP`默认通过`cookie`传递`session_id`。`HTTP`协议中的响应头`Set-Cookie`就是用来干这活的，`HTTP`响应报文无非就响应头和响应体，不用`Set-Cookie`行不行？当然，自己实现一套`session`机制也是可以的；既然服务端可以通过其它响应头或响应体来传递`session_id`，那客户端是不是也能不通过`Cookie`请求头来传递`session_id`？确实也可以。
 
 ### 通过 URL 传递
 
-`PHP`的`session`机制除了通过`cookie`来传递`session_id`外，还可以通过`URL`传参来传递，具体可看[https://www.php.net/manual/en/session.idpassing.php](https://www.php.net/manual/en/session.idpassing.php)一节。但需要修改一下`php.ini`配置，测试代码如下：
+`PHP`的`session`机制除了通过`cookie`来传递`session_id`外，还可以通过`URL`参数来传递，详情查看 [https://www.php.net/manual/en/session.idpassing.php](https://www.php.net/manual/en/session.idpassing.php)一节。测试代码如下：
 
 ```php
 <?php
@@ -29,7 +29,7 @@ if (isset($_GET['init'])) {
 print_r($_SESSION);
 ```
 
-由于`PHP`出于安全的考虑，默认只能允许通过`cookie`传递`session_id`，为了测试，需要将`session.use_cookies`和`session.use_only_cookies`禁用，同时设置一个易记的`session.name`。以下命令完整地测试了创建`session`、默认无参数无法获取`session`、`URL`传参获取`session`的步骤。这个`session_id`在客户端怎么保存就不需要多说了吧？
+`PHP`出于安全的考虑，默认只允许通过`cookie`传递`session_id`，为了通过`URL`传递，需要将`session.use_only_cookies`禁用，同时为了便于测试，可以设置一个易记的`session.name`。以下命令完整地测试了创建`session`、无参数无法获取`session`、`URL`传参获取`session`三个功能。这个`session_id`。至于在客户端怎么保存就提了。
 
 ```bash
 $ curl http://php84.id/programming_practice/php/snippets/php.php?init
@@ -51,7 +51,7 @@ Array
 
 ### 通过请求体传递
 
-当然通过`URL`传递确实不安全了，不过在客户端禁用`cookie`时也没办法，可以使用`https`等方式来加强安全，只不过`URL`暴露的风险还是大。其实，`PHP`还可以通过请求参数来传递，起码不存在`URL`泄露的风险。对比上述`PHP`代码，只是添加了获取`phpsid`请求体参数，通过`session_id`设置当前会话`ID`的逻辑。
+通过`URL`传递`session_id`会存在安全风险，不过在客户端禁用`cookie`时那也是没办法的，可以使用`https`等方式来加强安全，只不过`URL`会保留在访问记录中，依然不安全。事实上，`PHP`还可以通过请求参数来传递，对比上述`PHP`代码，多了获取`phpsid`请求体参数并使用`session_id()`函数设置当前会话`ID`的逻辑。
 
 ```php
 <?php
