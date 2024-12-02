@@ -29,7 +29,7 @@ if (isset($_GET['init'])) {
 print_r($_SESSION);
 ```
 
-`PHP`出于安全的考虑，默认只允许通过`cookie`传递`session_id`，为了通过`URL`传递，需要将`session.use_only_cookies`禁用，同时为了便于测试，可以设置一个易记的`session.name`。以下命令完整地测试了创建`session`、无参数无法获取`session`、`URL`传参获取`session`三个功能。这个`session_id`。至于在客户端怎么保存就提了。
+`PHP`出于安全的考虑，默认只允许通过`cookie`传递`session_id`，为了通过`URL`传递，需要将`session.use_only_cookies`禁用，同时为了便于测试，可以设置一个易记的`session.name`。以下命令完整地测试了创建`session`、无参数无法获取`session`、`URL`传参获取`session`三个功能。至于`session_id`在客户端怎么保存就不用提了。
 
 ```bash
 $ curl http://php84.id/programming_practice/php/snippets/php.php?init
