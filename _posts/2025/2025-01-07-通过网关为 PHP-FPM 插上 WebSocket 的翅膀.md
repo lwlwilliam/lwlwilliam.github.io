@@ -25,30 +25,30 @@ keywords: WebSocket,php,php-fpm,Go
 // websocket.php
 
 if (
-	!empty($_POST['type'])
-	&& !empty($_POST['client_id'])
-	&& isset($_POST['message'])
+    !empty($_POST['type'])
+    && !empty($_POST['client_id'])
+    && isset($_POST['message'])
 ) {
-	if ($_POST['type'] == 'client') {
-		// 接收客户端消息，推送到 client_id 对应的 WebSocket 客户端
-		$url = 'http://host.docker.internal:8080/send';
-    	$cmd = sprintf('curl -d "message=%s&type=client&client_id=%s" %s', $_POST['message'], $_POST['client_id'], $url);
-		system($cmd);
-		echo PHP_EOL, $cmd, PHP_EOL;
-	} else {
-		// 接收处理 WebSocket 客户端消息
-		switch ($_POST['message']) {
-		case 'name':
-			echo 'lwlinux';
-			break;
-		default:
-			echo 'default';
-		}
+    if ($_POST['type'] == 'client') {
+        // 接收客户端消息，推送到 client_id 对应的 WebSocket 客户端
+        $url = 'http://host.docker.internal:8080/send';
+        $cmd = sprintf('curl -d "message=%s&type=client&client_id=%s" %s', $_POST['message'], $_POST['client_id'], $url);
+        system($cmd);
+        echo PHP_EOL, $cmd, PHP_EOL;
+    } else {
+        // 接收处理 WebSocket 客户端消息
+        switch ($_POST['message']) {
+        case 'name':
+            echo 'lwlinux';
+            break;
+        default:
+            echo 'default';
+        }
 
-		echo ' to '. $_POST['client_id'];
-	}
+        echo ' to '. $_POST['client_id'];
+    }
 } else {
-	echo 'something wrong';
+    echo 'something wrong';
 }
 ```
 
@@ -60,135 +60,135 @@ if (
 package main
 
 import (
-	"bytes"
-	"fmt"
-	"github.com/gorilla/websocket"
-	"io/ioutil"
-	"log"
-	"net/http"
-	"sync"
-	"time"
+    "bytes"
+    "fmt"
+    "github.com/gorilla/websocket"
+    "io/ioutil"
+    "log"
+    "net/http"
+    "sync"
+    "time"
 )
 
 const (
-	phpFpmURL = "http://localhost/websocket.php"
-	wsAddr    = "localhost:8080"
-	wsPath    = "/ws"
+    phpFpmURL = "http://localhost/websocket.php"
+    wsAddr    = "localhost:8080"
+    wsPath    = "/ws"
 )
 
 type WebSocketGateway struct {
-	connections sync.Map
+    connections sync.Map
 }
 
 func (gw *WebSocketGateway) Start() {
-	http.HandleFunc(wsPath, gw.handleWebSocket)
-	http.HandleFunc("/send", gw.handleSendMessage)
-	log.Printf("WebSocket server started at ws://%s%s", wsAddr, wsPath)
-	err := http.ListenAndServe(wsAddr, nil)
-	if err != nil {
-		log.Fatalf("Error starting WebSocket server: %v", err)
-	}
+    http.HandleFunc(wsPath, gw.handleWebSocket)
+    http.HandleFunc("/send", gw.handleSendMessage)
+    log.Printf("WebSocket server started at ws://%s%s", wsAddr, wsPath)
+    err := http.ListenAndServe(wsAddr, nil)
+    if err != nil {
+        log.Fatalf("Error starting WebSocket server: %v", err)
+    }
 }
 
 func (gw *WebSocketGateway) handleWebSocket(w http.ResponseWriter, r *http.Request) {
-	upGrader := websocket.Upgrader{
-		CheckOrigin: func(r *http.Request) bool {
-			return true
-		},
-	}
+    upGrader := websocket.Upgrader{
+        CheckOrigin: func(r *http.Request) bool {
+            return true
+        },
+    }
 
-	conn, err := upGrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Println("Upgrade error:", err)
-		return
-	}
-	defer conn.Close()
+    conn, err := upGrader.Upgrade(w, r, nil)
+    if err != nil {
+        log.Println("Upgrade error:", err)
+        return
+    }
+    defer conn.Close()
 
-	clientID := fmt.Sprintf("%s", conn.RemoteAddr().String())
-	gw.connections.Store(clientID, conn)
-	log.Printf("New WebSocket connection: %s", clientID)
+    clientID := fmt.Sprintf("%s", conn.RemoteAddr().String())
+    gw.connections.Store(clientID, conn)
+    log.Printf("New WebSocket connection: %s", clientID)
 
-	for {
-		messageType, p, err := conn.ReadMessage()
-		if err != nil {
-			log.Printf("Read error for client %s: %v", clientID, err)
-			break
-		}
+    for {
+        messageType, p, err := conn.ReadMessage()
+        if err != nil {
+            log.Printf("Read error for client %s: %v", clientID, err)
+            break
+        }
 
-		log.Printf("Received message from client %s: %s", clientID, p)
+        log.Printf("Received message from client %s: %s", clientID, p)
 
-		resp, err := sendToPhpFpm(string(p), clientID)
-		if err != nil {
-			log.Println("Error communicating with PHP-FPM:", err)
-			continue
-		}
+        resp, err := sendToPhpFpm(string(p), clientID)
+        if err != nil {
+            log.Println("Error communicating with PHP-FPM:", err)
+            continue
+        }
 
-		err = conn.WriteMessage(messageType, resp)
-		if err != nil {
-			log.Printf("Write error for client %s: %v", clientID, err)
-			break
-		}
-	}
+        err = conn.WriteMessage(messageType, resp)
+        if err != nil {
+            log.Printf("Write error for client %s: %v", clientID, err)
+            break
+        }
+    }
 
-	gw.connections.Delete(clientID)
-	log.Printf("WebSocket connection closed: %s", clientID)
+    gw.connections.Delete(clientID)
+    log.Printf("WebSocket connection closed: %s", clientID)
 }
 
 func sendToPhpFpm(message, clientID string) ([]byte, error) {
-	reqBody := fmt.Sprintf("type=server&message=%s&client_id=%s", message, clientID)
-	req, err := http.NewRequest("POST", phpFpmURL, bytes.NewBuffer([]byte(reqBody)))
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+    reqBody := fmt.Sprintf("type=server&message=%s&client_id=%s", message, clientID)
+    req, err := http.NewRequest("POST", phpFpmURL, bytes.NewBuffer([]byte(reqBody)))
+    if err != nil {
+        return nil, err
+    }
+    req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
-	client := &http.Client{Timeout: 10 * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
+    client := &http.Client{Timeout: 10 * time.Second}
+    resp, err := client.Do(req)
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
 
-	respBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
+    respBody, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+        return nil, err
+    }
 
-	return respBody, nil
+    return respBody, nil
 }
 
 func (gw *WebSocketGateway) handleSendMessage(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(http.StatusText(http.StatusBadRequest)))
-		return
-	}
+    err := r.ParseForm()
+    if err != nil {
+        w.WriteHeader(http.StatusBadRequest)
+        w.Write([]byte(http.StatusText(http.StatusBadRequest)))
+        return
+    }
 
-	clientID := r.Form.Get("client_id")
-	message := r.Form.Get("message")
-	_ = r.Form.Get("type")
+    clientID := r.Form.Get("client_id")
+    message := r.Form.Get("message")
+    _ = r.Form.Get("type")
 
-	conn, ok := gw.connections.Load(clientID)
-	if !ok {
-		http.Error(w, "Client not found", http.StatusNotFound)
-		return
-	}
+    conn, ok := gw.connections.Load(clientID)
+    if !ok {
+        http.Error(w, "Client not found", http.StatusNotFound)
+        return
+    }
 
-	wsConn := conn.(*websocket.Conn)
+    wsConn := conn.(*websocket.Conn)
 
-	err = wsConn.WriteMessage(websocket.TextMessage, []byte(message))
-	if err != nil {
-		http.Error(w, "Failed to send message", http.StatusInternalServerError)
-		return
-	}
+    err = wsConn.WriteMessage(websocket.TextMessage, []byte(message))
+    if err != nil {
+        http.Error(w, "Failed to send message", http.StatusInternalServerError)
+        return
+    }
 
-	w.Write([]byte("Message sent"))
+    w.Write([]byte("Message sent"))
 }
 
 func main() {
-	gateway := &WebSocketGateway{}
-	gateway.Start()
+    gateway := &WebSocketGateway{}
+    gateway.Start()
 }
 ```
 
