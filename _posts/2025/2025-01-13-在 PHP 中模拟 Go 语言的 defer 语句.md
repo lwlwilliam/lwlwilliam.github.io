@@ -5,7 +5,7 @@ categories: [PHP]
 keywords: PHP,Go,defer
 ---
 
-看到一个很有意思的项目 <a href="https://github.com/php-defer/php-defer" target="_blank">https://github.com/php-defer/php-defer</a>，这个项目只用了`10`行代码左右的代码就实现了`Go`语言中的`defer`，看来灵活运用数据结构还是很重要的。整个项目核心源码如下：
+看到一个很有意思的项目 <a href="https://github.com/php-defer/php-defer" target="_blank">https://github.com/php-defer/php-defer</a>，这个项目只用了`10`行左右的代码就实现了`Go`语言中的`defer`，看来灵活运用数据结构还是很重要的。项目源码如下：
 
 ```php
 <?php
