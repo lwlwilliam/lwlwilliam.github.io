@@ -87,6 +87,8 @@ My exception
 跟我们设想的一样，`defer`回调函数确实是逆序输出的，跟`Go`语言的效果一致，可以再看看`return`的。
 
 ```php
+<?php
+
 function foo(): string {
     defer($_, function () {
         echo "first defer\n";
