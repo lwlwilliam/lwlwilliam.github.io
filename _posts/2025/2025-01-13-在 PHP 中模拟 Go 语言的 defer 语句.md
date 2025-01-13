@@ -31,10 +31,10 @@ function defer(?SplStack &$context, callable $callback): void {
 <?php
 
 function foo(): void {
-    defer($a, function () {
+    defer($_, function () {
         echo "first defer\n";
     });
-    defer($a, function () {
+    defer($_, function () {
         echo "second defer\n";
     });
 
@@ -88,10 +88,10 @@ My exception
 
 ```php
 function foo(): string {
-    defer($a, function () {
+    defer($_, function () {
         echo "first defer\n";
     });
-    defer($a, function () {
+    defer($_, function () {
         echo "second defer\n";
     });
 
