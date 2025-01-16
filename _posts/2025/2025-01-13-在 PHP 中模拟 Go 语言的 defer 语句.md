@@ -132,3 +132,41 @@ foo
 ```
 
 无论是异常还是返回，该`defer`函数的行为都跟`Go`语言的`defer`语句一致。
+
+小小改造一下它，让它可以接收参数。
+
+```php
+<?php
+
+function defer(?SplStack &$context, callable $callback, ...$args): void {
+    $context ??= new class extends SplStack {
+        public function __destruct() {
+            while ($this->count() > 0) {
+                $item = $this->pop();
+                $func = array_shift($item);
+                if (empty($item)) {
+                    call_user_func($func);
+                } else {
+                    call_user_func($func, ...$item);
+                }
+            }
+        }
+    };
+
+    $context->push([$callback, ...$args]);
+}
+```
+
+变化之处就在增加不限数量的参数`...$args`，入栈时，以数组形式入栈，弹栈时，先获取数据的第一个元素，调用函数分为带参数和不带参数的区别，用法跟先前几乎一样。
+
+```php
+<?php
+
+defer($_, function ($item) {
+    printf("item: %s\n", $item);
+}, "first");
+
+defer($_, function ($item) {
+    printf("item: %s\n", $item);
+}, "second");
+```
