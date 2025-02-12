@@ -12,7 +12,7 @@ keywords: WebSocket,php,php-fpm,Go
 
 架构图如下所示。
 
-![websocket-gateway](/assets/images/2025/websocket-gateway.png)
+![websocket-gateway](/assets/images/2025/0107/websocket-gateway.png)
 
 `WebSocket 客户端`跟`WebSocket 网关`建立连接，`WebSocket 网关`接收到`WebSocket 客户端`发送的数据，通过`HTTP`协议将数据发送到`Nginx`，`Nginx`再用`FastCGI`协议发送给`PHP-FPM`，`PHP`脚本处理完将数据沿原路反方向回传到`WebSocket 客户端`，这是接收逻辑；如果希望`PHP`主动推送数据到`WebSocket 客户端`，则需要额外的`HTTP 客户端`，因为`PHP-FPM`不适合持续运行推送，不过这个并不算关键的功能，理论上完全可以通过`WebSocket 网关`来定时触发，此处不作详细说明。主动推送时，`HTTP 客户端`向`Nginx`发起`HTTP`请求，由`PHP-FPM`处理，如果`PHP`脚本判断该请求需要推送到`WebSocket 客户端`，则将数据发送至`WebSocket 网关`对内暴露的`HTTP`接口，`WebSocket 网关`根据请求选择对应的`WebSocket 客户端`通信。
 
