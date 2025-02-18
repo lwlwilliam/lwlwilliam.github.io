@@ -97,7 +97,7 @@ simple_jekyll_search:
 
 
 # 评论
-comments_provider: gitalk
-gitalk:
-    clientID: ef26baa975fbac82ac52
-    clientSecret: 2ccf1fb00dbced9773c1fa27252534d28af38986
+#comments_provider: gitalk
+#gitalk:
+#    clientID: ef26baa975fbac82ac52
+#    clientSecret: 2ccf1fb00dbced9773c1fa27252534d28af38986
