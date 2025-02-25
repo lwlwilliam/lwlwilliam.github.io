@@ -17,7 +17,7 @@ keywords: PHP
 |     macOS	     |    	4	    | 	14 GB	  | 	14 GB	  | 	Intel	 |                           	macos-13	                            |
 |     macOS	     | 	3 (M1)	  |  	7 GB	  | 	14 GB	  | 	arm64	 |            	macos-latest、macos-14、macos-15 [公共预览版]	             |
 
-以`ubuntu-22.04-arm`编译`PHP-8.2.6`源码为例，`.github/workflows/myPHP-8.2.6.yaml`的配置根据压根自行添加运行步骤。
+以`ubuntu-22.04-arm`编译`PHP-8.2.6`源码为例，`.github/workflows/myPHP-8.2.6-arm.yaml`的配置根据压根自行添加运行步骤。
 
 ```yaml
 name: myPHP-8.2.6-arm
@@ -66,6 +66,10 @@ jobs:
           retention-days: 7
 ```
 
-目前只确保在`arm64`架构下的`ubuntu-22.04`运行正常，需要先确认`yaml`文件中的`apt`命令运行正常，安装好依赖。然后将`GitHub Actions`发布的`zip`文件下载解压，如下图运行即可。
+目前只确保在`arm64`架构下的`ubuntu-22.04`运行正常，需要先确认`yaml`文件中的`apt`命令运行正常，安装好依赖。然后将`GitHub Actions`发布的`zip`文件下载解压。
+
+![github_action](/assets/images/2025/0225/github_actions2.png)
+
+如下图运行即可。
 
 ![github_action](/assets/images/2025/0225/github_actions.png)
