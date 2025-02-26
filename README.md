@@ -24,3 +24,13 @@ $ python post.py 文章标题 分类名称
 #### 使用 mathjax
 
 页面中加上`mathjax: true`配置。
+
+#### 关于原生代码被 liquid 模板覆盖问题
+
+在需要使用原生代码的地方使用`{% raw %}`和`{% endraw %}`一前一后包裹住，如：
+
+```
+{% raw %}
+{{ env.PATH }}
+{% endraw %}
+```
