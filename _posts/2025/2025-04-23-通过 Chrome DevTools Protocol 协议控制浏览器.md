@@ -289,3 +289,7 @@ func main() {
     testWeb()
 }
 ```
+
+运行效果。
+
+![cdp](/assets/images/2025/0423/cdp.png)
