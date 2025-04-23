@@ -1,7 +1,7 @@
 ---
 title: 通过 Chrome DevTools Protocol 协议控制浏览器
 layout: post
-categories: [工具]
+categories: [计算机网络]
 keywords: 无头浏览器,headless,CDP,Chrome DevTools Protocol,selenium
 ---
 
