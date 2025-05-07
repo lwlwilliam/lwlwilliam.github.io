@@ -58,7 +58,7 @@ Your requirements could not be resolved to an installable set of packages.
 Use the option --with-all-dependencies (-W) to allow upgrades, downgrades and removals for packages currently locked to specific versions.
 ```
 
-这就对了，说明目前使用的就是本地的`third_party/mqtt`库，版本约束应该让`composer`检查，防范于未然。不要不兼容的库都可以安装，这样会出大问题的。
+这就对了，说明目前使用的就是本地的`third_party/mqtt`库，版本约束应该让`composer`检查，防患于未然。不要不兼容的库都可以安装，这样会出大问题的。
 
 另外，`composer`还支持指定私有仓库，也就是可以直接将`mqtt`放到自己的`git`仓库中，如下指定仓库地址即可，注意加个新的`tag`作为版本号，总体上比本地库方便得多，这里就不展开了。
 
