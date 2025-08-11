@@ -13,6 +13,12 @@
 - name: CFAFTING INTERPRETERS
   url: https://craftinginterpreters.com/contents.html
 
+- name: Let's Build a Simple Database
+  url: https://cstack.github.io/db_tutorial/
+
+#- name: The little book about OS development
+#  url: https://littleosbook.github.io/
+
 #- name: ACME Laboratories
 #  url: http://www.acme.com/
 #
