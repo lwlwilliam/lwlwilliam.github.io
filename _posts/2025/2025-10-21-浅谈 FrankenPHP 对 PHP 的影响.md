@@ -38,7 +38,7 @@ for ($nbRequests = 0; !$maxRequests || $nbRequests < $maxRequests; ++$nbRequests
 
 但由于大部分`fpm`下的生态发展多年，架构天生无共享短生命周期，很多开发者的代码都不一定会考虑内存常驻的情况，直接迁移到`FrankenPHP`的`worker`模式可能会水土不服，甚至需要改动项目逻辑。因此最好开始不要用`worker`模式，`classic`模式即可直接适配。
 
-如果要改造自己的项目，对`$handle`函数进行修改，判断`$_SERVER['REQUEST_URI']`作为路由调用对应的控制器，如此这般，就是一个简单的框架。
+如果要改造自己的项目，对`$handler`函数进行修改，判断`$_SERVER['REQUEST_URI']`作为路由调用对应的控制器，如此这般，就是一个简单的框架。
 
 ### 运行
 
