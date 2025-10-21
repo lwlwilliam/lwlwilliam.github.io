@@ -3,6 +3,10 @@
     info: ISBN 9781593272203
     remark: false
     collect: true
+  - name: CPU 眼里的 C/C++
+    info: ISBN 9787302643937
+    remark: false
+    collect: true
 2024:
   - name: Learn C the Hard Way
     info: ISBN 9787115477309
