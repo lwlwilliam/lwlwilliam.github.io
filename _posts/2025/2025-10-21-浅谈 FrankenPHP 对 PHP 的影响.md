@@ -61,16 +61,15 @@ echo json_encode(['name' => 'william'], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SL
 ```
 
 ```bash
-$ wrk http://localhost:9191/fpm.php
-Running 10s test @ http://localhost:9191/fpm.php
+$ wrk http://php84.id/fpm.php
+Running 10s test @ http://php84.id/fpm.php
   2 threads and 10 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     1.50ms    3.67ms  67.49ms   99.46%
-    Req/Sec   780.10      1.24k    3.48k    77.42%
-  2972 requests in 10.08s, 542.74KB read
-  Socket errors: connect 0, read 2972, write 0, timeout 0
-Requests/sec:    294.73
-Transfer/sec:     53.82KB
+    Latency     2.25ms    2.94ms  79.43ms   92.45%
+    Req/Sec     2.83k   549.71     4.60k    71.50%
+  56387 requests in 10.00s, 12.42MB read
+Requests/sec:   5636.95
+Transfer/sec:      1.24MB
 
 $ wrk http://localhost:9292/
 Running 10s test @ http://localhost:9292/
