@@ -61,25 +61,25 @@ echo json_encode(['name' => 'william'], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SL
 ```
 
 ```bash
-$ wrk http://php84.id/fpm.php
-Running 10s test @ http://php84.id/fpm.php
+$ wrk http://localhost/fpm.php
+Running 10s test @ http://localhost/fpm.php
   2 threads and 10 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     2.25ms    2.94ms  79.43ms   92.45%
-    Req/Sec     2.83k   549.71     4.60k    71.50%
-  56387 requests in 10.00s, 12.42MB read
-Requests/sec:   5636.95
-Transfer/sec:      1.24MB
+    Latency     3.57ms    4.03ms  78.87ms   94.31%
+    Req/Sec     1.59k   382.27     2.58k    72.50%
+  31700 requests in 10.00s, 6.95MB read
+Requests/sec:   3168.86
+Transfer/sec:    711.74KB
 
 $ wrk http://localhost:9292/
 Running 10s test @ http://localhost:9292/
   2 threads and 10 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency   755.86us    1.92ms  26.19ms   92.45%
-    Req/Sec    20.19k     2.25k   28.02k    80.69%
-  405771 requests in 10.10s, 70.04MB read
-Requests/sec:  40177.47
-Transfer/sec:      6.94MB
+    Latency     1.52ms    2.23ms  31.96ms   92.20%
+    Req/Sec     4.90k   528.36     6.20k    73.50%
+  97580 requests in 10.00s, 16.84MB read
+Requests/sec:   9757.60
+Transfer/sec:      1.68MB
 ```
 
 `FrankenPHP`的`worker`模式`RPS`达到`40177.47`，虽然只是一个简单的输出，跟`php-fpm`相比，提升可谓非常大，这就是它得到青睐的最大原因。
