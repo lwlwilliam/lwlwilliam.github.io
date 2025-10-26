@@ -50,7 +50,7 @@ $ frankenphp-mac-arm64 php-server -l 0.0.0.0:9292 --worker=./index.php,20 --watc
 
 ### 测试
 
-对比`fpm`脚本，同样`20`个`worker`进程。
+对比`fpm`脚本，同样`20`个`worker`进程。测试是在资源受限的云服务器`docker`容器中，数据会比一般开发机稍差。
 
 ```php
 <?php
