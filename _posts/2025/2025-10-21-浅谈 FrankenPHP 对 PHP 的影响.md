@@ -82,4 +82,4 @@ Requests/sec:   9757.60
 Transfer/sec:      1.68MB
 ```
 
-`FrankenPHP`的`worker`模式`RPS`达到`40177.47`，虽然只是一个简单的输出，跟`php-fpm`相比，提升可谓非常大，这就是它得到青睐的最大原因。
+`FrankenPHP`的`worker`模式`RPS`达到`9757.60`，虽然只是一个简单的输出，跟`php-fpm`相比，提升可谓非常大，这就是它得到青睐的最大原因。
