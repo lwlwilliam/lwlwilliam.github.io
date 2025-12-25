@@ -74,8 +74,64 @@
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>-->
 
     <script src="{{ site.cdn }}/assets/js/main.js"></script>
+
+    <script>
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();  // 禁用右键
+        });
+        document.addEventListener('keydown', function(e) {
+            console.log('"'+ e.key + '"')
+            if (
+                e.key === 'F12'
+                ||
+                ((e.key === 'c' || e.key === 'C') && e.ctrlKey)
+                ||
+                ((e.key === 'c' || e.key === 'C') && e.metaKey)
+                ||
+                ((e.key === 'i' || e.key === 'I') && e.ctrlKey && e.shiftKey)
+                ||
+                ((e.key === 'j' || e.key === 'J') && e.ctrlKey && e.shiftKey)
+                ||
+                ((e.key === '∆' || e.key === 'j' || e.key === 'J') && e.altKey && e.metaKey)
+                ||
+                e.key === 'Dead'
+            ) {
+                e.preventDefault()
+            }
+            // if (e.keyCode === 67 && e.ctrlKey) {  // Ctrl+C
+            //     e.preventDefault();
+            // }
+        });
+    </script>
+    <style>
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-80%, -50%) rotate(-60deg);
+            font-size: 100px;
+            color: rgba(0, 0, 0, 0.05);  /* 半透明黑色 */
+            pointer-events: none;  /* 不干扰点击 */
+            z-index: 9999;
+            font-family: Arial,serif;
+        }
+        /* 移动端调整：无旋转、完美居中、小字体 */
+        @media (max-width: 767px) {
+            .watermark {
+                transform: translate(-50%, -50%) rotate(-90deg);  /* 移动：直立居中 */
+            }
+        }
+
+        /* 可选：平板端（768-1024px）过渡 */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .watermark {
+                transform: translate(-50%, -50%) rotate(-60deg);  /* 平板：中等旋转 */
+            }
+        }
+    </style>
 </head>
 <body class="{{ page.class }}" data-mz="{{ page.class }}">
+    <div class="watermark">lwlwilliam</div>
     <header class="site-header">
         <div class="container">
             <h1><a href="{{ site.url }}" title="{{ site.title }}"><span class="octicon octicon-mark-github"></span> {{ site.title }}</a></h1>
