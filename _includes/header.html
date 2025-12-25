@@ -80,7 +80,8 @@
             e.preventDefault();  // 禁用右键
         });
         document.addEventListener('keydown', function(e) {
-            if (e.target.id !== 'search_box') {
+            console.log(e)
+            if (e.target.id !== 'search_box' && e.target.id !== 'pagenum') {
                 e.preventDefault();
                 e.stopPropagation();  // 额外阻止事件冒泡
             }
