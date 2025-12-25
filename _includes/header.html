@@ -80,29 +80,9 @@
             e.preventDefault();  // 禁用右键
         });
         document.addEventListener('keydown', function(e) {
-            console.log('"'+ e.key + '"')
-            if (
-                e.key === 'F12'
-                ||
-                ((e.key === 'c' || e.key === 'C') && e.ctrlKey)
-                ||
-                ((e.key === 'c' || e.key === 'C') && e.metaKey)
-                ||
-                ((e.key === 'i' || e.key === 'I') && e.ctrlKey && e.shiftKey)
-                ||
-                ((e.key === 'j' || e.key === 'J') && e.ctrlKey && e.shiftKey)
-                ||
-                ((e.key === '∆' || e.key === 'j' || e.key === 'J') && e.altKey && e.metaKey)
-                ||
-                e.key === 'Dead'
-            ) {
-                e.preventDefault()
-            }
-            // if (e.keyCode === 67 && e.ctrlKey) {  // Ctrl+C
-            //     e.preventDefault();
-            // }
-        });
-    </script>
+            e.preventDefault();
+            e.stopPropagation();  // 额外阻止事件冒泡
+        }, true);  // true 表示捕获阶段，确保优先拦截    </script>
     <style>
         .watermark {
             position: fixed;
