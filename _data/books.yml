@@ -1,4 +1,8 @@
 2025:
+  - name: Linux 是怎样工作的
+    info: ISBN 9787115581617
+    remark: false
+    collect: true
   - name: Linux/UNIX 系统编程手册
     info: ISBN 9781593272203
     remark: false
