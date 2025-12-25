@@ -80,8 +80,10 @@
             e.preventDefault();  // 禁用右键
         });
         document.addEventListener('keydown', function(e) {
-            e.preventDefault();
-            e.stopPropagation();  // 额外阻止事件冒泡
+            if (e.target.id !== 'search_box') {
+                e.preventDefault();
+                e.stopPropagation();  // 额外阻止事件冒泡
+            }
         }, true);  // true 表示捕获阶段，确保优先拦截    </script>
     <style>
         .watermark {
