@@ -51,6 +51,10 @@ navs:
     label: Links
 
   -
+    href: /simple-tools/
+    label: Simple-Tools
+
+  -
     href: /todo/
     label: Todo
 
