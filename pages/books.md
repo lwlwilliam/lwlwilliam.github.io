@@ -36,7 +36,7 @@ permalink: /books/
 {% for book in year[1] %}
 
 <span style="display:inline-block;text-indent:1em;width: 40px;">{{ forloop.index0 }}.</span>
-<span>{% if book.remark %}&#x2705;{% else %}&#x1f4d6;{% endif %}&nbsp;</span>
+<span>{% if book.complete %}&#x2705;{% else %}&#x1f4d6;{% endif %}&nbsp;</span>
 <span>{{ book.name }}</span> 
 <span style="color:grey;font-size:10px;vertical-align:middle;"> {{ book.info }}</span>
 <span>{% if book.collect %}&#x2764;{% endif %}</span><!--五角星收藏表情，不过有点不像。&#x2b50;-->

@@ -1,376 +1,376 @@
 2025:
   - name: Linux 是怎样工作的
     info: ISBN 9787115581617
-    remark: false
+    complete: true
     collect: true
   - name: Linux/UNIX 系统编程手册
     info: ISBN 9781593272203
-    remark: false
+    complete: false
     collect: true
   - name: CPU 眼里的 C/C++
     info: ISBN 9787302643937
-    remark: true
+    complete: true
     collect: true
 2024:
   - name: Learn C the Hard Way
     info: ISBN 9787115477309
-    remark: false
+    complete: false
     collect: true
 2023:
   - name: Crafting Interpreters
     info: ISBN 9780990582939
-    remark: false
+    complete: false
     collect: true
   - name: Hello 算法
     info: <a href="https://www.hello-algo.com" target="_blank">Hello 算法</a>
-    remark: true
+    complete: true
     collect: true
   - name: 零基础入门学习 Python
     info: ISBN 9787302514084
-    remark: true
+    complete: true
     collect: false
   - name: PHP Beyond the Web
     info: ISBN 9781484224809
-    remark: true
+    complete: true
     collect: true
   - name: 深入理解 Go 语言
     info: ISBN 9787302613664
-    remark: true
+    complete: true
     collect: true
   - name: Writing A Compiler In Go
     info: ISBN 9783982016108
-    remark: false
+    complete: false
     collect: true
   - name: 智慧的疆界：从图灵机到人工智能
     info: ISBN 9787111610496
-    remark: false
+    complete: false
     collect: false
   - name: 数学之美
     info: ISBN 9787115537973
-    remark: false
+    complete: false
     collect: false
 2022:
   - name: Python编程：从入门到实践
     info: ISBN 9787115428028
-    remark: true
+    complete: true
     collect: true
   - name: PHP Internals Book
     info: <a href="https://www.phpinternalsbook.com" target="_blank">PHP Internals Book</a>
-    remark: false
+    complete: false
     collect: true
   - name: 编译器设计（第2版）
     info: ISBN 9787115301949
-    remark: false
+    complete: false
     collect: true
   - name: 普林斯顿计算机公开课
     info: ISBN 9787111593102
-    remark: true
+    complete: true
     collect: true
   - name: 数据结构与算法之美
     info: ISBN 9787115562050
-    remark: true
+    complete: true
     collect: false
   - name: 大话设计模式
     info: ISBN 9787302162063
-    remark: true
+    complete: true
     collect: true
   - name: 大话数据结构
     info: ISBN 9787302255659
-    remark: true
+    complete: true
     collect: true
   - name: 编译原理学习与实践指导
     info: ISBN 9787562836681
-    remark: true
+    complete: true
     collect: false
 2021:
   - name: Linux C编程一站式学习
     info: ISBN 9787121097713
-    remark: true
+    complete: true
     collect: true
   - name: 程序员的自我修养——链接、装载与库
     info: ISBN 9787121085116
-    remark: true
+    complete: true
     collect: true
   - name: 数据库系统概念
     info: ISBN 9787111375296
-    remark: false
+    complete: false
     collect: false
   - name: 深入剖析 Kubernetes
     info: ISBN 9787115560018
-    remark: false
+    complete: false
     collect: false
   - name: MySQL技术内幕
     info: ISBN 9787111422068
-    remark: false
+    complete: false
     collect: true
   - name: 30天自制操作系统
     info: ISBN 9787115287960
-    remark: false
+    complete: false
     collect: false
   - name: Linux 内核设计的艺术(第2版)
     info: ISBN 9787111421764
-    remark: true
+    complete: true
     collect: false
   - name: 深度探索嵌入式操作系统
     info: ISBN 9787111514879
-    remark: false
+    complete: false
     collect: false
   - name: 操作系统真象还原
     info: ISBN 9787115414342
-    remark: false
+    complete: false
     collect: true
   - name: 操作系统原理、实现与实践
     info: ISBN 9787040492453
-    remark: false
+    complete: false
     collect: true
   - name: 汇编语言(第3版)
     info: ISBN 9787302333142
-    remark: true
+    complete: true
     collect: true
   - name: 代码的未来
     info: ISBN 9787115317513
-    remark: true
+    complete: true
     collect: true
   - name: 自己动手写Docker
     info: ISBN 9787121317866
-    remark: false
+    complete: false
     collect: true
   - name: 汇编语言简明教程
     info: ISBN 9787121201844
-    remark: false
+    complete: false
     collect: false
   - name: 数据结构与算法图解
     info: ISBN 9787115509000
-    remark: true
+    complete: true
     collect: true
   - name: Node.js+Webpack开发实战
     info: ISBN 9787302555957
-    remark: true
+    complete: true
     collect: false
   - name: Go语言高级编程
     info: ISBN 9787115510365
-    remark: true
+    complete: true
     collect: true
   - name: 算法(第4版)
     info: ISBN 9787115293800
-    remark: false
+    complete: false
     collect: true
   - name: 计算的本质
     info: ISBN 9787115361547
-    remark: false
+    complete: false
     collect: true
   - name: 自制编译器
     info: ISBN 9787115422187
-    remark: true
+    complete: true
     collect: true
   - name: PHP 内核剖析
     info: ISBN 9787121328107
-    remark: false
+    complete: false
     collect: false
   - name: 编译原理之美（网络课程）
     info: 宫文学 / 极客时间
-    remark: true
+    complete: true
     collect: true
   - name: 编译原理实战课（网络课程）
     info: 宫文学 / 极客时间
-    remark: true
+    complete: true
     collect: true
 2020:
   - name: Go 语言学习笔记
     info: ISBN 9787121291609
-    remark: true
+    complete: true
     collect: false
   - name: Docker 技术入门与实战(第3版)
     info: ISBN 9787111608523
-    remark: true
+    complete: true
     collect: false
   - name: 代码整洁之道
     info: ISBN 9787115216878
-    remark: false
+    complete: false
     collect: true
   - name: Linux 高性能服务器编程
     info: ISBN 9787111425199
-    remark: false
+    complete: false
     collect: false
   - name: 计算机组成原理教程
     info: ISBN 9787560989372
-    remark: true
+    complete: true
     collect: false
   - name: PHP 7 底层设计与源码实现
     info: ISBN 9787111599197
-    remark: true
+    complete: true
     collect: true
   - name: 数据库系统内幕
     info: ISBN 9787111655169
-    remark: false
+    complete: false
     collect: true
   - name: HTTP/2 基础教程
     info: ISBN 9787115473899
-    remark: false
+    complete: false
     collect: false
   - name: TCP/IP 详解 卷1：协议
     info: ISBN 9787111075660
-    remark: false
+    complete: false
     collect: true
   - name: Python 网络编程(第3版)
     info: ISBN 9787115433503
-    remark: false
+    complete: false
     collect: true
   - name: Docker 开发实践
     info: ISBN 9787115395191
-    remark: true
+    complete: true
     collect: false
   - name: Go Standard Library Cookbook
     info: ISBN 9781788475273 / Radomír Sohlich
-    remark: true
+    complete: true
     collect: false
   - name: 树莓派开始，玩转 Linux
     info: ISBN 9787121342660
-    remark: true
+    complete: true
     collect: false
   - name: 白帽子讲 Web 安全
     info: ISBN 9787121234101
-    remark: true
+    complete: true
     collect: true
   - name: Operating Systems：Three Easy Pieces
     info: ISBN 9781985086593 /  Remzi H Arpaci-Dusseau / Andrea C Arpaci-Dusseau
-    remark: true
+    complete: true
     collect: true
   - name: 算法图解
     info: ISBN 9787115447630
-    remark: true
+    complete: true
     collect: true
 
 2019:
   - name: 计算机网络：自顶向下方法(第5版影印版)
     info: ISBN 9787040449518
-    remark: false
+    complete: false
     collect: true
   - name: PHP 与 MySQL 高性能应用开发
     info: ISBN 9787111547969
-    remark: false
+    complete: false
     collect: false
   - name: Writing An Interpreter In Go
     info: ISBN 9783982016115 / Thorsten Ball
-    remark: false
+    complete: false
     collect: true
   - name: Go Web 编程
     info: ISBN 9787121200915
-    remark: false
+    complete: false
     collect: false
   - name: Go 并发编程实战(第2版)
     info: ISBN 9787115452511
-    remark: false
+    complete: false
     collect: false
   - name: The Go Programming Language
     info: ISBN 9780134190440 / Brian W. Kernighan / Alan Donovan
-    remark: true
+    complete: true
     collect: false
   - name: 现代操作系统(第3版)
     info: ISBN 9787111255444
-    remark: true
+    complete: true
     collect: true
   - name: HTTP 权威指南
     info: ISBN 9787115281487
-    remark: true
+    complete: true
     collect: true
   - name: 计算机是怎样跑起来的
     info: ISBN 9787115392275
-    remark: true
+    complete: true
     collect: true
   - name: 穿越计算机的迷雾(第2版)
     info: ISBN 9787121332715
-    remark: true
+    complete: true
     collect: false
   - name: 计算机网络(第7版)
     info: ISBN 9787121302954
-    remark: true
+    complete: true
     collect: false
   - name: 程序是怎样跑起来的
     info: ISBN 9787115385130
-    remark: true
+    complete: true
     collect: true
   - name: 编码：隐匿在计算机软硬件背后的语言
     info: ISBN 9787121181184
-    remark: true
+    complete: true
     collect: true
   - name: 网络是怎样连接的
     info: ISBN 9787115441249
-    remark: true
+    complete: true
     collect: true
   - name: 码农翻身：用故事给技术加点料
     info: ISBN 9787121341175
-    remark: true
+    complete: true
     collect: true
   - name: 黑客与画家
     info: ISBN 9787115249494
-    remark: true
+    complete: true
     collect: true
   - name: Network Programming with Go
     info: <a href="https://github.com/tumregels/Network-Programming-with-Go" target="_blank">tumregels</a>
-    remark: true
+    complete: true
     collect: false
   - name: The AWK Programming Language
     info: ISBN 9780201079814 / Alfred V. Aho / Brian W. Kernighan / Peter J. Weinberger
-    remark: true
+    complete: true
     collect: true
 
 2018:
   - name: PHP 核心技术与最佳实践
     info: ISBN 9787111401926
-    remark: false
+    complete: false
     collect: true
   - name: UNIX 网络编程
     info: ISBN 9787115517791(卷1) / ISBN 9787115367204(卷2)
-    remark: false
+    complete: false
     collect: true
   - name: 深入理解计算机系统(第3版)
     info: ISBN 9787111544937
-    remark: false
+    complete: false
     collect: true
   - name: UNIX 环境高级编程(第3版)
     info: ISBN 9787115516756
-    remark: false
+    complete: false
     collect: true
   - name: The C Programming Language(第2版)
     info: ISBN 9787111617945
-    remark: true
+    complete: true
     collect: true
   - name: Go 语言实战
     info: ISBN 9787115445353
-    remark: true
+    complete: true
     collect: false
   - name: The Way To Go
     info: ISBN 9781469769165 / Ivo Balbaert
-    remark: true
+    complete: true
     collect: false
   - name: Go 语言编程
     info: ISBN 9787115290366
-    remark: true
+    complete: true
     collect: false
   - name: 图解 HTTP
     info: ISBN 9787115351531
-    remark: true
+    complete: true
     collect: false
 
 2017:
   - name: JavaScript 高级程序设计(第3版)
     info: ISBN 9787115275790
-    remark: false
+    complete: false
     collect: false
   - name: 精通正则表达式(第3版)
     info: ISBN 9787121175015
-    remark: true
+    complete: true
     collect: true
   - name: 鸟哥的 Linux 私房菜：基础学习篇(第3版)
     info: ISBN 9787115226266
-    remark: true
+    complete: true
     collect: true
   - name: C Primer Plus(第6版)
     info: ISBN 9787115521637
-    remark: true
+    complete: true
     collect: true
   - name: The Linux Command Line(第2版)
     info: ISBN 9781593279523 / William Shotts
-    remark: true
+    complete: true
     collect: false
