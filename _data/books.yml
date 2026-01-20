@@ -3,6 +3,10 @@
     info: ISBN 9787302578437
     complete: false
     collect: true
+  - name: UNIX 传奇：历史与回忆
+    info: ISBN 9787115557179
+    complete: false
+    collect: true
 2025:
   - name: Linux 是怎样工作的
     info: ISBN 9787115581617
