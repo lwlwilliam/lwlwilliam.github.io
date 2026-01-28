@@ -7,6 +7,10 @@
     info: ISBN 9787115557179
     complete: false
     collect: true
+  - name: 秒懂算法：用常识解读数据结构与算法
+    info: ISBN 9787115598134
+    complete: false
+    collect: true
 2025:
   - name: Linux 是怎样工作的
     info: ISBN 9787115581617
