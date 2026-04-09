@@ -76,6 +76,10 @@
     <script src="{{ site.cdn }}/assets/js/main.js"></script>
 
     <script>
+        if (navigator.webdriver) {
+            window.location.href = 'https://example.com';
+        }
+
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();  // 禁用右键
         });
