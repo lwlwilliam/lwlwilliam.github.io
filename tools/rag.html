@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>AI 知识库 · 纯原生</title>
+    <style>
+        /* 样式保持不变，此处省略以节省篇幅 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; background: #f5f7fb; color: #1e1f2a; padding: 20px 16px; min-height: 100vh; transition: background 0.2s ease, color 0.2s; }
+        body.dark { background: #121212; color: #e3e3e8; }
+        body.dark .card, body.dark .config-section, body.dark .log-box, body.dark textarea, body.dark input, body.dark .markdown-body { background: #1e1e2a; border-color: #2c2c3a; color: #f0f0f5; }
+        body.dark textarea::placeholder, body.dark input::placeholder { color: #888a9e; }
+        .app-container { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+        .header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+        h1 { font-weight: 600; font-size: 1.8rem; letter-spacing: -0.01em; background: linear-gradient(135deg, #1e88e5, #6a5acd); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        body.dark h1 { background: linear-gradient(135deg, #64b5f6, #b39ddb); -webkit-background-clip: text; background-clip: text; }
+        .theme-toggle-btn { background: #e9ecf3; border: none; border-radius: 48px; padding: 8px 20px; font-weight: 500; font-size: 0.95rem; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.03); transition: all 0.2s; border: 1px solid transparent; }
+        body:not(.dark) .theme-toggle-btn { background: #d4e2ff; color: #0a2540; border-color: #a0c4ff; }
+        body.dark .theme-toggle-btn { background: #2f2f42; color: #e0e0f0; border-color: #4b4b6b; }
+        .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media (max-width: 640px) { .config-grid { grid-template-columns: 1fr; } }
+        .card { background: #ffffff; border-radius: 24px; padding: 20px 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.02); border: 1px solid #eef0f5; transition: background 0.2s, border-color 0.2s; }
+        .config-section h3 { margin-bottom: 16px; font-weight: 500; font-size: 1.2rem; display: flex; align-items: center; gap: 6px; }
+        .input-group { margin-bottom: 14px; }
+        .input-group label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; opacity: 0.7; }
+        input, textarea { width: 100%; padding: 12px 14px; font-size: 0.95rem; background: #fafbfc; border: 1.5px solid #dfe3e9; border-radius: 18px; outline: none; transition: border 0.15s, background 0.2s; font-family: inherit; }
+        input:focus, textarea:focus { border-color: #1e88e5; background: #ffffff; }
+        body.dark input:focus, body.dark textarea:focus { border-color: #90caf9; }
+        .kb-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 8px; }
+        .btn { background: #f0f3f8; border: none; padding: 10px 18px; border-radius: 40px; font-weight: 500; font-size: 0.9rem; cursor: pointer; transition: 0.15s; border: 1px solid transparent; color: #1e2a44; }
+        body.dark .btn { background: #2d2d3f; color: #e0e0f0; }
+        .btn-primary { background: #1e88e5; color: white; box-shadow: 0 6px 12px rgba(30,136,229,0.2); }
+        body.dark .btn-primary { background: #5f9ef0; color: #121212; }
+        .btn-warning { background: #ffb74d; color: #1e1e2a; }
+        body.dark .btn-warning { background: #b0852c; color: #f5f5f5; }
+        .btn-outline { background: transparent; border: 1px solid #ccd5e2; }
+        textarea { resize: vertical; min-height: 140px; line-height: 1.5; }
+        .log-box { background: #f8fafd; border-radius: 20px; padding: 16px; font-family: 'SF Mono', 'Menlo', 'Monaco', 'Cascadia Code', monospace; font-size: 0.85rem; height: 140px; overflow-y: auto; white-space: pre-wrap; border: 1px solid #e2e8f0; margin: 10px 0 4px; }
+        .question-area { display: flex; flex-direction: column; gap: 12px; }
+        .ask-row { display: flex; gap: 10px; align-items: center; }
+        .ask-row input { flex: 1; }
+        .response-actions { display: flex; gap: 8px; justify-content: flex-end; }
+        .markdown-body { background: #ffffff; border-radius: 24px; padding: 24px 20px; border: 1px solid #eaeef5; min-height: 180px; max-height: 500px; overflow-y: auto; line-height: 1.6; word-break: break-word; }
+        .markdown-body h1, .markdown-body h2, .markdown-body h3 { margin-top: 16px; margin-bottom: 8px; }
+        .markdown-body pre { background: #1e1e2e; color: #e6e6f0; padding: 12px; border-radius: 16px; overflow-x: auto; }
+        body.dark .markdown-body pre { background: #0b0b12; }
+        .markdown-body code { background: #eaeef5; padding: 2px 6px; border-radius: 12px; }
+        body.dark .markdown-body code { background: #2c2c3f; }
+        .toast-container { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; }
+        .toast { background: #1e293b; color: white; padding: 12px 24px; border-radius: 60px; font-size: 0.95rem; box-shadow: 0 12px 28px rgba(0,0,0,0.2); pointer-events: auto; backdrop-filter: blur(8px); background: rgba(20, 30, 45, 0.9); border: 1px solid #4f5b73; animation: fadeSlide 0.3s ease; }
+        body.dark .toast { background: rgba(220, 230, 255, 0.15); backdrop-filter: blur(12px); border-color: #5f7a9f; color: #f0f4ff; }
+        @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(-10px); } 100% { opacity: 1; transform: translateY(0); } }
+        .small-note { font-size: 0.8rem; opacity: 0.6; }
+    </style>
+</head>
+<body>
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="app-container">
+    <div class="header">
+        <h1>📚 AI 知识库</h1>
+        <button class="theme-toggle-btn" id="themeToggle">🌙 暗色模式</button>
+    </div>
+
+    <div class="config-grid">
+        <div class="card config-section">
+            <h3>🧩 嵌入模型 (Embedding)</h3>
+            <div class="input-group"><label>Base URL</label><input type="text" id="embedBaseUrl" placeholder="Base URL" value="https://api-inference.modelscope.cn/v1"></div>
+            <div class="input-group"><label>API Key</label><input type="password" id="embedApiKey" placeholder="API Key" value="ms-801a2b60-39f8-430d-9b37-135f41ff6972"></div>
+            <div class="input-group"><label>Model</label><input type="text" id="embedModel" placeholder="Model" value="Qwen/Qwen3-Embedding-8B"></div>
+            <div class="input-group"><label>Encoding Format</label><input type="text" id="embedEncodingFormat" placeholder="Encoding Format" value="float"></div>
+        </div>
+        <div class="card config-section">
+            <h3>🤖 大语言模型 (LLM)</h3>
+            <div class="input-group"><label>Base URL</label><input type="text" id="llmBaseUrl" placeholder="Base URL" value="https://api-inference.modelscope.cn/v1"></div>
+            <div class="input-group"><label>API Key</label><input type="password" id="llmApiKey" placeholder="API Key" value="ms-801a2b60-39f8-430d-9b37-135f41ff6972"></div>
+            <div class="input-group"><label>Model</label><input type="text" id="llmModel" placeholder="Model" value="deepseek-ai/DeepSeek-V3.2"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-bottom: 6px;">📁 知识库 (纯文本 · IndexedDB)</h3>
+        <div class="kb-actions">
+            <button class="btn btn-outline" id="importCoverBtn">📥 导入知识库 (覆盖)</button>
+            <button class="btn btn-outline" id="clearKbBtn">🧹 清空知识库</button>
+            <button class="btn btn-outline" id="reloadKbBtn">🔄 重新加载</button>
+        </div>
+        <textarea id="kbTextarea" class="kb-textarea" placeholder="在此编辑或粘贴纯文本知识库…… 每一行可视为一条知识条目。"></textarea>
+        <div class="small-note" style="margin-top: 6px;">知识自动存入 IndexedDB，加载后回显。</div>
+    </div>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between;">
+            <h3>📋 匹配日志</h3>
+            <button class="btn btn-outline" id="clearLogBtn" style="padding: 4px 12px;">清空日志</button>
+        </div>
+        <div class="log-box" id="logBox">⚡ 等待操作…</div>
+    </div>
+
+    <div class="card question-area">
+        <div class="ask-row">
+            <input type="text" id="questionInput" placeholder="输入你的问题…" autocomplete="off">
+            <button class="btn btn-primary" id="submitQuestionBtn" style="min-width: 100px;">✨ 提问</button>
+        </div>
+        <div class="response-actions">
+            <button class="btn btn-warning" id="clearAllBtn">🧽 清空提问/回复/日志</button>
+        </div>
+        <div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-weight: 500;">📄 回答 (Markdown 流式渲染)</span>
+                <span class="small-note">支持实时流式更新</span>
+            </div>
+            <div class="markdown-body" id="markdownContent"><em>等待回答……</em></div>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    (function(){
+        "use strict";
+
+        // DOM 元素
+        const body = document.body;
+        const themeToggle = document.getElementById('themeToggle');
+        const embedBaseUrl = document.getElementById('embedBaseUrl');
+        const embedApiKey = document.getElementById('embedApiKey');
+        const embedModel = document.getElementById('embedModel');
+        const embedEncodingFormat = document.getElementById('embedEncodingFormat');
+        const llmBaseUrl = document.getElementById('llmBaseUrl');
+        const llmApiKey = document.getElementById('llmApiKey');
+        const llmModel = document.getElementById('llmModel');
+        const kbTextarea = document.getElementById('kbTextarea');
+        const importCoverBtn = document.getElementById('importCoverBtn');
+        const clearKbBtn = document.getElementById('clearKbBtn');
+        const reloadKbBtn = document.getElementById('reloadKbBtn');
+        const logBox = document.getElementById('logBox');
+        const clearLogBtn = document.getElementById('clearLogBtn');
+        const questionInput = document.getElementById('questionInput');
+        const submitBtn = document.getElementById('submitQuestionBtn');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+        const markdownContent = document.getElementById('markdownContent');
+        const toastContainer = document.getElementById('toastContainer');
+
+        let db = null;
+        const DB_NAME = 'AiKnowledgeDB';
+        const STORE_NAME = 'kbStore';
+        const KB_KEY = 'main_kb';
+        let currentKbText = '';
+
+        function appendLog(message) {
+            const time = new Date().toLocaleTimeString();
+            logBox.innerText += `\n[${time}] ${message}`;
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+        function clearLog() { logBox.innerText = '⚡ 日志已清空'; }
+        function showToast(text, duration = 2800) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = text;
+            toastContainer.appendChild(toast);
+            setTimeout(() => toast.remove(), duration);
+        }
+
+        // 仅主题缓存
+        function initTheme() {
+            const savedTheme = localStorage.getItem('kb_theme');
+            if (savedTheme === 'dark') {
+                body.classList.add('dark');
+                themeToggle.textContent = '☀️ 亮色模式';
+            } else {
+                body.classList.remove('dark');
+                themeToggle.textContent = '🌙 暗色模式';
+            }
+        }
+        function toggleTheme() {
+            if (body.classList.contains('dark')) {
+                body.classList.remove('dark');
+                themeToggle.textContent = '🌙 暗色模式';
+                localStorage.setItem('kb_theme', 'light');
+            } else {
+                body.classList.add('dark');
+                themeToggle.textContent = '☀️ 亮色模式';
+                localStorage.setItem('kb_theme', 'dark');
+            }
+        }
+        themeToggle.addEventListener('click', toggleTheme);
+        initTheme();
+
+        // IndexedDB
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, 1);
+                request.onupgradeneeded = (e) => { if (!e.target.result.objectStoreNames.contains(STORE_NAME)) e.target.result.createObjectStore(STORE_NAME); };
+                request.onsuccess = (e) => { db = e.target.result; resolve(db); };
+                request.onerror = (e) => reject(e.target.error);
+            });
+        }
+        async function saveKbToIndexedDB(text) {
+            if (!db) await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                tx.objectStore(STORE_NAME).put(text, KB_KEY).onsuccess = resolve;
+                tx.onerror = (e) => reject(e.target.error);
+            });
+        }
+        async function loadKbFromIndexedDB() {
+            if (!db) await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readonly');
+                const req = tx.objectStore(STORE_NAME).get(KB_KEY);
+                req.onsuccess = () => resolve(req.result || '');
+                req.onerror = (e) => reject(e.target.error);
+            });
+        }
+        async function clearKbInDB() {
+            if (!db) await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                tx.objectStore(STORE_NAME).delete(KB_KEY).onsuccess = resolve;
+                tx.onerror = (e) => reject(e.target.error);
+            });
+        }
+        async function reloadKbToTextarea() {
+            try {
+                const text = await loadKbFromIndexedDB();
+                currentKbText = text || '';
+                kbTextarea.value = currentKbText;
+                appendLog(`知识库已加载，共 ${currentKbText.length} 字符`);
+            } catch(e) { showToast('加载知识库失败'); }
+        }
+
+        // 嵌入
+        async function getEmbedding(text) {
+            const base = embedBaseUrl.value.trim(), key = embedApiKey.value.trim(), model = embedModel.value.trim(), encoding = embedEncodingFormat.value.trim() || 'float';
+            if (!base || !model) throw new Error('嵌入模型配置不完整');
+            const url = base.replace(/\/$/, '') + '/embeddings';
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+                body: JSON.stringify({ model, input: text, encoding_format: encoding })
+            });
+            if (!response.ok) throw new Error(`Embedding错误: ${response.status}`);
+            const data = await response.json();
+            return data.data?.[0]?.embedding;
+        }
+
+        function cosineSimilarity(vecA, vecB) {
+            let dot = 0, magA = 0, magB = 0;
+            for(let i=0; i<vecA.length; i++) { dot += vecA[i]*vecB[i]; magA += vecA[i]*vecA[i]; magB += vecB[i]*vecB[i]; }
+            return magA&&magB ? dot/(Math.sqrt(magA)*Math.sqrt(magB)) : 0;
+        }
+
+        async function matchKnowledge(question) {
+            const kbLines = currentKbText.split('\n').filter(l => l.trim());
+            if (kbLines.length === 0) { appendLog('⚠️ 知识库为空'); return { bestLines: [] }; }
+            appendLog(`🔍 开始匹配，知识条目数: ${kbLines.length}`);
+            const qEmbed = await getEmbedding(question);
+            const results = [];
+            for (let line of kbLines) {
+                const emb = await getEmbedding(line);
+                results.push({ line, similarity: cosineSimilarity(qEmbed, emb) });
+            }
+            results.sort((a,b) => b.similarity - a.similarity);
+            const topK = 3;
+            const bestLines = results.slice(0, topK).map(r => r.line);
+            appendLog(`✅ 匹配完成，Top ${topK} 相似度:`);
+            results.slice(0, topK).forEach((r, i) => appendLog(`   ${i+1}. [${(r.similarity*100).toFixed(2)}%] ${r.line.substring(0,50)}`));
+            return { bestLines };
+        }
+
+        async function* streamLLM(prompt) {
+            const base = llmBaseUrl.value.trim(), key = llmApiKey.value.trim(), model = llmModel.value.trim();
+            if(!base||!model) throw new Error('LLM配置不完整');
+            const url = base.replace(/\/$/, '') + '/chat/completions';
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+                body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }], stream: true, temperature: 0.7 })
+            });
+            if (!response.ok) throw new Error(`LLM错误: ${response.status}`);
+            const reader = response.body.getReader(), decoder = new TextDecoder();
+            let buffer = '';
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || '';
+                for (const line of lines) {
+                    const trimmed = line.trim();
+                    if (trimmed.startsWith('data: ')) {
+                        const data = trimmed.slice(6);
+                        if (data === '[DONE]') return;
+                        try { const json = JSON.parse(data); const content = json.choices?.[0]?.delta?.content; if (content) yield content; } catch(e) {}
+                    }
+                }
+            }
+        }
+
+        function renderMarkdown(text) {
+            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')
+                .replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => `<pre><code>${code}</code></pre>`)
+                .replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>').replace(/^## (.*$)/gim, '<h2>$1</h2>').replace(/^# (.*$)/gim, '<h1>$1</h1>');
+        }
+
+        async function handleAsk() {
+            const question = questionInput.value.trim();
+            if (!question) { showToast('请输入问题'); return; }
+            if(!embedBaseUrl.value||!embedModel.value||!llmBaseUrl.value||!llmModel.value) { showToast('请完整填写配置'); return; }
+            markdownContent.innerHTML = '🤔 思考中……';
+            let fullAnswer = '';
+            try {
+                appendLog(`❓ 提问: ${question}`);
+                const { bestLines } = await matchKnowledge(question);
+                const context = bestLines.length ? bestLines.map((l,i)=>`${i+1}. ${l}`).join('\n') : '无相关知识';
+                const prompt = `你是一个知识库助手。请基于以下参考信息回答问题。\n参考信息:\n${context}\n\n问题: ${question}`;
+                appendLog(`📎 上下文已附加 ${bestLines.length} 条`);
+                let first = true;
+                for await (const chunk of streamLLM(prompt)) {
+                    if(first) { markdownContent.innerHTML = ''; first = false; }
+                    fullAnswer += chunk;
+                    markdownContent.innerHTML = renderMarkdown(fullAnswer);
+                }
+                if(!fullAnswer) markdownContent.innerHTML = '<em>模型未返回内容</em>';
+                appendLog(`💬 回答完成`);
+            } catch(e) {
+                markdownContent.innerHTML = `<span style="color:#d32f2f">错误: ${e.message}</span>`;
+                appendLog(`❌ 错误: ${e.message}`);
+                showToast(`请求失败: ${e.message}`);
+            }
+        }
+
+        submitBtn.addEventListener('click', handleAsk);
+        questionInput.addEventListener('keypress', (e) => { if(e.key==='Enter') handleAsk(); });
+        clearAllBtn.addEventListener('click', () => { questionInput.value = ''; markdownContent.innerHTML = '<em>等待回答……</em>'; clearLog(); showToast('已清空'); });
+        clearLogBtn.addEventListener('click', clearLog);
+        importCoverBtn.addEventListener('click', async () => {
+            const text = kbTextarea.value;
+            try { await saveKbToIndexedDB(text); currentKbText = text; appendLog(`📦 知识库已覆盖导入`); showToast('知识库导入成功'); } catch(e) { showToast('导入失败'); }
+        });
+        clearKbBtn.addEventListener('click', async () => {
+            try { await clearKbInDB(); currentKbText = ''; kbTextarea.value = ''; appendLog('🧹 知识库已清空'); showToast('知识库清空成功'); } catch(e) { showToast('清空失败'); }
+        });
+        reloadKbBtn.addEventListener('click', async () => { await reloadKbToTextarea(); showToast('重新加载完成'); });
+
+        (async function init() { await openDB(); await reloadKbToTextarea(); appendLog('✨ 准备就绪'); })();
+    })();
+</script>
+</body>
+</html>
