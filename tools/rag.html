@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>AI 知识库 · 纯原生</title>
+    <title>AI 知识库</title>
     <style>
-        /* 样式保持不变，此处省略以节省篇幅 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; background: #f5f7fb; color: #1e1f2a; padding: 20px 16px; min-height: 100vh; transition: background 0.2s ease, color 0.2s; }
         body.dark { background: #121212; color: #e3e3e8; }
@@ -52,6 +51,8 @@
         body.dark .toast { background: rgba(220, 230, 255, 0.15); backdrop-filter: blur(12px); border-color: #5f7a9f; color: #f0f4ff; }
         @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(-10px); } 100% { opacity: 1; transform: translateY(0); } }
         .small-note { font-size: 0.8rem; opacity: 0.6; }
+        .badge-cache { background: #c8e6e0; color: #1a5f4b; padding: 2px 8px; border-radius: 40px; font-size: 0.7rem; font-weight: 500; margin-left: 10px; }
+        body.dark .badge-cache { background: #2c6e5c; color: #d0f0e6; }
     </style>
 </head>
 <body>
@@ -80,14 +81,14 @@
     </div>
 
     <div class="card">
-        <h3 style="margin-bottom: 6px;">📁 知识库 (纯文本 · IndexedDB)</h3>
+        <h3 style="margin-bottom: 6px;">📁 知识库 (纯文本 · 向量缓存) <span class="badge-cache" id="cacheStatusBadge">未加载缓存</span></h3>
         <div class="kb-actions">
-            <button class="btn btn-outline" id="importCoverBtn">📥 导入知识库 (覆盖)</button>
-            <button class="btn btn-outline" id="clearKbBtn">🧹 清空知识库</button>
-            <button class="btn btn-outline" id="reloadKbBtn">🔄 重新加载</button>
+            <button class="btn btn-outline" id="importCoverBtn">📥 导入/重建索引 (覆盖)</button>
+            <button class="btn btn-outline" id="clearKbBtn">🧹 清空知识库+缓存</button>
+            <button class="btn btn-outline" id="reloadKbBtn">🔄 重新加载文本</button>
         </div>
-        <textarea id="kbTextarea" class="kb-textarea" placeholder="在此编辑或粘贴纯文本知识库…… 每一行可视为一条知识条目。"></textarea>
-        <div class="small-note" style="margin-top: 6px;">知识自动存入 IndexedDB，加载后回显。</div>
+        <textarea id="kbTextarea" class="kb-textarea" placeholder="在此编辑或粘贴纯文本知识库…… 每一行视为一条知识条目。保存时将自动为每一行生成向量并缓存到IndexedDB，后续提问直接复用向量，极速匹配。留空知识库则退化为纯LLM对话模式"></textarea>
+        <div class="small-note" style="margin-top: 6px;">💡 知识库为空时，将使用纯LLM模式回答问题（不进行向量检索）</div>
     </div>
 
     <div class="card">
@@ -116,237 +117,561 @@
     </div>
 </div>
 
-<script type="module">
-    (function(){
-        "use strict";
+<script>
+(function() {
+    "use strict";
 
-        // DOM 元素
-        const body = document.body;
-        const themeToggle = document.getElementById('themeToggle');
-        const embedBaseUrl = document.getElementById('embedBaseUrl');
-        const embedApiKey = document.getElementById('embedApiKey');
-        const embedModel = document.getElementById('embedModel');
-        const embedEncodingFormat = document.getElementById('embedEncodingFormat');
-        const llmBaseUrl = document.getElementById('llmBaseUrl');
-        const llmApiKey = document.getElementById('llmApiKey');
-        const llmModel = document.getElementById('llmModel');
-        const kbTextarea = document.getElementById('kbTextarea');
-        const importCoverBtn = document.getElementById('importCoverBtn');
-        const clearKbBtn = document.getElementById('clearKbBtn');
-        const reloadKbBtn = document.getElementById('reloadKbBtn');
-        const logBox = document.getElementById('logBox');
-        const clearLogBtn = document.getElementById('clearLogBtn');
-        const questionInput = document.getElementById('questionInput');
-        const submitBtn = document.getElementById('submitQuestionBtn');
-        const clearAllBtn = document.getElementById('clearAllBtn');
-        const markdownContent = document.getElementById('markdownContent');
-        const toastContainer = document.getElementById('toastContainer');
+    // DOM 元素
+    var body = document.body;
+    var themeToggle = document.getElementById('themeToggle');
+    var embedBaseUrl = document.getElementById('embedBaseUrl');
+    var embedApiKey = document.getElementById('embedApiKey');
+    var embedModel = document.getElementById('embedModel');
+    var embedEncodingFormat = document.getElementById('embedEncodingFormat');
+    var llmBaseUrl = document.getElementById('llmBaseUrl');
+    var llmApiKey = document.getElementById('llmApiKey');
+    var llmModel = document.getElementById('llmModel');
+    var kbTextarea = document.getElementById('kbTextarea');
+    var importCoverBtn = document.getElementById('importCoverBtn');
+    var clearKbBtn = document.getElementById('clearKbBtn');
+    var reloadKbBtn = document.getElementById('reloadKbBtn');
+    var logBox = document.getElementById('logBox');
+    var clearLogBtn = document.getElementById('clearLogBtn');
+    var questionInput = document.getElementById('questionInput');
+    var submitBtn = document.getElementById('submitQuestionBtn');
+    var clearAllBtn = document.getElementById('clearAllBtn');
+    var markdownContent = document.getElementById('markdownContent');
+    var toastContainer = document.getElementById('toastContainer');
+    var cacheStatusBadge = document.getElementById('cacheStatusBadge');
 
-        let db = null;
-        const DB_NAME = 'AiKnowledgeDB';
-        const STORE_NAME = 'kbStore';
-        const KB_KEY = 'main_kb';
-        let currentKbText = '';
+    var db = null;
+    var DB_NAME = 'AI_KB';
+    var KB_STORE = 'kbContent';
+    var VECTOR_STORE = 'kbVectors';
+    var KB_KEY = 'main_kb';
+    
+    var currentKbText = '';
+    var vectorCache = [];
+    var isCacheValid = false;
 
-        function appendLog(message) {
-            const time = new Date().toLocaleTimeString();
-            logBox.innerText += `\n[${time}] ${message}`;
-            logBox.scrollTop = logBox.scrollHeight;
+    function appendLog(message) {
+        var time = new Date().toLocaleTimeString();
+        logBox.innerText = logBox.innerText + '\n[' + time + '] ' + message;
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+    
+    function clearLog() { 
+        logBox.innerText = '⚡ 日志已清空'; 
+    }
+    
+    function showToast(text, duration) {
+        if (duration === undefined) duration = 2800;
+        var toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = text;
+        toastContainer.appendChild(toast);
+        setTimeout(function() { toast.remove(); }, duration);
+    }
+
+    // 主题
+    function initTheme() {
+        var savedTheme = localStorage.getItem('kb_theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark');
+            themeToggle.textContent = '☀️ 亮色模式';
+        } else {
+            body.classList.remove('dark');
+            themeToggle.textContent = '🌙 暗色模式';
         }
-        function clearLog() { logBox.innerText = '⚡ 日志已清空'; }
-        function showToast(text, duration = 2800) {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.textContent = text;
-            toastContainer.appendChild(toast);
-            setTimeout(() => toast.remove(), duration);
+    }
+    
+    function toggleTheme() {
+        if (body.classList.contains('dark')) {
+            body.classList.remove('dark');
+            themeToggle.textContent = '🌙 暗色模式';
+            localStorage.setItem('kb_theme', 'light');
+        } else {
+            body.classList.add('dark');
+            themeToggle.textContent = '☀️ 亮色模式';
+            localStorage.setItem('kb_theme', 'dark');
         }
+    }
+    
+    themeToggle.addEventListener('click', toggleTheme);
+    initTheme();
 
-        // 仅主题缓存
-        function initTheme() {
-            const savedTheme = localStorage.getItem('kb_theme');
-            if (savedTheme === 'dark') {
-                body.classList.add('dark');
-                themeToggle.textContent = '☀️ 亮色模式';
+    // IndexedDB 操作
+    function openDB() {
+        return new Promise(function(resolve, reject) {
+            var request = indexedDB.open(DB_NAME, 2);
+            request.onupgradeneeded = function(e) {
+                var dbInst = e.target.result;
+                if (!dbInst.objectStoreNames.contains(KB_STORE)) {
+                    dbInst.createObjectStore(KB_STORE);
+                }
+                if (!dbInst.objectStoreNames.contains(VECTOR_STORE)) {
+                    dbInst.createObjectStore(VECTOR_STORE, { keyPath: 'id' });
+                }
+            };
+            request.onsuccess = function(e) { 
+                db = e.target.result; 
+                resolve(db); 
+            };
+            request.onerror = function(e) { 
+                reject(e.target.error); 
+            };
+        });
+    }
+
+    function saveRawTextToDB(text) {
+        return openDB().then(function(db) {
+            return new Promise(function(resolve, reject) {
+                var tx = db.transaction(KB_STORE, 'readwrite');
+                var store = tx.objectStore(KB_STORE);
+                var req = store.put(text, KB_KEY);
+                req.onsuccess = function() { resolve(); };
+                req.onerror = function(e) { reject(e.target.error); };
+            });
+        });
+    }
+
+    function loadRawTextFromDB() {
+        return openDB().then(function(db) {
+            return new Promise(function(resolve, reject) {
+                var tx = db.transaction(KB_STORE, 'readonly');
+                var store = tx.objectStore(KB_STORE);
+                var req = store.get(KB_KEY);
+                req.onsuccess = function() { resolve(req.result || ''); };
+                req.onerror = function(e) { reject(e.target.error); };
+            });
+        });
+    }
+
+    function clearAllVectors() {
+        return openDB().then(function(db) {
+            return new Promise(function(resolve, reject) {
+                var tx = db.transaction(VECTOR_STORE, 'readwrite');
+                var store = tx.objectStore(VECTOR_STORE);
+                var req = store.clear();
+                req.onsuccess = function() { resolve(); };
+                req.onerror = function(e) { reject(e.target.error); };
+            });
+        });
+    }
+
+    function saveAllVectors(vectors) {
+        return openDB().then(function(db) {
+            return clearAllVectors().then(function() {
+                if (vectors.length === 0) return;
+                return new Promise(function(resolve, reject) {
+                    var tx = db.transaction(VECTOR_STORE, 'readwrite');
+                    var store = tx.objectStore(VECTOR_STORE);
+                    var completed = 0;
+                    vectors.forEach(function(vec) {
+                        var req = store.put(vec);
+                        req.onsuccess = function() {
+                            completed = completed + 1;
+                            if (completed === vectors.length) {
+                                resolve();
+                            }
+                        };
+                        req.onerror = function(e) { reject(e.target.error); };
+                    });
+                    tx.onerror = function(e) { reject(e.target.error); };
+                });
+            });
+        });
+    }
+
+    function loadAllVectors() {
+        return openDB().then(function(db) {
+            return new Promise(function(resolve, reject) {
+                var tx = db.transaction(VECTOR_STORE, 'readonly');
+                var store = tx.objectStore(VECTOR_STORE);
+                var req = store.getAll();
+                req.onsuccess = function() { resolve(req.result || []); };
+                req.onerror = function(e) { reject(e.target.error); };
+            });
+        });
+    }
+
+    function clearKnowledgeBase() {
+        return saveRawTextToDB('').then(function() {
+            return clearAllVectors();
+        }).then(function() {
+            currentKbText = '';
+            vectorCache = [];
+            isCacheValid = false;
+            kbTextarea.value = '';
+            updateCacheBadge(false);
+            appendLog('🧹 知识库及所有向量缓存已清空，现在为纯LLM对话模式');
+        });
+    }
+
+    // 嵌入调用
+    async function getEmbedding(text) {
+        var base = embedBaseUrl.value.trim();
+        var key = embedApiKey.value.trim();
+        var model = embedModel.value.trim();
+        var encoding = embedEncodingFormat.value.trim() || 'float';
+        if (!base || !model) throw new Error('嵌入模型配置不完整');
+        var url = base.replace(/\/$/, '') + '/embeddings';
+        var response = await fetch(url, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json', 
+                'Authorization': 'Bearer ' + key 
+            },
+            body: JSON.stringify({ model: model, input: text, encoding_format: encoding })
+        });
+        if (!response.ok) {
+            var errText = await response.text();
+            throw new Error('Embedding错误 ' + response.status + ': ' + errText.substring(0, 100));
+        }
+        var data = await response.json();
+        var emb = data.data && data.data[0] && data.data[0].embedding;
+        if (!emb || !Array.isArray(emb)) throw new Error('返回向量格式异常');
+        return emb;
+    }
+
+    // 批量生成向量
+    async function buildVectorsFromLines(lines) {
+        var results = [];
+        var total = lines.length;
+        for (var i = 0; i < total; i++) {
+			var line = lines[i];
+			if (!line.trim()) continue;
+			appendLog('🔄 生成向量 [' + (i+1) + '/' + total + ']: ' + line.substring(0, 40) + '...');
+			try {
+				var embedding = await getEmbedding(line);
+				results.push({ 
+					id: 'vec_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2, 6), 
+					text: line, 
+					embedding: embedding 
+				});
+
+				await new Promise(r => setTimeout(r, 1000));
+			} catch (err) {
+				appendLog('❌ 向量生成失败: ' + line.substring(0, 30) + ' - ' + err.message);
+				showToast('向量生成失败: ' + err.message, 2000);
+				throw err;
+			}
+        }
+        return results;
+    }
+
+    // 重建索引
+    async function rebuildIndexFromCurrentText() {
+        var rawText = kbTextarea.value;
+        var lines = rawText.split('\n').filter(function(l) { return l.trim().length > 0; });
+        
+        if (lines.length === 0) {
+            await saveRawTextToDB('');
+            await clearAllVectors();
+            currentKbText = '';
+            vectorCache = [];
+            isCacheValid = true;
+            updateCacheBadge(true);
+            appendLog('📦 知识库已清空，现在为纯LLM对话模式（无向量检索）');
+            showToast('知识库已清空，将使用纯LLM模式');
+            return;
+        }
+        
+        appendLog('🚀 开始建立向量索引，共 ' + lines.length + ' 条知识，调用嵌入API中...');
+        showToast('正在生成 ' + lines.length + ' 条向量，请稍等...', 3000);
+        try {
+            var vectors = await buildVectorsFromLines(lines);
+            await saveRawTextToDB(rawText);
+            await saveAllVectors(vectors);
+            vectorCache = vectors;
+            currentKbText = rawText;
+            isCacheValid = true;
+            updateCacheBadge(true);
+            appendLog('✅ 索引建立完成！已缓存 ' + vectors.length + ' 条向量，后续提问将直接使用缓存');
+            showToast('索引成功，缓存 ' + vectors.length + ' 条向量');
+        } catch (err) {
+            appendLog('🔥 索引失败: ' + err.message);
+            showToast('索引失败: ' + err.message);
+            isCacheValid = false;
+            updateCacheBadge(false);
+            throw err;
+        }
+    }
+
+    // 加载知识库
+    async function loadKnowledgeBaseWithCache() {
+        try {
+            var rawText = await loadRawTextFromDB();
+            var vectors = await loadAllVectors();
+            currentKbText = rawText;
+            kbTextarea.value = rawText;
+            vectorCache = vectors;
+            var linesFromText = rawText.split('\n').filter(function(l) { return l.trim().length > 0; });
+            
+            var isValid = (linesFromText.length === 0 && vectors.length === 0) || (vectors.length === linesFromText.length && vectors.length > 0);
+            isCacheValid = isValid;
+            updateCacheBadge(isValid);
+            
+            if (linesFromText.length === 0) {
+                appendLog('📭 知识库为空，当前为纯LLM对话模式');
+            } else if (isValid && vectors.length > 0) {
+                appendLog('📚 加载知识库: ' + linesFromText.length + ' 条文本，已从缓存加载 ' + vectors.length + ' 条向量');
+            } else if (rawText.trim() && vectors.length === 0) {
+                appendLog('⚠️ 检测到文本但无向量缓存，请点击「导入/重建索引」以生成向量缓存');
             } else {
-                body.classList.remove('dark');
-                themeToggle.textContent = '🌙 暗色模式';
+                appendLog('📄 知识库当前为空或缓存无效，请导入内容并重建索引');
             }
+        } catch (e) {
+            appendLog('加载失败: ' + e.message);
+            isCacheValid = false;
+            updateCacheBadge(false);
         }
-        function toggleTheme() {
-            if (body.classList.contains('dark')) {
-                body.classList.remove('dark');
-                themeToggle.textContent = '🌙 暗色模式';
-                localStorage.setItem('kb_theme', 'light');
-            } else {
-                body.classList.add('dark');
-                themeToggle.textContent = '☀️ 亮色模式';
-                localStorage.setItem('kb_theme', 'dark');
-            }
-        }
-        themeToggle.addEventListener('click', toggleTheme);
-        initTheme();
+    }
 
-        // IndexedDB
-        function openDB() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(DB_NAME, 1);
-                request.onupgradeneeded = (e) => { if (!e.target.result.objectStoreNames.contains(STORE_NAME)) e.target.result.createObjectStore(STORE_NAME); };
-                request.onsuccess = (e) => { db = e.target.result; resolve(db); };
-                request.onerror = (e) => reject(e.target.error);
-            });
+    function updateCacheBadge(valid) {
+        var isEmpty = currentKbText.trim() === '';
+        if (isEmpty) {
+            cacheStatusBadge.textContent = '📭 纯LLM模式 (无知识库)';
+            cacheStatusBadge.style.background = '#e9ecef';
+            cacheStatusBadge.style.color = '#5f6c80';
+        } else if (valid && vectorCache.length > 0) {
+            cacheStatusBadge.textContent = '✅ 向量缓存有效 (' + vectorCache.length + '条)';
+            cacheStatusBadge.style.background = '#c8e6e0';
+            cacheStatusBadge.style.color = '#1a5f4b';
+        } else if (currentKbText.trim() && !valid) {
+            cacheStatusBadge.textContent = '⚠️ 无缓存/索引过期，请重建';
+            cacheStatusBadge.style.background = '#ffe0b5';
+            cacheStatusBadge.style.color = '#a86903';
+        } else {
+            cacheStatusBadge.textContent = '📭 未建立向量索引';
+            cacheStatusBadge.style.background = '#e9ecef';
+            cacheStatusBadge.style.color = '#5f6c80';
         }
-        async function saveKbToIndexedDB(text) {
-            if (!db) await openDB();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                tx.objectStore(STORE_NAME).put(text, KB_KEY).onsuccess = resolve;
-                tx.onerror = (e) => reject(e.target.error);
-            });
-        }
-        async function loadKbFromIndexedDB() {
-            if (!db) await openDB();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readonly');
-                const req = tx.objectStore(STORE_NAME).get(KB_KEY);
-                req.onsuccess = () => resolve(req.result || '');
-                req.onerror = (e) => reject(e.target.error);
-            });
-        }
-        async function clearKbInDB() {
-            if (!db) await openDB();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                tx.objectStore(STORE_NAME).delete(KB_KEY).onsuccess = resolve;
-                tx.onerror = (e) => reject(e.target.error);
-            });
-        }
-        async function reloadKbToTextarea() {
-            try {
-                const text = await loadKbFromIndexedDB();
-                currentKbText = text || '';
-                kbTextarea.value = currentKbText;
-                appendLog(`知识库已加载，共 ${currentKbText.length} 字符`);
-            } catch(e) { showToast('加载知识库失败'); }
-        }
+    }
 
-        // 嵌入
-        async function getEmbedding(text) {
-            const base = embedBaseUrl.value.trim(), key = embedApiKey.value.trim(), model = embedModel.value.trim(), encoding = embedEncodingFormat.value.trim() || 'float';
-            if (!base || !model) throw new Error('嵌入模型配置不完整');
-            const url = base.replace(/\/$/, '') + '/embeddings';
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-                body: JSON.stringify({ model, input: text, encoding_format: encoding })
-            });
-            if (!response.ok) throw new Error(`Embedding错误: ${response.status}`);
-            const data = await response.json();
-            return data.data?.[0]?.embedding;
+    function cosineSimilarity(vecA, vecB) {
+        var dot = 0, magA = 0, magB = 0;
+        for (var i = 0; i < vecA.length; i++) { 
+            dot = dot + vecA[i] * vecB[i]; 
+            magA = magA + vecA[i] * vecA[i]; 
+            magB = magB + vecB[i] * vecB[i]; 
         }
-
-        function cosineSimilarity(vecA, vecB) {
-            let dot = 0, magA = 0, magB = 0;
-            for(let i=0; i<vecA.length; i++) { dot += vecA[i]*vecB[i]; magA += vecA[i]*vecA[i]; magB += vecB[i]*vecB[i]; }
-            return magA&&magB ? dot/(Math.sqrt(magA)*Math.sqrt(magB)) : 0;
+        if (magA && magB) {
+            return dot / (Math.sqrt(magA) * Math.sqrt(magB));
         }
+        return 0;
+    }
 
-        async function matchKnowledge(question) {
-            const kbLines = currentKbText.split('\n').filter(l => l.trim());
-            if (kbLines.length === 0) { appendLog('⚠️ 知识库为空'); return { bestLines: [] }; }
-            appendLog(`🔍 开始匹配，知识条目数: ${kbLines.length}`);
-            const qEmbed = await getEmbedding(question);
-            const results = [];
-            for (let line of kbLines) {
-                const emb = await getEmbedding(line);
-                results.push({ line, similarity: cosineSimilarity(qEmbed, emb) });
-            }
-            results.sort((a,b) => b.similarity - a.similarity);
-            const topK = 3;
-            const bestLines = results.slice(0, topK).map(r => r.line);
-            appendLog(`✅ 匹配完成，Top ${topK} 相似度:`);
-            results.slice(0, topK).forEach((r, i) => appendLog(`   ${i+1}. [${(r.similarity*100).toFixed(2)}%] ${r.line.substring(0,50)}`));
-            return { bestLines };
+    // 检索：使用缓存的向量
+    async function matchKnowledgeWithCache(question) {
+        if (vectorCache.length === 0) {
+            appendLog('📭 知识库为空，跳过向量检索，使用纯LLM模式');
+            return { bestLines: [] };
         }
+        
+        appendLog('🔍 向量匹配中 (使用缓存向量库，共 ' + vectorCache.length + ' 条)');
+        var qEmbed = await getEmbedding(question);
+        var results = [];
+        for (var i = 0; i < vectorCache.length; i++) {
+            var item = vectorCache[i];
+            var similarity = cosineSimilarity(qEmbed, item.embedding);
+            results.push({ line: item.text, similarity: similarity });
+        }
+        results.sort(function(a, b) { return b.similarity - a.similarity; });
+        var topK = 3;
+        var bestLines = [];
+        for (var i = 0; i < topK && i < results.length; i++) {
+            bestLines.push(results[i].line);
+        }
+        appendLog('✅ 匹配完成 (缓存命中)，Top ' + topK + ' 相似度:');
+        for (var i = 0; i < topK && i < results.length; i++) {
+            appendLog('   ' + (i+1) + '. [' + (results[i].similarity * 100).toFixed(2) + '%] ' + results[i].line.substring(0, 55));
+        }
+        return { bestLines: bestLines };
+    }
 
-        async function* streamLLM(prompt) {
-            const base = llmBaseUrl.value.trim(), key = llmApiKey.value.trim(), model = llmModel.value.trim();
-            if(!base||!model) throw new Error('LLM配置不完整');
-            const url = base.replace(/\/$/, '') + '/chat/completions';
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-                body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }], stream: true, temperature: 0.7 })
-            });
-            if (!response.ok) throw new Error(`LLM错误: ${response.status}`);
-            const reader = response.body.getReader(), decoder = new TextDecoder();
-            let buffer = '';
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split('\n');
-                buffer = lines.pop() || '';
-                for (const line of lines) {
-                    const trimmed = line.trim();
-                    if (trimmed.startsWith('data: ')) {
-                        const data = trimmed.slice(6);
-                        if (data === '[DONE]') return;
-                        try { const json = JSON.parse(data); const content = json.choices?.[0]?.delta?.content; if (content) yield content; } catch(e) {}
-                    }
+    // 流式LLM
+    async function streamLLM(prompt, onChunk) {
+        var base = llmBaseUrl.value.trim();
+        var key = llmApiKey.value.trim();
+        var model = llmModel.value.trim();
+        if (!base || !model) throw new Error('LLM配置不完整');
+        var url = base.replace(/\/$/, '') + '/chat/completions';
+        var response = await fetch(url, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json', 
+                'Authorization': 'Bearer ' + key 
+            },
+            body: JSON.stringify({ 
+                model: model, 
+                messages: [{ role: 'user', content: prompt }], 
+                stream: true, 
+                temperature: 0.7 
+            })
+        });
+        if (!response.ok) throw new Error('LLM错误: ' + response.status);
+        var reader = response.body.getReader();
+        var decoder = new TextDecoder();
+        var buffer = '';
+        while (true) {
+            var result = await reader.read();
+            if (result.done) break;
+            buffer = buffer + decoder.decode(result.value, { stream: true });
+            var lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+            for (var i = 0; i < lines.length; i++) {
+                var trimmed = lines[i].trim();
+                if (trimmed.startsWith('data: ')) {
+                    var data = trimmed.slice(6);
+                    if (data === '[DONE]') return;
+                    try { 
+                        var json = JSON.parse(data); 
+                        var content = json.choices && json.choices[0] && json.choices[0].delta && json.choices[0].delta.content; 
+                        if (content) {
+                            onChunk(content);
+                        }
+                    } catch(e) {}
                 }
             }
         }
+    }
 
-        function renderMarkdown(text) {
-            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')
-                .replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => `<pre><code>${code}</code></pre>`)
-                .replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-                .replace(/^### (.*$)/gim, '<h3>$1</h3>').replace(/^## (.*$)/gim, '<h2>$1</h2>').replace(/^# (.*$)/gim, '<h1>$1</h1>');
+    function renderMarkdown(text) {
+        var html = text;
+        html = html.replace(/&/g, '&amp;');
+        html = html.replace(/</g, '&lt;');
+        html = html.replace(/>/g, '&gt;');
+        html = html.replace(/\n/g, '<br>');
+        html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+        html = html.replace(/^### (.*)$/gm, '<h3>$1</h3>');
+        html = html.replace(/^## (.*)$/gm, '<h2>$1</h2>');
+        html = html.replace(/^# (.*)$/gm, '<h1>$1</h1>');
+        return html;
+    }
+
+    async function handleAsk() {
+        var question = questionInput.value.trim();
+        if (!question) { 
+            showToast('请输入问题'); 
+            return; 
         }
-
-        async function handleAsk() {
-            const question = questionInput.value.trim();
-            if (!question) { showToast('请输入问题'); return; }
-            if(!embedBaseUrl.value||!embedModel.value||!llmBaseUrl.value||!llmModel.value) { showToast('请完整填写配置'); return; }
-            markdownContent.innerHTML = '🤔 思考中……';
-            let fullAnswer = '';
-            try {
-                appendLog(`❓ 提问: ${question}`);
-                const { bestLines } = await matchKnowledge(question);
-                const context = bestLines.length ? bestLines.map((l,i)=>`${i+1}. ${l}`).join('\n') : '无相关知识';
-                const prompt = `你是一个知识库助手。请基于以下参考信息回答问题。\n参考信息:\n${context}\n\n问题: ${question}`;
-                appendLog(`📎 上下文已附加 ${bestLines.length} 条`);
-                let first = true;
-                for await (const chunk of streamLLM(prompt)) {
-                    if(first) { markdownContent.innerHTML = ''; first = false; }
-                    fullAnswer += chunk;
-                    markdownContent.innerHTML = renderMarkdown(fullAnswer);
-                }
-                if(!fullAnswer) markdownContent.innerHTML = '<em>模型未返回内容</em>';
-                appendLog(`💬 回答完成`);
-            } catch(e) {
-                markdownContent.innerHTML = `<span style="color:#d32f2f">错误: ${e.message}</span>`;
-                appendLog(`❌ 错误: ${e.message}`);
-                showToast(`请求失败: ${e.message}`);
+        if (!llmBaseUrl.value || !llmModel.value) { 
+            showToast('请完整填写LLM配置'); 
+            return; 
+        }
+        
+        var isEmptyKb = currentKbText.trim() === '';
+        if (!isEmptyKb && (!embedBaseUrl.value || !embedModel.value)) {
+            showToast('知识库非空，请完整填写嵌入模型配置');
+            return;
+        }
+        
+        markdownContent.innerHTML = '🤔 思考中……';
+        var fullAnswer = '';
+        try {
+            appendLog('❓ 提问: ' + question);
+            
+            var bestLines = [];
+            if (!isEmptyKb) {
+                var result = await matchKnowledgeWithCache(question);
+                bestLines = result.bestLines;
+            } else {
+                appendLog('📭 知识库为空，直接使用LLM回答');
             }
+            
+            if (bestLines.length === 0 && !isEmptyKb) {
+            Log('⚠️ 没有匹配到相关知识，将使用空上下文');
+            }
+            
+            var context = '';
+            if (bestLines.length > 0) {
+                for (var i = 0; i < bestLines.length; i++) {
+                    context = context + (i+1) + '. ' + bestLines[i] + '\n';
+                }
+            } else {
+                context = '无相关知识';
+            }
+            
+            var prompt;
+            if (isEmptyKb) {
+                prompt = '你是一个智能助手。\n问题: ' + question;
+            } else {
+                prompt = '你是一个知识库助手。请基于以下参考信息回答问题。如果参考信息不足以回答，请使用你自己的知识。\n参考信息:\n' + context + '\n\n问题: ' + question;
+            }
+            
+            appendLog('📎 ' + (isEmptyKb ? '纯LLM模式' : '上下文已附加 ' + bestLines.length + ' 条') + '，开始流式生成...');
+            markdownContent.innerHTML = '';
+            
+            await streamLLM(prompt, function(chunk) {
+                fullAnswer = fullAnswer + chunk;
+                markdownContent.innerHTML = renderMarkdown(fullAnswer);
+            });
+            
+            if (!fullAnswer) {
+                markdownContent.innerHTML = '<em>模型未返回内容</em>';
+            }
+            appendLog('💬 回答完成');
+        } catch(e) {
+            markdownContent.innerHTML = '<span style="color:#d32f2f">错误: ' + e.message + '</span>';
+            appendLog('❌ 错误: ' + e.message);
+            showToast('请求失败: ' + e.message);
         }
+    }
 
-        submitBtn.addEventListener('click', handleAsk);
-        questionInput.addEventListener('keypress', (e) => { if(e.key==='Enter') handleAsk(); });
-        clearAllBtn.addEventListener('click', () => { questionInput.value = ''; markdownContent.innerHTML = '<em>等待回答……</em>'; clearLog(); showToast('已清空'); });
-        clearLogBtn.addEventListener('click', clearLog);
-        importCoverBtn.addEventListener('click', async () => {
-            const text = kbTextarea.value;
-            try { await saveKbToIndexedDB(text); currentKbText = text; appendLog(`📦 知识库已覆盖导入`); showToast('知识库导入成功'); } catch(e) { showToast('导入失败'); }
-        });
-        clearKbBtn.addEventListener('click', async () => {
-            try { await clearKbInDB(); currentKbText = ''; kbTextarea.value = ''; appendLog('🧹 知识库已清空'); showToast('知识库清空成功'); } catch(e) { showToast('清空失败'); }
-        });
-        reloadKbBtn.addEventListener('click', async () => { await reloadKbToTextarea(); showToast('重新加载完成'); });
+    // 事件绑定
+    submitBtn.addEventListener('click', handleAsk);
+    questionInput.addEventListener('keypress', function(e) { 
+        if (e.key === 'Enter') handleAsk(); 
+    });
+    clearAllBtn.addEventListener('click', function() { 
+        questionInput.value = ''; 
+        markdownContent.innerHTML = '<em>等待回答……</em>'; 
+        clearLog(); 
+        showToast('已清空'); 
+    });
+    clearLogBtn.addEventListener('click', clearLog);
+    
+    importCoverBtn.addEventListener('click', async function() {
+        var isEmpty = kbTextarea.value.trim() === '';
+        if (!isEmpty) {
+            var confirmMsg = '覆盖导入将重新生成所有向量（会调用嵌入API），是否继续？';
+            if (!confirm(confirmMsg)) return;
+        }
+        try {
+            await rebuildIndexFromCurrentText();
+            showToast(isEmpty ? '知识库已清空' : '知识库索引重建完成');
+        } catch(e) {
+            showToast('重建失败，请检查配置或网络');
+        }
+    });
+    
+    clearKbBtn.addEventListener('click', async function() {
+        if (confirm('⚠️ 清空知识库会删除所有文本和向量缓存，不可撤销。确定吗？')) {
+            await clearKnowledgeBase();
+            showToast('知识库已清空，现在为纯LLM模式');
+        }
+    });
+    
+    reloadKbBtn.addEventListener('click', async function() {
+        await loadKnowledgeBaseWithCache();
+   ('已从数据库重新加载文本和缓存状态');
+    });
 
-        (async function init() { await openDB(); await reloadKbToTextarea(); appendLog('✨ 准备就绪'); })();
+    // 初始化
+    (async function init() {
+        await openDB();
+        await loadKnowledgeBaseWithCache();
+        appendLog('✨ 智能RAG已启动 (向量缓存模式)');
+        if (currentKbText.trim() === '') {
+            appendLog('📭 当前知识库为空，将使用纯LLM对话模式（无需嵌入模型配置）');
+        } else {
+            appendLog('🔍 提问时仅需生成问题向量，知识库向量完全复用缓存');
+		}
     })();
+})();
 </script>
 </body>
 </html>
