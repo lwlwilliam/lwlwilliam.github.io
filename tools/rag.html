@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>AI 知识库</title>
+    <title>AI 知识库 · 轻量测试版</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; background: #f5f7fb; color: #1e1f2a; padding: 20px 16px; min-height: 100vh; transition: background 0.2s ease, color 0.2s; }
@@ -53,6 +53,18 @@
         .small-note { font-size: 0.8rem; opacity: 0.6; }
         .badge-cache { background: #c8e6e0; color: #1a5f4b; padding: 2px 8px; border-radius: 40px; font-size: 0.7rem; font-weight: 500; margin-left: 10px; }
         body.dark .badge-cache { background: #2c6e5c; color: #d0f0e6; }
+        
+        /* 注意事项卡片样式 - 醒目提醒 */
+        .notice-card { background: #fff7e5; border-left: 6px solid #f59e0b; border-radius: 20px; padding: 14px 18px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
+        body.dark .notice-card { background: #2a2418; border-left-color: #f59e0b; color: #ffecb3; }
+        .notice-icon { font-size: 1.6rem; line-height: 1; }
+        .notice-content { flex: 1; font-size: 0.85rem; line-height: 1.45; }
+        .notice-content strong { color: #e67e22; }
+        body.dark .notice-content strong { color: #f39c12; }
+        .notice-title { font-weight: 700; margin-bottom: 6px; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+        .warning-badge { background: #f97316; color: white; padding: 2px 8px; border-radius: 30px; font-size: 0.7rem; font-weight: 600; margin-left: 6px; }
+        .kb-notice { background: #eef2ff; border-left-color: #3b82f6; }
+        body.dark .kb-notice { background: #1e293b; }
     </style>
 </head>
 <body>
@@ -60,8 +72,20 @@
 
 <div class="app-container">
     <div class="header">
-        <h1>📚 AI 知识库</h1>
+        <h1>📚 AI 知识库 · 轻量测试版</h1>
         <button class="theme-toggle-btn" id="themeToggle">🌙 暗色模式</button>
+    </div>
+
+    <!-- 🔔 全局注意事项：API 免费限额/限流提醒 -->
+    <div class="notice-card">
+        <div class="notice-icon">⚠️</div>
+        <div class="notice-content">
+            <div class="notice-title">
+                🧪 轻量测试·重要提醒
+                <span class="warning-badge">免费API·有限额</span>
+            </div>
+            <div>本工具使用的 <strong>ModelScope API Key 为免费公共测试密钥</strong>，存在严格的<strong>请求频率限制（限流）和每日总量限额</strong>。请勿高频调用、并发请求或上传超长文本，否则极易触发限流/拒绝服务，导致体验中断。建议<strong>手动间隔1~2秒</strong>，仅供学习与功能验证。</div>
+        </div>
     </div>
 
     <div class="config-grid">
@@ -82,12 +106,19 @@
 
     <div class="card">
         <h3 style="margin-bottom: 6px;">📁 知识库 (纯文本 · 向量缓存) <span class="badge-cache" id="cacheStatusBadge">未加载缓存</span></h3>
+        <!-- 知识库专用轻量提示 -->
+        <div class="notice-card kb-notice" style="margin-bottom: 12px; margin-top: 4px;">
+            <div class="notice-icon">📄</div>
+            <div class="notice-content">
+                <strong>🧪 轻量级测试专用</strong> — 请勿上传大段文本（建议每条知识 ≤ 300字，总条数 ≤ 30条），避免超出嵌入API长度限制或触发限流。大量文本将导致生成向量耗时极长且容易失败，影响缓存体验。
+            </div>
+        </div>
         <div class="kb-actions">
             <button class="btn btn-outline" id="importCoverBtn">📥 导入/重建索引 (覆盖)</button>
             <button class="btn btn-outline" id="clearKbBtn">🧹 清空知识库+缓存</button>
             <button class="btn btn-outline" id="reloadKbBtn">🔄 重新加载文本</button>
         </div>
-        <textarea id="kbTextarea" class="kb-textarea" placeholder="在此编辑或粘贴纯文本知识库…… 每一行视为一条知识条目。保存时将自动为每一行生成向量并缓存到IndexedDB，后续提问直接复用向量，极速匹配。留空知识库则退化为纯LLM对话模式"></textarea>
+        <textarea id="kbTextarea" class="kb-textarea" placeholder="在此编辑或粘贴纯文本知识库…… 每一行视为一条知识条目。保存时将自动为每一行生成向量并缓存到IndexedDB，后续提问直接复用向量，极速匹配。留空知识库则退化为纯LLM对话模式。&#10;&#10;⚡ 轻量测试建议：每条知识不超过200~300字，总行数不超过30行。"></textarea>
         <div class="small-note" style="margin-top: 6px;">💡 知识库为空时，将使用纯LLM模式回答问题（不进行向量检索）</div>
     </div>
 
@@ -153,6 +184,9 @@
     var currentKbText = '';
     var vectorCache = [];
     var isCacheValid = false;
+    
+    // 限流友好提示计数器 (仅辅助日志)
+    var lastEmbedCallTime = 0;
 
     function appendLog(message) {
         var time = new Date().toLocaleTimeString();
@@ -308,13 +342,23 @@
         });
     }
 
-    // 嵌入调用
+    // 嵌入调用 + 限流友好提醒 & 简易延迟
     async function getEmbedding(text) {
         var base = embedBaseUrl.value.trim();
         var key = embedApiKey.value.trim();
         var model = embedModel.value.trim();
         var encoding = embedEncodingFormat.value.trim() || 'float';
         if (!base || !model) throw new Error('嵌入模型配置不完整');
+        
+        // 简单客户端限流保护: 确保调用间隔不低于 800ms (避免高频)
+        var now = Date.now();
+        var gap = now - lastEmbedCallTime;
+        if (gap < 800 && lastEmbedCallTime !== 0) {
+            var waitMs = 850 - gap;
+            appendLog(`⏳ 避免限流，自动延迟 ${Math.ceil(waitMs)}ms 后再调用嵌入API...`);
+            await new Promise(r => setTimeout(r, waitMs));
+        }
+        
         var url = base.replace(/\/$/, '') + '/embeddings';
         var response = await fetch(url, {
             method: 'POST',
@@ -324,9 +368,16 @@
             },
             body: JSON.stringify({ model: model, input: text, encoding_format: encoding })
         });
+        lastEmbedCallTime = Date.now();
+        
         if (!response.ok) {
             var errText = await response.text();
-            throw new Error('Embedding错误 ' + response.status + ': ' + errText.substring(0, 100));
+            var errorMsg = 'Embedding错误 ' + response.status + ': ' + errText.substring(0, 120);
+            if (response.status === 429) {
+                showToast('⚠️ 触发API限流(429)，免费密钥请求太频繁，请稍后再试', 4000);
+                appendLog('❌ 触发限流，请降低频率');
+            }
+            throw new Error(errorMsg);
         }
         var data = await response.json();
         var emb = data.data && data.data[0] && data.data[0].embedding;
@@ -334,28 +385,32 @@
         return emb;
     }
 
-    // 批量生成向量
+    // 批量生成向量 (增加友好提示，控制并发)
     async function buildVectorsFromLines(lines) {
         var results = [];
         var total = lines.length;
+        if (total > 40) {
+            appendLog('⚠️ 注意：当前知识库条目较多(' + total + '条)，免费API限流风险较高，建议控制30条以内。继续生成可能失败');
+            showToast('条目较多，可能触发限流，请耐心等待或减少知识库文本', 3500);
+        }
         for (var i = 0; i < total; i++) {
-			var line = lines[i];
-			if (!line.trim()) continue;
-			appendLog('🔄 生成向量 [' + (i+1) + '/' + total + ']: ' + line.substring(0, 40) + '...');
-			try {
-				var embedding = await getEmbedding(line);
-				results.push({ 
-					id: 'vec_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2, 6), 
-					text: line, 
-					embedding: embedding 
-				});
-
-				await new Promise(r => setTimeout(r, 1000));
-			} catch (err) {
-				appendLog('❌ 向量生成失败: ' + line.substring(0, 30) + ' - ' + err.message);
-				showToast('向量生成失败: ' + err.message, 2000);
-				throw err;
-			}
+            var line = lines[i];
+            if (!line.trim()) continue;
+            appendLog('🔄 生成向量 [' + (i+1) + '/' + total + ']: ' + line.substring(0, 40) + '...');
+            try {
+                var embedding = await getEmbedding(line);
+                results.push({ 
+                    id: 'vec_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2, 6), 
+                    text: line, 
+                    embedding: embedding 
+                });
+                // 轻量测试友好：每条向量间隔额外保护
+                await new Promise(r => setTimeout(r, 600));
+            } catch (err) {
+                appendLog('❌ 向量生成失败: ' + line.substring(0, 30) + ' - ' + err.message);
+                showToast('向量生成失败: ' + err.message, 3000);
+                throw err;
+            }
         }
         return results;
     }
@@ -377,8 +432,13 @@
             return;
         }
         
-        appendLog('🚀 开始建立向量索引，共 ' + lines.length + ' 条知识，调用嵌入API中...');
-        showToast('正在生成 ' + lines.length + ' 条向量，请稍等...', 3000);
+        if (lines.length > 60) {
+            appendLog('⚠️ 高危：知识库条目超过60行，免费API极大概率限流/失败，建议拆分为小规模测试');
+            if (!confirm('当前条目较多('+lines.length+'条)，免费API容易限流导致全部失败，确定继续吗？')) return;
+        }
+        
+        appendLog('🚀 开始建立向量索引，共 ' + lines.length + ' 条知识，调用嵌入API中(已增加防限流延迟)...');
+        showToast('正在生成 ' + lines.length + ' 条向量，请勿频繁操作...', 3500);
         try {
             var vectors = await buildVectorsFromLines(lines);
             await saveRawTextToDB(rawText);
@@ -462,7 +522,7 @@
         return 0;
     }
 
-    // 检索：使用缓存的向量
+    // 检索
     async function matchKnowledgeWithCache(question) {
         if (vectorCache.length === 0) {
             appendLog('📭 知识库为空，跳过向量检索，使用纯LLM模式');
@@ -510,7 +570,10 @@
                 temperature: 0.7 
             })
         });
-        if (!response.ok) throw new Error('LLM错误: ' + response.status);
+        if (!response.ok) {
+            if (response.status === 429) showToast('⚠️ LLM接口限流，请稍后再试', 3000);
+            throw new Error('LLM错误: ' + response.status);
+        }
         var reader = response.body.getReader();
         var decoder = new TextDecoder();
         var buffer = '';
@@ -582,19 +645,7 @@
                 appendLog('📭 知识库为空，直接使用LLM回答');
             }
             
-            if (bestLines.length === 0 && !isEmptyKb) {
-            Log('⚠️ 没有匹配到相关知识，将使用空上下文');
-            }
-            
-            var context = '';
-            if (bestLines.length > 0) {
-                for (var i = 0; i < bestLines.length; i++) {
-                    context = context + (i+1) + '. ' + bestLines[i] + '\n';
-                }
-            } else {
-                context = '无相关知识';
-            }
-            
+            var context = (bestLines.length > 0) ? bestLines.map((l,idx)=> (idx+1)+'. '+l).join('\n') : '无相关知识';
             var prompt;
             if (isEmptyKb) {
                 prompt = '你是一个智能助手。\n问题: ' + question;
@@ -621,7 +672,6 @@
         }
     }
 
-    // 事件绑定
     submitBtn.addEventListener('click', handleAsk);
     questionInput.addEventListener('keypress', function(e) { 
         if (e.key === 'Enter') handleAsk(); 
@@ -637,14 +687,14 @@
     importCoverBtn.addEventListener('click', async function() {
         var isEmpty = kbTextarea.value.trim() === '';
         if (!isEmpty) {
-            var confirmMsg = '覆盖导入将重新生成所有向量（会调用嵌入API），是否继续？';
+            var confirmMsg = '覆盖导入将重新生成所有向量（会调用嵌入API），注意免费密钥限流。是否继续？';
             if (!confirm(confirmMsg)) return;
         }
         try {
             await rebuildIndexFromCurrentText();
             showToast(isEmpty ? '知识库已清空' : '知识库索引重建完成');
         } catch(e) {
-            showToast('重建失败，请检查配置或网络');
+            showToast('重建失败，请检查配置或网络，避免限流');
         }
     });
     
@@ -657,19 +707,18 @@
     
     reloadKbBtn.addEventListener('click', async function() {
         await loadKnowledgeBaseWithCache();
-   ('已从数据库重新加载文本和缓存状态');
+        appendLog('已从数据库重新加载文本和缓存状态');
     });
 
-    // 初始化
     (async function init() {
         await openDB();
         await loadKnowledgeBaseWithCache();
-        appendLog('✨ 智能RAG已启动 (向量缓存模式)');
+        appendLog('✨ 轻量RAG已启动 (免费API限流保护模式)');
         if (currentKbText.trim() === '') {
-            appendLog('📭 当前知识库为空，将使用纯LLM对话模式（无需嵌入模型配置）');
+            appendLog('📭 当前知识库为空，将使用纯LLM对话模式');
         } else {
-            appendLog('🔍 提问时仅需生成问题向量，知识库向量完全复用缓存');
-		}
+            appendLog('🔍 提问时仅需生成问题向量，知识库向量完全复用缓存。请注意免费API频率限制');
+        }
     })();
 })();
 </script>
