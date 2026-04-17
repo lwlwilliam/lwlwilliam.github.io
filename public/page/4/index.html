@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head>
+	<meta name="generator" content="Hugo 0.160.1"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>William A</title>
+
+      <link rel="stylesheet" href="/css/main.css">
+
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <h1>William A</h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a aria-current="page" class="active" href="/">Home</a>
+    </li>
+    <li>
+      <a href="/posts/">Posts</a>
+    </li>
+    <li>
+      <a href="/tags/">Tags</a>
+    </li>
+    </ul>
+  </nav>
+
+
+  </header>
+  <main>
+    
+<div class="home">
+    <h1 class="page-title">最新文章</h1>
+    
+    
+    
+    
+    <div class="posts-list">
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-12-31-fastcgi-%E5%8D%8F%E8%AE%AE%E5%88%9D%E6%8E%A5%E8%A7%A6/">FastCGI 协议初接触</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    准备 Nginx 配置 user root admin; worker_processes 2; events { worker_connections 1024; } http { include mime.types; default_type text/html; gzip on; gzip_types text/css text/x-component …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2020-03-27-github-pages-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D/">Github Pages 自定义域名</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    重新注册了个域名，有时候 web 开发没有域名还真是不方便。一下买了五年，美滋滋，当然顺便也要给 Github Pages 加个自己的烙印的。
+为 Github Pages 添加自定义域名 如下进入设置页面，将自定义的域名填入Customer domain下的输入框中，如果要用 HTTPS 传输，则勾选Enforce HTTPS复选框。
+效果就是在仓库中生成了一个 CNAME 文件，文件内容就是自 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-02-11-go-%E4%BB%A3%E7%A0%81%E6%B5%8B%E8%AF%95/">Go 代码测试</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    Go 有一个由go test命令和testing包组成的轻量级测试框架。testing包为 Go 包提供自动化测试支持，并和go test命令配合使用，自动运行符合以下形式的任意函数：
+func TestXxx(*testing.T) 被测试函数Xxx首字母为大写。在测试函数中使用Error、Fail或相关方法来标记失败。如果测试函数调用一个失败的函数，如t.Error或者t.Fail，则认为测试 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/go" class="category-tag">Go</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-12-18-go-%E5%86%85%E9%83%A8%E5%8C%85/">Go 内部包</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    在 Go 语言中，所有成员在包内均可访问，无论是否在同一源码文件中。但只有名称首字母为大写的成员可导出，在包外可视。
+但是在进行代码重构时，我们会将一些内部模块陆续分离开来，以独立包的形式维护。这时，基于首字母大小写的访问权限控制则显示过于粗犷。我们希望这些包的可导出成员仅在特定范围内可访问，而不是向所有用户公开。
+内部包机制提供了这种访问权限控制：所有保存在 internal 目录下的包都只能被 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/go" class="category-tag">Go</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-12-11-go-%E5%BB%B6%E8%BF%9F%E8%B0%83%E7%94%A8/">Go 延迟调用</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    语句 defer 向当前函数注册稍后执行的函数调用。这些调用被称作延迟调用，因为它们直到当前函数执行结束前才被执行，常用于资源释放、解除锁定以及错误处理等操作。
+延迟调用，注册的是调用，参数在注册时被复制并缓存起来。多个延迟注册按 FILO 的次序执行。
+func main() { x, y := 1, 2 defer func(i int) { fmt.Println(&#34;defer x, …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/go" class="category-tag">Go</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+    </div>
+    
+    
+    
+    <div class="pagination">
+        
+        <a href="/page/3/" class="pagination-link">上一页</a>
+        
+        
+        
+            
+        
+            
+            <a href="/page/2/" class="pagination-link">2</a>
+            
+        
+            
+            <a href="/page/3/" class="pagination-link">3</a>
+            
+        
+            
+            <span class="pagination-link active">4</span>
+            
+        
+            
+            <a href="/page/5/" class="pagination-link">5</a>
+            
+        
+            
+            <a href="/page/6/" class="pagination-link">6</a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+        
+        
+        <a href="/page/5/" class="pagination-link">下一页</a>
+        
+        
+        <div class="pagination-jump">
+            <span>跳转到:</span>
+            <input type="number" id="page-input" class="pagination-input" min="1" max="24" value="4">
+            <span>页</span>
+        </div>
+    </div>
+    
+    
+    
+</div>
+
+<style>
+.posts-list {
+    margin-top: 2rem;
+}
+
+.post-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    margin-bottom: 1.5rem;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.post-title a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.post-title a:hover {
+    color: var(--primary-color);
+}
+
+.post-date {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.post-excerpt {
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.category-tag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.category-tag:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.post-keywords {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.keyword-tag {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+@media (max-width: 768px) {
+    .post-card {
+        padding: 1.5rem;
+    }
+    
+    .post-title {
+        font-size: 1.25rem;
+    }
+    
+    .post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+
+  </main>
+  <footer>
+    <p>Copyright 2026. All rights reserved.</p>
+
+  </footer>
+</body>
+</html>

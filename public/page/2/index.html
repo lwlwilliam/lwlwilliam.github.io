@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head>
+	<meta name="generator" content="Hugo 0.160.1"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>William A</title>
+
+      <link rel="stylesheet" href="/css/main.css">
+
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <h1>William A</h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a aria-current="page" class="active" href="/">Home</a>
+    </li>
+    <li>
+      <a href="/posts/">Posts</a>
+    </li>
+    <li>
+      <a href="/tags/">Tags</a>
+    </li>
+    </ul>
+  </nav>
+
+
+  </header>
+  <main>
+    
+<div class="home">
+    <h1 class="page-title">最新文章</h1>
+    
+    
+    
+    
+    <div class="posts-list">
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2021-11-30-base64-%E7%BC%96%E7%A0%81%E5%8E%9F%E7%90%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/">Base64 编码原理及实现</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                     参考 RFC4648
+以上的 RFC 描述了几种常用的编码方案：Base64，Base32 和 Base16。数据的 Base 编码用于多种存储或者传输场景中，例如图片的传输，其中以 Base64 尤为常见。
+Base64 编码 Base64 编码使用了 US-ASCII 的一个子集 —— 65 个字符，将每 6 位数据都表示成一个可打印字符，额外的第 65 个字符=表示一种特殊的处理。编码的过 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8E%9F%E7%90%86" class="category-tag">计算机原理</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2020-12-10-cbc-%E7%BC%96%E8%AF%91%E5%99%A8/">cbc 编译器</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    cbc 编译器是《自制编译器》中实现的。由于 cbc 编译器是在 32 位机器上工作的，而现在大部分都是 64 位，即使按照官方文档进行处理，编译时也会出现各种错误，因此想到了用 docker 搭建 32 位的系统。
+$ docker run -d -ti --name cbc -v /path/cbc-1.0:/var/www/html -w /var/www/html i386/ubuntu …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86" class="category-tag">编译原理</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2020-04-29-cdn/">CDN</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    CDN(Content Distributed Network)是内容分发网络的缩写。
+由于 Github Pages 的速度一直不怎么样，今天就想起来要加速一下；本来 Pages 就是静态博客，加个 CDN 就得了。刚开始还想找个免费的蹭下，后来发现还要认证就算了，还是直接上阿里云比较省心，全家桶。
+这一两年还算补了下网络知识，发现很多东西都是旧瓶装新酒罢了，CDN 也不例外；CDN 本质上就是 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2020-03-25-centos7-%E5%85%81%E8%AE%B8%E7%94%A8%E6%88%B7%E6%88%96%E7%94%A8%E6%88%B7%E7%BB%84-ssh-%E7%99%BB%E5%BD%95/">CentOS7 允许用户或用户组 SSH 登录</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    平时用惯了root登录，一时间添加新用户倒不太适应。没有什么难度，纯粹记录一下方便查找。
+添加新用户 # useradd -m test # passwd test -m用来在创建用户的同时为其创建home目录。详细参数可见useradd --help。如果需要为用户添加超级用户权限，由将其添加到sudoers中，如果不需要，则忽略下一步。
+将用户添加到 sudoers 中[可选] 有两种方法，二 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" class="category-tag">操作系统</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-08-02-cgi-%E5%88%9D%E6%8E%A2/">CGI 初探</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    CGI(Common Gateway Interface)，通用网关接口，用于 web 服务器和外部应用程序（CGI 程序）之间的通信。为了探索 CGI 是如何工作的，我分别用 C 和 Python 语言写了段测试程序（均生成可执行程序），以及说明了一下解释型语言的 CGI 写法。
+C 程序 编译：$ gcc ctest.c -o ctest。
+// ctest.c #include …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+    </div>
+    
+    
+    
+    <div class="pagination">
+        
+        <a href="/" class="pagination-link">上一页</a>
+        
+        
+        
+            
+            <a href="/" class="pagination-link">1</a>
+            
+        
+            
+            <span class="pagination-link active">2</span>
+            
+        
+            
+            <a href="/page/3/" class="pagination-link">3</a>
+            
+        
+            
+            <a href="/page/4/" class="pagination-link">4</a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+        
+        
+        <a href="/page/3/" class="pagination-link">下一页</a>
+        
+        
+        <div class="pagination-jump">
+            <span>跳转到:</span>
+            <input type="number" id="page-input" class="pagination-input" min="1" max="24" value="2">
+            <span>页</span>
+        </div>
+    </div>
+    
+    
+    
+</div>
+
+<style>
+.posts-list {
+    margin-top: 2rem;
+}
+
+.post-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    margin-bottom: 1.5rem;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.post-title a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.post-title a:hover {
+    color: var(--primary-color);
+}
+
+.post-date {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.post-excerpt {
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.category-tag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.category-tag:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.post-keywords {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.keyword-tag {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+@media (max-width: 768px) {
+    .post-card {
+        padding: 1.5rem;
+    }
+    
+    .post-title {
+        font-size: 1.25rem;
+    }
+    
+    .post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+
+  </main>
+  <footer>
+    <p>Copyright 2026. All rights reserved.</p>
+
+  </footer>
+</body>
+</html>

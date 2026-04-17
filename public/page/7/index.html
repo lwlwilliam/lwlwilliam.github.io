@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head>
+	<meta name="generator" content="Hugo 0.160.1"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>William A</title>
+
+      <link rel="stylesheet" href="/css/main.css">
+
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <h1>William A</h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a aria-current="page" class="active" href="/">Home</a>
+    </li>
+    <li>
+      <a href="/posts/">Posts</a>
+    </li>
+    <li>
+      <a href="/tags/">Tags</a>
+    </li>
+    </ul>
+  </nav>
+
+
+  </header>
+  <main>
+    
+<div class="home">
+    <h1 class="page-title">最新文章</h1>
+    
+    
+    
+    
+    <div class="posts-list">
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2024-12-31-php-%E7%9A%84-opcode/">PHP 的 opcode</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    opcode跟PHP，类似于bytecode跟Java的关系，相当于机器码和编译型语言的关系。
+PHP是一门解释型语言，它的执行单元就是opcode，Zend Engine就是执行opcode的地方，Zend Engine也就是常说的VM。JVM比较出名，它就是针对Java设计的VM，这样说应该理解了PHP的Zend Engine和opcode是什么东西了吧。
+看看如下代码：
+&lt;?php …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/php" class="category-tag">PHP</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2023-08-17-php-%E9%80%9A%E8%BF%87-ffi--%E4%B8%8E-c-%E4%BA%A4%E4%BA%92/">PHP 通过 FFI 与 C 交互</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    一门语言写的代码跟另一门语言交互一直是我很感兴趣的事情，既想用着让自己舒服的语言，又想使用其它语言在特定领域中强大的生态。当然通过网络接口来交互是最简单的方式，但需要写很多额外的代码。FFI(Foreign Function Interface)是用于与其它语言交互的接口，可以将其它语言的接口内嵌到本语言中，用起来就方便得多。
+FFI是PHP核心代码的一部分，所以不需要担心后期没有人维护，放心大胆 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/php" class="category-tag">PHP</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2020-10-22-phpstorm-%E4%B8%AD%E4%BD%BF%E7%94%A8-docker-%E9%95%9C%E5%83%8F%E7%9A%84-php-cli-interpreter/">PhpStorm 中使用 Docker 镜像的 PHP CLI Interpreter</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    自学 PHP 以来，除了初学时期，一直都不太喜欢用集成环境如 MAMP、WAMP 之类的，这些工具虽然用起来很方便，但不符合我折腾的个性，而且灵活性有所欠缺，还可能会降低自己的好奇心；当然重要的是服务器一般也不会使用集成环境。这不，PHP 又出新版本了，想尝尝鲜，集成工具没有更新，不就得自己折腾么。
+Docker 自定义 PHP 镜像的步骤就不细说了，我已经准备好了，这里用的是 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E5%B7%A5%E5%85%B7" class="category-tag">工具</a>
+                    
+                    <a href="/categories/php" class="category-tag">PHP</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-07-03-pop3-%E7%AE%80%E4%BB%8B/">POP3 简介</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    SMTP 协议是push协议，因此不能用于收邮件。POP3 协议是 Post Office Protocol。
+$ telnet pop.qq.com 110 Trying 59.37.97.57... Connected to pop.qq.com. Escape character is &#39;^]&#39;. +OK QQMail POP3 Server v1.0 Service …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2023-06-06-posix-%E7%BB%88%E7%AB%AF%E5%B1%8F%E4%BF%9D/">POSIX 终端屏保</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    最近在读一本书《PHP Beyond the Web》，内容难度不大，不过感觉挺有意思的。可能是做惯了web应用，或者说潜意识觉得PHP就是做web应用的，没想到在其它领域上，PHP也用得挺顺手，也许这也是一种偏见吧。看了这本书，对PHP有一些许改观，也算是扩展了视野。
+在这里面看到一个挺好玩的小脚本，不过直接运行起来好像是有点小问题，于是在它的基础上改动了一下。
+首先定义三个常量，\033在以前 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E5%B7%A5%E5%85%B7" class="category-tag">工具</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+    </div>
+    
+    
+    
+    <div class="pagination">
+        
+        <a href="/page/6/" class="pagination-link">上一页</a>
+        
+        
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+            <a href="/page/5/" class="pagination-link">5</a>
+            
+        
+            
+            <a href="/page/6/" class="pagination-link">6</a>
+            
+        
+            
+            <span class="pagination-link active">7</span>
+            
+        
+            
+            <a href="/page/8/" class="pagination-link">8</a>
+            
+        
+            
+            <a href="/page/9/" class="pagination-link">9</a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+        
+        
+        <a href="/page/8/" class="pagination-link">下一页</a>
+        
+        
+        <div class="pagination-jump">
+            <span>跳转到:</span>
+            <input type="number" id="page-input" class="pagination-input" min="1" max="24" value="7">
+            <span>页</span>
+        </div>
+    </div>
+    
+    
+    
+</div>
+
+<style>
+.posts-list {
+    margin-top: 2rem;
+}
+
+.post-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    margin-bottom: 1.5rem;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.post-title a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.post-title a:hover {
+    color: var(--primary-color);
+}
+
+.post-date {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.post-excerpt {
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.category-tag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.category-tag:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.post-keywords {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.keyword-tag {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+@media (max-width: 768px) {
+    .post-card {
+        padding: 1.5rem;
+    }
+    
+    .post-title {
+        font-size: 1.25rem;
+    }
+    
+    .post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+
+  </main>
+  <footer>
+    <p>Copyright 2026. All rights reserved.</p>
+
+  </footer>
+</body>
+</html>

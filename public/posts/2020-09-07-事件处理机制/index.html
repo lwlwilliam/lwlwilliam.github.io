@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>事件处理机制 | William A</title>
+    <meta name="description" content="Love sports, love programming, love life.">
+    <meta name="keywords" content="William A, lwlwilliam">
+    
+    
+    
+    <link rel="stylesheet" href="/css/main.min.61311e98fda6ed7278ce2083dee74424508439207cee18072f54cec45e3ca75a.css">
+    
+    
+    
+    <script defer src="/js/main.min.4b385b5d7b348b137c609442c0fea7055f92fa2ca72a8ffecb9cddfa95655e36.js"></script>
+    
+    
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    
+    
+    
+    
+</head>
+<body>
+    
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="site-title">William A</a>
+                <nav class="nav-menu">
+                    
+                    <a href="/" class="nav-link">cd ~</a>
+                    
+                    <a href="/categories/" class="nav-link">分类</a>
+                    
+                    <a href="/archives/" class="nav-link">归档</a>
+                    
+                    <a href="/books/" class="nav-link">书籍</a>
+                    
+                    <a href="/links/" class="nav-link">链接</a>
+                    
+                    <a href="/tools/" class="nav-link">工具</a>
+                    
+                    <a href="/todo/" class="nav-link">待办</a>
+                    
+                    <a href="/about/" class="nav-link">关于</a>
+                    
+                    <div class="search-container">
+                        <input type="text" id="search-input" class="search-input" placeholder="搜索...">
+                        <div id="search-results" class="search-results"></div>
+                    </div>
+                    <button id="theme-toggle" class="theme-toggle">
+                        <span id="theme-icon">☀️</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+
+    
+    <main class="container">
+        
+  <h1>事件处理机制</h1>
+
+  
+  
+  <time datetime="2020-09-07T00:00:00&#43;00:00">September 7, 2020</time>
+
+  <p>懂 Jquery 的一定见过以下形式的代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">$</span>(<span style="color:#e6db74">&#39;#btn&#39;</span>).<span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;click&#39;</span>, <span style="color:#66d9ef">function</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">alert</span>(<span style="color:#e6db74">&#39;Hello world!&#39;</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>以上就是<code>Jquery</code>的事件处理。并不只有<code>Jquery</code>才有事件处理，很多语言框架都有类似的机制。那么事件是怎么实现的呢？</p>
+<p>最近在通过<code>PHP</code>学习网络编程，看到<code>on</code>事件处理函数在<code>Workerman</code>或者<code>Swoole</code>框架中简直太多了。下面就用原生的<code>PHP</code>来实现事件处理吧。</p>
+<h3 id="原生-php-实现事件处理">原生 PHP 实现事件处理</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Server</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;0.0.0.0&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $port <span style="color:#f92672">=</span> <span style="color:#ae81ff">10086</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $listen <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $client <span style="color:#f92672">=</span> [];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $callback <span style="color:#f92672">=</span> [];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__construct</span>($host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>, $port <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($host) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">host</span> <span style="color:#f92672">=</span> $host;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($port) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">port</span> <span style="color:#f92672">=</span> $port;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">listen</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">socket_create</span>(<span style="color:#a6e22e">AF_INET</span>, <span style="color:#a6e22e">SOCK_STREAM</span>, <span style="color:#a6e22e">SOL_TCP</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">socket_set_option</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">listen</span>, <span style="color:#a6e22e">SOL_SOCKET</span>, <span style="color:#a6e22e">SO_REUSEPORT</span>, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">socket_bind</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">listen</span>, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">host</span>, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">port</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">socket_listen</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">listen</span>);
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">client</span>[] <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">listen</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">on</span>($event <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#a6e22e">callable</span> $callback) {
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">callback</span>[$event] <span style="color:#f92672">=</span> $callback;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">runAll</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#66d9ef">true</span>) {
+</span></span><span style="display:flex;"><span>            $read <span style="color:#f92672">=</span> $write <span style="color:#f92672">=</span> $exception <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">client</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            $has <span style="color:#f92672">=</span> <span style="color:#a6e22e">socket_select</span>($read, $write, $exception, <span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> ($has <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 有新连接
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">in_array</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">listen</span>, $read)) {
+</span></span><span style="display:flex;"><span>                $conn <span style="color:#f92672">=</span> <span style="color:#a6e22e">socket_accept</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">listen</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>$conn) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">client</span>[] <span style="color:#f92672">=</span> $conn;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// listen 已经完成使命了，unset 它
+</span></span></span><span style="display:flex;"><span>                $key <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_search</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">listen</span>, $read);
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">unset</span>($read[$key]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// onConnect 事件
+</span></span></span><span style="display:flex;"><span>                $callback <span style="color:#f92672">=</span> <span style="color:#a6e22e">isset</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">callback</span>[<span style="color:#e6db74">&#39;connect&#39;</span>]) <span style="color:#f92672">?</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">callback</span>[<span style="color:#e6db74">&#39;connect&#39;</span>] <span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">false</span> <span style="color:#f92672">!==</span> $callback) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">call_user_func_array</span>($callback, []);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">foreach</span> ($read <span style="color:#66d9ef">as</span> $rk <span style="color:#f92672">=&gt;</span> $rv) {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">socket_recv</span>($rv, $buff, <span style="color:#ae81ff">1024</span>, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>$buff) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">unset</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">client</span>[$rk]);
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">socket_close</span>($rv);
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// onMessage 事件
+</span></span></span><span style="display:flex;"><span>                $callback <span style="color:#f92672">=</span> <span style="color:#a6e22e">isset</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">callback</span>[<span style="color:#e6db74">&#39;message&#39;</span>]) <span style="color:#f92672">?</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">callback</span>[<span style="color:#e6db74">&#39;message&#39;</span>] <span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">false</span> <span style="color:#f92672">!==</span> $callback) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">call_user_func_array</span>($callback, [$buff]);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">unset</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">client</span>[$rk]);
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">socket_shutdown</span>($rv);
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">socket_close</span>($rv);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$server <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Server</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$server<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;connect&#39;</span>, <span style="color:#66d9ef">function</span> () {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;connected.&#34;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">PHP_EOL</span>;
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$server<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;message&#39;</span>, <span style="color:#66d9ef">function</span> ($message) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;received message: &#34;</span> <span style="color:#f92672">.</span> $message;
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$server<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">runAll</span>();
+</span></span></code></pre></div><p>其实看起来也没多大难度嘛，无非就是注册事件函数，然后在特定位置调用<code>call_user_func_array</code>，跟钩子差不多。在<code>Workerman</code>中的<code>on</code>事件实现原理跟以上代码也差不多，当然那是经过了很多人的试错使代码变得更健壮的，这个示例跟它无法相提并论。<code>Swoole</code>的实现我估计也差不了太远，只不过用了其它语言实现。</p>
+<h3 id="workerman-中的事件处理">Workerman 中的事件处理</h3>
+<p>以下是<code>Workerman</code>中<code>Worker</code>类源码的一部分：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Worker</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Accept a connection.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     *
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param resource $socket
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @return void
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">acceptConnection</span>($socket)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Accept a connection on server socket.
+</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">\set_error_handler</span>(<span style="color:#66d9ef">function</span>(){});
+</span></span><span style="display:flex;"><span>        $new_socket <span style="color:#f92672">=</span> <span style="color:#a6e22e">\stream_socket_accept</span>($socket, <span style="color:#ae81ff">0</span>, $remote_address);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">\restore_error_handler</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Thundering herd.
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>$new_socket) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// TcpConnection.
+</span></span></span><span style="display:flex;"><span>        $connection                         <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">TcpConnection</span>($new_socket, $remote_address);
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">connections</span>[$connection<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">id</span>] <span style="color:#f92672">=</span> $connection;
+</span></span><span style="display:flex;"><span>        $connection<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">worker</span>                 <span style="color:#f92672">=</span> $this;
+</span></span><span style="display:flex;"><span>        $connection<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">protocol</span>               <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">protocol</span>;
+</span></span><span style="display:flex;"><span>        $connection<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">transport</span>              <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">transport</span>;
+</span></span><span style="display:flex;"><span>        $connection<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onMessage</span>              <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onMessage</span>;
+</span></span><span style="display:flex;"><span>        $connection<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onClose</span>                <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onClose</span>;
+</span></span><span style="display:flex;"><span>        $connection<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onError</span>                <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onError</span>;
+</span></span><span style="display:flex;"><span>        $connection<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onBufferDrain</span>          <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onBufferDrain</span>;
+</span></span><span style="display:flex;"><span>        $connection<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onBufferFull</span>           <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onBufferFull</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Try to emit onConnect callback.
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onConnect</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">\call_user_func</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onConnect</span>, $connection);
+</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">\Exception</span> $e) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">static</span><span style="color:#f92672">::</span><span style="color:#a6e22e">log</span>($e);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">exit</span>(<span style="color:#ae81ff">250</span>);
+</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">\Error</span> $e) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">static</span><span style="color:#f92672">::</span><span style="color:#a6e22e">log</span>($e);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">exit</span>(<span style="color:#ae81ff">250</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>看到了没有，<code>$connection-&gt;onMessage = $this-&gt;onMessage;</code>这类代码就是在指定事件处理函数。<code>Workerman</code>的使用示例如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$text_worker <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Worker</span>(<span style="color:#e6db74">&#34;http://0.0.0.0:9003&#34;</span>);
+</span></span><span style="display:flex;"><span>$text_worker<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">count</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$text_worker<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onMessage</span> <span style="color:#f92672">=</span>  <span style="color:#66d9ef">function</span>($connection, $data)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    $connection<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;hello world&#34;</span>);
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>看懂了没？实例化之后通过<code>$text_worker-&gt;onMessage</code>来设置回调函数，<code>这个就是 Workerman</code>在接收到客户端内容时调用的函数。</p>
+<p>还有些框架可以自定义事件的，如<code>Vue</code>的<code>vm.$emit(event, fn);</code>和<code>vm.$emit(event, args)</code>原理也是一样的，只不过调用事件的时机需要自己定义。</p>
+<p>通过阅读别人优秀的源码可以学习到挺多知识的哈！事件处理的机制应该讲得挺明白了吧？</p>
+
+  
+  <div>
+    <div>Tags:</div>
+    <ul>
+        <li><a href="/tags/%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86/">事件处理</a></li>
+    </ul>
+  </div>
+
+
+    </main>
+
+    
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 lwlwilliam. All rights reserved.</p>
+                <p>Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with custom theme.</p>
+                
+                <p><a href="https://github.com/lwlwilliam" target="_blank">GitHub</a></p>
+                
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,66 @@
+{{ define "main" }}
+<div class="books">
+    <h1 class="page-title">技术书籍</h1>
+    
+    {{ $books := .Site.Data.books }}
+    
+    {{ if $books }}
+    <div class="books-list">
+        {{ $sortedYears := slice }}
+        {{ range $year, $ := $books }}
+            {{ $sortedYears = $sortedYears | append $year }}
+        {{ end }}
+        {{ $sortedYears = sort $sortedYears "value" "desc" }}
+        
+        {{ range $sortedYears }}
+            {{ $yearBooks := index $books . }}
+            <div class="year-section">
+                <h2 class="year-header">{{ . }}</h2>
+                <div class="card-grid">
+                    {{ range $yearBooks }}
+                    <div class="card book-card">
+                        <h3 class="book-title">{{ .name }}</h3>
+                        <div class="book-info">{{ .info | safeHTML }}</div>
+                        <div class="book-status">
+                            {{ if .complete }}
+                            <span class="status-complete">✅ 已读完</span>
+                            {{ else }}
+                            <span class="status-incomplete">📖 阅读中</span>
+                            {{ end }}
+                            {{ if .collect }}
+                            <span class="status-collect">⭐ 收藏</span>
+                            {{ end }}
+                        </div>
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+        {{ end }}
+    </div>
+    {{ else }}
+    <div class="empty-state">
+        <div class="empty-state-icon">📚</div>
+        <p>暂无书籍</p>
+    </div>
+    {{ end }}
+</div>
+
+<style>
+.books-list {
+    margin-top: 2rem;
+}
+
+.year-section {
+    margin-bottom: 3rem;
+}
+
+.year-header {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+</style>
+{{ end }}

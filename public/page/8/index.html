@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head>
+	<meta name="generator" content="Hugo 0.160.1"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>William A</title>
+
+      <link rel="stylesheet" href="/css/main.css">
+
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <h1>William A</h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a aria-current="page" class="active" href="/">Home</a>
+    </li>
+    <li>
+      <a href="/posts/">Posts</a>
+    </li>
+    <li>
+      <a href="/tags/">Tags</a>
+    </li>
+    </ul>
+  </nav>
+
+
+  </header>
+  <main>
+    
+<div class="home">
+    <h1 class="page-title">最新文章</h1>
+    
+    
+    
+    
+    <div class="posts-list">
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2025-01-02-python-%E7%9A%84-bytecode/">Python 的 bytecode</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    喜欢上了通过字节码来分析代码差异的感觉，前几天机缘巧合之下玩了下PHP的opcode，今天来看看Python的bytecode。今天也是巧合，恰好群里有人问Python中3 &gt; 2 == 2为什么结果是True？很多语言其实并没有这种表达式。如果用过JavaScript，就会发现它的结果跟Python不一样，正因为如此，我就对3 &gt; 3 == 2在Python中的底层逻辑有点好奇，那就 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/python" class="category-tag">Python</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2023-11-15-python-%E7%9A%84%E5%85%83%E7%BB%84%E7%96%91%E6%83%91/">Python 的元组疑惑</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    发现一个有点意思的问题，代码如下：
+t = ([&#39;a&#39;], 1, 2) try: t[0] += [&#39;b&#39;, &#39;c&#39;] except Exception as e: print(e) print(t) # output: # &#39;tuple&#39; object does not support item assignment # …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/python" class="category-tag">Python</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2025-04-18-selenium-%E6%98%AF%E6%80%8E%E4%B9%88%E6%8C%87%E6%8C%A5%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BF%90%E8%A1%8C%E7%9A%84/">Selenium 是怎么指挥浏览器运行的</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    写过爬虫或者做自动化测试的相信对Selenium不会陌生，但Selenium 官方只提供少数几种语言的库，使用其它“小众”语言的只能眼馋。既然如此，那就自己琢磨一下能不能搞个类似的吧，毕竟大家都是图灵完备的语言，除了少数一些领域实在没办法或者几乎不可能做到之外，其它的都大差不差。
+“小小”的语言能唤起浏览器，有经验的大家都知道还有个前提就是下载浏览器驱动。以Chrome为例，Selenium启动 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-06-06-smtp-%E7%AE%80%E4%BB%8B/">SMTP 简介</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    SMTP(Simple Mail Transfer Protocol) 是基于文本的简单邮件协议，默认使用 25 端口。下图展示了 SMTP 的基本操作。
+Alice 通过 user agent 指定 Bob 的邮件地址以及编辑邮件，然后发送邮件；
+Alice 的 user agent 先把邮件发送到 Alice 的邮件服务器，邮件服务器用把放到消息队列中；
+与此同时，Alice 的邮件服务器的客 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-05-06-sql-%E5%9C%A8-excel-%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/">SQL 在 Excel 中的应用</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    估计平时比较少用 Office 全家桶的程序员都不知道 Excel 中可直接用 SQL，如我，更不用说非程序员了。 当然一般情况下也不需要用 SQL，用到 SQL 就说明遇到棘手的问题了。
+下面使用的是 Excel 2016，其它版本的应该也大同小异。
+首先创建一个测试用的文件test.xlsx，内容如下。
+第一行内容是字段名。保存后关闭该文件，并在新的工作簿选中下图红色箭头选项来自 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E5%B7%A5%E5%85%B7" class="category-tag">工具</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+    </div>
+    
+    
+    
+    <div class="pagination">
+        
+        <a href="/page/7/" class="pagination-link">上一页</a>
+        
+        
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+            <a href="/page/6/" class="pagination-link">6</a>
+            
+        
+            
+            <a href="/page/7/" class="pagination-link">7</a>
+            
+        
+            
+            <span class="pagination-link active">8</span>
+            
+        
+            
+            <a href="/page/9/" class="pagination-link">9</a>
+            
+        
+            
+            <a href="/page/10/" class="pagination-link">10</a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+        
+        
+        <a href="/page/9/" class="pagination-link">下一页</a>
+        
+        
+        <div class="pagination-jump">
+            <span>跳转到:</span>
+            <input type="number" id="page-input" class="pagination-input" min="1" max="24" value="8">
+            <span>页</span>
+        </div>
+    </div>
+    
+    
+    
+</div>
+
+<style>
+.posts-list {
+    margin-top: 2rem;
+}
+
+.post-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    margin-bottom: 1.5rem;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.post-title a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.post-title a:hover {
+    color: var(--primary-color);
+}
+
+.post-date {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.post-excerpt {
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.category-tag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.category-tag:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.post-keywords {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.keyword-tag {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+@media (max-width: 768px) {
+    .post-card {
+        padding: 1.5rem;
+    }
+    
+    .post-title {
+        font-size: 1.25rem;
+    }
+    
+    .post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+
+  </main>
+  <footer>
+    <p>Copyright 2026. All rights reserved.</p>
+
+  </footer>
+</body>
+</html>

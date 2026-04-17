@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head>
+	<meta name="generator" content="Hugo 0.160.1"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>William A</title>
+
+      <link rel="stylesheet" href="/css/main.css">
+
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <h1>William A</h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a aria-current="page" class="active" href="/">Home</a>
+    </li>
+    <li>
+      <a href="/posts/">Posts</a>
+    </li>
+    <li>
+      <a href="/tags/">Tags</a>
+    </li>
+    </ul>
+  </nav>
+
+
+  </header>
+  <main>
+    
+<div class="home">
+    <h1 class="page-title">最新文章</h1>
+    
+    
+    
+    
+    <div class="posts-list">
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-05-29-cookie-%E5%92%8C-session/">Cookie 和 Session</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    HTTP 协议是无状态的，用户的每一次请求都是独立的。有时候我们需要知道哪些请求是跟用户相关的，例如，购物车的商品属于哪个用户。web 规范给出的解决方案是经典的 cookie 和 session。cookie 是一种客户端机制，将用户的数据保存到客户端；session 是一种服务端机制，将数据以类似于散列表的结构来保存信息，这是用 PHP 内置函数生成的 session 数据格式 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-05-22-data-urls/">Data URLs</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    语法 Data URLs，即前缀为data:协议的 URL，其允许内容创建者向文档中嵌入小文件。
+Data URLs 由四个部分组成：前缀(data:)、指示数据类型的 MIME 类型、如果非文本则为可选的base64标记、数据本身：
+data:[&lt;mediatype&gt;][;base64],&lt;data&gt; mediatype是 MIME 类型的字符串，例如image/png表 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-03-08-dns-%E5%8E%9F%E7%90%86/">DNS 原理</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                     整理自DNS 原理入门
+DNS(Domain Name System)的作用是根据域名查询对应的 IP 地址，DNS 协议是应用层协议。
+查询过程 DNS 的查询过程非常复杂，分成多个步骤。可以用工具dig显示整个查询过程。
+$ dig github.com ; &lt;&lt;&gt;&gt; DiG 9.8.3-P1 &lt;&lt;&gt;&gt; github.com ;; global …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2020-03-29-docker-%E6%90%AD%E5%BB%BA-lnmp-%E7%8E%AF%E5%A2%83/">Docker 搭建 LNMP 环境</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    下载镜像 $ docker pull nginx $ docker pull mysql:5.7 $ docker pull php:7.1-fpm 启动容器&amp;配置&amp;测试 MySQL 启动容器，注意要添加 MYSQL_ROOT_PASSWORD 环境变量，用来设置 root 密码
+$ docker run -d --name mysql -p 3306:3306 -e …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E5%B7%A5%E5%85%B7" class="category-tag">工具</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-01-14-error-%E7%B1%BB%E5%9E%8B-error-%E6%96%B9%E6%B3%95%E7%9A%84%E6%97%A0%E9%99%90%E9%80%92%E5%BD%92/">error 类型 Error() 方法的无限递归</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    在 Go 语言中使用 error 值来表示错误状态。事实上，error 类型是内置的接口，定义如下：
+type error interface { Error() string } 函数一般会返回一个 error 类型的值，因此调用函数时应该通过测试 error 是否等于 nil 来处理错误，如：
+i, err := strconv.Atoi(&#34;42&#34;) if err != nil …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/go" class="category-tag">Go</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+    </div>
+    
+    
+    
+    <div class="pagination">
+        
+        <a href="/page/2/" class="pagination-link">上一页</a>
+        
+        
+        
+            
+            <a href="/" class="pagination-link">1</a>
+            
+        
+            
+            <a href="/page/2/" class="pagination-link">2</a>
+            
+        
+            
+            <span class="pagination-link active">3</span>
+            
+        
+            
+            <a href="/page/4/" class="pagination-link">4</a>
+            
+        
+            
+            <a href="/page/5/" class="pagination-link">5</a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+        
+        
+        <a href="/page/4/" class="pagination-link">下一页</a>
+        
+        
+        <div class="pagination-jump">
+            <span>跳转到:</span>
+            <input type="number" id="page-input" class="pagination-input" min="1" max="24" value="3">
+            <span>页</span>
+        </div>
+    </div>
+    
+    
+    
+</div>
+
+<style>
+.posts-list {
+    margin-top: 2rem;
+}
+
+.post-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    margin-bottom: 1.5rem;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.post-title a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.post-title a:hover {
+    color: var(--primary-color);
+}
+
+.post-date {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.post-excerpt {
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.category-tag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.category-tag:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.post-keywords {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.keyword-tag {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+@media (max-width: 768px) {
+    .post-card {
+        padding: 1.5rem;
+    }
+    
+    .post-title {
+        font-size: 1.25rem;
+    }
+    
+    .post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+
+  </main>
+  <footer>
+    <p>Copyright 2026. All rights reserved.</p>
+
+  </footer>
+</body>
+</html>

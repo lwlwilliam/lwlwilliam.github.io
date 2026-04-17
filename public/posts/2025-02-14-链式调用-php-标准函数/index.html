@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>链式调用 PHP 标准函数 | William A</title>
+    <meta name="description" content="Love sports, love programming, love life.">
+    <meta name="keywords" content="William A, lwlwilliam">
+    
+    
+    
+    <link rel="stylesheet" href="/css/main.min.61311e98fda6ed7278ce2083dee74424508439207cee18072f54cec45e3ca75a.css">
+    
+    
+    
+    <script defer src="/js/main.min.4b385b5d7b348b137c609442c0fea7055f92fa2ca72a8ffecb9cddfa95655e36.js"></script>
+    
+    
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    
+    
+    
+    
+</head>
+<body>
+    
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="site-title">William A</a>
+                <nav class="nav-menu">
+                    
+                    <a href="/" class="nav-link">cd ~</a>
+                    
+                    <a href="/categories/" class="nav-link">分类</a>
+                    
+                    <a href="/archives/" class="nav-link">归档</a>
+                    
+                    <a href="/books/" class="nav-link">书籍</a>
+                    
+                    <a href="/links/" class="nav-link">链接</a>
+                    
+                    <a href="/tools/" class="nav-link">工具</a>
+                    
+                    <a href="/todo/" class="nav-link">待办</a>
+                    
+                    <a href="/about/" class="nav-link">关于</a>
+                    
+                    <div class="search-container">
+                        <input type="text" id="search-input" class="search-input" placeholder="搜索...">
+                        <div id="search-results" class="search-results"></div>
+                    </div>
+                    <button id="theme-toggle" class="theme-toggle">
+                        <span id="theme-icon">☀️</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+
+    
+    <main class="container">
+        
+  <h1>链式调用 PHP 标准函数</h1>
+
+  
+  
+  <time datetime="2025-02-14T00:00:00&#43;00:00">February 14, 2025</time>
+
+  <p><code>PHP</code>内置函数太多，记不住怎么办？尤其<code>PHP</code>
+一直被人垢病函数名不统一，这就导致更不容易记忆了。这时候是不是在想，要是我随便定义一个变量，就能列出可以对其进行操作的函数就好了，虽然列出来也不一定知道用哪个，但起码一般情况下可以根据函数名猜到哪个才是要用的函数。例如<code>$a = &quot;Hello world&quot;;</code>，我在<code>IDE</code>上输入<code>$a-&gt;</code>，<code>IDE</code>就能将可用函数显示出来。简单，这不就是面向对象吗？那就动手吧。</p>
+<p>首先定义一个函数，用于将基础类型封装成类，以字符串为例，<code>Str</code>类有一个静态函数<code>wrap</code>接收一个字符串参数，返回<code>Str</code>的实例，并且将<code>$value</code>参数赋给<code>$value</code>属性，那么<code>wrap</code>的返回值就是对象，可以以<code>-&gt;</code>符号来调用属于<code>Str</code>的方法了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Str</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">mixed</span> $value;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">wrap</span>(<span style="color:#a6e22e">string</span> $value)<span style="color:#f92672">:</span> <span style="color:#a6e22e">Str</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">self</span>($value);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__construct</span>(<span style="color:#a6e22e">string</span> $value)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> $value;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这时候就碰到一个问题，字符串操作函数那么多，难道我们要一个个封装进类里面？这种方法也太落后且难维护了吧。幸好<code>PHP</code>有个魔术方法<code>__call</code>，思路打开，那么我们是不是可以通过<code>__call</code>来调用所有函数？实践起来吧。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__call</span>($callable, $args)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> $callable(<span style="color:#f92672">...</span>$args);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $this;
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>但是现在还有个问题，就是例如封装了一个字符串<code>&quot;foo&quot;</code>，我想对它调用<code>strlen</code>函数，显然<code>Str::wrap(&quot;foo&quot;)-&gt;strlen()</code>是行不通的，因为没有参数，默认将封闭的值传进去？在调用<code>strlen</code>时没问题，但是并非所有函数都将操作参数放在第一位，所以需要让<code>__call</code>方法知道我们的参数位置才行。方法是定义一个唯一值来标记封装值所在位置，这里我们使用<code>uniqid</code>函数，虽然没有一些<code>uuid</code>库那么标准，但在这里也够用了。然后对<code>__call</code>方法进行一定调整，调整后的代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">defined</span>(<span style="color:#e6db74">&#39;wrapped_placeholder&#39;</span>)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;wrapped_placeholder&#39;</span>, <span style="color:#e6db74">&#39;wrapped-placeholder-&#39;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">uniqid</span>());
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Str</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">mixed</span> $value;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">wrap</span>(<span style="color:#a6e22e">string</span> $value)<span style="color:#f92672">:</span> <span style="color:#a6e22e">Str</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">self</span>($value);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__construct</span>(<span style="color:#a6e22e">string</span> $value)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> $value;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__call</span>($callable, $args)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">foreach</span> ($args <span style="color:#66d9ef">as</span> <span style="color:#f92672">&amp;</span>$arg) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> ($arg <span style="color:#f92672">===</span> <span style="color:#a6e22e">wrapped_placeholder</span>) {
+</span></span><span style="display:flex;"><span>                $arg <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> $callable(<span style="color:#f92672">...</span>$args);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $this;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>现在基本雏形已经出来了。使用方法如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">print_r</span>(<span style="color:#a6e22e">Str</span><span style="color:#f92672">::</span><span style="color:#a6e22e">wrap</span>(<span style="color:#e6db74">&#34;foo&#34;</span>)<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">strlen</span>(<span style="color:#a6e22e">wrapped_placeholder</span>));
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 输出：
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// Str Object
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// (
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//     [value:Str:private] =&gt; 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// )
+</span></span></span></code></pre></div><p>大概就是这样，但结果是<code>Str</code>对象，显然不是我们想要的结果。再加个函数获取实际的结果吧。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">get</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">mixed</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>由于<code>get</code>方法直接通过之前的<code>__call</code>方法逻辑是行不通的，需要对其修改，当方法不可调用时，就调用对象内部的方法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__call</span>($callable, $args)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">is_callable</span>($callable)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> (<span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">callable</span> $callable) <span style="color:#66d9ef">use</span> ($args) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> $callable(<span style="color:#f92672">...</span>$args);
+</span></span><span style="display:flex;"><span>            })($this<span style="color:#f92672">-&gt;</span>$callable);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">foreach</span> ($args <span style="color:#66d9ef">as</span> <span style="color:#f92672">&amp;</span>$arg) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> ($arg <span style="color:#f92672">===</span> <span style="color:#a6e22e">wrapped_placeholder</span>) {
+</span></span><span style="display:flex;"><span>                $arg <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> $callable(<span style="color:#f92672">...</span>$args);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $this;
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>完结，撒花。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">defined</span>(<span style="color:#e6db74">&#39;wrapped_placeholder&#39;</span>)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;wrapped_placeholder&#39;</span>, <span style="color:#e6db74">&#39;wrapped-placeholder-&#39;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">uniqid</span>());
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Str</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">mixed</span> $value;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">wrap</span>(<span style="color:#a6e22e">string</span> $value)<span style="color:#f92672">:</span> <span style="color:#a6e22e">Str</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">self</span>($value);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__construct</span>(<span style="color:#a6e22e">string</span> $value)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> $value;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__call</span>($callable, $args)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">is_callable</span>($callable)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> (<span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">callable</span> $callable) <span style="color:#66d9ef">use</span> ($args) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> $callable(<span style="color:#f92672">...</span>$args);
+</span></span><span style="display:flex;"><span>            })($this<span style="color:#f92672">-&gt;</span>$callable);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">foreach</span> ($args <span style="color:#66d9ef">as</span> <span style="color:#f92672">&amp;</span>$arg) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> ($arg <span style="color:#f92672">===</span> <span style="color:#a6e22e">wrapped_placeholder</span>) {
+</span></span><span style="display:flex;"><span>                $arg <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> $callable(<span style="color:#f92672">...</span>$args);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $this;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">get</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">mixed</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$res <span style="color:#f92672">=</span> <span style="color:#a6e22e">Str</span><span style="color:#f92672">::</span><span style="color:#a6e22e">wrap</span>(<span style="color:#e6db74">&#39;hello_world_that_is_so_interesting_just_a_test&#39;</span>)<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">strtoupper</span>(<span style="color:#a6e22e">wrapped_placeholder</span>)<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">str_replace</span>([<span style="color:#e6db74">&#39;A&#39;</span>, <span style="color:#e6db74">&#39;E&#39;</span>, <span style="color:#e6db74">&#39;I&#39;</span>, <span style="color:#e6db74">&#39;O&#39;</span>, <span style="color:#e6db74">&#39;U&#39;</span>], [<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;e&#39;</span>, <span style="color:#e6db74">&#39;i&#39;</span>, <span style="color:#e6db74">&#39;o&#39;</span>, <span style="color:#e6db74">&#39;u&#39;</span>], <span style="color:#a6e22e">wrapped_placeholder</span>)<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">get</span>();
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">var_dump</span>($res);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 输出：
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// string(46) &#34;HeLLo_WoRLD_THaT_iS_So_iNTeReSTiNG_JuST_a_TeST&#34;
+</span></span></span></code></pre></div><p>等等，我们做这些的目的是啥？是为了<code>IDE</code>提示啊，调用是可以了，但<code>IDE</code>它没提示呢，差了最关键的一步。<code>IDE</code>的提示使用文档注解，跟俗称的注释差不多吧，就在<code>Str</code>顶部加上函数原型即可。<code>PHP</code>内置的参数这么多，总不能一个个自己写吧，配套原型生成代码这就给你，以下代码就不详细说明了，将其运行输出结果复制到<code>Str</code>顶部的文档注释就可以。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Stubs</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">array</span> $stubs;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">toString</span>(<span style="color:#a6e22e">mixed</span> $value)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($value <span style="color:#f92672">===</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;false&#39;</span>;
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> ($value <span style="color:#f92672">===</span> <span style="color:#66d9ef">true</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;true&#39;</span>;
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> ($value <span style="color:#f92672">===</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;null&#39;</span>;
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">is_array</span>($value) <span style="color:#f92672">||</span> <span style="color:#a6e22e">is_object</span>($value) <span style="color:#f92672">||</span> <span style="color:#a6e22e">is_string</span>($value)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">json_encode</span>($value, <span style="color:#a6e22e">JSON_UNESCAPED_UNICODE</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">JSON_UNESCAPED_SLASHES</span>);
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> $value;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param $type
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @return void
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @throws ReflectionException
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">gen</span>($type)<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $ret <span style="color:#f92672">=</span> [];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">foreach</span> (<span style="color:#a6e22e">get_defined_functions</span>() <span style="color:#66d9ef">as</span> $functionType <span style="color:#f92672">=&gt;</span> $functions) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">foreach</span> ($functions <span style="color:#66d9ef">as</span> $function) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">str_contains</span>($function, <span style="color:#e6db74">&#39;\\&#39;</span>)) { <span style="color:#75715e">// 忽略一些包含命名空间的函数
+</span></span></span><span style="display:flex;"><span>                    $refFunc <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ReflectionFunction</span>($function);
+</span></span><span style="display:flex;"><span>                    $params <span style="color:#f92672">=</span> $refFunc<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getParameters</span>();
+</span></span><span style="display:flex;"><span>                    $retType <span style="color:#f92672">=</span> (<span style="color:#a6e22e">string</span>)$refFunc<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getReturnType</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#75715e">// 只有参数或返回值匹配包装类型的函数才返回
+</span></span></span><span style="display:flex;"><span>                    $typePattern <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;~</span><span style="color:#e6db74">$type</span><span style="color:#e6db74">~&#34;</span>; <span style="color:#75715e">// 匹配类型的正则，如 &#34;string|int&#34;、&#34;string&#34;，&#34;int|string&#34;、&#34;?string&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//                    $matchRetType = !empty(preg_match($typePattern, $retType));
+</span></span></span><span style="display:flex;"><span>                    $matchParamType <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">foreach</span> ($params <span style="color:#66d9ef">as</span> $item) {
+</span></span><span style="display:flex;"><span>                        $paramType <span style="color:#f92672">=</span> (<span style="color:#a6e22e">string</span>)$item<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getType</span>();
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">preg_match</span>($typePattern, $paramType)) {
+</span></span><span style="display:flex;"><span>                            $matchParamType <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>                        }
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">if</span> ($matchParamType) {
+</span></span><span style="display:flex;"><span>                        $ret[] <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>                            <span style="color:#e6db74">&#39;func&#39;</span> <span style="color:#f92672">=&gt;</span> $function,
+</span></span><span style="display:flex;"><span>                            <span style="color:#e6db74">&#39;retType&#39;</span> <span style="color:#f92672">=&gt;</span> $retType,
+</span></span><span style="display:flex;"><span>                            <span style="color:#e6db74">&#39;params&#39;</span> <span style="color:#f92672">=&gt;</span> $params,
+</span></span><span style="display:flex;"><span>                        ];
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span>$stubs <span style="color:#f92672">=</span> $ret;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @return void
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">print</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">foreach</span> (<span style="color:#a6e22e">self</span><span style="color:#f92672">::</span>$stubs <span style="color:#66d9ef">as</span> $stub) {
+</span></span><span style="display:flex;"><span>            $func <span style="color:#f92672">=</span> $stub[<span style="color:#e6db74">&#39;func&#39;</span>];
+</span></span><span style="display:flex;"><span>            $retType <span style="color:#f92672">=</span> $stub[<span style="color:#e6db74">&#39;retType&#39;</span>];
+</span></span><span style="display:flex;"><span>            $paramsArray <span style="color:#f92672">=</span> [];
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">             * @var ReflectionParameter $item
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">             */</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">foreach</span> ($stub[<span style="color:#e6db74">&#39;params&#39;</span>] <span style="color:#66d9ef">as</span> $item) {
+</span></span><span style="display:flex;"><span>                $type <span style="color:#f92672">=</span> (<span style="color:#a6e22e">string</span>)$item<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getType</span>();
+</span></span><span style="display:flex;"><span>                $name <span style="color:#f92672">=</span> $item<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getName</span>();
+</span></span><span style="display:flex;"><span>                $prefixName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;$&#39;</span>;
+</span></span><span style="display:flex;"><span>                $value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> ($item<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">isPassedByReference</span>()) {
+</span></span><span style="display:flex;"><span>                    $prefixName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&amp;&#39;</span> <span style="color:#f92672">.</span> $prefixName;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> ($item<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">isOptional</span>() <span style="color:#f92672">&amp;&amp;</span> $item<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">isDefaultValueAvailable</span>()) {
+</span></span><span style="display:flex;"><span>                    $value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;= &#39;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">toString</span>($item<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getDefaultValue</span>());
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                $paramsArray[] <span style="color:#f92672">=</span> <span style="color:#a6e22e">trim</span>(<span style="color:#a6e22e">implode</span>(<span style="color:#e6db74">&#39; &#39;</span>, [$type, $prefixName <span style="color:#f92672">.</span> $name, $value]));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// debug
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//                if ($func == &#39;&#39;) {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//                    var_dump([$type, $prefixName. $name, $value], implode(&#39; &#39;, [$type, $prefixName. $name, $value]));
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//                }
+</span></span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            $params <span style="color:#f92672">=</span> <span style="color:#a6e22e">implode</span>(<span style="color:#e6db74">&#39;,&#39;</span>, $paramsArray);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;@method self %s(%s): %s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>,
+</span></span><span style="display:flex;"><span>                $func,
+</span></span><span style="display:flex;"><span>                $params,
+</span></span><span style="display:flex;"><span>                $retType
+</span></span><span style="display:flex;"><span>            );
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Stubs</span><span style="color:#f92672">::</span><span style="color:#a6e22e">gen</span>(<span style="color:#e6db74">&#39;string&#39;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Stubs</span><span style="color:#f92672">::</span><span style="color:#a6e22e">print</span>();
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">Throwable</span> $e) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">echo</span> $e<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getMessage</span>(), <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>可能会由于文档注释过多，<code>PhpStorm</code>会比较卡（解决方法就是不直接打开使用封装类，而是在另一个文件引入封装类文件），<code>vs code</code>则没那么卡，提示效果如下。</p>
+<p><img src="/assets/images/2025/0214/hint.png" alt="res"></p>
+<p>注意的是，这样做虽然写起来很方便，但性能会比直接调用原生函数差。</p>
+<p><strong>本文参考代码：<a href="https://github.com/sebastiaanluca/php-pipe-operator" target="_blank">php-pipe-operator</a>。</strong></p>
+
+  
+  <div>
+    <div>Tags:</div>
+    <ul>
+        <li><a href="/tags/php/">PHP</a></li>
+    </ul>
+  </div>
+
+
+    </main>
+
+    
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 lwlwilliam. All rights reserved.</p>
+                <p>Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with custom theme.</p>
+                
+                <p><a href="https://github.com/lwlwilliam" target="_blank">GitHub</a></p>
+                
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

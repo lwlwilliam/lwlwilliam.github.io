@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head>
+	<meta name="generator" content="Hugo 0.160.1"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>William A</title>
+
+      <link rel="stylesheet" href="/css/main.css">
+
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <h1>William A</h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a aria-current="page" class="active" href="/">Home</a>
+    </li>
+    <li>
+      <a href="/posts/">Posts</a>
+    </li>
+    <li>
+      <a href="/tags/">Tags</a>
+    </li>
+    </ul>
+  </nav>
+
+
+  </header>
+  <main>
+    
+<div class="home">
+    <h1 class="page-title">最新文章</h1>
+    
+    
+    
+    
+    <div class="posts-list">
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2025-05-07-%E7%94%A8-composer-%E5%B0%86-packagist-%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E5%8F%98%E6%88%90%E6%9C%AC%E5%9C%B0%E5%BA%93/">用 composer 将 packagist 第三方库变成本地库</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    之所以有这个想法，是因为部分第三方库版本约束没有做好，导致版本不匹配的库也可以安装，库版本不兼容到运行时才得以暴露，影响很大。
+以workerman/mqtt为例，2.1版本跟workerman/workerman:^4.0是不兼容的，但 composer.json 的require是&quot;workerman/workerman&quot; : &quot;^4.0 | …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/php" class="category-tag">PHP</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2023-06-30-%E7%94%A8-if-%E5%92%8C-goto-%E6%A8%A1%E6%8B%9F-switch/">用 if 和 goto 模拟 switch</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    很多编程语言都会有switch语句。switch作为选择语句的一种，也是可以用if-else语句来表示。在实现了switch的大部分编程语言中，通常跟break跳转语句配合来进行控制，其一般语法如下：
+switch (expression) { case constant1: statements1; break; case constant2: statements2; break; . . . …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/php" class="category-tag">PHP</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2026-04-13-%E7%94%A8-python-%E6%90%AD%E4%B8%80%E4%B8%AA%E6%9C%AC%E5%9C%B0-ai-%E7%9F%A5%E8%AF%86%E5%BA%93/">用 Python 搭一个本地 AI 知识库</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    本文使用的技术栈为python+qdrant(docker 镜像）+ollama(使用嵌入模型 bge-m3)+deepseek(兼容 openai 接口)。如果连大模型都想用本地部署的，只需要用ollama再下载个deepseek大模型，将配置改成本地即可。
+预先启动向量数据库及嵌入模型服务。
+$ docker run -d -ti -p 6333:6333 qdrant/qdrant # 启动 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD" class="category-tag">人工智能</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2025-04-30-%E7%94%A8-workerman-%E5%8F%8A-emqx-%E5%81%9A%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84-mqtt-%E7%A4%BA%E4%BE%8B/">用 Workerman 及 EMQX 做一个简单的 MQTT 示例</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    $ docker run -d --name emqx -e EMQX_DASHBOARD__DEFAULT_PASSWORD=admin --network=lnmp -ti -p 18083:18083 -p 1883:1883 -p 8083-8084:8083-8084 -p 4370:4370 -p 5369:5369 emqx/emqx:5.8 $ composer require …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2024-01-24-%E7%94%A8%E5%8E%9F%E5%A7%8B%E6%96%B9%E6%B3%95%E6%89%93%E5%8C%85%E4%B8%80%E4%B8%AA-macos-%E4%B8%8B%E7%9A%84-gtk-%E6%A1%8C%E9%9D%A2%E7%A8%8B%E5%BA%8F/">用原始方法打包一个 macOS 下的 GTK 桌面程序</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    一直都写服务端，对计算机的运行原理有了一定了解，就想看看自己对其它领域程序的理解是不是可以举一反三。
+最简单的GTK程序就是官网入门示例了，安装GTK的过程就不在这描述。代码如下：
+// hello.c #include &lt;gtk/gtk.h&gt; static void print_hello (GtkWidget *widget, gpointer data) { g_print …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/gui" class="category-tag">GUI</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+    </div>
+    
+    
+    
+    <div class="pagination">
+        
+        <a href="/page/18/" class="pagination-link">上一页</a>
+        
+        
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+            <a href="/page/17/" class="pagination-link">17</a>
+            
+        
+            
+            <a href="/page/18/" class="pagination-link">18</a>
+            
+        
+            
+            <span class="pagination-link active">19</span>
+            
+        
+            
+            <a href="/page/20/" class="pagination-link">20</a>
+            
+        
+            
+            <a href="/page/21/" class="pagination-link">21</a>
+            
+        
+            
+        
+            
+        
+            
+        
+        
+        
+        <a href="/page/20/" class="pagination-link">下一页</a>
+        
+        
+        <div class="pagination-jump">
+            <span>跳转到:</span>
+            <input type="number" id="page-input" class="pagination-input" min="1" max="24" value="19">
+            <span>页</span>
+        </div>
+    </div>
+    
+    
+    
+</div>
+
+<style>
+.posts-list {
+    margin-top: 2rem;
+}
+
+.post-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    margin-bottom: 1.5rem;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.post-title a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.post-title a:hover {
+    color: var(--primary-color);
+}
+
+.post-date {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.post-excerpt {
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.category-tag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.category-tag:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.post-keywords {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.keyword-tag {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+@media (max-width: 768px) {
+    .post-card {
+        padding: 1.5rem;
+    }
+    
+    .post-title {
+        font-size: 1.25rem;
+    }
+    
+    .post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+
+  </main>
+  <footer>
+    <p>Copyright 2026. All rights reserved.</p>
+
+  </footer>
+</body>
+</html>

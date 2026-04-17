@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head>
+	<meta name="generator" content="Hugo 0.160.1"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>William A</title>
+
+      <link rel="stylesheet" href="/css/main.css">
+
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <h1>William A</h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a aria-current="page" class="active" href="/">Home</a>
+    </li>
+    <li>
+      <a href="/posts/">Posts</a>
+    </li>
+    <li>
+      <a href="/tags/">Tags</a>
+    </li>
+    </ul>
+  </nav>
+
+
+  </header>
+  <main>
+    
+<div class="home">
+    <h1 class="page-title">最新文章</h1>
+    
+    
+    
+    
+    <div class="posts-list">
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2023-11-09-%E7%94%B1-php-fiber-%E5%BC%95%E5%8F%91%E7%9A%84%E6%80%9D%E8%80%83/">由 PHP Fiber 引发的思考</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    由于水平有限，可能有些术语并不是那么准确。
+PHP 8.1的新特性Fiber，可能让很多PHPer误解了，以为Fiber的出现可以解决PHP生态的很多问题，如官方多线程方案的缺失、PHP-FPM多进程阻塞模型的优化。但实际上Fiber目前解决的问题并不多，只是在底层引入了用户栈空间切换的原语，并不能像进程和线程那样，在同步阻塞时，仍然可以在操作系统层面进行上下文切换，不至于让整个程序无法往后执行。 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/php" class="category-tag">PHP</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2021-10-19-%E7%AE%97%E6%B3%95%E4%B8%AD%E7%9A%84%E5%93%A8%E5%85%B5/">算法中的哨兵</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    在地面上有200个箱子连续排列着，现在需要看一下前面100个箱子中有没有苹果。一般情况下，会怎么做呢？
+下面用代码来模拟一下。
+package main import ( &#34;fmt&#34; ) func main() { s := make([]int, 200) for i := 0; i &lt; 100; i++ { if s[i] == -1 { …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" class="category-tag">算法与数据结构</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2023-03-16-%E7%BA%AF%E6%89%8B%E5%B7%A5%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA-json-%E8%A7%A3%E9%87%8A%E5%99%A8/">纯手工打造一个 JSON 解释器</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    老早就想搞一个完整的解释器，不过呢，通用语言的解释器比较庞大，不太好写。写一个 JSON 解释器比较合适，要素不多，好掌握一点，而且在忽略一些细节之后，代码量极少，对于入门者了解解释器甚至编译器到底在干什么很有帮助。
+根据 https://www.json.org 的介绍，JSON 由以下结构组成：
+object: 无序的 name/value 键值对，以{开始，以}结束，name 后跟着 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86" class="category-tag">编译原理</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2022-08-10-%E7%BB%99-php-%E5%86%99-c-%E6%89%A9%E5%B1%95/">给 PHP 写 C 扩展</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    前期准备 源码编译安装 PHP。本文使用的是 PHP-8.1，其它版本可能会有所差异。
+$ # 获取 PHP 源码并编译 $ git clone https://github.com/php/php-src.git $ git checkout PHP-8.1 $ cd php-src $ ./buildconf $ ./configure $ make $ make install 生成扩展基本 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/php" class="category-tag">PHP</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-03-22-%E7%BD%91%E5%8D%A1%E4%B8%8E%E8%B7%AF%E7%94%B1%E5%99%A8/">网卡与路由器</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                     整理自：网卡与路由器
+TODO: 以下只是梗概 DHCP 网卡都有一个全球唯一的地址，这个地址在网卡制造时就是确定的，称为 MAC 地址。如：11:27:F5:8A:79:54。
+电脑初接网络时，需要确定 IP 地址，由 DHCP（动态主机配置协议）分配。
+但是电脑刚接入网络，不知道 DHCP 在哪里，如何配置？操作系统在应用层创建 DHCP 发现报文，由 UDP 报文封装，再被 IP 数据报封 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+    </div>
+    
+    
+    
+    <div class="pagination">
+        
+        <a href="/page/19/" class="pagination-link">上一页</a>
+        
+        
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+            <a href="/page/18/" class="pagination-link">18</a>
+            
+        
+            
+            <a href="/page/19/" class="pagination-link">19</a>
+            
+        
+            
+            <span class="pagination-link active">20</span>
+            
+        
+            
+            <a href="/page/21/" class="pagination-link">21</a>
+            
+        
+            
+            <a href="/page/22/" class="pagination-link">22</a>
+            
+        
+            
+        
+            
+        
+        
+        
+        <a href="/page/21/" class="pagination-link">下一页</a>
+        
+        
+        <div class="pagination-jump">
+            <span>跳转到:</span>
+            <input type="number" id="page-input" class="pagination-input" min="1" max="24" value="20">
+            <span>页</span>
+        </div>
+    </div>
+    
+    
+    
+</div>
+
+<style>
+.posts-list {
+    margin-top: 2rem;
+}
+
+.post-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    margin-bottom: 1.5rem;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.post-title a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.post-title a:hover {
+    color: var(--primary-color);
+}
+
+.post-date {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.post-excerpt {
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.category-tag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.category-tag:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.post-keywords {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.keyword-tag {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+@media (max-width: 768px) {
+    .post-card {
+        padding: 1.5rem;
+    }
+    
+    .post-title {
+        font-size: 1.25rem;
+    }
+    
+    .post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+
+  </main>
+  <footer>
+    <p>Copyright 2026. All rights reserved.</p>
+
+  </footer>
+</body>
+</html>

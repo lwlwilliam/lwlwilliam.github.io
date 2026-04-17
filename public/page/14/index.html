@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head>
+	<meta name="generator" content="Hugo 0.160.1"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>William A</title>
+
+      <link rel="stylesheet" href="/css/main.css">
+
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <h1>William A</h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a aria-current="page" class="active" href="/">Home</a>
+    </li>
+    <li>
+      <a href="/posts/">Posts</a>
+    </li>
+    <li>
+      <a href="/tags/">Tags</a>
+    </li>
+    </ul>
+  </nav>
+
+
+  </header>
+  <main>
+    
+<div class="home">
+    <h1 class="page-title">最新文章</h1>
+    
+    
+    
+    
+    <div class="posts-list">
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2020-04-24-%E5%AD%97%E8%8A%82%E5%BA%8F/">字节序</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    字节序，指的就是在计算机中存储的数据字节顺序，分为大端字节序和小端字节序。先看看以下代码，直观感受一下什么叫字节序。
+package main import ( &#34;bytes&#34; &#34;encoding/binary&#34; &#34;fmt&#34; ) func main() { buf := bytes.NewBuffer([]byte{}) var data int32 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8E%9F%E7%90%86" class="category-tag">计算机原理</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2025-04-29-%E5%AD%97%E8%8A%82%E7%A0%81%E7%BC%93%E5%AD%98%E6%8F%90%E5%8D%87%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E7%9A%84%E5%8E%9F%E7%90%86%E6%B5%85%E8%B0%88/">字节码缓存提升程序性能的原理浅谈</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    像Java这类语言，编译器会把代码预先编译为字节码，JVM直接解释执行这些字节码，程序就可以运行起来了。PHP使用者在性能优化时可能也会遇到OPcache这个名词，所谓OPcache其实就是opcode的cache，opcode其实类似于字节码，虽然本质上有点差异，但可以类比为同一种事物。
+PHP在开启OPcache扩展后，传统的PHP程序运行速度会提升很多，究其原因，就是OPcache扩展会将代 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86" class="category-tag">编译原理</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2020-06-30-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/">守护进程</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    守护进程(daemon)，简单来说就是可以脱离终端在后台运行的进程，脱离终端后成为内核初始进程的子进程。常见的服务如 web 服务都以守护进程的方式运行，它们的特点就是需要长时间或者永久运行，持续对外提供服务。
+进程包括以下几个 ID：
+PID：进程 ID，进程的唯一标识。 PPID：父进程 ID。 PGID：进程组 ID，每个进程都会有进程组 ID，表示该进程所属的进程组。默认情况下新创建的进程 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" class="category-tag">操作系统</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2021-12-29-%E5%AF%B9-coroutine-%E7%9A%84%E4%B8%8D%E6%88%90%E7%86%9F%E7%90%86%E8%A7%A3/">对 Coroutine 的不成熟理解</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    在需要恢复控制权的位置设置一系列 label：一个位于开始位置，另一个在每个 return 语句后面。我们还设置了一个 state 变量，用于在多次函数调用时告诉我们下次应该在哪里恢复控制权。在每次返回前，都需要更新 state 变量，使其指向正确的 label。而在调用后，我们都会通过 switch 对 state 进行判断，以便找到下一次要跳转的 label。
+#include …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86" class="category-tag">编译原理</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2019-05-31-%E5%AF%B9-https-%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F%E7%9A%84%E7%AE%80%E8%A6%81%E8%A7%A3%E9%87%8A/">对 https 工作方式的简要解释</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    Diffie-Hellman 算法 对于一个素数p来说，当一个数g满足以下条件：当1 &lt;= x &lt;= p-1时，如果(g^x) mod p能产生[1, p-1]的所有数值，就称 g 是 p 的 generator。例如，对素数 p = 7 来说，g = 3 就是它的 generator。`
+3^1 mod 7 = 3 3^2 mod 7 = 2 3^3 mod 7 = 6 3^4 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+    </div>
+    
+    
+    
+    <div class="pagination">
+        
+        <a href="/page/13/" class="pagination-link">上一页</a>
+        
+        
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+            <a href="/page/12/" class="pagination-link">12</a>
+            
+        
+            
+            <a href="/page/13/" class="pagination-link">13</a>
+            
+        
+            
+            <span class="pagination-link active">14</span>
+            
+        
+            
+            <a href="/page/15/" class="pagination-link">15</a>
+            
+        
+            
+            <a href="/page/16/" class="pagination-link">16</a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+        
+        
+        <a href="/page/15/" class="pagination-link">下一页</a>
+        
+        
+        <div class="pagination-jump">
+            <span>跳转到:</span>
+            <input type="number" id="page-input" class="pagination-input" min="1" max="24" value="14">
+            <span>页</span>
+        </div>
+    </div>
+    
+    
+    
+</div>
+
+<style>
+.posts-list {
+    margin-top: 2rem;
+}
+
+.post-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    margin-bottom: 1.5rem;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.post-title a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.post-title a:hover {
+    color: var(--primary-color);
+}
+
+.post-date {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.post-excerpt {
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.category-tag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.category-tag:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.post-keywords {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.keyword-tag {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+@media (max-width: 768px) {
+    .post-card {
+        padding: 1.5rem;
+    }
+    
+    .post-title {
+        font-size: 1.25rem;
+    }
+    
+    .post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+
+  </main>
+  <footer>
+    <p>Copyright 2026. All rights reserved.</p>
+
+  </footer>
+</body>
+</html>

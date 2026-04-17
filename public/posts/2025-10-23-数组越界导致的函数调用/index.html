@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>数组越界导致的函数调用 | William A</title>
+    <meta name="description" content="Love sports, love programming, love life.">
+    <meta name="keywords" content="William A, lwlwilliam">
+    
+    
+    
+    <link rel="stylesheet" href="/css/main.min.61311e98fda6ed7278ce2083dee74424508439207cee18072f54cec45e3ca75a.css">
+    
+    
+    
+    <script defer src="/js/main.min.4b385b5d7b348b137c609442c0fea7055f92fa2ca72a8ffecb9cddfa95655e36.js"></script>
+    
+    
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    
+    
+    
+    
+</head>
+<body>
+    
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="site-title">William A</a>
+                <nav class="nav-menu">
+                    
+                    <a href="/" class="nav-link">cd ~</a>
+                    
+                    <a href="/categories/" class="nav-link">分类</a>
+                    
+                    <a href="/archives/" class="nav-link">归档</a>
+                    
+                    <a href="/books/" class="nav-link">书籍</a>
+                    
+                    <a href="/links/" class="nav-link">链接</a>
+                    
+                    <a href="/tools/" class="nav-link">工具</a>
+                    
+                    <a href="/todo/" class="nav-link">待办</a>
+                    
+                    <a href="/about/" class="nav-link">关于</a>
+                    
+                    <div class="search-container">
+                        <input type="text" id="search-input" class="search-input" placeholder="搜索...">
+                        <div id="search-results" class="search-results"></div>
+                    </div>
+                    <button id="theme-toggle" class="theme-toggle">
+                        <span id="theme-icon">☀️</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+
+    
+    <main class="container">
+        
+  <h1>数组越界导致的函数调用</h1>
+
+  
+  
+  <time datetime="2025-10-23T00:00:00&#43;00:00">October 23, 2025</time>
+
+  <p><code>C</code>语言中数组越界是未定义行为，因此以下代码在不同的编译器或者不同版本的同一编译器行为是不可预测的。在<code>gcc</code>某些版本中，以下代码会出现有意思的行为。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">// demo.c
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">jmp</span>() {
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#e6db74">&#34;Hello jmp</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    exit(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">func</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">long</span> arr[<span style="color:#ae81ff">2</span>];
+</span></span><span style="display:flex;"><span>    arr[<span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> (<span style="color:#66d9ef">long</span>)jmp;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    func();
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#e6db74">&#34;Hello main</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>编译使用的<code>gcc</code>信息如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ gcc -v
+</span></span><span style="display:flex;"><span>Using built-in specs.
+</span></span><span style="display:flex;"><span>COLLECT_GCC<span style="color:#f92672">=</span>gcc
+</span></span><span style="display:flex;"><span>COLLECT_LTO_WRAPPER<span style="color:#f92672">=</span>/usr/lib/gcc/x86_64-linux-gnu/12/lto-wrapper
+</span></span><span style="display:flex;"><span>OFFLOAD_TARGET_NAMES<span style="color:#f92672">=</span>nvptx-none:amdgcn-amdhsa
+</span></span><span style="display:flex;"><span>OFFLOAD_TARGET_DEFAULT<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>Target: x86_64-linux-gnu
+</span></span><span style="display:flex;"><span>Configured with: ../src/configure -v --with-pkgversion<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Debian 12.2.0-14&#39;</span> --with-bugurl<span style="color:#f92672">=</span>file:///usr/share/doc/gcc-12/README.Bugs --enable-languages<span style="color:#f92672">=</span>c,ada,c++,go,d,fortran,objc,obj-c++,m2 --prefix<span style="color:#f92672">=</span>/usr --with-gcc-major-version-only --program-suffix<span style="color:#f92672">=</span>-12 --program-prefix<span style="color:#f92672">=</span>x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir<span style="color:#f92672">=</span>/usr/lib --without-included-gettext --enable-threads<span style="color:#f92672">=</span>posix --libdir<span style="color:#f92672">=</span>/usr/lib --enable-nls --enable-clocale<span style="color:#f92672">=</span>gnu --enable-libstdcxx-debug --enable-libstdcxx-time<span style="color:#f92672">=</span>yes --with-default-libstdcxx-abi<span style="color:#f92672">=</span>new --enable-gnu-unique-object --disable-vtable-verify --enable-plugin --enable-default-pie --with-system-zlib --enable-libphobos-checking<span style="color:#f92672">=</span>release --with-target-system-zlib<span style="color:#f92672">=</span>auto --enable-objc-gc<span style="color:#f92672">=</span>auto --enable-multiarch --disable-werror --enable-cet --with-arch-32<span style="color:#f92672">=</span>i686 --with-abi<span style="color:#f92672">=</span>m64 --with-multilib-list<span style="color:#f92672">=</span>m32,m64,mx32 --enable-multilib --with-tune<span style="color:#f92672">=</span>generic --enable-offload-targets<span style="color:#f92672">=</span>nvptx-none<span style="color:#f92672">=</span>/build/gcc-12-bTRWOB/gcc-12-12.2.0/debian/tmp-nvptx/usr,amdgcn-amdhsa<span style="color:#f92672">=</span>/build/gcc-12-bTRWOB/gcc-12-12.2.0/debian/tmp-gcn/usr --enable-offload-defaulted --without-cuda-driver --enable-checking<span style="color:#f92672">=</span>release --build<span style="color:#f92672">=</span>x86_64-linux-gnu --host<span style="color:#f92672">=</span>x86_64-linux-gnu --target<span style="color:#f92672">=</span>x86_64-linux-gnu
+</span></span><span style="display:flex;"><span>Thread model: posix
+</span></span><span style="display:flex;"><span>Supported LTO compression algorithms: zlib zstd
+</span></span><span style="display:flex;"><span>gcc version 12.2.0 <span style="color:#f92672">(</span>Debian 12.2.0-14<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>行为如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ gcc demo.c
+</span></span><span style="display:flex;"><span>$ ./a.out
+</span></span><span style="display:flex;"><span>Hello jmp
+</span></span><span style="display:flex;"><span>$ echo $?
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>这就有点意思了，看起来<code>jmp</code>函数被执行了，而<code>printf(&quot;Hello main\n&quot;);</code>语句却没有一点效果。通过汇编看看到底发生了什么事情，这里推荐一个网站 <a href="https://godbolt.org">https://godbolt.org</a>。</p>
+<pre tabindex="0"><code class="language-assembly" data-lang="assembly">_Z3jmpv:
+ push   rbp
+ mov    rbp,rsp
+ mov    edi,0x402004
+ call   401040 &lt;puts@plt&gt;
+ mov    edi,0x1
+ call   401030 &lt;exit@plt&gt;
+_Z4funcv:
+ push   rbp
+ mov    rbp,rsp
+ mov    eax,0x401136
+ mov    QWORD PTR [rbp+0x8],rax
+ nop
+ pop    rbp
+ ret
+main:
+ push   rbp
+ mov    rbp,rsp
+ call   40114e &lt;_Z4funcv&gt;
+ mov    edi,0x40200e
+ call   401040 &lt;puts@plt&gt;
+ mov    eax,0x0
+ pop    rbp
+ ret
+</code></pre><p><code>main</code>函数通过<code>call   40114e &lt;_Z4funcv&gt;</code>调用<code>func</code>函数时会把<code>mov    edi,0x40200e</code>所在的内存地址压栈，然后跳转到<code>func</code>所在地址，<code>push   rbp</code>之后，<code>rsp</code>的地址是<code>[rbp]</code>，而函数的返回地址则为<code>[rbp+0x8]</code>，而栈是由高地址往低地址增长的。在<code>long arr[2]</code>数组中，内存地址如下所示：</p>
+<pre tabindex="0"><code>[rbp+0x8]       -&gt; arr[3]
+[rbp]           -&gt; arr[2]
+
+[rbp-0x8]       -&gt; arr[1]
+[rbp-0x10]      -&gt; arr[0]
+</code></pre><p>因此<code>arr[3]</code>的地址跟函数返回地址一致，当它被赋值为<code>(long)jmp</code>时，<code>func</code>函数退出后就会跳转到<code>jmp</code>函数，就会出现上面看起来很奇怪的执行结果<code>Hello jmp</code>。</p>
+<p>原理理解了，那就可以自己修改一下汇编，例如在<code>_Z4funcv</code>的<code>push   rbp</code>之后再加一个<code>push   rbp</code>，然后将<code>mov    QWORD PTR [rbp+0x8],rax</code>改成<code>mov    QWORD PTR [rbp+0x10],rax</code>，最后把在<code>pop    rbp</code>再重复一次<code>pop    rbp</code>，看看结果是否一致。</p>
+<pre tabindex="0"><code class="language-assembly" data-lang="assembly">_Z3jmpv:
+ push   rbp
+ mov    rbp,rsp
+ mov    edi,0x402004
+ call   401040 &lt;puts@plt&gt;
+ mov    edi,0x1
+ call   401030 &lt;exit@plt&gt;
+_Z4funcv:
+ push   rbp
+ push   rbp
+ mov    rbp,rsp
+ mov    eax,0x401136
+ mov    QWORD PTR [rbp+0x10],rax
+ nop
+ pop    rbp
+ pop    rbp
+ ret
+main:
+ push   rbp
+ mov    rbp,rsp
+ call   40114e &lt;_Z4funcv&gt;
+ mov    edi,0x40200e
+ call   401040 &lt;puts@plt&gt;
+ mov    eax,0x0
+ pop    rbp
+ ret
+</code></pre>
+  
+  <div>
+    <div>Tags:</div>
+    <ul>
+        <li><a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a></li>
+    </ul>
+  </div>
+
+
+    </main>
+
+    
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 lwlwilliam. All rights reserved.</p>
+                <p>Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with custom theme.</p>
+                
+                <p><a href="https://github.com/lwlwilliam" target="_blank">GitHub</a></p>
+                
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

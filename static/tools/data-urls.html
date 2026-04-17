@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data URLs 生成器</title>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #2b2d42;
+            --border-color: #e0e4e8;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        h2 { margin-top: 0; color: var(--primary-color); font-weight: 700; text-align: center; }
+
+        .field { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; color: #4a5568; }
+
+        /* 美化下拉框 */
+        select {
+            appearance: none;
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%234a5568' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") no-repeat right 16px center;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        select:focus { outline: none; border-color: var(--primary-color); }
+
+        /* 美化文本框 */
+        textarea {
+            width: 100%; height: 120px; padding: 12px;
+            border: 2px solid var(--border-color); border-radius: 10px;
+            box-sizing: border-box; resize: none; font-family: monospace;
+        }
+        textarea:focus { outline: none; border-color: var(--primary-color); }
+
+        /* 美化文件上传 */
+        .file-upload-wrapper {
+            position: relative;
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.2s;
+            background: #fafbfc;
+        }
+        .file-upload-wrapper:hover { border-color: var(--primary-color); background: #f0f3ff; }
+        .file-upload-wrapper input[type="file"] {
+            position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer;
+        }
+        .upload-icon { font-size: 2rem; color: var(--primary-color); display: block; margin-bottom: 10px; }
+
+        /* 复选框组 */
+        .checkbox-group { display: flex; gap: 20px; background: #f1f3f5; padding: 12px; border-radius: 8px; }
+        .checkbox-item { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.9rem; }
+        .checkbox-item input { width: 18px; height: 18px; cursor: pointer; }
+
+        /* 按钮 */
+        button {
+            width: 100%; background-color: var(--primary-color); color: white; border: none;
+            padding: 14px; border-radius: 10px; cursor: pointer; font-size: 1rem; font-weight: 600;
+            transition: background 0.2s, transform 0.1s;
+        }
+        button:hover { background-color: var(--primary-hover); }
+        button:active { transform: scale(0.98); }
+
+        /* 结果展示 */
+        #resultArea {
+            margin-top: 2rem; background: #2b2d42; color: #edf2f4; padding: 1.5rem;
+            border-radius: 12px; position: relative;
+        }
+        #output {
+            font-size: 0.85rem; word-break: break-all; max-height: 150px; overflow-y: auto;
+            margin-bottom: 15px; font-family: 'Courier New', monospace; opacity: 0.9;
+        }
+        .copy-btn { background: #4a5568; padding: 8px 15px; font-size: 0.8rem; width: auto; }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2>Data URLs 生成器</h2>
+
+        <div class="field">
+            <label>MIME 类型</label>
+            <select id="mimeType">
+                <option value="text/plain">text/plain (纯文本)</option>
+                <option value="text/html">text/html (HTML 页面)</option>
+                <option value="application/json">application/json (JSON 数据)</option>
+                <option value="image/png">image/png (PNG 图片)</option>
+                <option value="image/jpeg">image/jpeg (JPEG 图片)</option>
+                <option value="image/gif">image/gif (GIF 动图)</option>
+            </select>
+        </div>
+
+        <div class="field" id="textOptions">
+            <label>编码选项</label>
+            <div class="checkbox-group">
+                <label class="checkbox-item">
+                    <input type="checkbox" id="useUtf8" checked> UTF-8 编码
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" id="useBase64"> Base64 编码
+                </label>
+            </div>
+        </div>
+
+        <div class="field" id="textInputGroup">
+            <label>文本内容</label>
+            <textarea id="textContent" placeholder="在此输入文本内容..."></textarea>
+        </div>
+
+        <div class="field hidden" id="imageInputGroup">
+            <label>上传图片</label>
+            <div class="file-upload-wrapper">
+                <span class="upload-icon">📁</span>
+                <span id="fileNameDisplay">点击或拖拽图片到此处</span>
+                <input type="file" id="imageFile" accept="image/png, image/jpeg, image/gif">
+            </div>
+        </div>
+
+        <button onclick="generateDataUri()">立即生成 Data 协议链接</button>
+
+        <div id="resultArea" class="hidden">
+            <label style="color: #8d99ae;">输出结果：</label>
+            <div id="output"></div>
+            <button class="copy-btn" onclick="copyToClipboard()">复制链接</button>
+        </div>
+        <p style="text-align: center; margin-top: 2rem; color: #9ca3af; font-size: 0.7rem;">
+            本地原生处理 · 隐私安全 · 无第三方追踪
+        </p>
+    </div>
+</div>
+
+<script>
+    const mimeSelect = document.getElementById('mimeType');
+    const textOptions = document.getElementById('textOptions');
+    const textGroup = document.getElementById('textInputGroup');
+    const imageGroup = document.getElementById('imageInputGroup');
+    const resultArea = document.getElementById('resultArea');
+    const output = document.getElementById('output');
+    const fileInput = document.getElementById('imageFile');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+    // 切换 UI 逻辑
+    mimeSelect.addEventListener('change', () => {
+        const isImage = mimeSelect.value.startsWith('image/');
+        textOptions.classList.toggle('hidden', isImage);
+        textGroup.classList.toggle('hidden', isImage);
+        imageGroup.classList.toggle('hidden', !isImage);
+        resultArea.classList.add('hidden');
+    });
+
+    // 图片名显示
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            fileNameDisplay.textContent = `已选择: ${e.target.files[0].name}`;
+        }
+    });
+
+    async function generateDataUri() {
+        const mime = mimeSelect.value;
+        const isImage = mime.startsWith('image/');
+        let dataUri = "";
+
+        try {
+            if (isImage) {
+                if (fileInput.files.length === 0) {
+                    alert('请先选择一个图片文件');
+                    return;
+                }
+                dataUri = await fileToBase64(fileInput.files[0]);
+            } else {
+                const content = document.getElementById('textContent').value;
+                const useUtf8 = document.getElementById('useUtf8').checked;
+                const useBase64 = document.getElementById('useBase64').checked;
+
+                let prefix = `data:${mime}`;
+                let charset = useUtf8 ? ';charset=utf-8' : '';
+
+                if (useBase64) {
+                    // 核心：处理 UTF-8 字符串转 Base64
+                    const encodedContent = btoa(unescape(encodeURIComponent(content)));
+                    dataUri = `${prefix}${charset};base64,${encodedContent}`;
+                } else {
+                    dataUri = `${prefix}${charset},${encodeURIComponent(content)}`;
+                }
+            }
+
+            output.textContent = dataUri;
+            resultArea.classList.remove('hidden');
+        } catch (e) {
+            alert("生成失败，请检查输入内容。");
+        }
+    }
+
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    function copyToClipboard() {
+        const text = output.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            btn.textContent = "已复制！";
+            setTimeout(() => btn.textContent = "复制链接", 2000);
+        });
+    }
+</script>
+
+</body>
+</html>

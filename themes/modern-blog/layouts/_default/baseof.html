@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+<head>
+    <meta charset="{{ .Site.Params.encoding | default "utf-8" }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    <meta name="keywords" content="{{ with .Keywords }}{{ delimit . ", " }}{{ else }}{{ .Site.Params.keywords }}{{ end }}">
+    
+    <!-- CSS -->
+    {{ $css := resources.Get "css/main.css" | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+    
+    <!-- JavaScript -->
+    {{ $js := resources.Get "js/main.js" | minify | fingerprint }}
+    <script defer src="{{ $js.RelPermalink }}"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ "favicon.ico" | relURL }}" type="image/x-icon">
+    
+    <!-- RSS Feed -->
+    {{ with .OutputFormats.Get "rss" -}}
+        {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+    {{ end -}}
+    
+    <!-- MathJax for math rendering -->
+    {{ if or .Params.math .Params.katex }}
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    {{ end }}
+</head>
+<body>
+    <!-- 头部 -->
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="{{ "/" | relURL }}" class="site-title">{{ .Site.Title }}</a>
+                <nav class="nav-menu">
+                    {{ range .Site.Params.navs }}
+                    <a href="{{ .href | relURL }}" class="nav-link">{{ .label }}</a>
+                    {{ end }}
+                    <div class="search-container">
+                        <input type="text" id="search-input" class="search-input" placeholder="搜索...">
+                        <div id="search-results" class="search-results"></div>
+                    </div>
+                    <button id="theme-toggle" class="theme-toggle">
+                        <span id="theme-icon">☀️</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+
+    <!-- 主要内容 -->
+    <main class="container">
+        {{ block "main" . }}{{ end }}
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; {{ now.Format "2006" }} {{ .Site.Params.author }}. All rights reserved.</p>
+                <p>Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with custom theme.</p>
+                {{ with .Site.Params.github_url }}
+                <p><a href="{{ . }}" target="_blank">GitHub</a></p>
+                {{ end }}
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

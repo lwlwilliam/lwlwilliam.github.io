@@ -1,0 +1,53 @@
+{{ define "main" }}
+<div class="todo">
+    <h1 class="page-title">待办事项</h1>
+    
+    {{ $todos := .Site.Data.todo }}
+    
+    {{ if $todos }}
+    <div class="card-grid">
+        {{ range $todos }}
+        <div class="card todo-card">
+            <h3 class="todo-name">{{ .name }}</h3>
+            {{ with .remark }}
+            <div class="todo-remark">{{ . }}</div>
+            {{ end }}
+        </div>
+        {{ end }}
+    </div>
+    {{ else }}
+    <div class="empty-state">
+        <div class="empty-state-icon">📋</div>
+        <p>暂无待办事项</p>
+    </div>
+    {{ end }}
+</div>
+
+<style>
+.todo-card {
+    position: relative;
+    padding-left: 3rem;
+}
+
+.todo-card::before {
+    content: '📌';
+    position: absolute;
+    left: 1rem;
+    top: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.todo-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.todo-remark {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+</style>
+{{ end }}

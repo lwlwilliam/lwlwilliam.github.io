@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head>
+	<meta name="generator" content="Hugo 0.160.1"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>William A</title>
+
+      <link rel="stylesheet" href="/css/main.css">
+
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <h1>William A</h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a aria-current="page" class="active" href="/">Home</a>
+    </li>
+    <li>
+      <a href="/posts/">Posts</a>
+    </li>
+    <li>
+      <a href="/tags/">Tags</a>
+    </li>
+    </ul>
+  </nav>
+
+
+  </header>
+  <main>
+    
+<div class="home">
+    <h1 class="page-title">最新文章</h1>
+    
+    
+    
+    
+    <div class="posts-list">
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2020-01-09-%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E4%B9%8B%E4%B8%8A%E4%BC%A0/">断点续传之上传</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    这篇文章主要讲断点续传的上传原理。
+断点续传指的是在文件传输时将文件进行切分，每个部分的传输都是独立的，并且在遇到网络故障时，可以在网络通畅之后继续传输的未曾传输的部分，并不需要重新传输。
+根据以上描述，Web 端的文件上传步骤如下。为了思路的清晰，以下代码十分简陋，没有进行相应的错误处理，而且是非并发安全的，千万不要在实际项目中这么写！
+读取文件 var fileEle = …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2020-04-28-%E6%9C%89%E8%B6%A3%E7%9A%84-screen/">有趣的 screen</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    这几天学习发现了一个很好玩的命令——screen。screen 是一个可以在多个进程之间复用一个物理终端的全屏窗口管理器，只要 screen 本身没有终止，其内部运行的会话都可以恢复，即使是网络中断。
+有时候我们需要远程执行一些任务，如备份，开启的远程终端窗口在任务执行完毕之前不能关掉该窗口，否则任务进程会被杀掉。这时可以通过 screen 命令来同时连接多个本地或远程会话。并在其间自由切换。
+会 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2021-01-26-%E6%A0%88%E5%AE%9E%E7%8E%B0%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/">栈实现的表达式求值</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    后进者先出，先进者后出，这就是数据结构中的&quot;栈&quot;。栈是一种相当简单的数据结构，但应用十分广泛，例如编程语言中的函数调用栈、浏览器的前进后退功能。本文讲的是栈的另一个常见应用场景，编译器利用栈实现表达式求值。初次见到这种实现思路的时候，我不禁叫绝，一个简单的栈还能玩出花。
+例如，一个简单的四则运算：10+20*2-30/3。人脑算出这个表达式的结果很简单。但是计算机只认识简单的机 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86" class="category-tag">编译原理</a>
+                    
+                    <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" class="category-tag">算法与数据结构</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2020-02-26-%E6%A0%91%E8%8E%93%E6%B4%BE-4b-%E6%8A%98%E8%85%BE%E8%AE%B0%E4%B8%80%E5%88%9D%E8%AF%86/">树莓派 4b 折腾记（一）——初识</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    其实很早就打算入手树莓派玩玩，因为看到了很多让我垂涎的各种花式玩法，当然最主要的是它还可以满足我当前的某些需求。小型，便宜，社区活跃，麻雀虽小，五脏俱全，这是我选择树莓派的主要原因。树莓派其实就是小型的电脑，主板接口排布紧凑，计算机的各种部件一目了解，极大地满足了我对计算机组成的好奇心。
+构造 以下是树莓派 4b 的构造图。
+另外，在主板背面还有一个 microSD 卡槽，SD 卡用来写入树莓派的 …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" class="category-tag">操作系统</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+        <article class="post-card">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="/posts/2021-04-22-%E6%B1%87%E7%BC%96%E7%BA%A7%E8%B0%83%E8%AF%95%E7%A8%8B%E5%BA%8F-debug/">汇编级调试程序 debug</a>
+                </h2>
+                <div class="post-meta">
+                    <time datetime="0001-01-01" class="post-date">
+                        0001年1月1日
+                    </time>
+                </div>
+            </div>
+            
+            <div class="post-excerpt">
+                
+                    其实本文并不是主要介绍 debug 用法的。。。
+最近看了两本汇编的书，里面都提到 debug.exe。写代码嘛，肯定要实践一下，可惜电脑上并没有 debug.exe 了，所以为了方便学习，特意记录一下怎么在 win10 和 macOS(10.14.3) 上搞出 debug.exe。
+debug.exe 属于久远的 dos 时代，所以得先搞个 dos 环境呗，dosbox 就是 dos 的模拟器， …
+                
+            </div>
+            
+            <div class="post-footer">
+                
+                <div class="post-categories">
+                    
+                    <a href="/categories/%E6%B1%87%E7%BC%96" class="category-tag">汇编</a>
+                    
+                </div>
+                
+                
+                
+            </div>
+        </article>
+        
+    </div>
+    
+    
+    
+    <div class="pagination">
+        
+        <a href="/page/16/" class="pagination-link">上一页</a>
+        
+        
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+            <a href="/page/15/" class="pagination-link">15</a>
+            
+        
+            
+            <a href="/page/16/" class="pagination-link">16</a>
+            
+        
+            
+            <span class="pagination-link active">17</span>
+            
+        
+            
+            <a href="/page/18/" class="pagination-link">18</a>
+            
+        
+            
+            <a href="/page/19/" class="pagination-link">19</a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+        
+        
+        <a href="/page/18/" class="pagination-link">下一页</a>
+        
+        
+        <div class="pagination-jump">
+            <span>跳转到:</span>
+            <input type="number" id="page-input" class="pagination-input" min="1" max="24" value="17">
+            <span>页</span>
+        </div>
+    </div>
+    
+    
+    
+</div>
+
+<style>
+.posts-list {
+    margin-top: 2rem;
+}
+
+.post-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    margin-bottom: 1.5rem;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.post-title a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.post-title a:hover {
+    color: var(--primary-color);
+}
+
+.post-date {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.post-excerpt {
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.category-tag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.category-tag:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.post-keywords {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.keyword-tag {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+@media (max-width: 768px) {
+    .post-card {
+        padding: 1.5rem;
+    }
+    
+    .post-title {
+        font-size: 1.25rem;
+    }
+    
+    .post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+
+  </main>
+  <footer>
+    <p>Copyright 2026. All rights reserved.</p>
+
+  </footer>
+</body>
+</html>

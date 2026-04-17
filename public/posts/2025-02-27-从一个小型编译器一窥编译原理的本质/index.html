@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>从一个小型编译器一窥编译原理的本质 | William A</title>
+    <meta name="description" content="Love sports, love programming, love life.">
+    <meta name="keywords" content="William A, lwlwilliam">
+    
+    
+    
+    <link rel="stylesheet" href="/css/main.min.61311e98fda6ed7278ce2083dee74424508439207cee18072f54cec45e3ca75a.css">
+    
+    
+    
+    <script defer src="/js/main.min.4b385b5d7b348b137c609442c0fea7055f92fa2ca72a8ffecb9cddfa95655e36.js"></script>
+    
+    
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    
+    
+    
+    
+</head>
+<body>
+    
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="site-title">William A</a>
+                <nav class="nav-menu">
+                    
+                    <a href="/" class="nav-link">cd ~</a>
+                    
+                    <a href="/categories/" class="nav-link">分类</a>
+                    
+                    <a href="/archives/" class="nav-link">归档</a>
+                    
+                    <a href="/books/" class="nav-link">书籍</a>
+                    
+                    <a href="/links/" class="nav-link">链接</a>
+                    
+                    <a href="/tools/" class="nav-link">工具</a>
+                    
+                    <a href="/todo/" class="nav-link">待办</a>
+                    
+                    <a href="/about/" class="nav-link">关于</a>
+                    
+                    <div class="search-container">
+                        <input type="text" id="search-input" class="search-input" placeholder="搜索...">
+                        <div id="search-results" class="search-results"></div>
+                    </div>
+                    <button id="theme-toggle" class="theme-toggle">
+                        <span id="theme-icon">☀️</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+
+    
+    <main class="container">
+        
+  <h1>从一个小型编译器一窥编译原理的本质</h1>
+
+  
+  
+  <time datetime="2025-02-27T00:00:00&#43;00:00">February 27, 2025</time>
+
+  <p>编译器可以粗略地分为几个简单的部分：词法分析器、语法分析器、代码生成器。其中语义分析器、代码优化器这些不影响本文示例功能。另外，本文的编译器生成的是字节码，因此还需要一个虚拟机来执行。</p>
+<h3 id="lexer-词法分析器">Lexer 词法分析器</h3>
+<p><code>Lexer</code>的功能是将代码串不同的符号进行标记分组，例如<code>(3 + 5) * 2</code>可以拆分为不同的<code>token</code>，分别是<code>(</code>、<code>3</code>、<code>+</code>、<code>5</code>、<code>)</code>、<code>*</code>、<code>2</code>，包含五个分类，有左括号、右括号、加号、乘号以及整数，其中的空白符号需要忽略。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Lexer</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $input;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $pos <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $currentChar;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__construct</span>($input)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">input</span> <span style="color:#f92672">=</span> $input;
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span> <span style="color:#f92672">=</span> $input[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">??</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">advance</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">pos</span><span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span> <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">input</span>[$this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">pos</span>] <span style="color:#f92672">??</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">skipWhitespace</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span> <span style="color:#f92672">!==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">ctype_space</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span>)) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">advance</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">integer</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $result <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span> <span style="color:#f92672">!==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">ctype_digit</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span>)) {
+</span></span><span style="display:flex;"><span>            $result <span style="color:#f92672">.=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span>;
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">advance</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">int</span>)$result;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">identifier</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $result <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span> <span style="color:#f92672">!==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> (<span style="color:#a6e22e">ctype_alnum</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span>) <span style="color:#f92672">||</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;_&#39;</span>)) {
+</span></span><span style="display:flex;"><span>            $result <span style="color:#f92672">.=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span>;
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">advance</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $result;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getNextToken</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span> <span style="color:#f92672">!==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 忽略空白符
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">ctype_space</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span>)) {
+</span></span><span style="display:flex;"><span>                $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">skipWhitespace</span>();
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 当前字符为整型时，扫描后续部分的整型字符
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">ctype_digit</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span>)) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;INTEGER&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">integer</span>()];
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 当前字符为字母时，扫描后续部分的字母或数字字符
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">ctype_alpha</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span>)) {
+</span></span><span style="display:flex;"><span>                $id <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">identifier</span>();
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// 如果扫描到的 token 为 print，则将其标记为关键词 print
+</span></span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">strtoupper</span>($id) <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;PRINT&#39;</span>) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;PRINT&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> $id];
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;ID&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> $id];
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 普通的符号
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">switch</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;=&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">advance</span>();
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;ASSIGN&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;=&#39;</span>];
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;+&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">advance</span>();
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;PLUS&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;+&#39;</span>];
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;-&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">advance</span>();
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;MINUS&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;-&#39;</span>];
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;*&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">advance</span>();
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;MUL&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;*&#39;</span>];
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;/&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">advance</span>();
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;DIV&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;/&#39;</span>];
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;;&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">advance</span>();
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;SEMI&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;;&#39;</span>];
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;(&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">advance</span>();
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;LPAREN&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;(&#39;</span>];
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;)&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">advance</span>();
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;RPAREN&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;)&#39;</span>];
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Exception</span>(<span style="color:#e6db74">&#34;Invalid character: &#34;</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentChar</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;EOF&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">null</span>];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="parser-语法分析器">Parser 语法分析器</h3>
+<p><code>Parser</code>遍历<code>token</code>，生成<code>AST</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Parser</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $lexer;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $currentToken;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__construct</span>($lexer)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">lexer</span> <span style="color:#f92672">=</span> $lexer;
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentToken</span> <span style="color:#f92672">=</span> $lexer<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getNextToken</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 用于消费一个指定类型的 token
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">eat</span>($tokenType)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentToken</span>[<span style="color:#e6db74">&#39;type&#39;</span>] <span style="color:#f92672">===</span> $tokenType) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentToken</span> <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">lexer</span><span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getNextToken</span>();
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Exception</span>(<span style="color:#e6db74">&#34;Syntax error: expected </span><span style="color:#e6db74">$tokenType</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 第一优先级的 token，分别是整型、标识符（这里是变量）、左括号（左括号会递归解释括号中的表达式）
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">factor</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $token <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentToken</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($token[<span style="color:#e6db74">&#39;type&#39;</span>] <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;INTEGER&#39;</span>) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">eat</span>(<span style="color:#e6db74">&#39;INTEGER&#39;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;NumberLiteral&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> $token[<span style="color:#e6db74">&#39;value&#39;</span>]];
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($token[<span style="color:#e6db74">&#39;type&#39;</span>] <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;ID&#39;</span>) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">eat</span>(<span style="color:#e6db74">&#39;ID&#39;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;Variable&#39;</span>, <span style="color:#e6db74">&#39;name&#39;</span> <span style="color:#f92672">=&gt;</span> $token[<span style="color:#e6db74">&#39;value&#39;</span>]];
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($token[<span style="color:#e6db74">&#39;type&#39;</span>] <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;LPAREN&#39;</span>) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">eat</span>(<span style="color:#e6db74">&#39;LPAREN&#39;</span>);
+</span></span><span style="display:flex;"><span>            $node <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">expr</span>();
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">eat</span>(<span style="color:#e6db74">&#39;RPAREN&#39;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> $node;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Exception</span>(<span style="color:#e6db74">&#34;Unexpected factor: &#34;</span> <span style="color:#f92672">.</span> $token[<span style="color:#e6db74">&#39;type&#39;</span>]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 第二优先级。乘除法，解释为一个二元表达式
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">term</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $node <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">factor</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#a6e22e">in_array</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentToken</span>[<span style="color:#e6db74">&#39;type&#39;</span>], [<span style="color:#e6db74">&#39;MUL&#39;</span>, <span style="color:#e6db74">&#39;DIV&#39;</span>])) {
+</span></span><span style="display:flex;"><span>            $token <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentToken</span>;
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">eat</span>($token[<span style="color:#e6db74">&#39;type&#39;</span>]);
+</span></span><span style="display:flex;"><span>            $node <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;BinaryOp&#39;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;left&#39;</span> <span style="color:#f92672">=&gt;</span> $node,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;op&#39;</span> <span style="color:#f92672">=&gt;</span> $token[<span style="color:#e6db74">&#39;value&#39;</span>],
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;right&#39;</span> <span style="color:#f92672">=&gt;</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">factor</span>()
+</span></span><span style="display:flex;"><span>            ];
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $node;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 第三优先级。加减法，解释为一个二元表达式
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">expr</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $node <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">term</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#a6e22e">in_array</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentToken</span>[<span style="color:#e6db74">&#39;type&#39;</span>], [<span style="color:#e6db74">&#39;PLUS&#39;</span>, <span style="color:#e6db74">&#39;MINUS&#39;</span>])) {
+</span></span><span style="display:flex;"><span>            $token <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentToken</span>;
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">eat</span>($token[<span style="color:#e6db74">&#39;type&#39;</span>]);
+</span></span><span style="display:flex;"><span>            $node <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;BinaryOp&#39;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;left&#39;</span> <span style="color:#f92672">=&gt;</span> $node,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;op&#39;</span> <span style="color:#f92672">=&gt;</span> $token[<span style="color:#e6db74">&#39;value&#39;</span>],
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;right&#39;</span> <span style="color:#f92672">=&gt;</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">term</span>()
+</span></span><span style="display:flex;"><span>            ];
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $node;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 目前只有两种语句啦：print 语句；赋值表达式
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">statement</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentToken</span>[<span style="color:#e6db74">&#39;type&#39;</span>] <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;PRINT&#39;</span>) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">eat</span>(<span style="color:#e6db74">&#39;PRINT&#39;</span>);
+</span></span><span style="display:flex;"><span>            $expr <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">expr</span>();
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">eat</span>(<span style="color:#e6db74">&#39;SEMI&#39;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;PrintStatement&#39;</span>, <span style="color:#e6db74">&#39;expr&#39;</span> <span style="color:#f92672">=&gt;</span> $expr];
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentToken</span>[<span style="color:#e6db74">&#39;type&#39;</span>] <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;ID&#39;</span>) {
+</span></span><span style="display:flex;"><span>            $varName <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentToken</span>[<span style="color:#e6db74">&#39;value&#39;</span>];
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">eat</span>(<span style="color:#e6db74">&#39;ID&#39;</span>);
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">eat</span>(<span style="color:#e6db74">&#39;ASSIGN&#39;</span>);
+</span></span><span style="display:flex;"><span>            $expr <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">expr</span>();
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">eat</span>(<span style="color:#e6db74">&#39;SEMI&#39;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;Assignment&#39;</span>, <span style="color:#e6db74">&#39;name&#39;</span> <span style="color:#f92672">=&gt;</span> $varName, <span style="color:#e6db74">&#39;expr&#39;</span> <span style="color:#f92672">=&gt;</span> $expr];
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Exception</span>(<span style="color:#e6db74">&#34;Invalid statement&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">parse</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $statements <span style="color:#f92672">=</span> [];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">currentToken</span>[<span style="color:#e6db74">&#39;type&#39;</span>] <span style="color:#f92672">!==</span> <span style="color:#e6db74">&#39;EOF&#39;</span>) {
+</span></span><span style="display:flex;"><span>            $statements[] <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">statement</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;type&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;Program&#39;</span>, <span style="color:#e6db74">&#39;body&#39;</span> <span style="color:#f92672">=&gt;</span> $statements];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="code-generator-代码生成器">Code Generator 代码生成器</h3>
+<p>递归遍历<code>AST</code>，生成字节码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CodeGenerator</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $ast;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $instructions <span style="color:#f92672">=</span> [];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $varIndex <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $varMap <span style="color:#f92672">=</span> [];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__construct</span>($ast)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">ast</span> <span style="color:#f92672">=</span> $ast;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">generateExpr</span>($node)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">switch</span> ($node[<span style="color:#e6db74">&#39;type&#39;</span>]) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;NumberLiteral&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">instructions</span>[] <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;op&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;PUSH&#39;</span>, <span style="color:#e6db74">&#39;value&#39;</span> <span style="color:#f92672">=&gt;</span> $node[<span style="color:#e6db74">&#39;value&#39;</span>]];
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;Variable&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">isset</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">varMap</span>[$node[<span style="color:#e6db74">&#39;name&#39;</span>]])) {
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">varMap</span>[$node[<span style="color:#e6db74">&#39;name&#39;</span>]] <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">varIndex</span><span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">instructions</span>[] <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;op&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;LOAD&#39;</span>, <span style="color:#e6db74">&#39;address&#39;</span> <span style="color:#f92672">=&gt;</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">varMap</span>[$node[<span style="color:#e6db74">&#39;name&#39;</span>]]];
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;BinaryOp&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">generateExpr</span>($node[<span style="color:#e6db74">&#39;left&#39;</span>]);
+</span></span><span style="display:flex;"><span>                $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">generateExpr</span>($node[<span style="color:#e6db74">&#39;right&#39;</span>]);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">switch</span> ($node[<span style="color:#e6db74">&#39;op&#39;</span>]) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;+&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">instructions</span>[] <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;op&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;ADD&#39;</span>];
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;-&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">instructions</span>[] <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;op&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;SUB&#39;</span>];
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;*&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">instructions</span>[] <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;op&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;MUL&#39;</span>];
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;/&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">instructions</span>[] <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;op&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;DIV&#39;</span>];
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">generate</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">foreach</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">ast</span>[<span style="color:#e6db74">&#39;body&#39;</span>] <span style="color:#66d9ef">as</span> $stmt) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">switch</span> ($stmt[<span style="color:#e6db74">&#39;type&#39;</span>]) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;PrintStatement&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">generateExpr</span>($stmt[<span style="color:#e6db74">&#39;expr&#39;</span>]);
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">instructions</span>[] <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;op&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;PRINT&#39;</span>];
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;Assignment&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">generateExpr</span>($stmt[<span style="color:#e6db74">&#39;expr&#39;</span>]);
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">isset</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">varMap</span>[$stmt[<span style="color:#e6db74">&#39;name&#39;</span>]])) {
+</span></span><span style="display:flex;"><span>                        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">varMap</span>[$stmt[<span style="color:#e6db74">&#39;name&#39;</span>]] <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">varIndex</span><span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">instructions</span>[] <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;op&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;STORE&#39;</span>, <span style="color:#e6db74">&#39;address&#39;</span> <span style="color:#f92672">=&gt;</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">varMap</span>[$stmt[<span style="color:#e6db74">&#39;name&#39;</span>]]];
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">instructions</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="vm-虚拟机">VM 虚拟机</h3>
+<p><code>VM</code>执行<code>Code Generator</code>一步生成的字节码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VM</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $code;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $stack <span style="color:#f92672">=</span> [];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $memory <span style="color:#f92672">=</span> [];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $pc <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__construct</span>($code)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">code</span> <span style="color:#f92672">=</span> $code;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">run</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">pc</span> <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">count</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">code</span>)) {
+</span></span><span style="display:flex;"><span>            $instr <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">code</span>[$this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">pc</span><span style="color:#f92672">++</span>];
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">switch</span> ($instr[<span style="color:#e6db74">&#39;op&#39;</span>]) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;PUSH&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>[] <span style="color:#f92672">=</span> $instr[<span style="color:#e6db74">&#39;value&#39;</span>];
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;LOAD&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>[] <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">memory</span>[$instr[<span style="color:#e6db74">&#39;address&#39;</span>]] <span style="color:#f92672">??</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;STORE&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $value <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_pop</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>);
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">memory</span>[$instr[<span style="color:#e6db74">&#39;address&#39;</span>]] <span style="color:#f92672">=</span> $value;
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;ADD&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $b <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_pop</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>);
+</span></span><span style="display:flex;"><span>                    $a <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_pop</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>);
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>[] <span style="color:#f92672">=</span> $a <span style="color:#f92672">+</span> $b;
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;SUB&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $b <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_pop</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>);
+</span></span><span style="display:flex;"><span>                    $a <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_pop</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>);
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>[] <span style="color:#f92672">=</span> $a <span style="color:#f92672">-</span> $b;
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;MUL&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $b <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_pop</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>);
+</span></span><span style="display:flex;"><span>                    $a <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_pop</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>);
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>[] <span style="color:#f92672">=</span> $a <span style="color:#f92672">*</span> $b;
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;DIV&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    $b <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_pop</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>);
+</span></span><span style="display:flex;"><span>                    $a <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_pop</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>);
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>[] <span style="color:#f92672">=</span> $a <span style="color:#f92672">/</span> $b;
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;PRINT&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">echo</span> <span style="color:#a6e22e">array_pop</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">stack</span>) <span style="color:#f92672">.</span> <span style="color:#a6e22e">PHP_EOL</span>;
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="测试代码">测试代码</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>$input <span style="color:#f92672">=</span> <span style="color:#e6db74">&lt;&lt;&lt;</span><span style="color:#e6db74">CODE</span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">print (3 + 5) * 2;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">a = 10 - 2;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">print a * 3;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">b = a * 5;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">print b;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">CODE</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 词法分析
+</span></span></span><span style="display:flex;"><span>    $lexer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Lexer</span>($input);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 语法分析生成AST
+</span></span></span><span style="display:flex;"><span>    $parser <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Parser</span>($lexer);
+</span></span><span style="display:flex;"><span>    $ast <span style="color:#f92672">=</span> $parser<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">parse</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 生成中间代码
+</span></span></span><span style="display:flex;"><span>    $generator <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">CodeGenerator</span>($ast);
+</span></span><span style="display:flex;"><span>    $code <span style="color:#f92672">=</span> $generator<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">generate</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 虚拟机执行
+</span></span></span><span style="display:flex;"><span>    $vm <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">VM</span>($code);
+</span></span><span style="display:flex;"><span>    $vm<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">run</span>();
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">Exception</span> $e) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;Error: &#34;</span> <span style="color:#f92672">.</span> $e<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getMessage</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+  
+  <div>
+    <div>Tags:</div>
+    <ul>
+        <li><a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a></li>
+    </ul>
+  </div>
+
+
+    </main>
+
+    
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 lwlwilliam. All rights reserved.</p>
+                <p>Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with custom theme.</p>
+                
+                <p><a href="https://github.com/lwlwilliam" target="_blank">GitHub</a></p>
+                
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

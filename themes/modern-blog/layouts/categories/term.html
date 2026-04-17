@@ -1,0 +1,48 @@
+{{ define "main" }}
+<div class="category">
+    <h1 class="page-title">分类: {{ .Title }}</h1>
+    <p class="page-subtitle">共 {{ len .Pages }} 篇文章</p>
+    
+    {{ if .Pages }}
+    <div class="card-grid">
+        {{ range .Pages }}
+        <article class="card article-card">
+            <a href="{{ .RelPermalink }}" class="article-link">
+                <h2 class="article-title">{{ .Title }}</h2>
+                <div class="article-meta">
+                    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006年1月2日" }}</time>
+                </div>
+                <div class="article-excerpt">
+                    {{ with .Description }}
+                        {{ . }}
+                    {{ else }}
+                        {{ .Summary | plainify | truncate 150 }}
+                    {{ end }}
+                </div>
+                {{ with .Params.keywords }}
+                <div class="article-tags">
+                    {{ range split . ";" }}
+                    <span class="tag">{{ . }}</span>
+                    {{ end }}
+                </div>
+                {{ end }}
+            </a>
+        </article>
+        {{ end }}
+    </div>
+    {{ else }}
+    <div class="empty-state">
+        <div class="empty-state-icon">📝</div>
+        <p>此分类下暂无文章</p>
+    </div>
+    {{ end }}
+</div>
+
+<style>
+.page-subtitle {
+    color: var(--secondary-color);
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+</style>
+{{ end }}

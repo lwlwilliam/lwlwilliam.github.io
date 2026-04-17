@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Tool</title>
+    <style>
+        /* 基础样式复位 */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 导航栏 */
+        nav {
+            border-bottom: 1px solid #f0f0f0;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        .nav-content {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.25rem; }
+        .logo-icon {
+            width: 32px; height: 32px; background: #2563eb; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem;
+        }
+
+        /* 主体布局 */
+        main {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+        }
+
+        /* 文本区域 */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        .label { font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; }
+        .count { font-size: 0.75rem; color: #9ca3af; }
+
+        textarea {
+            width: 100%;
+            height: 320px;
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+            background-color: #f9fafb;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: none;
+            transition: all 0.2s;
+            outline: none;
+        }
+        textarea:focus {
+            background-color: #fff;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 按钮样式 */
+        button {
+            cursor: pointer;
+            border: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-primary {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background: #2563eb;
+            color: white;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+        }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-dark { background: #111827; }
+        .btn-dark:hover { background: #000; }
+
+        .btn-text {
+            background: none;
+            color: #2563eb;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .btn-text:hover { color: #1d4ed8; text-decoration: underline; }
+
+        .btn-clear { color: #ef4444; font-size: 0.875rem; }
+        .btn-clear:hover { color: #dc2626; }
+
+        /* Toast 提示 */
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(1rem);
+            background: #111827;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            opacity: 0;
+            transition: all 0.3s;
+            pointer-events: none;
+            z-index: 100;
+        }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            main { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-content">
+        <div class="logo">
+            <div class="logo-icon">&lt;/&gt;</div>
+            Base64 Tool
+        </div>
+        <button onclick="clearAll()" class="btn-clear">清空全部</button>
+    </div>
+</nav>
+
+<main>
+    <div class="container">
+        <div class="grid">
+            <div>
+                <div class="section-header">
+                    <span class="label">原始内容</span>
+                    <span class="count" id="rawCount">0 字符</span>
+                </div>
+                <textarea id="inputText" placeholder="输入需要编码的文字..."></textarea>
+                <button onclick="process('encode')" class="btn-primary">
+                    编码为 Base64 ➔
+                </button>
+            </div>
+
+            <div>
+                <div class="section-header">
+                    <span class="label">Base64 结果</span>
+                    <div style="display: flex; gap: 15px;">
+                        <button onclick="copyToClipboard()" class="btn-text" id="copyBtn">
+                            📋 复制全部
+                        </button>
+                        <span class="count" id="baseCount">0 字符</span>
+                    </div>
+                </div>
+                <textarea id="outputText" placeholder="输入 Base64 进行解码..."></textarea>
+                <button onclick="process('decode')" class="btn-primary btn-dark">
+                    ⬅ 解码为文字
+                </button>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 2rem; color: #9ca3af; font-size: 0.7rem;">
+            本地原生处理 · 隐私安全 · 无第三方追踪
+        </p>
+    </div>
+</main>
+
+<div id="toast">提示信息</div>
+
+<script>
+    const inputEl = document.getElementById('inputText');
+    const outputEl = document.getElementById('outputText');
+    const toastEl = document.getElementById('toast');
+
+    function updateCount() {
+        document.getElementById('rawCount').innerText = `${inputEl.value.length} 字符`;
+        document.getElementById('baseCount').innerText = `${outputEl.value.length} 字符`;
+    }
+    inputEl.addEventListener('input', updateCount);
+    outputEl.addEventListener('input', updateCount);
+
+    function process(type) {
+        try {
+            if (type === 'encode') {
+                if (!inputEl.value) return;
+                // 原生 UTF-8 兼容方案
+                outputEl.value = btoa(unescape(encodeURIComponent(inputEl.value)));
+                showToast('编码成功');
+            } else {
+                if (!outputEl.value) return;
+                inputEl.value = decodeURIComponent(escape(atob(outputEl.value.trim())));
+                showToast('解码成功');
+            }
+            updateCount();
+        } catch (e) {
+            showToast('解析失败，请检查格式', true);
+        }
+    }
+
+    function copyToClipboard() {
+        const text = outputEl.value;
+        if (!text) {
+            showToast('没有可复制的内容', true);
+            return;
+        }
+
+        // 兜底复制逻辑
+        const handleSuccess = () => {
+            const btn = document.getElementById('copyBtn');
+            const oldText = btn.innerText;
+            btn.innerText = '✅ 已复制';
+            showToast('已成功复制');
+            setTimeout(() => { btn.innerText = oldText; }, 2000);
+        };
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(handleSuccess).catch(() => fallbackCopy(text, handleSuccess));
+        } else {
+            fallbackCopy(text, handleSuccess);
+        }
+    }
+
+    function fallbackCopy(text, callback) {
+        outputEl.select();
+        try {
+            if (document.execCommand('copy')) callback();
+        } catch (err) {
+            showToast('复制失败，请手动选取', true);
+        }
+    }
+
+    function clearAll() {
+        inputEl.value = '';
+        outputEl.value = '';
+        updateCount();
+        showToast('已清空内容');
+    }
+
+    function showToast(msg, isError = false) {
+        toastEl.innerText = msg;
+        toastEl.style.backgroundColor = isError ? '#ef4444' : '#111827';
+        toastEl.classList.add('show');
+        setTimeout(() => { toastEl.classList.remove('show'); }, 2000);
+    }
+</script>
+</body>
+</html>

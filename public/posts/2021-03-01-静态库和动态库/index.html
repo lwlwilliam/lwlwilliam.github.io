@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>静态库和动态库 | William A</title>
+    <meta name="description" content="Love sports, love programming, love life.">
+    <meta name="keywords" content="William A, lwlwilliam">
+    
+    
+    
+    <link rel="stylesheet" href="/css/main.min.61311e98fda6ed7278ce2083dee74424508439207cee18072f54cec45e3ca75a.css">
+    
+    
+    
+    <script defer src="/js/main.min.4b385b5d7b348b137c609442c0fea7055f92fa2ca72a8ffecb9cddfa95655e36.js"></script>
+    
+    
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    
+    
+    
+    
+</head>
+<body>
+    
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="site-title">William A</a>
+                <nav class="nav-menu">
+                    
+                    <a href="/" class="nav-link">cd ~</a>
+                    
+                    <a href="/categories/" class="nav-link">分类</a>
+                    
+                    <a href="/archives/" class="nav-link">归档</a>
+                    
+                    <a href="/books/" class="nav-link">书籍</a>
+                    
+                    <a href="/links/" class="nav-link">链接</a>
+                    
+                    <a href="/tools/" class="nav-link">工具</a>
+                    
+                    <a href="/todo/" class="nav-link">待办</a>
+                    
+                    <a href="/about/" class="nav-link">关于</a>
+                    
+                    <div class="search-container">
+                        <input type="text" id="search-input" class="search-input" placeholder="搜索...">
+                        <div id="search-results" class="search-results"></div>
+                    </div>
+                    <button id="theme-toggle" class="theme-toggle">
+                        <span id="theme-icon">☀️</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+
+    
+    <main class="container">
+        
+  <h1>静态库和动态库</h1>
+
+  
+  
+  <time datetime="2021-03-01T00:00:00&#43;00:00">March 1, 2021</time>
+
+  <p>顾名思义，静态库可以理解为该库相对于可执行目标文件是静态的，而动态库相对于可执行文件是动态的。静态库跟可执行文件捆绑在一起，不需要依赖操作系统中其它库；动态库则一般固定在操作系统的特定位置，如<code>/usr/lib</code>目录中，如果可执行文件依赖于动态库，一旦该库被移动或损坏，则无法运行。有兴趣可以进行以下测试，我使用的是 docker 中的容器，可千万别用自己的系统试。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@b64869b93f5d:~# mv /usr/lib/ /usr/lib.bak
+</span></span><span style="display:flex;"><span>root@b64869b93f5d:~# mv /usr/lib.bak/ /usr/lib
+</span></span><span style="display:flex;"><span>mv: error <span style="color:#66d9ef">while</span> loading shared libraries: libacl.so.1: cannot open shared object file: No such file or directory
+</span></span></code></pre></div><p>第一次<code>mv</code>时一切正常，第二次<code>mv</code>时却提示<code>mv: error while loading shared libraries: libacl.so.1: cannot open shared object file: No such file or directory</code>。就是在加载共享库时发生错误，找不到<code>libacl.so.1</code>这个库。之所以出现这种错误，就是<code>mv</code>命令使用了动态库<code>libacl.so.1</code>，而这个动态库就在<code>/usr/lib</code>中，由于修改了该目录名，就不能通过目录链接到该库。</p>
+<p>通过以上测试，可以对动态库的原理进行简单的推断了：使用了动态库的可执行程序，并不需要将该库编译到可执行文件中，只需要知道这些库在磁盘的具体路径即可，在运行时，再通过路径来加载动态库。</p>
+<p>静态库跟动态库相反，会直接将库链接到可执行文件中，省略了运行时寻找库这一步骤。</p>
+<p>接下来通过两段 cgo 代码看看两者具体的区别。</p>
+<h3 id="number-库">number 库</h3>
+<p>创建<code>number/number.h</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// number/number.h
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">number_add_mod</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b, <span style="color:#66d9ef">int</span> mod);
+</span></span></code></pre></div><p>创建<code>number/number.c</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// number/number.c
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;number.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">number_add_mod</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b, <span style="color:#66d9ef">int</span> mod) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> (a<span style="color:#f92672">+</span>b)<span style="color:#f92672">%</span>mod;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="静态库">静态库</h3>
+<p>生成<code>libnumber.a</code>静态库，<code>.a</code>指<code>archived</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ cd number
+</span></span><span style="display:flex;"><span>$ gcc -c -o number.o number.c
+</span></span><span style="display:flex;"><span>$ ar rcs libnumber.a number.o
+</span></span></code></pre></div><p>以下的<code>#cgo</code>命令，分别是编译和链接参数。<code>CFLAGS</code>通过<code>-I ./number</code>将<code>number</code>库对应的头文件所在目录加入头文件检索路径。<code>LDFLAGS</code>通过<code>-L ${SRCDIR}/number</code>将编译后的<code>number</code>静态库所在目录加入链接库检索路径，<code>-lnumber</code>表示链接<code>libnumber.a</code>静态库。注意，在链接部分的检索路径不能使用相对路径（C/C++代码的链接程序的限制）。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// static.go</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// #cgo CFLAGS: -I./number</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// #cgo LDFLAGS: -L${SRCDIR}/number -lnumber</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// #include &#34;number.h&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">number_add_mod</span>(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">12</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ go build static.go
+</span></span><span style="display:flex;"><span>$ ./static
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3</span>
+</span></span></code></pre></div><h3 id="动态库">动态库</h3>
+<p>生成<code>libnumber.so</code>动态库，<code>.so</code>是指<code>shared object</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ cd number
+</span></span><span style="display:flex;"><span>$ gcc -shared -o libnum.so number.c
+</span></span></code></pre></div><p>动态库的 Go 语言代码跟静态库的基本一致，为了区分，将动态库改名为<code>num</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// dynamic.go</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// #cgo CFLAGS: -I./number</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// #cgo LDFLAGS: -L${SRCDIR}/number -lnum</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// #include &#34;number.h&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">number_add_mod</span>(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">12</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>以上 cgo 配置用于动态库时无法生效，只好使用系统的动态库配置来加载。</strong></p>
+<p>运行时链接会通过系统默认的动态库配置来加载库。在 Linux 下，动态库链接路径可以通过<code>/etc/ld.so.conf</code>以及<code>/etc/ld.so.conf.d</code>指定。例如，现在我们的代码在<code>/root</code>目录中，则可以如下配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ echo <span style="color:#e6db74">&#39;/root/number&#39;</span> &gt; /etc/ld.so.conf.d/root.conf
+</span></span><span style="display:flex;"><span>$ ldconfig
+</span></span></code></pre></div><p><code>ldconfig</code>使配置生效，生成缓存。</p>
+<p>现在可以编译代码了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ go build dynamic.go
+</span></span><span style="display:flex;"><span>$ ./dynamic
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3</span>
+</span></span></code></pre></div><p>当然，除了修改配置之外，还可以直接将动态库移动到<code>/usr/lib</code>或者<code>/usr/lib64</code>等默认加载路径中。</p>
+
+  
+  <div>
+    <div>Tags:</div>
+    <ul>
+        <li><a href="/tags/%E9%9D%99%E6%80%81%E5%BA%93%E5%8A%A8%E6%80%81%E5%BA%93/">静态库,动态库</a></li>
+    </ul>
+  </div>
+
+
+    </main>
+
+    
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 lwlwilliam. All rights reserved.</p>
+                <p>Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with custom theme.</p>
+                
+                <p><a href="https://github.com/lwlwilliam" target="_blank">GitHub</a></p>
+                
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>有趣的 screen | William A</title>
+    <meta name="description" content="Love sports, love programming, love life.">
+    <meta name="keywords" content="William A, lwlwilliam">
+    
+    
+    
+    <link rel="stylesheet" href="/css/main.min.61311e98fda6ed7278ce2083dee74424508439207cee18072f54cec45e3ca75a.css">
+    
+    
+    
+    <script defer src="/js/main.min.4b385b5d7b348b137c609442c0fea7055f92fa2ca72a8ffecb9cddfa95655e36.js"></script>
+    
+    
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    
+    
+    
+    
+</head>
+<body>
+    
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="site-title">William A</a>
+                <nav class="nav-menu">
+                    
+                    <a href="/" class="nav-link">cd ~</a>
+                    
+                    <a href="/categories/" class="nav-link">分类</a>
+                    
+                    <a href="/archives/" class="nav-link">归档</a>
+                    
+                    <a href="/books/" class="nav-link">书籍</a>
+                    
+                    <a href="/links/" class="nav-link">链接</a>
+                    
+                    <a href="/tools/" class="nav-link">工具</a>
+                    
+                    <a href="/todo/" class="nav-link">待办</a>
+                    
+                    <a href="/about/" class="nav-link">关于</a>
+                    
+                    <div class="search-container">
+                        <input type="text" id="search-input" class="search-input" placeholder="搜索...">
+                        <div id="search-results" class="search-results"></div>
+                    </div>
+                    <button id="theme-toggle" class="theme-toggle">
+                        <span id="theme-icon">☀️</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+
+    
+    <main class="container">
+        
+  <h1>有趣的 screen</h1>
+
+  
+  
+  <time datetime="2020-04-28T00:00:00&#43;00:00">April 28, 2020</time>
+
+  <p>这几天学习发现了一个很好玩的命令——screen。screen 是一个可以在多个进程之间复用一个物理终端的全屏窗口管理器，只要 screen 本身没有终止，其内部运行的会话都可以恢复，即使是网络中断。</p>
+<p>有时候我们需要远程执行一些任务，如备份，开启的远程终端窗口在任务执行完毕之前不能关掉该窗口，否则任务进程会被杀掉。这时可以通过 screen 命令来同时连接多个本地或远程会话。并在其间自由切换。</p>
+<h3 id="会话恢复">会话恢复</h3>
+<h5 id="两个远程终端窗口连接到同一服务器">两个远程终端窗口连接到同一服务器</h5>
+<blockquote>
+<p>窗口一</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ssh pi@raspberrypi.id
+</span></span></code></pre></div><blockquote>
+<p>窗口二</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ssh pi@raspberrypi.id
+</span></span></code></pre></div><h5 id="窗口一执行耗时任务时中断">窗口一执行耗时任务时中断</h5>
+<p>窗口一执行以下脚本，每隔一秒输出一个递增的数字。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ i<span style="color:#f92672">=</span>0; <span style="color:#66d9ef">while</span> <span style="color:#f92672">[</span> $i -lt <span style="color:#ae81ff">100</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">do</span> sleep 1; echo $i; i<span style="color:#f92672">=</span><span style="color:#e6db74">`</span>expr $i + 1<span style="color:#e6db74">`</span>; <span style="color:#66d9ef">done</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>这时候，在窗口二查看进程，应该可以看到 sleep 进程。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ps aux | grep sleep
+</span></span><span style="display:flex;"><span>pi        <span style="color:#ae81ff">3924</span>  0.0  0.0   <span style="color:#ae81ff">6456</span>   <span style="color:#ae81ff">376</span> pts/0    S+   22:46   0:00 sleep <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>pi        <span style="color:#ae81ff">3926</span>  0.0  0.0   <span style="color:#ae81ff">7348</span>   <span style="color:#ae81ff">584</span> pts/1    S+   22:46   0:00 grep --color<span style="color:#f92672">=</span>auto sleep
+</span></span></code></pre></div><p>接着关闭窗口一，再次在窗口二查看进程，发现 sleep 进程已经没有了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ps aux | grep sleep
+</span></span><span style="display:flex;"><span>pi        <span style="color:#ae81ff">3955</span>  0.0  0.0   <span style="color:#ae81ff">7348</span>   <span style="color:#ae81ff">580</span> pts/1    S+   22:50   0:00 grep --color<span style="color:#f92672">=</span>auto sleep
+</span></span></code></pre></div><h5 id="打开新窗口窗口三开启-screen-会话后再次执行耗时任务时中断">打开新窗口（窗口三）开启 screen 会话后，再次执行耗时任务时中断</h5>
+<p><code>screen -S helloworld</code>命令创建了一个 socket 名为 helloworld 的会话。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ssh pi@raspberrypi.id
+</span></span><span style="display:flex;"><span>$ screen -S helloworld
+</span></span><span style="display:flex;"><span>$ i<span style="color:#f92672">=</span>0; <span style="color:#66d9ef">while</span> <span style="color:#f92672">[</span> $i -lt <span style="color:#ae81ff">100</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">do</span> sleep 1; echo $i; i<span style="color:#f92672">=</span><span style="color:#e6db74">`</span>expr $i + 1<span style="color:#e6db74">`</span>; <span style="color:#66d9ef">done</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>这时候，在窗品二查看进程，同样可以看到 sleep 进程。</p>
+<p>关闭窗口三。</p>
+<h5 id="窗口二连接窗口三创建的-screen-会话">窗口二连接窗口三创建的 screen 会话</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ screen -x helloworld
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">6</span>
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>可以看到窗口三之前的任务在继续执行。</p>
+<h3 id="远程协作会话共享">远程协作（会话共享）</h3>
+<p>通过以上的操作，可以发现窗口二可以看到窗口三的完整任务，也就是会话在窗口二和窗口三之间实现了共享，窗口二可以帮窗口三完成后续工作。当然，多个用户之间可以通过 screen 实现简单的聊天需求。</p>
+<h3 id="screen-原理">screen 原理</h3>
+<p>我没有看过 screen 的源码啦，不过可以猜想一下其实现原理。</p>
+<ol>
+<li><code>screen -S name</code>命令创建了 screen unix socket 服务端，同时也生成了当前终端的 screen 客户端；</li>
+<li>连接服务端后，客户端执行的任务通通由 screen 服务端的子进程执行，因此，终端窗口关闭之后不会影响到该任务；</li>
+<li>同时，服务端将该 socket 接收到的输入输出同时定向到与该连接关联的类似于队列的结构中；</li>
+<li>当有新的客户端 attach 到该 socket 时，将该 socket 相关的任务信息从队列中取出，写入到客户端连接中，以实现多客户端间实现信息共享；</li>
+<li>当 socket 中的任务执行完毕，且超过指定时间仍然没有连接状态的客户端，则会关闭该 socket 连接；</li>
+</ol>
+
+  
+  <div>
+    <div>Tags:</div>
+    <ul>
+        <li><a href="/tags/screen-linux-%E8%BF%9C%E7%A8%8B-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">Screen, Linux, 远程, 计算机网络</a></li>
+    </ul>
+  </div>
+
+
+    </main>
+
+    
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 lwlwilliam. All rights reserved.</p>
+                <p>Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with custom theme.</p>
+                
+                <p><a href="https://github.com/lwlwilliam" target="_blank">GitHub</a></p>
+                
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

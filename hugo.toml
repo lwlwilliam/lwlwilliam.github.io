@@ -1,0 +1,109 @@
+baseURL = 'https://pages.lwlinux.cn/'
+languageCode = 'zh-cn'
+title = 'William A'
+theme = 'modern-blog'
+
+[params]
+  encoding = 'utf-8'
+  keywords = 'William A, lwlwilliam'
+  description = 'Love sports, love programming, love life.'
+  about = 'Just for fun.'
+  
+  author = 'lwlwilliam'
+  location = 'Guangzhou, China'
+  email = 'lwlwilliam@foxmail.com'
+  github_url = 'https://github.com/lwlwilliam'
+  avatar = 'https://avatars1.githubusercontent.com/u/25366940?s=150&v=4'
+  
+  paginate = 5
+  
+  [[params.navs]]
+    href = '/'
+    label = 'cd ~'
+  
+  [[params.navs]]
+    href = '/categories/'
+    label = '分类'
+
+  [[params.navs]]
+    href = '/archives/'
+    label = '归档'
+
+  [[params.navs]]
+    href = '/books/'
+    label = '书籍'
+
+  [[params.navs]]
+    href = '/links/'
+    label = '链接'
+
+  [[params.navs]]
+    href = '/tools/'
+    label = '工具'
+
+  [[params.navs]]
+    href = '/todo/'
+    label = '待办'
+
+  [[params.navs]]
+    href = '/about/'
+    label = '关于'
+
+[taxonomies]
+  category = 'categories'
+  tag = 'tags'
+
+[outputs]
+  home = ['HTML', 'RSS']
+  page = ['HTML']
+  section = ['HTML']
+  taxonomy = ['HTML']
+  term = ['HTML']
+
+[outputFormats]
+  [outputFormats.SearchJSON]
+    mediaType = 'application/json'
+    baseName = 'search'
+    isPlainText = true
+    notAlternative = true
+
+[services]
+  [services.rss]
+    limit = 20
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = 'monokai'
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 6
+
+[imaging]
+  quality = 75
+  anchor = 'smart'
+  resampleFilter = 'lanczos'
+
+[security]
+  [security.exec]
+    allow = ['^dart-sass-embedded$', '^go$', '^npx$', '^postcss$', '^npm$', '^yarn$']
+  [security.funcs]
+    getenv = ['^HUGO_']
+
+[build]
+  writeStats = true
+  noChmod = true
+  noTimes = true
+
+[build.cachebusters]
+  [build.cachebusters.styles]
+    source = 'assets/.*\.(css|scss|sass|less)$'
+    target = 'css'
+  [build.cachebusters.scripts]
+    source = 'assets/.*\.(js|ts|jsx|tsx)$'
+    target = 'js'
+  [build.cachebusters.images]
+    source = 'assets/.*\.(png|jpg|jpeg|gif|svg|webp|avif)$'
+    target = 'img'
