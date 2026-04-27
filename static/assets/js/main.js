@@ -52,33 +52,58 @@ document.getElementById('searchOverlay').addEventListener('click', function(e) {
 });
 
 var searchData = null;
+var searchLoading = false;
+var searchCallbacks = [];
+var searchDebounceTimer = null;
 var searchInput = document.getElementById('searchInput');
 
 if (searchInput) {
   searchInput.addEventListener('input', function() {
-    var query = this.value.trim().toLowerCase();
+    var self = this;
+    var query = self.value.trim().toLowerCase();
+    clearTimeout(searchDebounceTimer);
     if (!query) {
       document.getElementById('searchResults').innerHTML = '<div class="search-hint">Enter keywords to search...</div>';
       return;
     }
-    if (!searchData) {
-      loadSearchData(function() { doSearch(query); });
-    } else {
-      doSearch(query);
-    }
+    searchDebounceTimer = setTimeout(function() {
+      if (!searchData) {
+        if (searchLoading) {
+          searchCallbacks.push(function() { doSearch(query); });
+        } else {
+          loadSearchData(function() { doSearch(query); });
+        }
+      } else {
+        doSearch(query);
+      }
+    }, 200);
   });
 }
 
 function loadSearchData(callback) {
+  searchLoading = true;
   var xhr = new XMLHttpRequest();
   xhr.open('GET', '/search.json', true);
   xhr.onload = function() {
     if (xhr.status === 200) {
       try { searchData = JSON.parse(xhr.responseText); } catch(e) { searchData = []; }
-      callback();
+    } else {
+      searchData = [];
     }
+    var cbs = searchCallbacks;
+    searchCallbacks = [];
+    searchLoading = false;
+    if (callback) callback();
+    cbs.forEach(function(cb) { cb(); });
   };
-  xhr.onerror = function() { searchData = []; callback(); };
+  xhr.onerror = function() {
+    searchData = [];
+    var cbs = searchCallbacks;
+    searchCallbacks = [];
+    searchLoading = false;
+    if (callback) callback();
+    cbs.forEach(function(cb) { cb(); });
+  };
   xhr.send();
 }
 
