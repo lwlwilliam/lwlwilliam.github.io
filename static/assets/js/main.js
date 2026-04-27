@@ -69,6 +69,9 @@ if (searchInput) {
       document.getElementById('searchResults').innerHTML = '<div class="search-hint">Enter keywords to search...</div>';
       return;
     }
+    if (!searchData) {
+      document.getElementById('searchResults').innerHTML = '<div class="search-hint">Loading search index...</div>';
+    }
     searchDebounceTimer = setTimeout(function() {
       if (!searchData) {
         if (searchLoading) {
