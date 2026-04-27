@@ -1,7 +1,7 @@
 {{ define "main" }}
 <div class="books-page">
 
-  {{ $books := site.Data.books }}
+  {{ $books := hugo.Data.books }}
   {{ $years := slice }}
   {{ range $year, $_ := $books }}
     {{ $years = $years | append $year }}
@@ -32,7 +32,7 @@
     {{ end }}
   </div>
 
-  {{ with site.Data.other_books }}
+  {{ with hugo.Data.other_books }}
   {{ $obooks := . }}
   {{ $oyears := slice }}
   {{ range $year, $_ := $obooks }}
