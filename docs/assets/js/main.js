@@ -30,6 +30,9 @@ function toggleSearch() {
     document.getElementById('searchResults').innerHTML = '<div class="search-hint">Enter keywords to search...</div>';
   } else {
     ov.classList.add('active');
+    if (!searchData && !searchLoading) {
+      loadSearchData();
+    }
     input.focus();
   }
 }
