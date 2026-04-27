@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>对 Coroutine 的不成熟理解 - William A</title>
@@ -10,7 +10,7 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777307869">
   
 </head>
 <body>
@@ -40,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -82,9 +83,10 @@
     
   </header>
   
-  <details class="post-toc">
-    <summary class="post-toc-title">目录</summary>
-    <div class="post-toc-content"><nav id="TableOfContents">
+  
+  <nav class="post-toc" id="post-toc">
+    <span class="toc-title">目录</span>
+    <nav id="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -93,8 +95,8 @@
       </ul>
     </li>
   </ul>
-</nav></div>
-  </details>
+</nav>
+  </nav>
   
   <div class="post-content">
     <p>在需要恢复控制权的位置设置一系列 label：一个位于开始位置，另一个在每个 return 语句后面。我们还设置了一个 state 变量，用于在多次函数调用时告诉我们下次应该在哪里恢复控制权。在每次返回前，都需要更新 state 变量，使其指向正确的 label。而在调用后，我们都会通过 switch 对 state 进行判断，以便找到下一次要跳转的 label。</p>
@@ -292,7 +294,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777302623"></script>
+  <script src="/assets/js/main.js?v=1777307869"></script>
   
 </body>
 </html>

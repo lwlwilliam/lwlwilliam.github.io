@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>m3u8 在线视频播放 - William A</title>
@@ -10,7 +10,7 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777307869">
   
 </head>
 <body>
@@ -40,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -90,9 +91,10 @@
     
   </header>
   
-  <details class="post-toc">
-    <summary class="post-toc-title">目录</summary>
-    <div class="post-toc-content"><nav id="TableOfContents">
+  
+  <nav class="post-toc" id="post-toc">
+    <span class="toc-title">目录</span>
+    <nav id="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -102,8 +104,8 @@
       </ul>
     </li>
   </ul>
-</nav></div>
-  </details>
+</nav>
+  </nav>
   
   <div class="post-content">
     <p>自己有个需求，有时候希望能直接下载网站上的视频。以前另存一下就行，但后来发现很多视频网站都不能用这种方法下载了。仔细观察了一下，发现它们都有一个共同点，就是将视频分成大量切片，这种片段的格式也不是常见的， 其中在一种的 URL 都以<code>.ts</code>结尾，并且有个<code>m3u8</code>的链接跟这些<code>.ts</code>的 URL 有一定关系。于是就这样我就又开始愉快地玩了起来。</p>
@@ -218,7 +220,7 @@ nxb-0006.ts
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777302623"></script>
+  <script src="/assets/js/main.js?v=1777307869"></script>
   
 </body>
 </html>

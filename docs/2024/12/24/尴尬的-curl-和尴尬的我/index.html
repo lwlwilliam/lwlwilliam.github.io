@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>尴尬的 curl 和尴尬的我 - William A</title>
@@ -10,7 +10,7 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777307869">
   
 </head>
 <body>
@@ -40,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -84,10 +85,6 @@
     
   </header>
   
-  <details class="post-toc">
-    <summary class="post-toc-title">目录</summary>
-    <div class="post-toc-content"><nav id="TableOfContents"></nav></div>
-  </details>
   
   <div class="post-content">
     <p>事情的起因是这样的，对接某个接口，一个<code>POST</code>请求的请求体比较大（注：跟系统和<code>curl</code>的版本有关，有的并不会发送<code>Except</code>请求头），<code>curl</code>默认给我发送了<code>Expect</code>请求头，事前我并不知道，但一直没调通，对方就提出要看看我的<code>HTTP</code>报文。</p>
@@ -211,7 +208,7 @@ Expect: 100-continue
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777302623"></script>
+  <script src="/assets/js/main.js?v=1777307869"></script>
   
 </body>
 </html>

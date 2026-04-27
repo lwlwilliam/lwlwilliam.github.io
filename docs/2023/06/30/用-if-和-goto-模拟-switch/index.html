@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>用 if 和 goto 模拟 switch - William A</title>
@@ -10,7 +10,7 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777307869">
   
 </head>
 <body>
@@ -40,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -94,10 +95,6 @@
     
   </header>
   
-  <details class="post-toc">
-    <summary class="post-toc-title">目录</summary>
-    <div class="post-toc-content"><nav id="TableOfContents"></nav></div>
-  </details>
   
   <div class="post-content">
     <p>很多编程语言都会有<code>switch</code>语句。<code>switch</code>作为选择语句的一种，也是可以用<code>if-else</code>语句来表示。在实现了<code>switch</code>的大部分编程语言中，通常跟<code>break</code>跳转语句配合来进行控制，其一般语法如下：</p>
@@ -245,7 +242,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777302623"></script>
+  <script src="/assets/js/main.js?v=1777307869"></script>
   
 </body>
 </html>

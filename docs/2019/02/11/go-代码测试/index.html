@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Go 代码测试 - William A</title>
@@ -10,7 +10,7 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777307869">
   
 </head>
 <body>
@@ -40,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -84,10 +85,6 @@
     
   </header>
   
-  <details class="post-toc">
-    <summary class="post-toc-title">目录</summary>
-    <div class="post-toc-content"><nav id="TableOfContents"></nav></div>
-  </details>
   
   <div class="post-content">
     <p>Go 有一个由<code>go test</code>命令和<code>testing</code>包组成的轻量级测试框架。<code>testing</code>包为 Go 包提供自动化测试支持，并和<code>go test</code>命令配合使用，自动运行符合以下形式的任意函数：</p>
@@ -167,7 +164,7 @@ ok      github.com/lwlwilliam/stringutil        0.199s
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777302623"></script>
+  <script src="/assets/js/main.js?v=1777307869"></script>
   
 </body>
 </html>

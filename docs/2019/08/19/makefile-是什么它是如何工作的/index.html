@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Makefile 是什么？它是如何工作的？ - William A</title>
@@ -10,7 +10,7 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777307869">
   
 </head>
 <body>
@@ -40,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -86,9 +87,10 @@
     
   </header>
   
-  <details class="post-toc">
-    <summary class="post-toc-title">目录</summary>
-    <div class="post-toc-content"><nav id="TableOfContents">
+  
+  <nav class="post-toc" id="post-toc">
+    <span class="toc-title">目录</span>
+    <nav id="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -102,8 +104,8 @@
       </ul>
     </li>
   </ul>
-</nav></div>
-  </details>
+</nav>
+  </nav>
   
   <div class="post-content">
     <p>如果想要在某些文件更新时执行或更新任务，<code>make</code>工具会令这个过程变得很方便。<code>make</code>工具需要<code>Makefile</code>(或<code>makefile</code>)文件来定义要执行的一系列任务。你可能已经使用过<code>make</code>将源码编译为程序。大部分开源项目都使用<code>make</code>来编译为二进制的可执行程序，编译后的程序可以使用<code>make install</code>进行安装。</p>
@@ -352,7 +354,7 @@ clean:
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777302623"></script>
+  <script src="/assets/js/main.js?v=1777307869"></script>
   
 </body>
 </html>

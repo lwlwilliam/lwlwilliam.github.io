@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>似乎挺多人不知道 PHP 可以通过 URL 甚至请求体来传递 SESSION_ID - William A</title>
@@ -10,7 +10,7 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777307869">
   
 </head>
 <body>
@@ -40,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -90,9 +91,10 @@
     
   </header>
   
-  <details class="post-toc">
-    <summary class="post-toc-title">目录</summary>
-    <div class="post-toc-content"><nav id="TableOfContents">
+  
+  <nav class="post-toc" id="post-toc">
+    <span class="toc-title">目录</span>
+    <nav id="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -101,8 +103,8 @@
       </ul>
     </li>
   </ul>
-</nav></div>
-  </details>
+</nav>
+  </nav>
   
   <div class="post-content">
     <p>由于<code>HTTP</code>是无状态的，服务端不知道前一个访问者跟后一个访问者是否为同一人，于是会话机制出现了。<code>session</code>和<code>cookie</code>几乎总是同时出现的。<code>cookie</code>是由服务端创建、由客户端保存的小块数据，在用户再次访问服务时，会带上该服务端对应的<code>cookie</code>，服务端比对后就能辨别出用户身份。而在服务端跟<code>cookie</code>对应的数据就称为<code>session</code>。</p>
@@ -202,7 +204,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777302623"></script>
+  <script src="/assets/js/main.js?v=1777307869"></script>
   
 </body>
 </html>

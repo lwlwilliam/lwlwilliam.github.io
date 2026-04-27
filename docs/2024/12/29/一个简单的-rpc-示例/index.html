@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>一个简单的 RPC 示例 - William A</title>
@@ -10,7 +10,7 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777302624">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777307869">
   
 </head>
 <body>
@@ -40,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -84,9 +85,10 @@
     
   </header>
   
-  <details class="post-toc">
-    <summary class="post-toc-title">目录</summary>
-    <div class="post-toc-content"><nav id="TableOfContents">
+  
+  <nav class="post-toc" id="post-toc">
+    <span class="toc-title">目录</span>
+    <nav id="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -95,8 +97,8 @@
       </ul>
     </li>
   </ul>
-</nav></div>
-  </details>
+</nav>
+  </nav>
   
   <div class="post-content">
     <p>远程过程调用——<code>RPC(Remote Procedure Call)</code>，在<code>《UNIX 网络编程》</code>一书中是这样描述的：被调用过程和调用过程处于不同的进程中，一个进程调用同一台主机上另一个进程的某个过程（函数）。<code>RPC</code>通常允许一台主机上的某个客户调用另一台主机上的某个服务器过程，只要这两台主机以某种形式的网络连接着。</p>
@@ -294,7 +296,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777302624"></script>
+  <script src="/assets/js/main.js?v=1777307869"></script>
   
 </body>
 </html>

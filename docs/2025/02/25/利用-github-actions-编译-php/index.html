@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>利用 GitHub Actions 编译 PHP - William A</title>
@@ -10,7 +10,7 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777302624">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777307869">
   
 </head>
 <body>
@@ -40,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -82,10 +83,6 @@
     
   </header>
   
-  <details class="post-toc">
-    <summary class="post-toc-title">目录</summary>
-    <div class="post-toc-content"><nav id="TableOfContents"></nav></div>
-  </details>
   
   <div class="post-content">
     <p>使用<code>GitHub Actions</code>编译方便不使用<code>Docker</code>等工具还要定制<code>PHP</code>版本的用户，降低了部署成本，只需要下载编译后的压缩包即可使用（前提是部署的环境跟编译的环境保持一致，也就是运行与<code>yaml</code>文件的<code>dependence</code>相同的命令解决依赖问题）。</p>
@@ -230,7 +227,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777302624"></script>
+  <script src="/assets/js/main.js?v=1777307869"></script>
   
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>字节码缓存提升程序性能的原理浅谈 - William A</title>
@@ -10,7 +10,7 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777302624">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777307869">
   
 </head>
 <body>
@@ -40,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -82,9 +83,10 @@
     
   </header>
   
-  <details class="post-toc">
-    <summary class="post-toc-title">目录</summary>
-    <div class="post-toc-content"><nav id="TableOfContents">
+  
+  <nav class="post-toc" id="post-toc">
+    <span class="toc-title">目录</span>
+    <nav id="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -93,8 +95,8 @@
       </ul>
     </li>
   </ul>
-</nav></div>
-  </details>
+</nav>
+  </nav>
   
   <div class="post-content">
     <p>像<code>Java</code>这类语言，编译器会把代码预先编译为字节码，<code>JVM</code>直接解释执行这些字节码，程序就可以运行起来了。<code>PHP</code>使用者在性能优化时可能也会遇到<code>OPcache</code>这个名词，所谓<code>OPcache</code>其实就是<code>opcode</code>的<code>cache</code>，<code>opcode</code>其实类似于字节码，虽然本质上有点差异，但可以类比为同一种事物。</p>
@@ -1325,7 +1327,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777302624"></script>
+  <script src="/assets/js/main.js?v=1777307869"></script>
   
 </body>
 </html>
