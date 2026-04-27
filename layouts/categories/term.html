@@ -18,6 +18,13 @@
       </h2>
       <div class="post-card-meta">
         <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006年1月2日" }}</time>
+        {{ with .Params.categories }}
+        <span class="post-card-categories">
+          {{ range . }}
+          <a href="/categories/{{ . | urlize }}/" class="category-pill-sm">{{ . }}</a>
+          {{ end }}
+        </span>
+        {{ end }}
       </div>
       <div class="post-card-excerpt">
         {{ $excerpt := .Summary | plainify | truncate .Site.Params.excerptLength }}

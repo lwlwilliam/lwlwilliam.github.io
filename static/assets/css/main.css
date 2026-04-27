@@ -325,12 +325,14 @@ a:hover {
   color: var(--accent);
   border-radius: 999px;
   font-size: 0.75rem;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  border: 1px solid transparent;
 }
 
 .category-pill-sm:hover {
   background: var(--accent);
   color: #fff;
+  border-color: var(--accent);
 }
 
 .post-card-excerpt {
@@ -505,6 +507,8 @@ a:hover {
   position: sticky;
   top: calc(var(--header-height) + 8px);
   z-index: 10;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .toc-title {
@@ -855,11 +859,11 @@ a:hover {
   white-space: nowrap;
 }
 
-.archive-item a {
+.archive-item > a {
   color: var(--text);
 }
 
-.archive-item a:hover {
+.archive-item > a:hover {
   color: var(--accent);
 }
 
@@ -1493,6 +1497,12 @@ a:hover {
   .post-content h1 { font-size: 1.35rem; }
   .post-content h2 { font-size: 1.15rem; }
   .post-content h3 { font-size: 1.05rem; }
+  .post-toc {
+    position: static;
+  }
+  .post-toc nav ul {
+    flex-wrap: nowrap;
+  }
 }
 
 @media (max-width: 400px) {
