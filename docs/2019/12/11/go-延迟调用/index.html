@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go 延迟调用 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="Go,defer,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">Go 延迟调用</h1>
+    <div class="post-meta">
+      <time datetime="2019-12-11">2019年12月11日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/go/" class="category-pill">Go</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">Go</span>
+      
+      <span class="keyword-tag">defer</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <p>语句 defer 向当前函数注册稍后执行的函数调用。这些调用被称作延迟调用，因为它们直到当前函数执行结束前才被执行，常用于资源释放、解除锁定以及错误处理等操作。</p>
+<p>延迟调用，注册的是调用，参数在注册时被复制并缓存起来。多个延迟注册按 FILO 的次序执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">y</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;defer x, y =&#34;</span>, <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">y</span>)
+</span></span><span style="display:flex;"><span>    }(<span style="color:#a6e22e">x</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">x</span> <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">y</span> <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    }()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">x</span> <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">y</span> <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">y</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 输出：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//  2 3</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//  defer x, y = 1 4</span>
+</span></span></code></pre></div><p>对延迟调用的不合理使用会浪费更多资源，甚至造成逻辑错误。如下，不恰当的 defer 导致文件关闭时间延长。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">10000</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">path</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">SPrintf</span>(<span style="color:#e6db74">&#34;.log/%d.txt&#34;</span>, <span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">f</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#a6e22e">path</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 在 main 结束时才会执行，延长了逻辑结束时间和 f 的生命周期，消耗更多的内存等资源</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>应该直接调用，或者重构为函数，将循环和处理算法分离。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">do</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">path</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">SPrintf</span>(<span style="color:#e6db74">&#34;.log/%d.txt&#34;</span>, <span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">f</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#a6e22e">path</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 在该匿名函数结束时执行，而不是 main</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">10000</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">do</span>(<span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="性能">性能</h3>
+<p>相比直接用 CALL 汇编指令调用函数，延迟调用需要花费更多代价。这其中包括注册、调用等操作，还有额外的缓存开销。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// deferBenchmark/deferBenchmark_test.go</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">deferBenchmark</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;testing&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">m</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">call</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">deferCall</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Lock</span>() 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Unlock</span>() 
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">BenchmarkCall</span>(<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">B</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">N</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">call</span>()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">BenchmarkDefer</span>(<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">B</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">N</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">deferCall</span>()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>测试以上代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ cd path/to/deferBenchmark
+</span></span><span style="display:flex;"><span>$ go test -bench<span style="color:#f92672">=</span>.
+</span></span><span style="display:flex;"><span>goos: darwin
+</span></span><span style="display:flex;"><span>goarch: amd64
+</span></span><span style="display:flex;"><span>BenchmarkCall-4   <span style="color:#ae81ff">100000000</span>         18.7 ns/op
+</span></span><span style="display:flex;"><span>BenchmarkDefer-4  <span style="color:#ae81ff">30000000</span>          57.7 ns/op
+</span></span><span style="display:flex;"><span>PASS
+</span></span><span style="display:flex;"><span>ok    _/var/gonotes/src/github.com/lwlwilliam/deferBenchmark    3.691s
+</span></span></code></pre></div><p>可以看出，延迟调用跟普通调用的速度相差了几倍，因此，对那些性能要求高且压力大的算法，应避免使用延迟调用。</p>
+
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2019/12/02/%E5%8F%8D%E9%A6%88%E4%B8%8E%E8%A7%A6%E5%8F%91%E5%99%A8/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">反馈与触发器</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2019/12/18/go-%E5%86%85%E9%83%A8%E5%8C%85/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">Go 内部包</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284981"></script>
+  
+</body>
+</html>

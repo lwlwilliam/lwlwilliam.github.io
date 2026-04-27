@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Github Pages 自定义域名 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="Github,域名,DNS,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">Github Pages 自定义域名</h1>
+    <div class="post-meta">
+      <time datetime="2020-03-27">2020年3月27日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-pill">计算机网络</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">Github</span>
+      
+      <span class="keyword-tag">域名</span>
+      
+      <span class="keyword-tag">DNS</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <p>重新注册了个域名，有时候 web 开发没有域名还真是不方便。一下买了五年，美滋滋，当然顺便也要给 Github Pages 加个自己的烙印的。</p>
+<h3 id="为-github-pages-添加自定义域名">为 Github Pages 添加自定义域名</h3>
+<p>如下进入设置页面，将自定义的域名填入<code>Customer domain</code>下的输入框中，如果要用 HTTPS 传输，则勾选<code>Enforce HTTPS</code>复选框。</p>
+<p><img src="/assets/images/2020/0327/WX_20200327220016.png" alt="setting"></p>
+<p><img src="/assets/images/2020/0327/WX_20200327220401.png" alt="pages"></p>
+<p>效果就是在仓库中生成了一个 CNAME 文件，文件内容就是自定义的域名。目的就是在前台用户访问 user.github.io 时指向自定义域名（<strong>不知道说得对不对，毕竟现在还不是很专业</strong>）。</p>
+<h3 id="dns-解析">DNS 解析</h3>
+<p>前提是你已经拥有一个域名，如果没有就看看好了。我用的是阿里云，其它云服务端操作是一样的。进入添加 DNS 记录的表单。</p>
+<p><img src="/assets/images/2020/0327/WX_20200327220930.png" alt="add"></p>
+<p>为 user.github.io 域名添加 CNAME 记录，CNAME 就是别名的意思，添加之后访问自定义域名时，DNS 会将 IP 解析为 user.github.io 对应的 IP。</p>
+<p><img src="/assets/images/2020/0327/WX_20200327221025.png" alt="record"></p>
+<p>注意，在设置完成后，需要一段时间 DNS 记录才会生效。用类 Unix 系统的小伙伴可以使用 dig 命令来查看 DNS 记录。如果 DNS 解析生效，命令会返回如下结果，ANSWER SECTION 部分中的有一条记录<code>github.lwlinux.cn       599     IN      CNAME   lwlwilliam.github.io</code>，就是以上添加的 DNS CNAME 记录。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ dig github.lwlinux.cn
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; &lt;&lt;&gt;&gt; DiG 9.11.3-1ubuntu1.7-Ubuntu &lt;&lt;&gt;&gt; github.lwlinux.cn
+</span></span><span style="display:flex;"><span>;; global options: +cmd
+</span></span><span style="display:flex;"><span>;; Got answer:
+</span></span><span style="display:flex;"><span>;; -&gt;&gt;HEADER<span style="color:#e6db74">&lt;&lt;- opco</span>de: QUERY, status: NOERROR, id: <span style="color:#ae81ff">14075</span>
+</span></span><span style="display:flex;"><span>;; flags: qr rd ra; QUERY: 1, ANSWER: 5, AUTHORITY: 0, ADDITIONAL: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>;; OPT PSEUDOSECTION:
+</span></span><span style="display:flex;"><span>; EDNS: version: 0, flags:; udp: <span style="color:#ae81ff">512</span>
+</span></span><span style="display:flex;"><span>;; QUESTION SECTION:
+</span></span><span style="display:flex;"><span>;github.lwlinux.cn.             IN      A
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>;; ANSWER SECTION:
+</span></span><span style="display:flex;"><span>github.lwlinux.cn.      <span style="color:#ae81ff">599</span>     IN      CNAME   lwlwilliam.github.io.
+</span></span><span style="display:flex;"><span>lwlwilliam.github.io.   <span style="color:#ae81ff">3599</span>    IN      A       185.199.110.153
+</span></span><span style="display:flex;"><span>lwlwilliam.github.io.   <span style="color:#ae81ff">3599</span>    IN      A       185.199.109.153
+</span></span><span style="display:flex;"><span>lwlwilliam.github.io.   <span style="color:#ae81ff">3599</span>    IN      A       185.199.108.153
+</span></span><span style="display:flex;"><span>lwlwilliam.github.io.   <span style="color:#ae81ff">3599</span>    IN      A       185.199.111.153
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>;; Query time: <span style="color:#ae81ff">90</span> msec
+</span></span><span style="display:flex;"><span>;; SERVER: 8.8.8.8#53<span style="color:#f92672">(</span>8.8.8.8<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>;; WHEN: Fri Mar <span style="color:#ae81ff">27</span> 22:22:39 CST <span style="color:#ae81ff">2020</span>
+</span></span><span style="display:flex;"><span>;; MSG SIZE  rcvd: <span style="color:#ae81ff">144</span>
+</span></span></code></pre></div><p>至此，就算是完成了 Github Pages 的自定义域名。需要注意的是 HTTPS 生效会比较久，我就等了一天一夜，orz&hellip;另外，有的 Jekyll 模板可能会需要修改一下网站的 URL。</p>
+
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2020/03/25/centos7-%E5%85%81%E8%AE%B8%E7%94%A8%E6%88%B7%E6%88%96%E7%94%A8%E6%88%B7%E7%BB%84-ssh-%E7%99%BB%E5%BD%95/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">CentOS7 允许用户或用户组 SSH 登录</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2020/03/29/docker-%E6%90%AD%E5%BB%BA-lnmp-%E7%8E%AF%E5%A2%83/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">Docker 搭建 LNMP 环境</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284981"></script>
+  
+</body>
+</html>

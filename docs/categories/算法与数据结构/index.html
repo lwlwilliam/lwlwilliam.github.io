@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>算法与数据结构 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content=",William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284980">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+
+<div class="category-term-page">
+  <h1 class="page-title">算法与数据结构 <span class="category-term-count">2</span></h1>
+  <div class="post-list">
+    
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2021/10/19/%E7%AE%97%E6%B3%95%E4%B8%AD%E7%9A%84%E5%93%A8%E5%85%B5/">算法中的哨兵</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2021-10-19">2021年10月19日</time>
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        在地面上有200个箱子连续排列着，现在需要看一下前面100个箱子中有没有苹果。一般情况下，会怎么做呢？
+下面用代码来模拟一下。
+package main import ( &#34;fmt&#34; ) func main() { s := make([]int, 200) for i := 0; …...
+        
+      </div>
+      <a href="/2021/10/19/%E7%AE%97%E6%B3%95%E4%B8%AD%E7%9A%84%E5%93%A8%E5%85%B5/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2021/01/26/%E6%A0%88%E5%AE%9E%E7%8E%B0%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/">栈实现的表达式求值</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2021-01-26">2021年1月26日</time>
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        后进者先出，先进者后出，这就是数据结构中的&quot;栈&quot;。栈是一种相当简单的数据结构，但应用十分广泛，例如编程语言中的函数调用栈、浏览器的前进后退功能。本文讲的是栈的另一个常见应用场景，编译器利用栈实现表达式求值。初次见到这种实现思路的时候，我不禁叫绝，一个简单的栈还能玩出花。
+例如，一 …...
+        
+      </div>
+      <a href="/2021/01/26/%E6%A0%88%E5%AE%9E%E7%8E%B0%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+  </div>
+
+  
+</div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284980"></script>
+  
+</body>
+</html>

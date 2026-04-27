@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>编译原理 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content=",William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284980">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+
+<div class="category-term-page">
+  <h1 class="page-title">编译原理 <span class="category-term-count">14</span></h1>
+  <div class="post-list">
+    
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2025/10/23/%E6%95%B0%E7%BB%84%E8%B6%8A%E7%95%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/">数组越界导致的函数调用</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2025-10-23">2025年10月23日</time>
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        C语言中数组越界是未定义行为，因此以下代码在不同的编译器或者不同版本的同一编译器行为是不可预测的。在gcc某些版本中，以下代码会出现有意思的行为。
+// demo.c #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt; void jmp() { …...
+        
+      </div>
+      <a href="/2025/10/23/%E6%95%B0%E7%BB%84%E8%B6%8A%E7%95%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2025/04/29/%E5%AD%97%E8%8A%82%E7%A0%81%E7%BC%93%E5%AD%98%E6%8F%90%E5%8D%87%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E7%9A%84%E5%8E%9F%E7%90%86%E6%B5%85%E8%B0%88/">字节码缓存提升程序性能的原理浅谈</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2025-04-29">2025年4月29日</time>
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        像Java这类语言，编译器会把代码预先编译为字节码，JVM直接解释执行这些字节码，程序就可以运行起来了。PHP使用者在性能优化时可能也会遇到OPcache这个名词，所谓OPcache其实就是opcode的cache，opcode其实类似于字节码，虽然本质上有点差异，但可以类比为同一种事物。
+PHP在 …...
+        
+      </div>
+      <a href="/2025/04/29/%E5%AD%97%E8%8A%82%E7%A0%81%E7%BC%93%E5%AD%98%E6%8F%90%E5%8D%87%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E7%9A%84%E5%8E%9F%E7%90%86%E6%B5%85%E8%B0%88/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2025/02/27/%E4%BB%8E%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%9E%8B%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%80%E7%AA%A5%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E7%9A%84%E6%9C%AC%E8%B4%A8/">从一个小型编译器一窥编译原理的本质</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2025-02-27">2025年2月27日</time>
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        编译器可以粗略地分为几个简单的部分：词法分析器、语法分析器、代码生成器。其中语义分析器、代码优化器这些不影响本文示例功能。另外，本文的编译器生成的是字节码，因此还需要一个虚拟机来执行。
+Lexer 词法分析器 Lexer的功能是将代码串不同的符号进行标记分组，例如(3 + 5) * 2可以拆分为不同 …...
+        
+      </div>
+      <a href="/2025/02/27/%E4%BB%8E%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%9E%8B%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%80%E7%AA%A5%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E7%9A%84%E6%9C%AC%E8%B4%A8/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2023/11/27/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/">语法分析</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2023-11-27">2023年11月27日</time>
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        语法分析是编译前端部分的重要部分。
+# todo class PlusMinus: def __init__(self, left, op, right): self.left = left self.op = op self.right = right def __str__(self): …...
+        
+      </div>
+      <a href="/2023/11/27/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2023/10/09/stack-machines/">Stack Machines</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2023-10-09">2023年10月9日</time>
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        Stack Machines，感觉不翻译看起来会顺眼一点，翻译成栈机感觉怪怪的。该文章总结自Igor Wiedler的Stack Machines系列文章，可惜他很久没贡献过代码以及没更新过博客了。先贴代码，到时候再写文章，可能需要一段时间来消化这个系列。
+&lt;?php // php 8.2 …...
+        
+      </div>
+      <a href="/2023/10/09/stack-machines/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+  </div>
+
+  
+  
+
+
+
+
+
+
+
+<nav class="pagination">
+  <div class="pagination-controls">
+    
+    <span class="page-btn disabled">««</span>
+    <span class="page-btn disabled">«</span>
+    
+
+    
+      
+      <span class="page-btn current">1</span>
+      
+    
+      
+        
+        <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/page/2/" class="page-btn">2</a>
+        
+      
+    
+      
+        
+        <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/page/3/" class="page-btn">3</a>
+        
+      
+    
+
+    
+    <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/page/2/" class="page-btn" title="Next">»</a>
+    <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/page/3/" class="page-btn" title="Last">»»</a>
+    
+  </div>
+  <div class="pagination-jump">
+    <span>Page</span>
+    <input type="number" id="pageJumpInput" min="1" max="3" value="1" class="page-jump-input" data-base="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">
+    <span>of 3</span>
+    <button class="page-btn page-jump-btn" onclick="jumpToPage()">Go</button>
+  </div>
+</nav>
+
+  
+</div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284981"></script>
+  
+</body>
+</html>

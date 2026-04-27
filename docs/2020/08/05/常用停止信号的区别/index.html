@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>常用停止信号的区别 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="信号,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">常用停止信号的区别</h1>
+    <div class="post-meta">
+      <time datetime="2020-08-05">2020年8月5日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-pill">操作系统</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">信号</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <p>在 Workerman 源码中看到这么一段代码，用于终止进程。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">static</span><span style="color:#f92672">::</span>$_gracefulStop) {
+</span></span><span style="display:flex;"><span>    $sig <span style="color:#f92672">=</span> <span style="color:#a6e22e">\SIGTERM</span>;
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    $sig <span style="color:#f92672">=</span> <span style="color:#a6e22e">\SIGINT</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> ($worker_pid_array <span style="color:#66d9ef">as</span> $worker_pid) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">\posix_kill</span>($worker_pid, $sig);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">static</span><span style="color:#f92672">::</span>$_gracefulStop){
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Timer</span><span style="color:#f92672">::</span><span style="color:#a6e22e">add</span>(<span style="color:#66d9ef">static</span><span style="color:#f92672">::</span><span style="color:#a6e22e">KILL_WORKER_TIMER_TIME</span>, <span style="color:#e6db74">&#39;\posix_kill&#39;</span>, <span style="color:#66d9ef">array</span>($worker_pid, <span style="color:#a6e22e">\SIGKILL</span>), <span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>以上代码使用了三种信号用于停止进程，分别是<code>SIGTERM</code>、<code>SIGINT</code>、<code>SIGKILL</code>。第一次看到循环中的两个<code>posix_kill</code>时不禁一愣，为什么要调用两次呢？难道是为了确保成功终止？那为什么不调用三次、四次呢？</p>
+<p>在分析之前，再看一段代码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pcntl_async_signals</span>(<span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pcntl_signal</span>(<span style="color:#a6e22e">SIGKILL</span>, <span style="color:#e6db74">&#34;sig_handler&#34;</span>, <span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">sig_handler</span>($signo) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span> ($signo) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">SIGKILL</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;kill</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> (<span style="color:#66d9ef">true</span>) {}
+</span></span></code></pre></div><p>以上代码执行会报错<code>Fatal error: Error installing signal handler for 9</code>。<code>SIGKILL</code>的值就是<code>9</code>，错误的意思是<code>SIGKILL</code>安装处理器出错，也就是说<code>SIGKILL</code>是不受用户控制的，无论进程在干什么，都必须要终止。因此，<code>SIGKILL</code>很靠谱，但是不优雅，毕竟是强制终止的。同时，也可以判断<code>SIGTERM</code>和<code>SIGINT</code>都是可以受用户控制的，至于<code>SIGTERM</code>跟<code>SIGINT</code>的区别不大，<code>SIGINT</code>在命令行上可以通过<code>Ctrl+C</code>发出；<code>SIGTERM</code>是<code>kill</code>命令的默认信号。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// demo.php
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pcntl_async_signals</span>(<span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pcntl_signal</span>(<span style="color:#a6e22e">SIGINT</span>, <span style="color:#e6db74">&#34;sig_handler&#34;</span>, <span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pcntl_signal</span>(<span style="color:#a6e22e">SIGTERM</span>, <span style="color:#e6db74">&#34;sig_handler&#34;</span>, <span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">sig_handler</span>($signo) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span> ($signo) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">SIGINT</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;interrupt</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">SIGTERM</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;terminate</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> (<span style="color:#66d9ef">true</span>) {}
+</span></span></code></pre></div><p>执行以上程序，可以玩下以下命令加深一下对信号的印象，<code>^</code>表示<code>Ctrl</code>键。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ php demo.php &amp;
+</span></span><span style="display:flex;"><span>$ ps ajx | grep demo.php | grep -v grep | awk <span style="color:#e6db74">&#39;{print $2}&#39;</span> | xargs kill
+</span></span><span style="display:flex;"><span>terminate
+</span></span><span style="display:flex;"><span>$ jobs
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>1<span style="color:#f92672">]</span>+  Running                 php demo.php &amp;
+</span></span><span style="display:flex;"><span>$ fg <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>php demo.php
+</span></span><span style="display:flex;"><span>^Cinterrupt
+</span></span><span style="display:flex;"><span>^Cinterrupt
+</span></span><span style="display:flex;"><span>^Cinterrupt
+</span></span><span style="display:flex;"><span>^Z
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>1<span style="color:#f92672">]</span>+  Stopped                 php demo.php
+</span></span><span style="display:flex;"><span>$ ps ajx
+</span></span><span style="display:flex;"><span> PPID   PID  PGID   SID TTY      TPGID STAT   UID   TIME COMMAND
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">16</span>   <span style="color:#ae81ff">192</span>   <span style="color:#ae81ff">192</span>    <span style="color:#ae81ff">16</span> pts/0      <span style="color:#ae81ff">206</span> T        <span style="color:#ae81ff">0</span>   1:35 php demo.php
+</span></span><span style="display:flex;"><span>$ kill -s SIGCONT <span style="color:#ae81ff">192</span>
+</span></span><span style="display:flex;"><span> PPID   PID  PGID   SID TTY      TPGID STAT   UID   TIME COMMAND
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">16</span>   <span style="color:#ae81ff">192</span>   <span style="color:#ae81ff">192</span>    <span style="color:#ae81ff">16</span> pts/0      <span style="color:#ae81ff">207</span> R        <span style="color:#ae81ff">0</span>   1:37 php demo.php
+</span></span></code></pre></div><p>除了以上三个信号，还有两个跟停止相关的信号<code>SIGQUIT</code>和<code>SIGSTOP</code>。<code>SIGQUIT</code>跟<code>SIGINT</code>、<code>SIGTERM</code>类似，<code>SIGQUIT</code>可以在命令行上通过<code>Ctrl+\</code>发出。<code>SIGSTOP</code>只是暂停进程，并不会终止，在接收到<code>SIGSTOP</code>之后，<code>SIGTERM</code>、<code>SIGINT</code>、<code>SIGQUIT</code>都会无效，但是<code>SIGKILL</code>仍然可以终止进程。</p>
+<p>在<code>SIGSTOP</code>之后，通过<code>SIGCONT</code>信号让进程继续运行。<code>SIGSTOP</code>和<code>SIGCONT</code>这对命令挺好用的，可以用于定时器之类的情景下，暂停任务时，通过<code>SIGSTOP</code>来实现，<code>SIGCONT</code>则用于恢复任务。</p>
+
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2020/07/30/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">文件系统实现</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2020/08/13/ssh-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">SSH 端口转发</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284981"></script>
+  
+</body>
+</html>

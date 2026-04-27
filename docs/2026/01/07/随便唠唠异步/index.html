@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>随便唠唠异步 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="操作系统,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">随便唠唠异步</h1>
+    <div class="post-meta">
+      <time datetime="2026-01-07">2026年1月7日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-pill">操作系统</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">操作系统</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <p>再看操作系统原理时，又“吸收”了一个名词“页缓存”，跟<code>ChatGPT</code>扯了下之后，就有了更深刻的理解，于是灵光一现问了以下问题：</p>
+<p><img src="/assets/images/2026/0107/async.png" alt="async"></p>
+<p>异步<code>I/O</code>的本质就是提交<code>I/O</code>后，不会阻塞调用者，并在<code>I/O</code>完成后通知调用者结果。</p>
+<p>现在分析一下我的问题。在用户层面实现<code>I/O</code>函数，并通过用户层面实现的“页缓存”（本质上就是内存）来处理数据。也就是说，在数据落盘前，<code>I/O</code>函数只需要跟内存打交道，只要在内存层面处理好数据即可返回处理结果，因此实际上<code>I/O</code>操作并不会阻塞调用者，而可以在后台线程统一对这些用户层面的“页缓存”同步到<code>I/O</code>设备，完成后再通知业务线程。所以这种实现方式在原理上可行的，当然实际上还有很多细节要处理。</p>
+<p>最近<code>PHP</code>社区讨论异步<code>RFC</code>闹得沸沸扬扬，哎，不知道该怎么评价，大部分社区成员都希望保持<code>PHP</code>的简单性，不希望引入复杂的异步，无共享架构深入人心了，而且添加异步是否会影响现存的大量项目也是很多人纠结的。也有很多社区声音觉得<code>PHP</code>应该抛弃沉重的包袱，大胆更新。目前看讨论情况，估计是难了，异步功能庞大，推动的人应该只能说只有一个，挺佩服作者的，单枪匹马坚持了一年多；另外<code>PHP</code>社区中缺少相应领域的编译器专家，即使功能是好的，但能审核的人也没几个，大家对自己不懂的东西还是很保守的。</p>
+
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2025/10/23/%E6%95%B0%E7%BB%84%E8%B6%8A%E7%95%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">数组越界导致的函数调用</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2026/04/09/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%85%B7%E7%9A%84%E8%83%BD%E5%8A%9B%E6%80%8E%E4%B9%88%E6%9D%A5%E7%9A%84/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">大模型使用工具的能力怎么来的</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284981"></script>
+  
+</body>
+</html>

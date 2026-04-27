@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动手写个简易的静态博客生成器 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="PHP,static-site-generator,静态博客生成器,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">动手写个简易的静态博客生成器</h1>
+    <div class="post-meta">
+      <time datetime="2025-02-12">2025年2月12日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/php/" class="category-pill">PHP</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">PHP</span>
+      
+      <span class="keyword-tag">static-site-generator</span>
+      
+      <span class="keyword-tag">静态博客生成器</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <p><code>github</code>带火了类似<code>jekyll</code>的静态博客生成器，可以将<code>markdown</code>文件转换为<code>html</code>文件，然后发布到网站上，对喜欢<code>markdown</code>简洁的人来说，简直太棒了，尤其现在大量的网站可以免费托管这种小型的博客，当然，我也是因<code>github pages</code>的服务而接触到它，懒人必备。</p>
+<p>但用久了<code>jekyll</code>就觉得不爽，毕竟我对<code>ruby</code>不太熟悉，有时候想定制一些功能稍显不太方便，既然这样，那就自己写一个吧。先思考下静态博客生成器的核心功能是啥？首先是将<code>markdown</code>文件转换为<code>html</code>文件，然后生成首页，最后是生成文章页，这三个功能是最基本的，当然还有一些其他功能，比如<code>watch</code>功能，当<code>markdown</code>文件发生变化时，自动重新生成<code>html</code>文件，这样就不用每次都手动去执行生成器了。<code>markdown</code>转<code>html</code>就不在这写了，毕竟也是一个解释器，有一定代码量，这里就直接使用第三方的<code>markdown</code>组件了，要真想写，其实也可以使用字符串替代来将就一下，但这里先不考虑这个。</p>
+<p>生成首页和文章页我们这里只有三个关键的<code>header</code>、实际内容、<code>footer</code>三类模板，这三个模板是固定的，只是内容不同，所以我们可以将这三个模板放在一个目录下，然后在生成器中读取这三个模板，将标签内容替换掉，最后生成<code>html</code>文件。关于标签部分，我定义了几个<code>$$post$$</code>、<code>$$content$$</code>、<code>$$nav$$</code>、<code>$$header$$</code>和<code>$$footer$$</code>，分别代表文章列表、文章内容、导航、页头和页脚，这样我们就可以在模板中使用这些标签，然后在生成器中将这些标签替换为实际内容。要更强大的标签，则需要定制一门模板语言。</p>
+<p><code>$$post$$</code>可以通过扫描<code>content</code>目录来获取，<code>$$content$$</code>的内容需要经过<code>markdown</code>解释器转换，<code>$$nav$$</code>是自定义的，<code>$$header$$</code>特指<code>templates/header.html</code>文件，<code>$$footer$$</code>则指<code>templates/footer.html</code>。</p>
+<p>至于<code>watch</code>功能，单独启动一个进程定时扫描特定目录，发现目录文件更新后，就重新生成<code>html</code>文件，这里使用了<code>swoole</code>的<code>Process</code>类，当然也可以使用<code>inotify</code>来监听文件变化，这里就不展开了。</p>
+<p>项目目录结构如下，<code>content/</code>目录用于放置<code>markdown</code>文章；<code>public/</code>目录的文件由生成器生成；<code>templates/</code>目录是模板目录，像页头、页脚、首页、文章页等模板文件都放在这里；<code>composer.json</code>是<code>PHP</code>的版本管理工具，为了简化代码，使用了第三方<code>markdown</code>组件，毕竟本文的重点是静态页面生成，而不是<code>markdown</code>渲染；<code>generator.php</code>是生成器的主要代码。</p>
+<pre tabindex="0"><code>content/
+    2025-02-12-测试.md
+public/
+templates/
+    footer.html
+    header.html
+    index.html  
+    post.html
+composer.json
+generator.php
+</code></pre><h3 id="文章页-content2025-02-12-测试md">文章页 content/2025-02-12-测试.md</h3>
+<p>这就是一个常规的<code>markdown</code>文件，内容如下。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span><span style="color:#75715e">### PHP
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">`PHP`</span>是世界上最好的语言，以下是一个简单的<span style="color:#e6db74">`PHP`</span>代码示例，想了解更多请访问[<span style="color:#f92672">官网</span>](<span style="color:#a6e22e">https://www.php.net</span>)。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">```php
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;Hello world</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">```</span>
+</span></span></code></pre></div><h3 id="页面尾模板-templatesfooterhtml">页面尾模板 templates/footer.html</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;color: gray; position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);&#34;</span>&gt;copyright xxx&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span></code></pre></div><h3 id="页面头模板-templatesheaderhtml">页面头模板 templates/header.html</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text-align: center; margin-bottom: 20px;&#34;</span>&gt;$$nav$$&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span></code></pre></div><h3 id="首页模板-templatesindexhtml">首页模板 templates/index.html</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!doctype html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span> <span style="color:#a6e22e">lang</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;en&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">charset</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;viewport&#34;</span> <span style="color:#a6e22e">content</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;width=device-width, initial-scale=1&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">title</span>&gt;静态博客生成器&lt;/<span style="color:#f92672">title</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>$$header$$
+</span></span><span style="display:flex;"><span>$$post$$
+</span></span><span style="display:flex;"><span>$$footer$$
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
+</span></span></code></pre></div><h3 id="文章页模板-templatesposthtml">文章页模板 templates/post.html</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!DOCTYPE html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span> <span style="color:#a6e22e">lang</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;en&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">charset</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;viewport&#34;</span> <span style="color:#a6e22e">content</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;width=device-width, initial-scale=1.0&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">title</span>&gt;静态博客生成器&lt;/<span style="color:#f92672">title</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>$$header$$
+</span></span><span style="display:flex;"><span>$$content$$
+</span></span><span style="display:flex;"><span>$$footer$$
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
+</span></span></code></pre></div><h3 id="composerjson">composer.json</h3>
+<p>只需要以下<code>markdown</code>解释器。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;require&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;league/commonmark&#34;</span>: <span style="color:#e6db74">&#34;^2.6&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="generatorphp">generator.php</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">require</span> <span style="color:#e6db74">&#39;vendor/autoload.php&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> <span style="color:#a6e22e">League\CommonMark\CommonMarkConverter</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> <span style="color:#a6e22e">League\CommonMark\Exception\CommonMarkException</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> <span style="color:#a6e22e">Swoole\Http\Request</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> <span style="color:#a6e22e">Swoole\Http\Response</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> <span style="color:#a6e22e">Swoole\Http\Server</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> <span style="color:#a6e22e">Swoole\Process</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * 打印函数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * @param mixed $msg
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * @return void
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">println</span>(<span style="color:#a6e22e">mixed</span> $msg)<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span> (<span style="color:#a6e22e">gettype</span>($msg)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;string&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;integer&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;double&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">echo</span> $msg, <span style="color:#a6e22e">PHP_EOL</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">var_dump</span>($msg);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * 获取当前时间
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * @return string
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> */</span> 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">now</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">string</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">date</span>(<span style="color:#e6db74">&#39;Y-m-d H:i:s&#39;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * 静态站点生成器
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StaticSiteGenerator</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">CommonMarkConverter</span> $converter;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $contentDir;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $publicDir;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $templateDir;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $htmlExtension <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;.html&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $markdownExtension <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;.md&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $indexTemplate;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $headerTemplate <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;header.html&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $footerTemplate <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;footer.html&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $postTemplate <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;post.html&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $postTag <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;$$post$$&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $contentTag <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;$$content$$&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $navTag <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;$$nav$$&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $headerTag <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;$$header$$&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $footerTag <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;$$footer$$&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">array</span> $nav <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;首页&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;/&#39;</span>, <span style="color:#e6db74">&#39;关于&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;/&#39;</span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">string</span> $linkFormatter <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&lt;a href=&#34;%s&#34;&gt;%s&lt;/a&gt;&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__construct</span>(<span style="color:#a6e22e">string</span> $contentDir, <span style="color:#a6e22e">string</span> $publicDir, <span style="color:#a6e22e">string</span> $templateDir, <span style="color:#a6e22e">string</span> $indexTemplate)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">contentDir</span> <span style="color:#f92672">=</span> $contentDir;
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">publicDir</span> <span style="color:#f92672">=</span> $publicDir;
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">templateDir</span> <span style="color:#f92672">=</span> $templateDir;
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">indexTemplate</span> <span style="color:#f92672">=</span> $indexTemplate;
+</span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">converter</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">CommonMarkConverter</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * markdown 转 html 以及合并页面
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @throws CommonMarkException
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">generate</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $files <span style="color:#f92672">=</span> <span style="color:#a6e22e">glob</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">contentDir</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;/*</span><span style="color:#e6db74">$this-&gt;markdownExtension</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 链接
+</span></span></span><span style="display:flex;"><span>        $posts <span style="color:#f92672">=</span> [];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 生成文章页
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">foreach</span> ($files <span style="color:#66d9ef">as</span> $file) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">generateHtml</span>($file);
+</span></span><span style="display:flex;"><span>            $generatedName <span style="color:#f92672">=</span> <span style="color:#a6e22e">basename</span>($file, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">markdownExtension</span>) <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">htmlExtension</span>;
+</span></span><span style="display:flex;"><span>            $posts[] <span style="color:#f92672">=</span> <span style="color:#a6e22e">sprintf</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">linkFormatter</span>, $generatedName, $generatedName);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        $indexContent <span style="color:#f92672">=</span> <span style="color:#a6e22e">file_get_contents</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">templateDir</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">indexTemplate</span>);
+</span></span><span style="display:flex;"><span>        $indexContent <span style="color:#f92672">=</span> <span style="color:#a6e22e">str_replace</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">postTag</span>, <span style="color:#a6e22e">implode</span>(<span style="color:#e6db74">&#39;&lt;br&gt;&#39;</span>, $posts), $indexContent);
+</span></span><span style="display:flex;"><span>        $indexContent <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">composeHtml</span>($indexContent);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">file_put_contents</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">publicDir</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">indexTemplate</span>, $indexContent);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * 合成完整的页面
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">composeHtml</span>(<span style="color:#a6e22e">string</span> $htmlContent)<span style="color:#f92672">:</span> <span style="color:#a6e22e">string</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $headerContent <span style="color:#f92672">=</span> <span style="color:#a6e22e">file_get_contents</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">templateDir</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">headerTemplate</span>);
+</span></span><span style="display:flex;"><span>        $nav <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">foreach</span> ($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">nav</span> <span style="color:#66d9ef">as</span> $name <span style="color:#f92672">=&gt;</span> $href) {
+</span></span><span style="display:flex;"><span>            $nav <span style="color:#f92672">.=</span> <span style="color:#a6e22e">sprintf</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">linkFormatter</span>, $href, $name) <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&#39;</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        $headerContent <span style="color:#f92672">=</span> <span style="color:#a6e22e">str_replace</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">navTag</span>, $nav, $headerContent);
+</span></span><span style="display:flex;"><span>        $footer <span style="color:#f92672">=</span> <span style="color:#a6e22e">file_get_contents</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">templateDir</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">footerTemplate</span>);
+</span></span><span style="display:flex;"><span>        $htmlContent <span style="color:#f92672">=</span> <span style="color:#a6e22e">str_replace</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">headerTag</span>, $headerContent, $htmlContent);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">str_replace</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">footerTag</span>, $footer, $htmlContent);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * 生成文章页 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @throws CommonMarkException
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @throws Exception
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">generateHtml</span>($markdownFile)<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $content <span style="color:#f92672">=</span> <span style="color:#a6e22e">file_get_contents</span>($markdownFile);
+</span></span><span style="display:flex;"><span>        $htmlContent <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">converter</span><span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">convert</span>($content);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        $template <span style="color:#f92672">=</span> <span style="color:#a6e22e">file_get_contents</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">templateDir</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">postTemplate</span>);
+</span></span><span style="display:flex;"><span>        $htmlContent <span style="color:#f92672">=</span> <span style="color:#a6e22e">str_replace</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">contentTag</span>, $htmlContent, $template);
+</span></span><span style="display:flex;"><span>        $htmlContent <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">composeHtml</span>($htmlContent);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        $basename <span style="color:#f92672">=</span> <span style="color:#a6e22e">basename</span>($markdownFile, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">markdownExtension</span>);
+</span></span><span style="display:flex;"><span>        $outputFile <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">publicDir</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $basename <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">htmlExtension</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">file_put_contents</span>($outputFile, $htmlContent);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Generating </span><span style="color:#e6db74">$outputFile</span><span style="color:#e6db74">...&#34;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">now</span>());
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * 文件监控变化重新生成页面
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">watch</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $process <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Process</span>(<span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">Process</span> $worker) {
+</span></span><span style="display:flex;"><span>            $lastMtime <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> (<span style="color:#66d9ef">true</span>) {
+</span></span><span style="display:flex;"><span>                $files <span style="color:#f92672">=</span> <span style="color:#a6e22e">glob</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">contentDir</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;/*</span><span style="color:#e6db74">$this-&gt;markdownExtension</span><span style="color:#e6db74">&#34;</span>, <span style="color:#a6e22e">GLOB_BRACE</span>);
+</span></span><span style="display:flex;"><span>                $files <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_merge</span>($files, <span style="color:#a6e22e">glob</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">templateDir</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;/*</span><span style="color:#e6db74">$this-&gt;htmlExtension</span><span style="color:#e6db74">&#34;</span>, <span style="color:#a6e22e">GLOB_BRACE</span>));
+</span></span><span style="display:flex;"><span>                $maxMtime <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">foreach</span> ($files <span style="color:#66d9ef">as</span> $file) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">clearstatcache</span>(<span style="color:#66d9ef">true</span>, $file);
+</span></span><span style="display:flex;"><span>                    $mtime <span style="color:#f92672">=</span> <span style="color:#a6e22e">filemtime</span>($file);
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">if</span> ($mtime <span style="color:#f92672">&gt;</span> $maxMtime) {
+</span></span><span style="display:flex;"><span>                        $maxMtime <span style="color:#f92672">=</span> $mtime;
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> ($maxMtime <span style="color:#f92672">&gt;</span> $lastMtime) {
+</span></span><span style="display:flex;"><span>                    $lastMtime <span style="color:#f92672">=</span> $maxMtime;
+</span></span><span style="display:flex;"><span>                    $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">generate</span>();
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">2</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        });
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        $process<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    $contentDir <span style="color:#f92672">=</span> <span style="color:#66d9ef">__DIR__</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/content&#39;</span>;
+</span></span><span style="display:flex;"><span>    $publicDir <span style="color:#f92672">=</span> <span style="color:#66d9ef">__DIR__</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/public&#39;</span>;
+</span></span><span style="display:flex;"><span>    $templateDir <span style="color:#f92672">=</span> <span style="color:#66d9ef">__DIR__</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/templates&#39;</span>;
+</span></span><span style="display:flex;"><span>    $indexTemplate <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;index.html&#39;</span>;
+</span></span><span style="display:flex;"><span>    $host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;0.0.0.0&#39;</span>;
+</span></span><span style="display:flex;"><span>    $port <span style="color:#f92672">=</span> <span style="color:#ae81ff">10004</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    $generator <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">StaticSiteGenerator</span>($contentDir, $publicDir, $templateDir, $indexTemplate);
+</span></span><span style="display:flex;"><span>    $generator<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">watch</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 静态页面访问服务
+</span></span></span><span style="display:flex;"><span>    $http <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Server</span>($host, $port);
+</span></span><span style="display:flex;"><span>    $http<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;request&#39;</span>, <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">Request</span> $request, <span style="color:#a6e22e">Response</span> $response) <span style="color:#66d9ef">use</span> ($publicDir, $indexTemplate) {
+</span></span><span style="display:flex;"><span>        $path <span style="color:#f92672">=</span> <span style="color:#a6e22e">urldecode</span>($request<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">server</span>[<span style="color:#e6db74">&#39;request_uri&#39;</span>]);
+</span></span><span style="display:flex;"><span>        $path <span style="color:#f92672">=</span> $path <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">?</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $indexTemplate <span style="color:#f92672">:</span> $path;
+</span></span><span style="display:flex;"><span>        $file <span style="color:#f92672">=</span> $publicDir <span style="color:#f92672">.</span> $path;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Requesting </span><span style="color:#e6db74">$file</span><span style="color:#e6db74">...&#34;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">now</span>());
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">file_exists</span>($file)) {
+</span></span><span style="display:flex;"><span>            $response<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#39;Content-Type&#39;</span>, <span style="color:#e6db74">&#39;text/html&#39;</span>);
+</span></span><span style="display:flex;"><span>            $response<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">sendfile</span>($file);
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            $response<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">setStatusCode</span>(<span style="color:#ae81ff">404</span>);
+</span></span><span style="display:flex;"><span>            $response<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">end</span>(<span style="color:#e6db74">&#39;404 Not Found&#39;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Static site generator server running at http://</span><span style="color:#e6db74">$host</span><span style="color:#e6db74">:</span><span style="color:#e6db74">$port</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    $http<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">Throwable</span> $e) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">println</span>($e<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getMessage</span>());
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="运行效果图">运行效果图</h3>
+<p><img src="/assets/images/2025/0212/run.png" alt="run"></p>
+<h3 id="首页效果图">首页效果图</h3>
+<p><img src="/assets/images/2025/0212/homepage.png" alt="homepage"></p>
+<h3 id="文章效果图">文章效果图</h3>
+<p><img src="/assets/images/2025/0212/detail.png" alt="detail"></p>
+
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2025/01/13/%E5%9C%A8-php-%E4%B8%AD%E6%A8%A1%E6%8B%9F-go-%E8%AF%AD%E8%A8%80%E7%9A%84-defer-%E8%AF%AD%E5%8F%A5/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">在 PHP 中模拟 Go 语言的 defer 语句</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2025/02/14/%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8-php-%E6%A0%87%E5%87%86%E5%87%BD%E6%95%B0/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">链式调用 PHP 标准函数</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284981"></script>
+  
+</body>
+</html>

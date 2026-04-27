@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>远程 coding 实现 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="远程,sshfs,docker,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">远程 coding 实现</h1>
+    <div class="post-meta">
+      <time datetime="2020-12-02">2020年12月2日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/%E5%B7%A5%E5%85%B7/" class="category-pill">工具</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">远程</span>
+      
+      <span class="keyword-tag">sshfs</span>
+      
+      <span class="keyword-tag">docker</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <p>出于现实的考虑，不得不使用多台性能不怎么样的电脑一起玩耍，主要还是为了分摊机器的内存。最先考虑到的是 docker，毕竟现在运行环境都是用 docker 部署的，我想通过<code>docker run -v 远程目录:容器目录 image</code>一条命令来实现，果真是图样图森破，sometime naive，docker 目前还不支持挂载远程目录吧。</p>
+<p>后来在小动物们的帮忙下，找到了 sshfs，具体安装过程我就不一一列举了，顶多就是在挂载时会遇到小坑。</p>
+<p>sshfs 具体干的工作就是通过 ssh 来访问远程的目录，达到共享的目的。跟同系列的命令差不多，sshfs 基本的用法很简单：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sshfs root@192.168.10.66:/Users/Hello/world ~/Desktop/www
+</span></span></code></pre></div><p>以上命令的意思就是将主机 192.168.10.66 上的目录<code>/Users/Hello/world</code>挂载到本机的<code>~/Desktop/www</code>目录上，root 就是远程主机的用户名啦。使用完的时候用<code>umount</code>即可弹出。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ umount ~/Desktop/www
+</span></span></code></pre></div><p>以上就是远程 coding 最重要的一步。接下来当然就是通过 docker 搭建运行环境。以<code>nginx</code>+<code>php-fpm</code>为例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ docker network create lnmp
+</span></span><span style="display:flex;"><span>$ docker run -d --name nginx --network lnmp -p 80:80 -v ~/Desktop/www:/usr/share/nginx/html lwlwufeng/nginx:1.19
+</span></span><span style="display:flex;"><span>$ docker run -d --name php --network lnmp -v ~/Desktop/www:/usr/share/php -w /usr/share/php lwlwufeng/php:7.1-fpm
+</span></span><span style="display:flex;"><span>$ <span style="color:#75715e"># mysql 就不多说了，这个不影响测试</span>
+</span></span></code></pre></div><p>注意了，由于使用 sshfs 的目的是远程 coding，所以得将共享目录挂载到 docker 容器上，以上使用的是我配置好的测试镜像。由于 nginx 转发 php 的配置需要使用容器名，因此镜像去掉 nginx 配置中的一些注释，具体就不细说了，熟悉的话相信很容易就找到具体注释。</p>
+<p>现在就可以在远程主机 192.168.10.66 上愉快地开发，在 docker 机实时预览，完美地利用了老旧机器做一些专项用途。</p>
+<p>在断网时可能会对 sshfs 造成一些麻烦，重新连网之后似乎并不会重新生效。尤其是有些程序还在使用 sshfs 挂载的目录时，<code>umount</code>失效，重新<code>sshfs</code>也不行。这时就需要查找什么进程在占用资源了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ fuser -u ~/Desktop/lnmp
+</span></span></code></pre></div><p>通过以上命令就可以找到实际占用挂载目录的进程，退出这些进程就可以<code>umount</code>，重新<code>sshfs</code>挂载。</p>
+
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2020/11/16/%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">词法分析</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2020/12/10/cbc-%E7%BC%96%E8%AF%91%E5%99%A8/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">cbc 编译器</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284981"></script>
+  
+</body>
+</html>

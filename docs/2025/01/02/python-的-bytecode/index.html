@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python 的 bytecode - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="Python,bytecode,字节码,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">Python 的 bytecode</h1>
+    <div class="post-meta">
+      <time datetime="2025-01-02">2025年1月2日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/python/" class="category-pill">Python</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">Python</span>
+      
+      <span class="keyword-tag">bytecode</span>
+      
+      <span class="keyword-tag">字节码</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <p>喜欢上了通过字节码来分析代码差异的感觉，前几天机缘巧合之下玩了下<code>PHP</code>的<code>opcode</code>，今天来看看<code>Python</code>的<code>bytecode</code>。今天也是巧合，恰好群里有人问<code>Python</code>中<code>3 &gt; 2 == 2</code>为什么结果是<code>True</code>？很多语言其实并没有这种表达式。如果用过<code>JavaScript</code>，就会发现它的结果跟<code>Python</code>不一样，正因为如此，我就对<code>3 &gt; 3 == 2</code>在<code>Python</code>中的底层逻辑有点好奇，那就直接动手吧。</p>
+<p>有人猜测<code>3 &gt; 2 == 2</code>可能跟<code>3 &gt; 2 and 2 == 2</code>是一样的，这就对比一下两段代码。跟编译型语言有疑问时就看看编译产生的汇编类似，要知道<code>Python</code>代码的逻辑，就得研究它的字节码。<code>dis</code>模块通过反汇编支持<code>CPython</code>的<code>bytecode</code>分析。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># bc.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> dis
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">3</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bar</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">3</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">and</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>dis<span style="color:#f92672">.</span>dis(foo)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#39;-&#39;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>dis<span style="color:#f92672">.</span>dis(bar)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#39;-&#39;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>print(foo(), bar())
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ python3 bc.py
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">6</span>           <span style="color:#ae81ff">0</span> LOAD_CONST               <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>3<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#ae81ff">2</span> LOAD_CONST               <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>2<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#ae81ff">4</span> DUP_TOP
+</span></span><span style="display:flex;"><span>              <span style="color:#ae81ff">6</span> ROT_THREE
+</span></span><span style="display:flex;"><span>              <span style="color:#ae81ff">8</span> COMPARE_OP               <span style="color:#ae81ff">4</span> <span style="color:#f92672">(</span>&gt;<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>             <span style="color:#ae81ff">10</span> JUMP_IF_FALSE_OR_POP    <span style="color:#ae81ff">18</span>
+</span></span><span style="display:flex;"><span>             <span style="color:#ae81ff">12</span> LOAD_CONST               <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>2<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>             <span style="color:#ae81ff">14</span> COMPARE_OP               <span style="color:#ae81ff">2</span> <span style="color:#f92672">(==)</span>
+</span></span><span style="display:flex;"><span>             <span style="color:#ae81ff">16</span> RETURN_VALUE
+</span></span><span style="display:flex;"><span>        &gt;&gt;   <span style="color:#ae81ff">18</span> ROT_TWO
+</span></span><span style="display:flex;"><span>             <span style="color:#ae81ff">20</span> POP_TOP
+</span></span><span style="display:flex;"><span>             <span style="color:#ae81ff">22</span> RETURN_VALUE
+</span></span><span style="display:flex;"><span>----------------------------------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">10</span>           <span style="color:#ae81ff">0</span> LOAD_CONST               <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>3<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#ae81ff">2</span> LOAD_CONST               <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>2<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#ae81ff">4</span> COMPARE_OP               <span style="color:#ae81ff">4</span> <span style="color:#f92672">(</span>&gt;<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#ae81ff">6</span> JUMP_IF_FALSE_OR_POP    <span style="color:#ae81ff">14</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#ae81ff">8</span> LOAD_CONST               <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>2<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>             <span style="color:#ae81ff">10</span> LOAD_CONST               <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>2<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>             <span style="color:#ae81ff">12</span> COMPARE_OP               <span style="color:#ae81ff">2</span> <span style="color:#f92672">(==)</span>
+</span></span><span style="display:flex;"><span>        &gt;&gt;   <span style="color:#ae81ff">14</span> RETURN_VALUE
+</span></span><span style="display:flex;"><span>----------------------------------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>True True
+</span></span></code></pre></div><p>光看结果，<code>foo</code>和<code>bar</code>函数的结果都是<code>True</code>，有戏了，可能真的就逻辑一样。分隔线顶部就是<code>3 &gt; 2 == 2</code>的字节码，现在就来分析一下。</p>
+<p>先看看上半部分<code>3 &gt; 2 == 2</code>的输出：</p>
+<ol>
+<li>
+<p><code>LOAD_CONST</code>：加载常量<code>3</code>；</p>
+<pre tabindex="0"><code>3
+</code></pre></li>
+<li>
+<p><code>LOAD_CONST</code>：加载常量<code>2</code>；</p>
+<pre tabindex="0"><code>2
+3
+</code></pre></li>
+<li>
+<p><code>DUP_TOP</code>：复制栈顶元素；</p>
+<pre tabindex="0"><code>2
+2
+3
+</code></pre></li>
+<li>
+<p><code>ROT_THREE</code>：旋转栈顶三个元素（栈顶元素旋转后移到栈底，第二个元素移到栈顶，第三个元素移到第二位）；</p>
+<pre tabindex="0"><code>2
+3
+2
+</code></pre></li>
+<li>
+<p><code>COMPARE_OP</code>：比较操作符<code>&gt;</code>，栈顶元素作为第二个操作数，第二个元素作为第一个操作数；</p>
+<pre tabindex="0"><code>True
+2
+</code></pre></li>
+<li>
+<p><code>JUMP_IF_FALSE_OR_POP</code>：判断栈顶元素是否为<code>False</code>，如果是则跳转到地址<code>18</code>，否则弹出栈顶元素；</p>
+<pre tabindex="0"><code>2
+</code></pre></li>
+<li>
+<p><code>LOAD_CONST</code>：加载常量<code>2</code>；</p>
+<pre tabindex="0"><code>2
+2
+</code></pre></li>
+<li>
+<p><code>COMPARE_OP</code>：比较操作符<code>==</code>，栈顶元素作为第二个操作数，第二个元素作为第一个操作数；</p>
+<pre tabindex="0"><code>True
+</code></pre></li>
+<li>
+<p><code>RETURN_VALUE</code>：返回栈顶元素；</p>
+<pre tabindex="0"><code></code></pre></li>
+<li>
+<p>由于已经<code>RETURN_VALUE</code>了，后续的字节码就不会执行；</p>
+</li>
+</ol>
+<p>再分析第二部分的输出：</p>
+<ol>
+<li>
+<p><code>LOAD_CONST</code>：加载常量<code>3</code>；</p>
+<pre tabindex="0"><code>3
+</code></pre></li>
+<li>
+<p><code>LOAD_CONST</code>：加载常量<code>2</code>；</p>
+<pre tabindex="0"><code>2
+3
+</code></pre></li>
+<li>
+<p><code>COMPARE_OP</code>：比较操作符<code>&gt;</code>，栈顶元素作为第二个操作数，第二个元素作为第一个操作数；</p>
+<pre tabindex="0"><code>True
+</code></pre></li>
+<li>
+<p><code>JUMP_IF_FALSE_OR_POP</code>：判断栈顶元素是否为<code>False</code>，如果是则跳转到地址<code>14</code>，否则弹出栈顶元素；</p>
+<pre tabindex="0"><code></code></pre></li>
+<li>
+<p><code>LOAD_CONST</code>：加载常量<code>2</code>；</p>
+<pre tabindex="0"><code>2
+</code></pre></li>
+<li>
+<p><code>LOAD_CONST</code>：加载常量<code>2</code>；</p>
+<pre tabindex="0"><code>2
+2
+</code></pre></li>
+<li>
+<p><code>COMPARE_OP</code>：比较操作符<code>==</code>，栈顶元素作为第二个操作数，第二个元素作为第一个操作数；</p>
+<pre tabindex="0"><code>True
+</code></pre></li>
+<li>
+<p><code>RETURN_VALUE</code>：返回栈顶元素；</p>
+<pre tabindex="0"><code></code></pre></li>
+</ol>
+<p>本质上，<code>3 &gt; 2 == 2</code>和<code>3 &gt; 2 and 2 == 2</code>没有什么不同，只不过字节码层面的操作有点差异，<code>Python</code>代码量而言<code>3 &gt; 2 == 2</code>比较简洁，但字节码反而更多，极限情况下，性能稍低，但相差不多，以执行<code>10</code>亿次为例，才相差<code>2</code>秒左右。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># cmp.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> timeit
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>number <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000000000</span>
+</span></span><span style="display:flex;"><span>print(timeit<span style="color:#f92672">.</span>timeit(<span style="color:#e6db74">&#39;3 &gt; 2 == 2&#39;</span>, number<span style="color:#f92672">=</span>number))
+</span></span><span style="display:flex;"><span>print(timeit<span style="color:#f92672">.</span>timeit(<span style="color:#e6db74">&#39;3 &gt; 2 and 2 == 2&#39;</span>, number<span style="color:#f92672">=</span>number))
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ python3 cmp.py
+</span></span><span style="display:flex;"><span>17.322567800000797
+</span></span><span style="display:flex;"><span>14.951357840000128
+</span></span></code></pre></div><p>如果用<code>jit</code>版本的<code>python3.13</code>（目前还是实验版，需要自行编译才能启用<code>jit</code>），差异就更小，也就<code>0.5</code>秒。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ./python3.13jit/cpython-3.13.1/output/bin/python3 cmp.py
+</span></span><span style="display:flex;"><span>9.997729628999878
+</span></span><span style="display:flex;"><span>9.506675130000076
+</span></span></code></pre></div>
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2024/12/31/php-%E7%9A%84-opcode/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">PHP 的 opcode</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2025/01/07/%E9%80%9A%E8%BF%87%E7%BD%91%E5%85%B3%E4%B8%BA-php-fpm-%E6%8F%92%E4%B8%8A-websocket-%E7%9A%84%E7%BF%85%E8%86%80/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">通过网关为 PHP-FPM 插上 WebSocket 的翅膀</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284981"></script>
+  
+</body>
+</html>

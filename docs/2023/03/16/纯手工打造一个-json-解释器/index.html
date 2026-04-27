@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>纯手工打造一个 JSON 解释器 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="JSON,解释器,编译,Python,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">纯手工打造一个 JSON 解释器</h1>
+    <div class="post-meta">
+      <time datetime="2023-03-16">2023年3月16日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" class="category-pill">编译原理</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">JSON</span>
+      
+      <span class="keyword-tag">解释器</span>
+      
+      <span class="keyword-tag">编译</span>
+      
+      <span class="keyword-tag">Python</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <p>老早就想搞一个完整的解释器，不过呢，通用语言的解释器比较庞大，不太好写。写一个 JSON 解释器比较合适，要素不多，好掌握一点，而且在忽略一些细节之后，代码量极少，对于入门者了解解释器甚至编译器到底在干什么很有帮助。</p>
+<p>根据 <a href="https://www.json.org/json-en.html">https://www.json.org</a> 的介绍，JSON 由以下结构组成：</p>
+<ol>
+<li>object: 无序的 name/value 键值对，以<code>{</code>开始，以<code>}</code>结束，name 后跟着<code>:</code>，name/value 键值对由<code>,</code>分隔；</li>
+<li>array: 有序的值集合，以<code>[</code>开始，以<code>]</code>结束，值由<code>,</code>分隔；</li>
+<li>value: 可以是位于两个<code>&quot;</code>之间的 string，或者是 true 、false、null、object、array，该结构可以嵌套；</li>
+<li>string: 由双引号包裹的 0 个或多个 Unicode 字符序列，使用反斜杠<code>\</code>转义。一个字符代表一个单字节字符串。字符串跟 C 或者 Java 的字符串类似；</li>
+<li>number: 跟 C 或 Java 的数字类似，但是不使用八进制和十六进制的格式；</li>
+<li>whitespace: 可以出现在任何 token 对之间；</li>
+</ol>
+<p>以下是一个完整的 JSON 解释器代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># json_parser.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_json</span>(json_str):
+</span></span><span style="display:flex;"><span>    index <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    length <span style="color:#f92672">=</span> len(json_str)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_value</span>():
+</span></span><span style="display:flex;"><span>        char <span style="color:#f92672">=</span> json_str[index]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> char <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;{&#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> parse_object()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">elif</span> char <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;[&#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> parse_array()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">elif</span> char <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">&#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> parse_string()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">elif</span> char <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;t&#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> parse_true()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">elif</span> char <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;f&#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> parse_false()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">elif</span> char <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;n&#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> parse_null()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> parse_number()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_object</span>():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">nonlocal</span> index
+</span></span><span style="display:flex;"><span>        obj <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>        index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> index <span style="color:#f92672">&lt;</span> length <span style="color:#f92672">and</span> json_str[index] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;}&#34;</span>:
+</span></span><span style="display:flex;"><span>            key <span style="color:#f92672">=</span> parse_string()
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> index <span style="color:#f92672">&gt;=</span> length <span style="color:#f92672">and</span> json_str[index] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;}&#34;</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">raise</span> <span style="color:#e6db74">&#34;Expected &#39;:&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            val <span style="color:#f92672">=</span> parse_value()
+</span></span><span style="display:flex;"><span>            obj[key] <span style="color:#f92672">=</span> val
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> index <span style="color:#f92672">&lt;</span> length <span style="color:#f92672">and</span> json_str[index] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;,&#34;</span>:
+</span></span><span style="display:flex;"><span>                index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> index <span style="color:#f92672">&gt;=</span> length:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">raise</span> <span style="color:#e6db74">&#34;Unexpected end of input&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> obj
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_array</span>():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">nonlocal</span> index
+</span></span><span style="display:flex;"><span>        index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        arr <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> index <span style="color:#f92672">&lt;</span> length <span style="color:#f92672">and</span> json_str[index] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;]&#34;</span>:
+</span></span><span style="display:flex;"><span>            val <span style="color:#f92672">=</span> parse_value()
+</span></span><span style="display:flex;"><span>            arr<span style="color:#f92672">.</span>append(val)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> index <span style="color:#f92672">&lt;</span> length <span style="color:#f92672">and</span> json_str[index] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;,&#34;</span>:
+</span></span><span style="display:flex;"><span>                index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> index <span style="color:#f92672">&gt;=</span> length:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">raise</span> <span style="color:#e6db74">&#34;Unexpected end of input&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> arr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_string</span>():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">nonlocal</span> index
+</span></span><span style="display:flex;"><span>        index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        start <span style="color:#f92672">=</span> index
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> index <span style="color:#f92672">&lt;</span> length <span style="color:#f92672">and</span> json_str[index] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;&#34;&#39;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> json_str[index] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">&#34;</span>:
+</span></span><span style="display:flex;"><span>                index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> index <span style="color:#f92672">&gt;=</span> length:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">raise</span> <span style="color:#e6db74">&#34;Unexpected end of input&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> json_str[start:index <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_true</span>():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">nonlocal</span> index
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> json_str[index:index <span style="color:#f92672">+</span> <span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;true&#34;</span>:
+</span></span><span style="display:flex;"><span>            index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#e6db74">&#34;Unexpected token: &#34;</span> <span style="color:#f92672">+</span> json_str[index:index <span style="color:#f92672">+</span> <span style="color:#ae81ff">4</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_false</span>():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">nonlocal</span> index
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> json_str[index:index <span style="color:#f92672">+</span> <span style="color:#ae81ff">5</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;false&#34;</span>:
+</span></span><span style="display:flex;"><span>            index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#e6db74">&#34;Unexpected token: &#34;</span> <span style="color:#f92672">+</span> json_str[index:index <span style="color:#f92672">+</span> <span style="color:#ae81ff">5</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_null</span>():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">nonlocal</span> index
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> json_str[index:index <span style="color:#f92672">+</span> <span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;null&#34;</span>:
+</span></span><span style="display:flex;"><span>            index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#e6db74">&#34;Unexpected token: &#34;</span> <span style="color:#f92672">+</span> json_str[index:index <span style="color:#f92672">+</span> <span style="color:#ae81ff">5</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_number</span>():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">nonlocal</span> index
+</span></span><span style="display:flex;"><span>        start <span style="color:#f92672">=</span> index
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> index <span style="color:#f92672">&lt;</span> length <span style="color:#f92672">and</span> json_str[index]<span style="color:#f92672">.</span>isdigit():
+</span></span><span style="display:flex;"><span>            index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> index <span style="color:#f92672">&lt;</span> length <span style="color:#f92672">and</span> json_str[index] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;.&#34;</span>:
+</span></span><span style="display:flex;"><span>            index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> index <span style="color:#f92672">&lt;</span> length <span style="color:#f92672">and</span> json_str[index]<span style="color:#f92672">.</span>isdigit():
+</span></span><span style="display:flex;"><span>                index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> index <span style="color:#f92672">&lt;</span> length <span style="color:#f92672">and</span> (json_str[index] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;e&#34;</span> <span style="color:#f92672">or</span> json_str[index] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;E&#34;</span>):
+</span></span><span style="display:flex;"><span>            index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> index <span style="color:#f92672">&lt;</span> length <span style="color:#f92672">and</span> (json_str[index] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;+&#34;</span> <span style="color:#f92672">or</span> json_str[index] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;-&#34;</span>):
+</span></span><span style="display:flex;"><span>                index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> index <span style="color:#f92672">&lt;</span> length <span style="color:#f92672">and</span> json_str[index]<span style="color:#f92672">.</span>isdigit():
+</span></span><span style="display:flex;"><span>                index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> float(json_str[start:index])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> parse_value()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>s <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;{&#34;name&#34;:&#34;hello&#34;,&#34;int&#34;:1,&#34;string&#34;:&#34;True&#34;,&#34;arr&#34;:[&#34;a&#34;,&#34;你好&#34;,1.1,true,null,{&#34;value&#34;:&#34;haha&#34;}],&#34;bool&#34;:true}&#39;</span>
+</span></span><span style="display:flex;"><span>res <span style="color:#f92672">=</span> parse_json(s)
+</span></span><span style="display:flex;"><span>print(res)
+</span></span><span style="display:flex;"><span>print(res[<span style="color:#e6db74">&#39;arr&#39;</span>][<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>print(res[<span style="color:#e6db74">&#39;arr&#39;</span>][<span style="color:#ae81ff">5</span>][<span style="color:#e6db74">&#39;value&#39;</span>])
+</span></span></code></pre></div><p>运行结果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ python json_parser.py
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span><span style="color:#e6db74">&#39;name&#39;</span>: <span style="color:#e6db74">&#39;hello&#39;</span>, <span style="color:#e6db74">&#39;int&#39;</span>: 1.0, <span style="color:#e6db74">&#39;string&#39;</span>: <span style="color:#e6db74">&#39;True&#39;</span>, <span style="color:#e6db74">&#39;arr&#39;</span>: <span style="color:#f92672">[</span><span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;你好&#39;</span>, 1.1, True, None, <span style="color:#f92672">{</span><span style="color:#e6db74">&#39;value&#39;</span>: <span style="color:#e6db74">&#39;haha&#39;</span><span style="color:#f92672">}]</span>, <span style="color:#e6db74">&#39;bool&#39;</span>: True<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>你好
+</span></span><span style="display:flex;"><span>haha
+</span></span></code></pre></div>
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2023/03/06/a1-%E5%92%8C-r1c1-%E5%BC%95%E7%94%A8%E5%88%97%E6%A0%87%E7%AD%BE%E8%BD%AC%E6%8D%A2/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">A1 和 R1C1 引用列标签转换</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2023/06/06/posix-%E7%BB%88%E7%AB%AF%E5%B1%8F%E4%BF%9D/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">POSIX 终端屏保</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284981"></script>
+  
+</body>
+</html>

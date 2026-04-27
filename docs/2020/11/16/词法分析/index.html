@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>词法分析 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="词法分析,lexer,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">词法分析</h1>
+    <div class="post-meta">
+      <time datetime="2020-11-16">2020年11月16日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" class="category-pill">编译原理</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">词法分析</span>
+      
+      <span class="keyword-tag">lexer</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <p>一个简单的词法分析程序如下：</p>
+<ol>
+<li>开始；</li>
+<li>调用识别器；</li>
+<li>判断是否为关键字或标识符，如果是，跳转到步骤 4；如果否，跳转到步骤 5；</li>
+<li>查关键字表(KT表，keyword table)，如果是关键字则记录该标记该值为<code>K.TOKEN</code>；否则查填标识符表(IT表，identifier table)，识别该值为<code>I.TOKEN</code>；</li>
+<li>判断是否为算术常数，如果是，按常数处理，查填常数表(CT表，const table)，识别该值为<code>C.TOKEN</code>；否则，跳转到步骤 6；</li>
+<li>判断是否为结束符，如果是，则结束词法分析程序；否则，查界符表(PT 表)，识别该值为<code>P.TOKEN</code>。</li>
+</ol>
+<p>以上提到了几种 token：<code>K.TOKEN</code>、<code>I.TOKEN</code>、<code>C.TOKEN</code>、<code>P.TOKEN</code>，以下面一段 C 程序为例说明：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">foo</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>以上程序的词法分析结果如下表：</p>
+<p>| <strong>value</strong> | int | foo | ( | ) | { |  return | 1 | ; | } |
+| <strong>type</strong> | K.TOKEN | I.TOKEN | P.TOKEN | P.TOKEN | P.TOKEN | K.TOKEN | C.TOKEN | P.TOKEN | P.TOKEN |</p>
+<p>其中关键字表如下：</p>
+<p>| <strong>KT</strong> | int | return |</p>
+<p>界符表如下：</p>
+<p>| <strong>PT</strong> | ( | ) | { | ; | } |</p>
+<h3 id="简单的词法分析程序">简单的词法分析程序</h3>
+<p>以下程序用于分析上述 C 语言程序的词法。由于是示例程序，就没有进行太多的优化及词法的完善。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">TokenType</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Token</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Literal</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Type</span>    <span style="color:#a6e22e">TokenType</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">EOF</span>     = <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ILLEGAL</span> = <span style="color:#e6db74">&#34;ILLEGAL&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 标识符</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">IDENTIFIER</span> = <span style="color:#e6db74">&#34;IDENTIFIER&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 整数</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">INTEGER</span> = <span style="color:#e6db74">&#34;INTEGER&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 界符</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">LPAREN</span>    = <span style="color:#e6db74">&#34;(&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">RPAREN</span>    = <span style="color:#e6db74">&#34;)&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">LBRACE</span>    = <span style="color:#e6db74">&#34;{&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">RBRACE</span>    = <span style="color:#e6db74">&#34;}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">SEMICOLON</span> = <span style="color:#e6db74">&#34;;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 关键字</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">INT</span>    = <span style="color:#e6db74">&#34;INT&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">RETURN</span> = <span style="color:#e6db74">&#34;RETURN&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">keywords</span> = <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#a6e22e">TokenType</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;int&#34;</span>:    <span style="color:#a6e22e">INT</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;return&#34;</span>: <span style="color:#a6e22e">RETURN</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 检查标识符是否关键字</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">LookupIdent</span>(<span style="color:#a6e22e">ident</span> <span style="color:#66d9ef">string</span>) <span style="color:#a6e22e">TokenType</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">tk</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">keywords</span>[<span style="color:#a6e22e">ident</span>]; <span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">tk</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">IDENTIFIER</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 创建 Token</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">newToken</span>(<span style="color:#a6e22e">tokenType</span> <span style="color:#a6e22e">TokenType</span>, <span style="color:#a6e22e">ch</span> <span style="color:#66d9ef">byte</span>) <span style="color:#a6e22e">Token</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">Token</span>{<span style="color:#a6e22e">Type</span>: <span style="color:#a6e22e">tokenType</span>, <span style="color:#a6e22e">Literal</span>: string(<span style="color:#a6e22e">ch</span>)}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Lexer</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">input</span>        <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">position</span>     <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">readPosition</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ch</span>           <span style="color:#66d9ef">byte</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">input</span> <span style="color:#66d9ef">string</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">Lexer</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Lexer</span>{<span style="color:#a6e22e">input</span>: <span style="color:#a6e22e">input</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">readChar</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">l</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Lexer</span>) <span style="color:#a6e22e">readChar</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">readPosition</span> <span style="color:#f92672">&gt;=</span> len(<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">input</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span> = <span style="color:#ae81ff">0</span> <span style="color:#75715e">// NUL，表示到了源码的末尾</span>
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span> = <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">input</span>[<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">readPosition</span>]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">position</span> = <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">readPosition</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">readPosition</span> <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Lexer</span>) <span style="color:#a6e22e">skipWhitespace</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\t&#39;</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\n&#39;</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\r&#39;</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">readChar</span>()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isLetter</span>(<span style="color:#a6e22e">ch</span> <span style="color:#66d9ef">byte</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;a&#39;</span> <span style="color:#f92672">&lt;=</span> <span style="color:#a6e22e">ch</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;=</span> <span style="color:#e6db74">&#39;z&#39;</span> <span style="color:#f92672">||</span> <span style="color:#e6db74">&#39;A&#39;</span> <span style="color:#f92672">&lt;=</span> <span style="color:#a6e22e">ch</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;=</span> <span style="color:#e6db74">&#39;Z&#39;</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">ch</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;_&#39;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 读取数值，暂时只能读取整数</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Lexer</span>) <span style="color:#a6e22e">readNumber</span>() <span style="color:#66d9ef">string</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">position</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">position</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">isDigit</span>(<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">readChar</span>()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">input</span>[<span style="color:#a6e22e">position</span>:<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">position</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isDigit</span>(<span style="color:#a6e22e">ch</span> <span style="color:#66d9ef">byte</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;0&#39;</span> <span style="color:#f92672">&lt;=</span> <span style="color:#a6e22e">ch</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;=</span> <span style="color:#e6db74">&#39;9&#39;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Lexer</span>) <span style="color:#a6e22e">readIdentifier</span>() <span style="color:#66d9ef">string</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">position</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">position</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">isLetter</span>(<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">readChar</span>()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">input</span>[<span style="color:#a6e22e">position</span>:<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">position</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Lexer</span>) <span style="color:#a6e22e">NextToken</span>() <span style="color:#a6e22e">Token</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">tk</span> <span style="color:#a6e22e">Token</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">skipWhitespace</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Literal</span> = <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Type</span> = <span style="color:#a6e22e">EOF</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;(&#39;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tk</span> = <span style="color:#a6e22e">newToken</span>(<span style="color:#a6e22e">LPAREN</span>, <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;)&#39;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tk</span> = <span style="color:#a6e22e">newToken</span>(<span style="color:#a6e22e">RPAREN</span>, <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;{&#39;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tk</span> = <span style="color:#a6e22e">newToken</span>(<span style="color:#a6e22e">LBRACE</span>, <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;}&#39;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tk</span> = <span style="color:#a6e22e">newToken</span>(<span style="color:#a6e22e">RBRACE</span>, <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;;&#39;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tk</span> = <span style="color:#a6e22e">newToken</span>(<span style="color:#a6e22e">SEMICOLON</span>, <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">isLetter</span>(<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Literal</span> = <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">readIdentifier</span>()
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Type</span> = <span style="color:#a6e22e">LookupIdent</span>(<span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Literal</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">tk</span>
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">isDigit</span>(<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Type</span> = <span style="color:#a6e22e">INTEGER</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Literal</span> = <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">readNumber</span>()
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">tk</span>
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">tk</span> = <span style="color:#a6e22e">newToken</span>(<span style="color:#a6e22e">ILLEGAL</span>, <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">readChar</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">tk</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">input</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">`
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">int foo() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">`</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">input</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tk</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">NextToken</span>()
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">tk</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Type</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">EOF</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Type</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">ILLEGAL</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>以上词法分析程序将 C 语言的代码作为输入，开始调用识别器；然后一个接着一个字节地读取；遇到特定字节时，识别为不同的 token。为了代码的清晰，将开头的步骤调换了一下顺序，但并不影响最终的结果。</p>
+
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2020/10/22/phpstorm-%E4%B8%AD%E4%BD%BF%E7%94%A8-docker-%E9%95%9C%E5%83%8F%E7%9A%84-php-cli-interpreter/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">PhpStorm 中使用 Docker 镜像的 PHP CLI Interpreter</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2020/12/02/%E8%BF%9C%E7%A8%8B-coding-%E5%AE%9E%E7%8E%B0/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">远程 coding 实现</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284981"></script>
+  
+</body>
+</html>

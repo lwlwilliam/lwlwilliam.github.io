@@ -1,4 +1,5 @@
 baseURL = 'https://pages.lwlinux.cn/'
+publishDir = "docs"
 languageCode = 'zh-cn'
 title = 'William A'
 

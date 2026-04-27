@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>守护进程 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="守护进程,进程,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">守护进程</h1>
+    <div class="post-meta">
+      <time datetime="2020-06-30">2020年6月30日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-pill">操作系统</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">守护进程</span>
+      
+      <span class="keyword-tag">进程</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <p>守护进程(daemon)，简单来说就是可以脱离终端在后台运行的进程，脱离终端后成为内核初始进程的子进程。常见的服务如 web 服务都以守护进程的方式运行，它们的特点就是需要长时间或者永久运行，持续对外提供服务。</p>
+<p>进程包括以下几个 ID：</p>
+<ul>
+<li>PID：进程 ID，进程的唯一标识。</li>
+<li>PPID：父进程 ID。</li>
+<li>PGID：进程组 ID，每个进程都会有进程组 ID，表示该进程所属的进程组。默认情况下新创建的进程会继承父进程的进程组 ID。</li>
+<li>SID：会话 ID，每个进程都有会话 ID。默认情况下，新创建的进程会继承父进程的会话 ID。</li>
+</ul>
+<p>在 Linux 中可以通过<code>ps ajx</code>查看这几个 ID。一般 PPID 为 0 的，都是内核态进程；一般 PPID 为 1 且 PID == PGID == SID 的，都是守护进程，当然还有一些特殊情况，PID 跟 PGID、SID 不一致。</p>
+<p>守护进程的创建流程如下：</p>
+<ul>
+<li>fork 一个子进程，退出主进程，目的是让子进程继承进程组 ID，并获取一个新的进程 ID，这保证了子进程一定不是进程组组长，因为进程组组长不能创建新会话。</li>
+<li>setsid 创建新会话以及设置进程组 ID，成为会话组长和进程组组长，脱离原会话、进程组、终端控制，这样该进程就不会被原终端的控制信号中断。使得进程完全独立出来，摆脱其它进程的控制。</li>
+<li>再次 fork 出子进程，退出父进程（前一个子进程）。通过再次创建子进程结束当前进程，使进程不再是会话首进程来禁止进程重新打开控制终端。这个步骤并不是必须的，只是在基于 System-V 的系统上，有人建议再 fork 一次，避免打开终端设备，使程序的通用性更强。</li>
+<li>设置文件创建掩码，在子进程中调用 umask(0) 重设文件权限，这是因为子进程继承了父进程的文件权限掩码，带来一定麻烦。<code>这个并不是必要的，需要操作文件才需要</code>。</li>
+</ul>
+<blockquote>
+<p>补充 APUE 中的守护进程编程规则</p>
+</blockquote>
+<p>以上守护进程的创建流程可能不是太规范。以下是 APUE 中给出的在编写守护进程程序时需遵循的基本规则。</p>
+<ol>
+<li>首先要做的是调用 umask 将文件模式创建屏蔽字设置为一个已知值(通常是 0)。由继承得来的文件模式创建屏蔽字可能会被设置为拒绝某些权限。如果守护进程要创建文件，那么它可能要设置特定的权限。</li>
+<li>调用 fork，然后使父进程 exit。这样做实现了下面几点。第一，如果该守护进程是作为一条简单的 shell 命令启动的，那么父进程终止会让 shell 认为这条命令已经执行完毕。第二，虽然子进程继承了父进程的进程组 ID，但获得了一个新的进程 ID，这就保证了子进程不是一个进程组的组长进程。这是下面将要进行的 setsid 调用的先决条件。</li>
+<li>调用 setsid 创建一个会话。使调用进程：(a)成为新会话的首进程，(b)成为一个新进程组的组长进程，(c)没有控制终端。<strong>在基于 System V 的系统中，有些人建议在此时再次调用 fork，终止父进程，继续使用子进程中的守护进程。这就保证了该守护进程不是会话首进程，于是按照 System V 规则，可以防止它取得控制终端。</strong></li>
+<li>将当前工作目录更改为根目录。从父进程处继承过来的当前工作目录可能在一个挂载的文件系统中。因为守护进程通常在系统再引导之前是一直存在的，所以如果守护进程的当前工作目录在一个挂载文件系统中，那么该文件系统就不能被卸载。或者，某些守护进程还可能会把当前工作目录更改到某个指定位置，并在此位置进行它们的全部工作。</li>
+<li>关闭不再需要的文件描述符。这使守护进程不再持有从其父进程继承来的任何文件描述符。</li>
+<li>某些守护进程打开<code>/dev/null</code>使其具有文件描述符 0、1 和 2，这样，任何一个试图读标准输入、写标准输出或标准错误的库例程都不会产生任何效果。因为守护进程并不与终端设备相关联，所以其输出无处显示，也无处从交互式用户那里接收输入。即使守护进程是从交互式会话启动的，但是守护进程是在后台运行的，所以登录会话的终止并不影响守护进程。如果其他用户在同一终端设备上登录，我们不希望在该终端上见到守护进程的输出，用户也不期望他们在终端上的输入被守护进程读取。</li>
+</ol>
+<p>因此，以下程序也并不太规范，缺少了第 4-6 步。</p>
+<h3 id="守护进程示例">守护进程示例</h3>
+<p>以下是 C 语言的示例代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;unistd.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">umask</span>(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pid_t</span> pid;
+</span></span><span style="display:flex;"><span>    pid <span style="color:#f92672">=</span> <span style="color:#a6e22e">fork</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (pid <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;fork error</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (pid <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">10</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;first process exit</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>); <span style="color:#75715e">// 2
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;before setsid</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);  <span style="color:#75715e">// 1
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">20</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">setsid</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;after setsid</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>); <span style="color:#75715e">// 3
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    pid <span style="color:#f92672">=</span> <span style="color:#a6e22e">fork</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (pid <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;fork error</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">2</span>);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (pid <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">10</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;second process exit</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>); <span style="color:#75715e">// 4
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">20</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Hello world</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>); <span style="color:#75715e">// 5
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>附加个 PHP 版本的，跟 C 语言的大同小异，需要安装<code>pcntl</code>和<code>posix</code>扩展。后面的说明以 C 语言的为准，当然 PHP 版本的试过也没有问题，效果是一致的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">umask</span>(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$pid <span style="color:#f92672">=</span> <span style="color:#a6e22e">pcntl_fork</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> ($pid <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;fork error</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> ($pid <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">10</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;first process exit</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>); <span style="color:#75715e">// 2
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">exit</span>(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;before setsid</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>); <span style="color:#75715e">// 1
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">20</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">posix_setsid</span>();
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;after setsid</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>); <span style="color:#75715e">// 3
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$pid <span style="color:#f92672">=</span> <span style="color:#a6e22e">pcntl_fork</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> ($pid <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;fork error</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">exit</span>(<span style="color:#ae81ff">2</span>);
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> ($pid <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">10</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;second process exit</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>); <span style="color:#75715e">// 4
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">exit</span>(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">20</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Hello world</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>); <span style="color:#75715e">// 5
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">exit</span>(<span style="color:#ae81ff">0</span>);
+</span></span></code></pre></div><p>接着，根据以上程序的运行情况进行分析。</p>
+<h3 id="不同时间点的进程状态">不同时间点的进程状态</h3>
+<p><strong>需要额外说明一下，由于运行环境处于 docker 中，所以守护进程的 PPID 不是 1，而是 0</strong>。每个时间点顺序位于以上程序的注释处。以下内容以 C 语言实现的版本为准。</p>
+<blockquote>
+<p>before setsid</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@4b3b2feeac63:/var/www/html# ps ajx | sort -k <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">16</span>   <span style="color:#ae81ff">145</span>   <span style="color:#ae81ff">145</span>    <span style="color:#ae81ff">16</span> pts/1      <span style="color:#ae81ff">145</span> S+       <span style="color:#ae81ff">0</span>   0:00 ./a.out
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">145</span>   <span style="color:#ae81ff">146</span>   <span style="color:#ae81ff">145</span>    <span style="color:#ae81ff">16</span> pts/1      <span style="color:#ae81ff">145</span> S+       <span style="color:#ae81ff">0</span>   0:00 ./a.out
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">16</span>    <span style="color:#ae81ff">16</span>    <span style="color:#ae81ff">16</span> pts/1      <span style="color:#ae81ff">145</span> Ss       <span style="color:#ae81ff">0</span>   0:00 /bin/bash
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">134</span>   <span style="color:#ae81ff">134</span>   <span style="color:#ae81ff">134</span> pts/0      <span style="color:#ae81ff">147</span> Ss       <span style="color:#ae81ff">0</span>   0:00 /bin/bash
+</span></span><span style="display:flex;"><span> PPID   PID  PGID   SID TTY      TPGID STAT   UID   TIME COMMAND
+</span></span></code></pre></div><p>这时，第一次创建完子进程，子进程的 PPID、PID、PGID、SID 分别为 145、146、145、16。可以看到进程 16 和 145 的 PGID 都是 145，PGID 跟进程 145 的 PID 相同，两个进程位于同一个进程组；而 SID 则是为 16，跟 PID 为 16 的终端一致，进程 145、146、16 共享一个会话。</p>
+<blockquote>
+<p>first process exit</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@4b3b2feeac63:/var/www/html# ps ajx | sort -k <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">146</span>   <span style="color:#ae81ff">145</span>    <span style="color:#ae81ff">16</span> pts/1       <span style="color:#ae81ff">16</span> S        <span style="color:#ae81ff">0</span>   0:00 ./a.out
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">16</span>    <span style="color:#ae81ff">16</span>    <span style="color:#ae81ff">16</span> pts/1       <span style="color:#ae81ff">16</span> Ss+      <span style="color:#ae81ff">0</span>   0:00 /bin/bash
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">134</span>   <span style="color:#ae81ff">134</span>   <span style="color:#ae81ff">134</span> pts/0      <span style="color:#ae81ff">149</span> Ss       <span style="color:#ae81ff">0</span>   0:00 /bin/bash
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">134</span>   <span style="color:#ae81ff">150</span>   <span style="color:#ae81ff">149</span>   <span style="color:#ae81ff">134</span> pts/0      <span style="color:#ae81ff">149</span> R+       <span style="color:#ae81ff">0</span>   0:00 /bin/bash
+</span></span><span style="display:flex;"><span> PPID   PID  PGID   SID TTY      TPGID STAT   UID   TIME COMMAND
+</span></span></code></pre></div><p>第一次父进程退出后，子进程 PPID 变成了 0，这是因为子进程变成<code>孤儿进程</code>之后被内核初始进程收养了，docker 容器的内核初始进程 PID 就是 0；其余的 ID 并没有变化。</p>
+<blockquote>
+<p>after setsid</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@4b3b2feeac63:/var/www/html# ps ajx | sort -k <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">146</span>   <span style="color:#ae81ff">146</span>   <span style="color:#ae81ff">146</span> ?           -1 Ss       <span style="color:#ae81ff">0</span>   0:00 ./a.out
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">146</span>   <span style="color:#ae81ff">153</span>   <span style="color:#ae81ff">146</span>   <span style="color:#ae81ff">146</span> ?           -1 S        <span style="color:#ae81ff">0</span>   0:00 ./a.out
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">16</span>    <span style="color:#ae81ff">16</span>    <span style="color:#ae81ff">16</span> pts/1       <span style="color:#ae81ff">16</span> Ss+      <span style="color:#ae81ff">0</span>   0:00 /bin/bash
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">134</span>   <span style="color:#ae81ff">134</span>   <span style="color:#ae81ff">134</span> pts/0      <span style="color:#ae81ff">156</span> Ss       <span style="color:#ae81ff">0</span>   0:00 /bin/bash
+</span></span><span style="display:flex;"><span> PPID   PID  PGID   SID TTY      TPGID STAT   UID   TIME COMMAND
+</span></span></code></pre></div><p>调用 setsid 之后，同时第二次创建了子进程，也就是进程 153。这时，第一次创建的子进程（也就是 PPID 为 0 的进程）PGID 和 SID 都变成 146，跟其 PID 相同，实现了自己的进程组和会话，此时进程已经跟进程 16 （终端）脱离了；同时，进程 153 的 PGID 和 SID 跟进程 146 相同，也就是它们在同一个进程组中，并共享会话。</p>
+<blockquote>
+<p>second process exit</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@4b3b2feeac63:/var/www/html# ps ajx | sort -k <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">153</span>   <span style="color:#ae81ff">146</span>   <span style="color:#ae81ff">146</span> ?           -1 S        <span style="color:#ae81ff">0</span>   0:00 ./a.out
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">16</span>    <span style="color:#ae81ff">16</span>    <span style="color:#ae81ff">16</span> pts/1       <span style="color:#ae81ff">16</span> Ss+      <span style="color:#ae81ff">0</span>   0:00 /bin/bash
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">134</span>   <span style="color:#ae81ff">134</span>   <span style="color:#ae81ff">134</span> pts/0      <span style="color:#ae81ff">158</span> Ss       <span style="color:#ae81ff">0</span>   0:00 /bin/bash
+</span></span><span style="display:flex;"><span> PPID   PID  PGID   SID TTY      TPGID STAT   UID   TIME COMMAND
+</span></span></code></pre></div><p>第一次创建的子进程退出，它的子进程保留原有的 PGID 和 SID，但是 PID 跟 PGID、SID 不相同的，也就是本文开头所说的特殊情况。</p>
+<blockquote>
+<p>Hello world</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@4b3b2feeac63:/var/www/html# ps ajx | sort -k <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">16</span>    <span style="color:#ae81ff">16</span>    <span style="color:#ae81ff">16</span> pts/1       <span style="color:#ae81ff">16</span> Ss+      <span style="color:#ae81ff">0</span>   0:00 /bin/bash
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">134</span>   <span style="color:#ae81ff">134</span>   <span style="color:#ae81ff">134</span> pts/0      <span style="color:#ae81ff">162</span> Ss       <span style="color:#ae81ff">0</span>   0:00 /bin/bash
+</span></span><span style="display:flex;"><span> PPID   PID  PGID   SID TTY      TPGID STAT   UID   TIME COMMAND
+</span></span></code></pre></div><p>守护进程完成使命，光荣退出。</p>
+<p>当然常见的守护进程并不会自行退出。由于守护进程已经脱离终端了，因此不能直接使用 Ctrl+C 退出。Ctrl+C 本质上就是给进程发送一个 SIGINT 信号，当然我们还可以通过 kill 命令给进程发送信号，不过这方法不优雅。既然知道了退出进程的方法就是给进程发送信号，我们就可以通过命令参数传入命令，并写对应的信号处理器，在处理器中进行资源回收等操作并退出，本文就不多说了。</p>
+
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2020/06/05/%E5%9C%A8-php-%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%8D%8F%E7%A8%8B%E8%BF%9B%E8%A1%8C%E5%8D%8F%E5%90%8C%E5%A4%9A%E4%BB%BB%E5%8A%A1%E5%A4%84%E7%90%86/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">在 PHP 中使用协程进行协同多任务处理</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2020/07/10/master-worker-%E5%AE%88%E6%8A%A4%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%BC%8F/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">Master-Worker 守护多进程模式</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284981"></script>
+  
+</body>
+</html>
