@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>由 PHP Fiber 引发的思考 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  
 </head>
 <body>
   <script>
@@ -94,6 +91,12 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents"></nav></div>
+  </details>
+  
   <div class="post-content">
     <p>由于水平有限，可能有些术语并不是那么准确。</p>
 <p><code>PHP 8.1</code>的新特性<code>Fiber</code>，可能让很多<code>PHPer</code>误解了，以为<code>Fiber</code>的出现可以解决<code>PHP</code>生态的很多问题，如官方多线程方案的缺失、<code>PHP-FPM</code>多进程阻塞模型的优化。但实际上<code>Fiber</code>目前解决的问题并不多，只是在底层引入了用户栈空间切换的原语，并不能像进程和线程那样，在同步阻塞时，仍然可以在操作系统层面进行上下文切换，不至于让整个程序无法往后执行。</p>
@@ -268,7 +271,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302623"></script>
   
 </body>
 </html>

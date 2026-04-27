@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>用 Workerman 及 EMQX 做一个简单的 MQTT 示例 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302624">
+  
 </head>
 <body>
   <script>
@@ -84,6 +81,12 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents"></nav></div>
+  </details>
+  
   <div class="post-content">
     <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ docker run -d --name emqx -e EMQX_DASHBOARD__DEFAULT_PASSWORD<span style="color:#f92672">=</span>admin --network<span style="color:#f92672">=</span>lnmp -ti -p 18083:18083 -p 1883:1883 -p 8083-8084:8083-8084 -p 4370:4370 -p 5369:5369 emqx/emqx:5.8
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ composer require workerman/mqtt:2.1
@@ -161,7 +164,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302624"></script>
   
 </body>
 </html>

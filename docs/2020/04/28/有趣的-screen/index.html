@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>有趣的 screen - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  
 </head>
 <body>
   <script>
@@ -90,6 +87,26 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#会话恢复">会话恢复</a>
+          <ul>
+            <li></li>
+          </ul>
+        </li>
+        <li><a href="#远程协作会话共享">远程协作（会话共享）</a></li>
+        <li><a href="#screen-原理">screen 原理</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+  </details>
+  
   <div class="post-content">
     <p>这几天学习发现了一个很好玩的命令——screen。screen 是一个可以在多个进程之间复用一个物理终端的全屏窗口管理器，只要 screen 本身没有终止，其内部运行的会话都可以恢复，即使是网络中断。</p>
 <p>有时候我们需要远程执行一些任务，如备份，开启的远程终端窗口在任务执行完毕之前不能关掉该窗口，否则任务进程会被杀掉。这时可以通过 screen 命令来同时连接多个本地或远程会话。并在其间自由切换。</p>
@@ -182,7 +199,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302623"></script>
   
 </body>
 </html>

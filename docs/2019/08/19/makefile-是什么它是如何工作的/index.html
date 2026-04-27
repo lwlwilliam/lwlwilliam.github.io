@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Makefile 是什么？它是如何工作的？ - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  
 </head>
 <body>
   <script>
@@ -88,6 +85,26 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#基础示例">基础示例</a></li>
+        <li><a href="#高级示例">高级示例</a>
+          <ul>
+            <li><a href="#变量">变量</a></li>
+            <li><a href="#模式与函数">模式与函数</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+  </details>
+  
   <div class="post-content">
     <p>如果想要在某些文件更新时执行或更新任务，<code>make</code>工具会令这个过程变得很方便。<code>make</code>工具需要<code>Makefile</code>(或<code>makefile</code>)文件来定义要执行的一系列任务。你可能已经使用过<code>make</code>将源码编译为程序。大部分开源项目都使用<code>make</code>来编译为二进制的可执行程序，编译后的程序可以使用<code>make install</code>进行安装。</p>
 <p>本文将使用一些基本和高级的示例来对<code>make</code>和<code>makefile</code>进行探索。在这之前，先确保<code>make</code>已经安装好了。</p>
@@ -335,7 +352,7 @@ clean:
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302623"></script>
   
 </body>
 </html>

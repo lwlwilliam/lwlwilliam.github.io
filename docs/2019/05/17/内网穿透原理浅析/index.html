@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>内网穿透原理浅析 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284980">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  
 </head>
 <body>
   <script>
@@ -90,6 +87,12 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents"></nav></div>
+  </details>
+  
   <div class="post-content">
     <p>以前用过一下花生壳穿透内网，当时觉得这玩意太神奇了，有了这工具只需要在本地开发完就可以让别人直接访问，不需要烦琐的部署。可惜当初自己能力不够，只有眼馋的份。最近开始钻计算机网络这块知识，仅仅看理论觉得不过瘾，刚好看到 NAT 这块，找到了关于内网穿透的一些文章，希望自己写代码实现一个内网穿透工具，加深这方面的理解。</p>
 <p>有时候都觉得自己有点走火入魔，总喜欢折腾些很多人都不怎么爱折腾的事，给人的感觉就是浪费时间，重复造轮子，何必呢？但个人还挺喜欢这种入迷的感觉，心怀好奇心，总是好事吧~极客精神？然而我的技术离极客还差远了。闲话就不多说了，下面进入正题。由于技术所限，难免出错。如果有心且发现本文的错误，可以到<a href="https://github.com/lwlwilliam/lwlwilliam.github.io">lwlwilliam.github.io</a>给我提 issue。</p>
@@ -272,7 +275,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284980"></script>
+  <script src="/assets/js/main.js?v=1777302623"></script>
   
 </body>
 </html>

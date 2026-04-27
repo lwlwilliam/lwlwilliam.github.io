@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CentOS7 允许用户或用户组 SSH 登录 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  
 </head>
 <body>
   <script>
@@ -86,6 +83,23 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#添加新用户">添加新用户</a></li>
+        <li><a href="#将用户添加到-sudoers-中可选">将用户添加到 sudoers 中[可选]</a></li>
+        <li><a href="#将用户添加到-sshd_config-中">将用户添加到 sshd_config 中</a></li>
+        <li><a href="#重启-sshd">重启 sshd</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+  </details>
+  
   <div class="post-content">
     <p>平时用惯了<code>root</code>登录，一时间添加新用户倒不太适应。没有什么难度，纯粹记录一下方便查找。</p>
 <h3 id="添加新用户">添加新用户</h3>
@@ -145,7 +159,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302623"></script>
   
 </body>
 </html>

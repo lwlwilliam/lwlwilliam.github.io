@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python 的 bytecode - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777305166">
+  
 </head>
 <body>
   <script>
@@ -88,6 +85,8 @@
     </div>
     
   </header>
+  
+  
   <div class="post-content">
     <p>喜欢上了通过字节码来分析代码差异的感觉，前几天机缘巧合之下玩了下<code>PHP</code>的<code>opcode</code>，今天来看看<code>Python</code>的<code>bytecode</code>。今天也是巧合，恰好群里有人问<code>Python</code>中<code>3 &gt; 2 == 2</code>为什么结果是<code>True</code>？很多语言其实并没有这种表达式。如果用过<code>JavaScript</code>，就会发现它的结果跟<code>Python</code>不一样，正因为如此，我就对<code>3 &gt; 3 == 2</code>在<code>Python</code>中的底层逻辑有点好奇，那就直接动手吧。</p>
 <p>有人猜测<code>3 &gt; 2 == 2</code>可能跟<code>3 &gt; 2 and 2 == 2</code>是一样的，这就对比一下两段代码。跟编译型语言有疑问时就看看编译产生的汇编类似，要知道<code>Python</code>代码的逻辑，就得研究它的字节码。<code>dis</code>模块通过反汇编支持<code>CPython</code>的<code>bytecode</code>分析。</p>
@@ -265,7 +264,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777305166"></script>
   
 </body>
 </html>

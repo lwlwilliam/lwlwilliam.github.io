@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>动手写个简易的静态博客生成器 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302624">
+  
 </head>
 <body>
   <script>
@@ -88,6 +85,29 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#文章页-content2025-02-12-测试md">文章页 content/2025-02-12-测试.md</a></li>
+        <li><a href="#页面尾模板-templatesfooterhtml">页面尾模板 templates/footer.html</a></li>
+        <li><a href="#页面头模板-templatesheaderhtml">页面头模板 templates/header.html</a></li>
+        <li><a href="#首页模板-templatesindexhtml">首页模板 templates/index.html</a></li>
+        <li><a href="#文章页模板-templatesposthtml">文章页模板 templates/post.html</a></li>
+        <li><a href="#composerjson">composer.json</a></li>
+        <li><a href="#generatorphp">generator.php</a></li>
+        <li><a href="#运行效果图">运行效果图</a></li>
+        <li><a href="#首页效果图">首页效果图</a></li>
+        <li><a href="#文章效果图">文章效果图</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+  </details>
+  
   <div class="post-content">
     <p><code>github</code>带火了类似<code>jekyll</code>的静态博客生成器，可以将<code>markdown</code>文件转换为<code>html</code>文件，然后发布到网站上，对喜欢<code>markdown</code>简洁的人来说，简直太棒了，尤其现在大量的网站可以免费托管这种小型的博客，当然，我也是因<code>github pages</code>的服务而接触到它，懒人必备。</p>
 <p>但用久了<code>jekyll</code>就觉得不爽，毕竟我对<code>ruby</code>不太熟悉，有时候想定制一些功能稍显不太方便，既然这样，那就自己写一个吧。先思考下静态博客生成器的核心功能是啥？首先是将<code>markdown</code>文件转换为<code>html</code>文件，然后生成首页，最后是生成文章页，这三个功能是最基本的，当然还有一些其他功能，比如<code>watch</code>功能，当<code>markdown</code>文件发生变化时，自动重新生成<code>html</code>文件，这样就不用每次都手动去执行生成器了。<code>markdown</code>转<code>html</code>就不在这写了，毕竟也是一个解释器，有一定代码量，这里就直接使用第三方的<code>markdown</code>组件了，要真想写，其实也可以使用字符串替代来将就一下，但这里先不考虑这个。</p>
@@ -400,7 +420,7 @@ generator.php
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302624"></script>
   
 </body>
 </html>

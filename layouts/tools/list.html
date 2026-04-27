@@ -3,8 +3,10 @@
   <div class="tool-grid">
     {{ range site.Data.tools }}
     <a href="/tools/{{ .file_name }}.html" target="_blank" class="tool-card" rel="noopener noreferrer">
-      <span class="tool-card-icon">🛠️</span>
-      <h3 class="tool-card-name">{{ .name }}</h3>
+      <span class="tool-card-name">{{ .name }}</span>
+      {{ with .desc }}
+      <span class="tool-card-desc">{{ . }}</span>
+      {{ end }}
       <span class="tool-card-action">Open →</span>
     </a>
     {{ end }}

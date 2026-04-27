@@ -1,21 +1,23 @@
-baseURL = 'https://pages.lwlinux.cn/'
-publishDir = "docs"
+# ===== 站点基础设置 =====
+baseURL = 'https://pages.lwlinux.cn/'   # 网站域名
+publishDir = "docs"                      # 构建输出目录（GitHub Pages 用）
 languageCode = 'zh-cn'
 title = 'William A'
 
 [params]
-  keywords = 'William A'
+  keywords = 'William A'                 # 全局 SEO 关键词
   encoding = 'utf-8'
   about = 'Just for fun.'
-  description = 'Love sports, love programming, love life.'
+  description = 'Love sports, love programming, love life.'  # 全局站点描述
 
   author = 'William A'
 
-  paginate = 5
-  paginationWindow = 2
-  excerptLength = 150
+  paginate = 5                           # 首页每页文章数
+  paginationWindow = 2                   # 分页器显示的页码数量
+  excerptLength = 150                    # 摘要字数
   dateFormat = '2006-01-02'
 
+  # ===== 导航栏菜单 =====
   [[params.navs]]
     href = '/'
     label = 'cd ~'
@@ -48,12 +50,14 @@ title = 'William A'
     href = '/about/'
     label = 'About'
 
+# ===== 分类法：将 posts 按 categories 分组 =====
 [taxonomies]
   category = 'categories'
 
+# ===== 输出格式 =====
 [outputs]
-  home = ['HTML', 'RSS', 'SearchJSON']
-  page = ['HTML']
+  home = ['HTML', 'RSS', 'SearchJSON']   # 首页额外输出 RSS 和搜索 JSON
+  page = ['HTML']                        # 文章页只输出 HTML
   section = ['HTML']
   taxonomy = ['HTML']
   term = ['HTML']
@@ -63,27 +67,33 @@ title = 'William A'
     baseName = 'feed'
   [outputFormats.SearchJSON]
     mediaType = 'application/json'
-    baseName = 'search'
+    baseName = 'search'                  # 输出 /search.json 供前端搜索
     isPlainText = true
     notAlternative = true
 
 [services]
   [services.rss]
-    limit = 20
+    limit = 20                           # RSS 最多包含 20 篇文章
 
+# ===== 标记语言配置 =====
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
-      unsafe = true
+      unsafe = true                      # 允许在 Markdown 中直接写 HTML
     [markup.goldmark.extensions]
       [markup.goldmark.extensions.passthrough]
-        enable = true
+        enable = true                    # 允许 LaTeX 等 passthrough 块
         [markup.goldmark.extensions.passthrough.delimiters]
           block = [['$$', '$$'], ['\\[', '\\]']]
           inline = [['$', '$'], ['\\(', '\\)']]
 
   [markup.highlight]
-    style = 'monokai'
+    style = 'monokai'                    # 代码块高亮主题
+
+  [markup.tableOfContents]
+    startLevel = 2                       # 目录从 h2 开始
+    endLevel = 4                         # 目录到 h4 为止
+    ordered = false                      # 无序列表
 
 [permalinks]
-  posts = '/:year/:month/:day/:slug/'
+  posts = '/:year/:month/:day/:slug/'    # 文章固定链接格式

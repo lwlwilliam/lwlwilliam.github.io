@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>对 https 工作方式的简要解释 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284980">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  
 </head>
 <body>
   <script>
@@ -90,6 +87,20 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#diffie-hellman-算法">Diffie-Hellman 算法</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+  </details>
+  
   <div class="post-content">
     <h3 id="diffie-hellman-算法">Diffie-Hellman 算法</h3>
 <p>对于一个素数<code>p</code>来说，当一个数<code>g</code>满足以下条件：当<code>1 &lt;= x &lt;= p-1</code>时，如果<code>(g^x) mod p</code>能产生<code>[1, p-1]</code>的<code>所有数值</code>，就称<code>g</code>是<code>p</code>的<code>generator</code>。例如，对素数<code>p = 7</code>来说，<code>g = 3</code>就是它的<code>generator</code>。</p>
@@ -150,7 +161,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284980"></script>
+  <script src="/assets/js/main.js?v=1777302623"></script>
   
 </body>
 </html>

@@ -1,7 +1,15 @@
 {{ define "main" }}
 {{ $paginator := .Paginate .Pages .Site.Params.paginate }}
+{{ $termTitle := .Data.Term }}
+{{ range first 1 .Pages }}
+  {{ range .Params.categories }}
+    {{ if eq (. | urlize) ($.Data.Term | urlize) }}
+      {{ $termTitle = . }}
+    {{ end }}
+  {{ end }}
+{{ end }}
 <div class="category-term-page">
-  <h1 class="page-title">{{ .Title }} <span class="category-term-count">{{ len .Pages }}</span></h1>
+  <h1 class="page-title">{{ $termTitle }} <span class="category-term-count">{{ len .Pages }}</span></h1>
   <div class="post-list">
     {{ range $paginator.Pages }}
     <article class="post-card">

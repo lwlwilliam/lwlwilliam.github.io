@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>探索 PHP 源码（三）——从一个简单的时间函数入门 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777306511">
+  
 </head>
 <body>
   <script>
@@ -43,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -92,6 +90,8 @@
     </div>
     
   </header>
+  
+  
   <div class="post-content">
     <p>想必<code>phper</code>对<code>date()</code>函数不会陌生，<code>date('Y-m-d H:i:s')</code>是常见的用法。<code>date</code>扩展代码行数不少，而且一大块宏让人摸不着头脑。先根据自己的思路写一个吧，给<code>PHP</code>添加一个打印当前时间格式化形式的函数。函数原型位于<code>ext/standard/basic_functions.stub.php</code>，<code>function pmydate(string $value): void {}</code>函数接收一个格式化字符串，仅支持<code>Y</code>、<code>m</code>、<code>d</code>、<code>H</code>、<code>i</code>、<code>s</code>几种格式，没有返回值，直接输出结果。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">// ext/standard/basic_functions.stub.php
@@ -222,7 +222,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777306511"></script>
   
 </body>
 </html>

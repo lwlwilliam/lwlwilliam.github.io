@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>部署私有 LLM - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  
 </head>
 <body>
   <script>
@@ -90,6 +87,12 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents"></nav></div>
+  </details>
+  
   <div class="post-content">
     <p>目前对<code>LLM(Large Language Models，大语言模型)</code>一无所知，万事开头难，虽然部署了，但并不知道原理，不过起码兴趣点上了，好歹以兴趣入手，搞一个私有的知识库倒是不错。</p>
 <p>还是得<code>Linux</code>环境方便，<code>Ollama</code>和<code>Anything LLM</code>一起构成了我所要的知识库。<code>Ollama</code>应该是目前本地构建运行<code>LLM</code>最好的工具了，但我不仅是想本地构建，而且要是私人知识库，因此，嵌入自己的知识数据就是另一个重要的部分。以我目前粗浅的见识来看，<code>Ollama</code>给<code>LLM</code>嵌入数据还是需要其它工具协助的，<code>Anything LLM</code>正好符合我的要求。</p>
@@ -152,7 +155,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302623"></script>
   
 </body>
 </html>

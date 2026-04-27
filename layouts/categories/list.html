@@ -2,8 +2,16 @@
 <div class="categories-page">
   <div class="category-grid">
     {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
+    {{ $title := $name }}
+    {{ range first 1 $taxonomy }}
+      {{ range .Params.categories }}
+        {{ if eq (. | urlize) ($name | urlize) }}
+          {{ $title = . }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
     <a href="/categories/{{ $name | urlize }}/" class="category-card">
-      <span class="category-card-name">{{ $name }}</span>
+      <span class="category-card-name">{{ $title }}</span>
       <span class="category-card-count">{{ len $taxonomy }}</span>
     </a>
     {{ end }}

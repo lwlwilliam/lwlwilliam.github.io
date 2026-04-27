@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>字节码缓存提升程序性能的原理浅谈 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302624">
+  
 </head>
 <body>
   <script>
@@ -84,6 +81,21 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#代码">代码</a></li>
+        <li><a href="#比较">比较</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+  </details>
+  
   <div class="post-content">
     <p>像<code>Java</code>这类语言，编译器会把代码预先编译为字节码，<code>JVM</code>直接解释执行这些字节码，程序就可以运行起来了。<code>PHP</code>使用者在性能优化时可能也会遇到<code>OPcache</code>这个名词，所谓<code>OPcache</code>其实就是<code>opcode</code>的<code>cache</code>，<code>opcode</code>其实类似于字节码，虽然本质上有点差异，但可以类比为同一种事物。</p>
 <p><code>PHP</code>在开启<code>OPcache</code>扩展后，传统的<code>PHP</code>程序运行速度会提升很多，究其原因，就是<code>OPcache</code>扩展会将代码编译中间结果<code>opcode</code>进行缓存，而<code>php-fpm</code>的运行模式又是每次请求都会重新解释代码，也就是每次请求都会省略了前面的编译过程，所以单位时间内就能节省很多实际运行时间。与之相反，<code>php-cli</code>运行模式下的程序，<code>OPcache</code>对其起到的作用不大，因为<code>php-cli</code>下，程序由于常驻内存而只需要解释一次执行多次。</p>
@@ -1313,7 +1325,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302624"></script>
   
 </body>
 </html>

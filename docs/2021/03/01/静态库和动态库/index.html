@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>静态库和动态库 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777306511">
+  
 </head>
 <body>
   <script>
@@ -43,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -88,6 +86,23 @@
     </div>
     
   </header>
+  
+  
+  <nav class="post-toc" id="post-toc">
+    <span class="toc-title">目录</span>
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#number-库">number 库</a></li>
+        <li><a href="#静态库">静态库</a></li>
+        <li><a href="#动态库">动态库</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </nav>
+  
   <div class="post-content">
     <p>顾名思义，静态库可以理解为该库相对于可执行目标文件是静态的，而动态库相对于可执行文件是动态的。静态库跟可执行文件捆绑在一起，不需要依赖操作系统中其它库；动态库则一般固定在操作系统的特定位置，如<code>/usr/lib</code>目录中，如果可执行文件依赖于动态库，一旦该库被移动或损坏，则无法运行。有兴趣可以进行以下测试，我使用的是 docker 中的容器，可千万别用自己的系统试。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@b64869b93f5d:~# mv /usr/lib/ /usr/lib.bak
@@ -190,7 +205,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777306511"></script>
   
 </body>
 </html>

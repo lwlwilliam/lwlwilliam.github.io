@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PHP 的 opcode - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777304608">
+  
 </head>
 <body>
   <script>
@@ -88,6 +85,23 @@
     </div>
     
   </header>
+  
+  
+  <nav class="post-toc" id="post-toc">
+    <span class="toc-title">目录</span>
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#使用-zend-opcache">使用 Zend Opcache</a></li>
+        <li><a href="#使用-phpdbg">使用 phpdbg</a></li>
+        <li><a href="#通过-opcode-解决疑问">通过 opcode 解决疑问</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </nav>
+  
   <div class="post-content">
     <p><code>opcode</code>跟<code>PHP</code>，类似于<code>bytecode</code>跟<code>Java</code>的关系，相当于<code>机器码</code>和编译型语言的关系。</p>
 <p><code>PHP</code>是一门解释型语言，它的执行单元就是<code>opcode</code>，<code>Zend Engine</code>就是执行<code>opcode</code>的地方，<code>Zend Engine</code>也就是常说的<code>VM</code>。<code>JVM</code>比较出名，它就是针对<code>Java</code>设计的<code>VM</code>，这样说应该理解了<code>PHP</code>的<code>Zend Engine</code>和<code>opcode</code>是什么东西了吧。</p>
@@ -258,7 +272,7 @@ Array
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777304608"></script>
   
 </body>
 </html>

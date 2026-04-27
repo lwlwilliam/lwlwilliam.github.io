@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>利用 GitHub Actions 编译 PHP - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302624">
+  
 </head>
 <body>
   <script>
@@ -84,6 +81,12 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents"></nav></div>
+  </details>
+  
   <div class="post-content">
     <p>使用<code>GitHub Actions</code>编译方便不使用<code>Docker</code>等工具还要定制<code>PHP</code>版本的用户，降低了部署成本，只需要下载编译后的压缩包即可使用（前提是部署的环境跟编译的环境保持一致，也就是运行与<code>yaml</code>文件的<code>dependence</code>相同的命令解决依赖问题）。</p>
 <p>用于公共存储库的<code>GitHub</code>托管的标准运行器。对于公共存储库，使用下表所示工作流标签的作业可在具有关联规范的虚拟机上运行。可以在公共存储库上免费且无限制地使用这些运行器。</p>
@@ -227,7 +230,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302624"></script>
   
 </body>
 </html>

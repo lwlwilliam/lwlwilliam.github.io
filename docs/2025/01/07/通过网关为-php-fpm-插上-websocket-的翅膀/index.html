@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>通过网关为 PHP-FPM 插上 WebSocket 的翅膀 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302624">
+  
 </head>
 <body>
   <script>
@@ -90,6 +87,23 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#php-业务代码">PHP 业务代码</a></li>
+        <li><a href="#websocket-网关">WebSocket 网关</a></li>
+        <li><a href="#websocket-客户端">WebSocket 客户端</a></li>
+        <li><a href="#php-推送消息到-websocket-客户端">PHP 推送消息到 WebSocket 客户端</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+  </details>
+  
   <div class="post-content">
     <p>众所周知，运行在<code>PHP-FPM</code>模式下的<code>PHP</code>代码并非常驻内存，而<code>WebSocket</code>实时通信又需要常驻内存，可以说<code>PHP-FPM</code>模式跟
 <code>WebSocket</code>就走不到一块去。</p>
@@ -325,7 +339,7 @@ curl -d &#34;message=hello_world_from_curl&amp;type=client&amp;client_id=127.0.0
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302624"></script>
   
 </body>
 </html>

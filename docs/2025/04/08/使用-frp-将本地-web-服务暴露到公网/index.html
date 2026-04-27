@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>使用 frp 将本地 web 服务暴露到公网 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302624">
+  
 </head>
 <body>
   <script>
@@ -86,6 +83,21 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#http-服务">HTTP 服务</a></li>
+        <li><a href="#https-服务">HTTPS 服务</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+  </details>
+  
   <div class="post-content">
     <p>使用 <a href="https://github.com/fatedier/frp" target="_blank">frp</a> 的前提条件是有公网<code>IP</code>的服务器，毕竟标题所讲的就是内网穿透。内网穿透，要么买服务，要么就自己搭，<code>frp</code>就是一款高性能的反向代理应用，专注于内网穿透，主打一个免安装，<code>Go</code>语言写的嘛，交叉静态编译就是香。</p>
 <p>像微信以及一些服务，需要提供公网<code>HTTP</code>地址甚至必须是<code>HTTPS</code>服务才能申请或测试，频繁同步代码到服务器也不方便，而且如果是新的服务器还得搭环境，那还是做个内网穿透服务到本地比较舒服，非常适合个人做测试。</p>
@@ -177,7 +189,7 @@ LICENSE
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302624"></script>
   
 </body>
 </html>

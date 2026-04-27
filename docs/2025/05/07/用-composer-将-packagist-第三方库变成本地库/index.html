@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>用 composer 将 packagist 第三方库变成本地库 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777307212">
+  
 </head>
 <body>
   <script>
@@ -43,6 +40,7 @@
         
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>
@@ -84,6 +82,8 @@
     </div>
     
   </header>
+  
+  
   <div class="post-content">
     <p>之所以有这个想法，是因为部分第三方库版本约束没有做好，导致版本不匹配的库也可以安装，库版本不兼容到运行时才得以暴露，影响很大。</p>
 <p>以<code>workerman/mqtt</code>为例，<code>2.1</code>版本跟<code>workerman/workerman:^4.0</code>是不兼容的，但 <a href="https://github.com/walkor/mqtt/blob/v2.1/composer.json#L34">composer.json</a> 的<code>require</code>是<code>&quot;workerman/workerman&quot; : &quot;^4.0 | ^5.0&quot;</code>。当然直接<code>composer require workerman/mqtt:2.1</code>是没有问题的，如果是在已有的<code>workerman/workerman:^4.0</code>项目中<code>require</code>可以安装<code>2.1</code>版本，但运行时就会产生不兼容的错误提示。</p>
@@ -166,7 +166,7 @@ Use the option --with-all-dependencies (-W) to allow upgrades, downgrades and re
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777307212"></script>
   
 </body>
 </html>

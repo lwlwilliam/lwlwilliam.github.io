@@ -1,8 +1,11 @@
 - file_name: rag
   name: RAG
+  desc: AI 知识库检索增强生成工具
 
 - file_name: data-urls
   name: Data URLs
+  desc: Data URL 编码/解码工具
 
 - file_name: base64
   name: Base64
+  desc: Base64 编解码及文本互转工具

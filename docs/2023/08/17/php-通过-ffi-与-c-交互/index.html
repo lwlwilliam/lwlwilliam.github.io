@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PHP 通过 FFI 与 C 交互 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  
 </head>
 <body>
   <script>
@@ -86,6 +83,21 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#简单的-ffi-示例">简单的 FFI 示例</a></li>
+        <li><a href="#ffi--raylib-写图形程序">FFI + raylib 写图形程序</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+  </details>
+  
   <div class="post-content">
     <p>一门语言写的代码跟另一门语言交互一直是我很感兴趣的事情，既想用着让自己舒服的语言，又想使用其它语言在特定领域中强大的生态。当然通过网络接口来交互是最简单的方式，但需要写很多额外的代码。<code>FFI(Foreign Function Interface)</code>是用于与其它语言交互的接口，可以将其它语言的接口内嵌到本语言中，用起来就方便得多。</p>
 <p><code>FFI</code>是<code>PHP</code>核心代码的一部分，所以不需要担心后期没有人维护，放心大胆地使用吧。官方文档中提到访问<code>FFI</code>数据结构比访问原生<code>PHP</code>数组和对象慢很多（大约 2 倍）。因此使用<code>FFI</code>扩展来提高速度没有意义；减少内存消耗可能有意义。不过我使用<code>FFI</code>就是为了使用其它语言的生态，这个倒无所谓了。</p>
@@ -200,7 +212,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302623"></script>
   
 </body>
 </html>

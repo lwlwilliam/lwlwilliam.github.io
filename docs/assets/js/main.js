@@ -6,6 +6,21 @@ function toggleTheme() {
   localStorage.setItem('theme', next);
 }
 
+function toggleMenu() {
+  var nav = document.querySelector('.site-nav');
+  var btn = document.querySelector('.btn-hamburger');
+  nav.classList.toggle('open');
+  btn.textContent = nav.classList.contains('open') ? '✕' : '☰';
+}
+
+document.addEventListener('click', function(e) {
+  var nav = document.querySelector('.site-nav');
+  if (nav.classList.contains('open') && e.target.closest('.nav-link')) {
+    nav.classList.remove('open');
+    document.querySelector('.btn-hamburger').textContent = '☰';
+  }
+});
+
 function toggleSearch() {
   var ov = document.getElementById('searchOverlay');
   var input = document.getElementById('searchInput');

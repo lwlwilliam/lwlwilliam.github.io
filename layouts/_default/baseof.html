@@ -13,10 +13,12 @@
   <link rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" href="{{ .RelPermalink }}">
   {{ end }}
   <link rel="stylesheet" href="/assets/css/main.css?v={{ now.Unix }}">
+  {{ if .Params.enableKatex }}
   <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
   <script defer src="/katex/katex.min.js?v=0.16.9"></script>
   <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
   <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  {{ end }}
 </head>
 <body>
   <script>
@@ -31,6 +33,7 @@
         {{ end }}
       </nav>
       <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
         <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
         <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
       </div>

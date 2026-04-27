@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>探索 PHP 源码（一）——创建扩展 - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  
 </head>
 <body>
   <script>
@@ -86,6 +83,12 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents"></nav></div>
+  </details>
+  
   <div class="post-content">
     <p>有时候还是得逼自己一把，自从写了下玩具编译器后，就对语言底层原理产生了浓厚的兴趣。但是，<code>C</code>语言本身呢，看起来似乎语言本身的内容不多，但真的太灵活了，一个宏就能让人晕头转向；还有各种贴近硬件的类型，未定义行为，指针，想写好真的不简单。<code>PHP</code>解释器是用<code>C</code>实现的，因此也容易让我产生畏难情绪。</p>
 <p>其实学<code>C</code>语言的时间也不短了，却一直没用它写过像样的程序。最近又翻了下一本<code>C</code>语言书，有了些许收获，也许会让我能沉下心来钻进<code>PHP</code>解释器中。同时，<code>PHP</code>基金会的成立也让我对这门语言越来越有了接近之意，关注了很多社区中的大牛，也许受了感染吧，感觉就挺有意思。</p>
@@ -192,7 +195,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302623"></script>
   
 </body>
 </html>

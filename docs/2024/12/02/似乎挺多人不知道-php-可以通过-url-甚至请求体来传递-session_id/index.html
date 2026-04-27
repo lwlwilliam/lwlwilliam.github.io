@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8802&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>似乎挺多人不知道 PHP 可以通过 URL 甚至请求体来传递 SESSION_ID - William A</title>
@@ -10,11 +10,8 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777284981">
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
-  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777302623">
+  
 </head>
 <body>
   <script>
@@ -92,6 +89,21 @@
     </div>
     
   </header>
+  
+  <details class="post-toc">
+    <summary class="post-toc-title">目录</summary>
+    <div class="post-toc-content"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#通过-url-传递">通过 URL 传递</a></li>
+        <li><a href="#通过请求体传递">通过请求体传递</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+  </details>
+  
   <div class="post-content">
     <p>由于<code>HTTP</code>是无状态的，服务端不知道前一个访问者跟后一个访问者是否为同一人，于是会话机制出现了。<code>session</code>和<code>cookie</code>几乎总是同时出现的。<code>cookie</code>是由服务端创建、由客户端保存的小块数据，在用户再次访问服务时，会带上该服务端对应的<code>cookie</code>，服务端比对后就能辨别出用户身份。而在服务端跟<code>cookie</code>对应的数据就称为<code>session</code>。</p>
 <p>从以上描述可以发现，会话中的<code>cookie</code>是由服务端生成的且要唯一识别用户，称为<code>session_id</code>，<code>PHP</code>默认通过<code>cookie</code>传递<code>session_id</code>。<code>HTTP</code>协议中的响应头<code>Set-Cookie</code>就是用来干这活的，<code>HTTP</code>响应报文无非就响应头和响应体，不用<code>Set-Cookie</code>行不行？当然，自己实现一套<code>session</code>机制也是可以的；既然服务端可以通过其它响应头或响应体来传递<code>session_id</code>，那客户端是不是也能不通过<code>Cookie</code>请求头来传递<code>session_id</code>？确实也可以。</p>
@@ -190,7 +202,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777284981"></script>
+  <script src="/assets/js/main.js?v=1777302623"></script>
   
 </body>
 </html>
