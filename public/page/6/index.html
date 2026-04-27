@@ -1,412 +1,278 @@
 <!DOCTYPE html>
-<html lang="zh-cn" dir="ltr">
+<html lang="zh-cn">
 <head>
 	<meta name="generator" content="Hugo 0.160.1"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
-<meta name="viewport" content="width=device-width">
-<title>William A</title>
-
-      <link rel="stylesheet" href="/css/main.css">
-
-
-      <script src="/js/main.js"></script>
-
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content=",William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284281">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
 </head>
 <body>
-  <header>
-    <h1>William A</h1>
-
-  <nav>
-    <ul>
-    <li>
-      <a aria-current="page" class="active" href="/">Home</a>
-    </li>
-    <li>
-      <a href="/posts/">Posts</a>
-    </li>
-    <li>
-      <a href="/tags/">Tags</a>
-    </li>
-    </ul>
-  </nav>
-
-
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link active">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
   </header>
-  <main>
-    
-<div class="home">
-    <h1 class="page-title">最新文章</h1>
-    
-    
-    
-    
-    <div class="posts-list">
-        
-        <article class="post-card">
-            <div class="post-header">
-                <h2 class="post-title">
-                    <a href="/posts/2020-01-10-m3u8-%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/">m3u8 在线视频播放</a>
-                </h2>
-                <div class="post-meta">
-                    <time datetime="0001-01-01" class="post-date">
-                        0001年1月1日
-                    </time>
-                </div>
-            </div>
-            
-            <div class="post-excerpt">
-                
-                    自己有个需求，有时候希望能直接下载网站上的视频。以前另存一下就行，但后来发现很多视频网站都不能用这种方法下载了。仔细观察了一下，发现它们都有一个共同点，就是将视频分成大量切片，这种片段的格式也不是常见的， 其中在一种的 URL 都以.ts结尾，并且有个m3u8的链接跟这些.ts的 URL 有一定关系。于是就这样我就又开始愉快地玩了起来。
-生成 ts 及 m3u8 文件 经过查阅一些资料，发现这些 …
-                
-            </div>
-            
-            <div class="post-footer">
-                
-                <div class="post-categories">
-                    
-                    <a href="/categories/%E8%A7%86%E9%A2%91%E5%A4%84%E7%90%86" class="category-tag">视频处理</a>
-                    
-                </div>
-                
-                
-                
-            </div>
-        </article>
-        
-        <article class="post-card">
-            <div class="post-header">
-                <h2 class="post-title">
-                    <a href="/posts/2019-08-19-makefile-%E6%98%AF%E4%BB%80%E4%B9%88%E5%AE%83%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84/">Makefile 是什么？它是如何工作的？</a>
-                </h2>
-                <div class="post-meta">
-                    <time datetime="0001-01-01" class="post-date">
-                        0001年1月1日
-                    </time>
-                </div>
-            </div>
-            
-            <div class="post-excerpt">
-                
-                    如果想要在某些文件更新时执行或更新任务，make工具会令这个过程变得很方便。make工具需要Makefile(或makefile)文件来定义要执行的一系列任务。你可能已经使用过make将源码编译为程序。大部分开源项目都使用make来编译为二进制的可执行程序，编译后的程序可以使用make install进行安装。
-本文将使用一些基本和高级的示例来对make和makefile进行探索。在这之前，先确保 …
-                
-            </div>
-            
-            <div class="post-footer">
-                
-                <div class="post-categories">
-                    
-                    <a href="/categories/%E5%B7%A5%E5%85%B7" class="category-tag">工具</a>
-                    
-                </div>
-                
-                
-                
-            </div>
-        </article>
-        
-        <article class="post-card">
-            <div class="post-header">
-                <h2 class="post-title">
-                    <a href="/posts/2020-07-10-master-worker-%E5%AE%88%E6%8A%A4%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%BC%8F/">Master-Worker 守护多进程模式</a>
-                </h2>
-                <div class="post-meta">
-                    <time datetime="0001-01-01" class="post-date">
-                        0001年1月1日
-                    </time>
-                </div>
-            </div>
-            
-            <div class="post-excerpt">
-                
-                    Master-Worker 模式的核心思想是 Master 进程和 Worker 进程各自分担各自的任务，协同完成信息处理的模式。
-Master 进程用于管理维护 Worker 进程，而 Worker 进程则用于处理业务，如维持各自的客户端连接。
-以下是用 PHP 实现的简单的 Master-Worker 守护多进程模式。
-&lt;?php declare(ticks=1); class …
-                
-            </div>
-            
-            <div class="post-footer">
-                
-                <div class="post-categories">
-                    
-                    <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" class="category-tag">操作系统</a>
-                    
-                    <a href="/categories/php" class="category-tag">PHP</a>
-                    
-                </div>
-                
-                
-                
-            </div>
-        </article>
-        
-        <article class="post-card">
-            <div class="post-header">
-                <h2 class="post-title">
-                    <a href="/posts/2020-04-16-nginx-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/">Nginx 反向代理</a>
-                </h2>
-                <div class="post-meta">
-                    <time datetime="0001-01-01" class="post-date">
-                        0001年1月1日
-                    </time>
-                </div>
-            </div>
-            
-            <div class="post-excerpt">
-                
-                    最近在云服务器部署了 Jupyter，跟其它服务都堆在一台主机上了，又不想暴露太多端口，所以就用 Nginx 搞了下反向代理。
-首先，先为 Jupyter 分配一个域名，该域名指向 Nginx 所在主机。个人主页暂时用的是host.xxx.cn，于是给 Jupyter 分配了个subhost.host.xxx.cn，这个域名自己喜欢就好。
-接着在 Nginx 中给 Jupyter 分配一个虚拟主机 …
-                
-            </div>
-            
-            <div class="post-footer">
-                
-                <div class="post-categories">
-                    
-                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
-                    
-                </div>
-                
-                
-                
-            </div>
-        </article>
-        
-        <article class="post-card">
-            <div class="post-header">
-                <h2 class="post-title">
-                    <a href="/posts/2020-10-20-php-%E6%96%87%E4%BB%B6%E5%BC%95%E5%85%A5%E7%BB%86%E8%8A%82/">PHP 文件引入细节</a>
-                </h2>
-                <div class="post-meta">
-                    <time datetime="0001-01-01" class="post-date">
-                        0001年1月1日
-                    </time>
-                </div>
-            </div>
-            
-            <div class="post-excerpt">
-                
-                    今天在 workerman 的官方群看到有人问 webman 中的一个问题。大意就是 webman 在 windows 中修改 controller 代码需要重启才生效，而修改 view 代码则不需要重启也能生效（注：webman 使用了作者自己写的 FileMonitor 组件。在 Linux 系统中，可以通过监控指定目录，定时更新文件，然后通过 kill 给子进程发送信号达到重新加载的目的；而 …
-                
-            </div>
-            
-            <div class="post-footer">
-                
-                <div class="post-categories">
-                    
-                    <a href="/categories/php" class="category-tag">PHP</a>
-                    
-                </div>
-                
-                
-                
-            </div>
-        </article>
-        
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
     </div>
+  </div>
+
+  <main class="main-content">
     
+<div class="home-page">
+  
+  <div class="post-list">
     
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2024/07/11/%E6%8E%A2%E7%B4%A2-php-%E6%BA%90%E7%A0%81%E4%BA%8C%E8%B0%83%E6%95%B4-phpinfo-%E5%9C%A8-cli-%E4%B8%8B%E7%9A%84%E6%A0%BC%E5%BC%8F/">探索 PHP 源码（二）——调整 phpinfo 在 cli 下的格式</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2024-07-11">2024年7月11日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href="/categories/php8.2.6-%E6%BA%90%E7%A0%81%E6%8E%A2%E7%B4%A2/" class="category-pill-sm">PHP8.2.6-源码探索</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        php-cli下的phpinfo()并没有html格式，对于像reactphp、amphp等库就显示不是那么友好了，所以添加一个选项来开关html格式的phpinfo()显示比较有用。
+sapi/cli/php_cli.c的代码：
+int phpinfo_as_text = 1; while ((c …...
+        
+      </div>
+      <a href="/2024/07/11/%E6%8E%A2%E7%B4%A2-php-%E6%BA%90%E7%A0%81%E4%BA%8C%E8%B0%83%E6%95%B4-phpinfo-%E5%9C%A8-cli-%E4%B8%8B%E7%9A%84%E6%A0%BC%E5%BC%8F/" class="post-card-readmore">Read more →</a>
+    </article>
     
-    <div class="pagination">
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2024/07/10/%E6%8E%A2%E7%B4%A2-php-%E6%BA%90%E7%A0%81%E5%AE%9A%E5%88%B6%E5%8F%AF%E8%B0%83%E8%AF%95%E7%9A%84-php-%E8%A7%A3%E9%87%8A%E5%99%A8/">探索 PHP 源码（〇）——定制可调试的 PHP 解释器</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2024-07-10">2024年7月10日</time>
         
-        <a href="/page/5/" class="pagination-link">上一页</a>
+        <span class="post-card-categories">
+          
+          <a href="/categories/php8.2.6-%E6%BA%90%E7%A0%81%E6%8E%A2%E7%B4%A2/" class="category-pill-sm">PHP8.2.6-源码探索</a>
+          
+        </span>
         
-        
-        
-            
-        
-            
-        
-            
-        
-            
-            <a href="/page/4/" class="pagination-link">4</a>
-            
-        
-            
-            <a href="/page/5/" class="pagination-link">5</a>
-            
-        
-            
-            <span class="pagination-link active">6</span>
-            
-        
-            
-            <a href="/page/7/" class="pagination-link">7</a>
-            
-        
-            
-            <a href="/page/8/" class="pagination-link">8</a>
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
+      </div>
+      <div class="post-card-excerpt">
         
         
+        探索PHP源码时，定制编译是挺重要的，毕竟预先编译发行版是没有调试功能的。
+首先安装编译工具（debian系统）：
+$ sudo apt install -y pkg-config build-essential autoconf bison re2c libxml2-dev …...
         
-        <a href="/page/7/" class="pagination-link">下一页</a>
-        
-        
-        <div class="pagination-jump">
-            <span>跳转到:</span>
-            <input type="number" id="page-input" class="pagination-input" min="1" max="24" value="6">
-            <span>页</span>
-        </div>
-    </div>
+      </div>
+      <a href="/2024/07/10/%E6%8E%A2%E7%B4%A2-php-%E6%BA%90%E7%A0%81%E5%AE%9A%E5%88%B6%E5%8F%AF%E8%B0%83%E8%AF%95%E7%9A%84-php-%E8%A7%A3%E9%87%8A%E5%99%A8/" class="post-card-readmore">Read more →</a>
+    </article>
     
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2024/05/24/%E6%8E%A2%E7%B4%A2-php-%E6%BA%90%E7%A0%81%E4%B8%80%E5%88%9B%E5%BB%BA%E6%89%A9%E5%B1%95/">探索 PHP 源码（一）——创建扩展</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2024-05-24">2024年5月24日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href="/categories/php8.2.6-%E6%BA%90%E7%A0%81%E6%8E%A2%E7%B4%A2/" class="category-pill-sm">PHP8.2.6-源码探索</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        有时候还是得逼自己一把，自从写了下玩具编译器后，就对语言底层原理产生了浓厚的兴趣。但是，C语言本身呢，看起来似乎语言本身的内容不多，但真的太灵活了，一个宏就能让人晕头转向；还有各种贴近硬件的类型，未定义行为，指针，想写好真的不简单。PHP解释器是用C实现的，因此也容易让我产生畏难情绪。
+其实学C语言 …...
+        
+      </div>
+      <a href="/2024/05/24/%E6%8E%A2%E7%B4%A2-php-%E6%BA%90%E7%A0%81%E4%B8%80%E5%88%9B%E5%BB%BA%E6%89%A9%E5%B1%95/" class="post-card-readmore">Read more →</a>
+    </article>
     
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2024/05/08/%E9%83%A8%E7%BD%B2%E7%A7%81%E6%9C%89-llm/">部署私有 LLM</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2024-05-08">2024年5月8日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" class="category-pill-sm">人工智能</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        目前对LLM(Large Language Models，大语言模型)一无所知，万事开头难，虽然部署了，但并不知道原理，不过起码兴趣点上了，好歹以兴趣入手，搞一个私有的知识库倒是不错。
+还是得Linux环境方便，Ollama和Anything LLM一起构成了我所要的知识库。Ollama应该是目前本 …...
+        
+      </div>
+      <a href="/2024/05/08/%E9%83%A8%E7%BD%B2%E7%A7%81%E6%9C%89-llm/" class="post-card-readmore">Read more →</a>
+    </article>
     
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2024/01/24/%E7%94%A8%E5%8E%9F%E5%A7%8B%E6%96%B9%E6%B3%95%E6%89%93%E5%8C%85%E4%B8%80%E4%B8%AA-macos-%E4%B8%8B%E7%9A%84-gtk-%E6%A1%8C%E9%9D%A2%E7%A8%8B%E5%BA%8F/">用原始方法打包一个 macOS 下的 GTK 桌面程序</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2024-01-24">2024年1月24日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href="/categories/gui/" class="category-pill-sm">GUI</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        一直都写服务端，对计算机的运行原理有了一定了解，就想看看自己对其它领域程序的理解是不是可以举一反三。
+最简单的GTK程序就是官网入门示例了，安装GTK的过程就不在这描述。代码如下：
+// hello.c #include &lt;gtk/gtk.h&gt; static void …...
+        
+      </div>
+      <a href="/2024/01/24/%E7%94%A8%E5%8E%9F%E5%A7%8B%E6%96%B9%E6%B3%95%E6%89%93%E5%8C%85%E4%B8%80%E4%B8%AA-macos-%E4%B8%8B%E7%9A%84-gtk-%E6%A1%8C%E9%9D%A2%E7%A8%8B%E5%BA%8F/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+  </div>
+
+  
+  
+
+
+
+
+
+
+
+<nav class="pagination">
+  <div class="pagination-controls">
+    
+    <a href="/" class="page-btn" title="First">««</a>
+    <a href="/page/5/" class="page-btn" title="Previous">«</a>
+    
+
+    
+      
+        
+        <a href="/page/4/" class="page-btn">4</a>
+        
+      
+    
+      
+        
+        <a href="/page/5/" class="page-btn">5</a>
+        
+      
+    
+      
+      <span class="page-btn current">6</span>
+      
+    
+      
+        
+        <a href="/page/7/" class="page-btn">7</a>
+        
+      
+    
+      
+        
+        <a href="/page/8/" class="page-btn">8</a>
+        
+      
+    
+
+    
+    <a href="/page/7/" class="page-btn" title="Next">»</a>
+    <a href="/page/23/" class="page-btn" title="Last">»»</a>
+    
+  </div>
+  <div class="pagination-jump">
+    <span>Page</span>
+    <input type="number" id="pageJumpInput" min="1" max="23" value="6" class="page-jump-input" data-base="/">
+    <span>of 23</span>
+    <button class="page-btn page-jump-btn" onclick="jumpToPage()">Go</button>
+  </div>
+</nav>
+
+  
 </div>
 
-<style>
-.posts-list {
-    margin-top: 2rem;
-}
-
-.post-card {
-    background-color: var(--card-bg);
-    border-radius: var(--radius);
-    padding: 2rem;
-    margin-bottom: 2rem;
-    border: 1px solid var(--border-color);
-    transition: var(--transition);
-}
-
-.post-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-}
-
-.post-header {
-    margin-bottom: 1.5rem;
-}
-
-.post-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-.post-title a {
-    color: var(--text-color);
-    text-decoration: none;
-}
-
-.post-title a:hover {
-    color: var(--primary-color);
-}
-
-.post-date {
-    color: var(--secondary-color);
-    font-size: 0.9rem;
-}
-
-.post-excerpt {
-    color: var(--text-color);
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-    font-size: 1rem;
-}
-
-.post-footer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    align-items: center;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-}
-
-.post-categories {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.category-tag {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.85rem;
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-.category-tag:hover {
-    background-color: var(--accent-color);
-    transform: translateY(-1px);
-}
-
-.post-keywords {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.keyword-tag {
-    background-color: var(--card-bg);
-    color: var(--text-color);
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    border: 1px solid var(--border-color);
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-}
-
-@media (max-width: 768px) {
-    .post-card {
-        padding: 1.5rem;
-    }
-    
-    .post-title {
-        font-size: 1.25rem;
-    }
-    
-    .post-footer {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-</style>
-
   </main>
-  <footer>
-    <p>Copyright 2026. All rights reserved.</p>
 
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
   </footer>
+
+  <script src="/assets/js/main.js?v=1777284281"></script>
+  
 </body>
 </html>

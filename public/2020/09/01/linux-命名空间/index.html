@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linux 命名空间 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="namespace,cgroup,命名空间,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284281">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">Linux 命名空间</h1>
+    <div class="post-meta">
+      <time datetime="2020-09-01">2020年9月1日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-pill">操作系统</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">namespace</span>
+      
+      <span class="keyword-tag">cgroup</span>
+      
+      <span class="keyword-tag">命名空间</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <blockquote>
+<p>暂时没那个水平。以下内容摘自《Docker技术入门与实战》。</p>
+</blockquote>
+<p>今天在回顾 Docker 时看到了<code>容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的命名空间</code>，这里有一个以前自己不理解的知识点，其实也听说过的很多次了，但是之前基础不够，最后不了了之。最近在补基础，于是就想深挖一下。查了下<a href="https://en.wikipedia.org/wiki/Linux_namespaces">维基百科</a>，到 Linux 5.6 为止，命名空间有以下八种：</p>
+<ol>
+<li>
+<p>Mount (mnt)</p>
+<p>Mount 命名空间用来控制挂载点。MNT 命名空间将进程的根文件系统限制在一个特定的目录下，它允许不同命名空间的进程看到的本地文件位于宿主机中不同的路径下，每个命名空间中进程所看到的文件目录是彼此隔离的。例如，不同命名空间中的进程，都认为自己独占了一个完整的根文件系统(rootfs)，但实际上，不同命名空间中的文件彼此隔离，不会造成影响。</p>
+</li>
+<li>
+<p>Process ID (pid)</p>
+<p>Linux 通过进程命名空间管理进程号，对于同一个进程，在不同的命名空间中，看到的进程号不同。进程命名空间是一个父子关系的结构。新 fork 出的进程，在父命名空间和子命名空间分别对应不同的进程号。</p>
+</li>
+<li>
+<p>Network (net)</p>
+<p>网络命名空间是网络栈的虚拟化。在创建网络命名空间时只包含 lookback 接口。每一个网络接口（物理或者虚拟）都在一个命名空间中，并可以在命名空间中移动。每一个命名空间都有自己的一系列 IP 地址、路由表、socket 列表、连接跟踪表、防火墙和其它相关的网络资源。当破坏一个网络空间时，就会破坏它其中的所有虚拟接口并且它的所有物理接口都会回到初始化的网络空间中。</p>
+</li>
+<li>
+<p>Interprocess Communication (ipc)</p>
+<p>IPC 命名空间将进程从 SysV 网络的进程间通信中隔离开。这禁止了进程在不同的 IPC 命名空间中使用。在同一个 IPC 命名空间内的进程可以彼此可见，允许交互；不同 IPC 命名空间的进程无法交互。</p>
+</li>
+<li>
+<p>UTS (UNIX Time-Sharing)</p>
+<p>UTS 命名空间允许每个容器拥有独立的主机名和域名，从而可以虚拟出一个有独立主机名和网络空间的环境，就跟网络上一台独立主机一样。</p>
+</li>
+<li>
+<p>User ID (user)</p>
+<p>从内核 3.8 开始，用户命名空间给多个进程提供了权限隔离和用户标识隔离。每个容器可以有不同的用户和组 ID，可以在容器内使用特定的内部用户执行程序，而非本地系统上存在的用户。每个容器都可以有最高权限的 root 账号，但跟宿主主机不在一个命名空间。通过使用隔离的用户命名空间，可以提高安全性，避免容器内的进程获取到额外的权限。</p>
+</li>
+<li>
+<p>Control group (cgroup) Namespace</p>
+<p>cgroup 是 Linux 内核的一个特性，主要用来对共享资源进行隔离、限制、审计等。只有将分配到容器的资源进行控制，才能避免多个容器同时运行时对宿主机系统的资源竞争。控制组提供如下功能：</p>
+<ul>
+<li>资源限制(resource limiting)：可将组设置一定的内存限制。</li>
+<li>优先级(prioritization)：通过优先级让一些组优先得到更多的 CPU 等资源。</li>
+<li>资源审计(accounting)：用来统计系统实际上把多少资源用到适合的目的上，可以使用 cpuacct 子系统记录某个进程组使用的 CPU 时间。</li>
+<li>隔离(isolation)：为组隔离命名空间，这样使得一个组不会看到另一个组的进程、网络连接和文件系统。</li>
+<li>控制(control)：执行挂起、恢复和重启动等操作。</li>
+</ul>
+</li>
+<li>
+<p>Time Namespace</p>
+<p>跟 UTS 命名空间类似，允许进程查看到不同的系统时间。这是在 2018 年的建议，并且在 Linux 5.6 中实现。</p>
+</li>
+</ol>
+<blockquote>
+<p>Proposed namespaces: syslog namespace。这个是建议的命名空间，也就是暂未实现。</p>
+</blockquote>
+<p>其实大部分都还挺熟悉的，有没有？我还从中看到了<code>cgroup</code>，这个单词我也是见过很多次了，当然也是只停留在见过的层面上。</p>
+
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2020/08/18/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">二进制安全</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2020/09/04/%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%E5%B9%B3%E5%8F%B0%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">消息推送平台原理探究</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284281"></script>
+  
+</body>
+</html>

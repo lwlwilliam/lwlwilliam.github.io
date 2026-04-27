@@ -1,0 +1,45 @@
+{{ $window := site.Params.paginationWindow | default 2 }}
+{{ $current := .PageNumber }}
+{{ $total := .TotalPages }}
+{{ $start := sub $current $window }}
+{{ if lt $start 1 }}{{ $start = 1 }}{{ end }}
+{{ $end := add $current $window }}
+{{ if gt $end $total }}{{ $end = $total }}{{ end }}
+
+<nav class="pagination">
+  <div class="pagination-controls">
+    {{ if .HasPrev }}
+    <a href="{{ .First.URL }}" class="page-btn" title="First">««</a>
+    <a href="{{ .Prev.URL }}" class="page-btn" title="Previous">«</a>
+    {{ else }}
+    <span class="page-btn disabled">««</span>
+    <span class="page-btn disabled">«</span>
+    {{ end }}
+
+    {{ range seq $start $end }}
+      {{ if eq . $current }}
+      <span class="page-btn current">{{ . }}</span>
+      {{ else }}
+        {{ if eq . 1 }}
+        <a href="{{ $.First.URL }}" class="page-btn">{{ . }}</a>
+        {{ else }}
+        <a href="{{ $.First.URL }}page/{{ . }}/" class="page-btn">{{ . }}</a>
+        {{ end }}
+      {{ end }}
+    {{ end }}
+
+    {{ if .HasNext }}
+    <a href="{{ .Next.URL }}" class="page-btn" title="Next">»</a>
+    <a href="{{ .Last.URL }}" class="page-btn" title="Last">»»</a>
+    {{ else }}
+    <span class="page-btn disabled">»</span>
+    <span class="page-btn disabled">»»</span>
+    {{ end }}
+  </div>
+  <div class="pagination-jump">
+    <span>Page</span>
+    <input type="number" id="pageJumpInput" min="1" max="{{ $total }}" value="{{ $current }}" class="page-jump-input" data-base="{{ .First.URL }}">
+    <span>of {{ $total }}</span>
+    <button class="page-btn page-jump-btn" onclick="jumpToPage()">Go</button>
+  </div>
+</nav>

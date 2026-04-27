@@ -1,0 +1,31 @@
+{{ define "main" }}
+{{ $paginator := .Paginate .Pages .Site.Params.paginate }}
+<div class="category-term-page">
+  <h1 class="page-title">{{ .Title }} <span class="category-term-count">{{ len .Pages }}</span></h1>
+  <div class="post-list">
+    {{ range $paginator.Pages }}
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006年1月2日" }}</time>
+      </div>
+      <div class="post-card-excerpt">
+        {{ $excerpt := .Summary | plainify | truncate .Site.Params.excerptLength }}
+        {{ if ge (len .Summary) .Site.Params.excerptLength }}
+        {{ $excerpt }}...
+        {{ else }}
+        {{ $excerpt }}
+        {{ end }}
+      </div>
+      <a href="{{ .RelPermalink }}" class="post-card-readmore">Read more →</a>
+    </article>
+    {{ end }}
+  </div>
+
+  {{ if gt $paginator.TotalPages 1 }}
+  {{ partial "pagination.html" $paginator }}
+  {{ end }}
+</div>
+{{ end }}

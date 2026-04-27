@@ -1,3 +1,4 @@
 ---
-title: "链接"
+title: Links
+type: links
 ---

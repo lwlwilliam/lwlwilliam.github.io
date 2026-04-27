@@ -1,0 +1,17 @@
+{{ define "main" }}
+<div class="todo-page">
+  <div class="todo-grid">
+    {{ range site.Data.todo }}
+    <div class="todo-card">
+      <div class="todo-card-header">
+        <span class="todo-checkbox">📋</span>
+        <h3 class="todo-name">{{ .name }}</h3>
+      </div>
+      {{ with .remark }}
+      <p class="todo-remark">{{ . }}</p>
+      {{ end }}
+    </div>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

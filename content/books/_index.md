@@ -1,3 +1,4 @@
 ---
-title: "书籍"
+title: Books
+type: books
 ---

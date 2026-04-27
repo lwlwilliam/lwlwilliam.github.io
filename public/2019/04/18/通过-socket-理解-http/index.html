@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>通过 Socket 理解 HTTP - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="Socket,HTTP,Web,Python,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284281">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">通过 Socket 理解 HTTP</h1>
+    <div class="post-meta">
+      <time datetime="2019-04-18">2019年4月18日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-pill">计算机网络</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">Socket</span>
+      
+      <span class="keyword-tag">HTTP</span>
+      
+      <span class="keyword-tag">Web</span>
+      
+      <span class="keyword-tag">Python</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <p>随着基于 web 的软件（web 应用、微服务、REST、SOAP 等）的日益流行，思考其背后的原理总是好的。当我冒险进入 Flask 或者 Django 这样的框架时
+这对我特别有用。</p>
+<p>那么我们对其深入了解到什么程度呢？协议栈中最主要的传输协议 TCP 和 UDP。</p>
+<h3 id="tcp-和-udp">TCP 和 UDP</h3>
+<p>这里就不详细介绍了，TCP 和 UDP 是在网络中传输字节的两个主要标准。它们在连接上有着本质的区别，TCP 要求握手（在服务端与客户端进程间的一个正式连接）
+，而客户端发送 UDP 消息到服务端时则不保证传输的完整性。</p>
+<p>在本文，我们将重点讨论 TCP，因为对于使用 HTTP 的网络流量，几乎总是使用 TCP（因此网络协议栈的典型标签是 TCP/IP）。</p>
+<p>那么我们如何 TCP 在网络上的两个进程之间传输消息呢？答案之一是 socket。</p>
+<h3 id="socket">Socket</h3>
+<p>Socket 是程序与操作系统之间魔术般的接口。socket API 由操作系统提供，所有编译语言都可以通过库来访问，因此开发者可以选择任何一种，只要是 Python
+的就可以了（译注：因为本文使用 Python）。</p>
+<p>下面让我们来创建使用 TCP socket 来通信的服务端和客户端脚本（以下脚本都不兼容 Python3）。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># server_tcp.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> socket
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># socket.SOCK_STREAM indicates TCP</span>
+</span></span><span style="display:flex;"><span>serversocket <span style="color:#f92672">=</span> socket<span style="color:#f92672">.</span>socket(socket<span style="color:#f92672">.</span>AF_INET, socket<span style="color:#f92672">.</span>SOCK_STREAM)
+</span></span><span style="display:flex;"><span>serversocket<span style="color:#f92672">.</span>bind((<span style="color:#e6db74">&#34;localhost&#34;</span>, <span style="color:#ae81ff">10000</span>))
+</span></span><span style="display:flex;"><span>serversocket<span style="color:#f92672">.</span>listen(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>(clientsocket, address) <span style="color:#f92672">=</span> serversocket<span style="color:#f92672">.</span>accept()
+</span></span><span style="display:flex;"><span>msg <span style="color:#f92672">=</span> clientsocket<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">1024</span>)
+</span></span><span style="display:flex;"><span>print <span style="color:#e6db74">&#34;server recieved &#34;</span> <span style="color:#f92672">+</span> msg
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># client_tcp.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> socket
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># socket.SOCK_STREAM indicates TCP</span>
+</span></span><span style="display:flex;"><span>clientsocket <span style="color:#f92672">=</span> socket<span style="color:#f92672">.</span>socket(socket<span style="color:#f92672">.</span>AF_INET, socket<span style="color:#f92672">.</span>SOCK_STREAM)
+</span></span><span style="display:flex;"><span>clientsocket<span style="color:#f92672">.</span>connect((<span style="color:#e6db74">&#34;localhost&#34;</span>, <span style="color:#ae81ff">12345</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>msg <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Hello world from client&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print <span style="color:#e6db74">&#34;client sending: &#34;</span> <span style="color:#f92672">+</span> msg
+</span></span></code></pre></div><p>首先在单独的进程中运行 server_tcp 脚本，然后再在另一进程运行 client_tcp 脚本，结果如下：</p>
+<pre tabindex="0"><code>$ python server_tcp.py
+server received
+
+$ python client_tcp.py
+client sending: Hello world from client
+</code></pre><p>可以修改以上示例，通过向 server_tcp 和 client_tcp 脚本添加 send 和 recv 方法来进行双向通信。修改后完整脚本如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># server_tcp.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> socket
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># socket.SOCK_STREAM indicates TCP</span>
+</span></span><span style="display:flex;"><span>serversocket <span style="color:#f92672">=</span> socket<span style="color:#f92672">.</span>socket(socket<span style="color:#f92672">.</span>AF_INET, socket<span style="color:#f92672">.</span>SOCK_STREAM)
+</span></span><span style="display:flex;"><span>serversocket<span style="color:#f92672">.</span>bind((<span style="color:#e6db74">&#34;localhost&#34;</span>, <span style="color:#ae81ff">10000</span>))
+</span></span><span style="display:flex;"><span>serversocket<span style="color:#f92672">.</span>listen(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>(clientsocket, address) <span style="color:#f92672">=</span> serversocket<span style="color:#f92672">.</span>accept()
+</span></span><span style="display:flex;"><span>msg <span style="color:#f92672">=</span> clientsocket<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">1024</span>)
+</span></span><span style="display:flex;"><span>print <span style="color:#e6db74">&#34;server recieved &#34;</span> <span style="color:#f92672">+</span> msg
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print <span style="color:#e6db74">&#34;server sending reply&#34;</span>
+</span></span><span style="display:flex;"><span>clientsocket<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#34;server received your message&#34;</span>)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># client_tcp.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> socket
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># socket.SOCK_STREAM indicates TCP</span>
+</span></span><span style="display:flex;"><span>clientsocket <span style="color:#f92672">=</span> socket<span style="color:#f92672">.</span>socket(socket<span style="color:#f92672">.</span>AF_INET, socket<span style="color:#f92672">.</span>SOCK_STREAM)
+</span></span><span style="display:flex;"><span>clientsocket<span style="color:#f92672">.</span>connect((<span style="color:#e6db74">&#34;localhost&#34;</span>, <span style="color:#ae81ff">10000</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>msg <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Hello World from client&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print <span style="color:#e6db74">&#34;client sending: &#34;</span> <span style="color:#f92672">+</span> msg
+</span></span><span style="display:flex;"><span>clientsocket<span style="color:#f92672">.</span>send(msg)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>msg <span style="color:#f92672">=</span> clientsocket<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">1024</span>)
+</span></span><span style="display:flex;"><span>print <span style="color:#e6db74">&#34;client received: &#34;</span> <span style="color:#f92672">+</span> msg
+</span></span></code></pre></div><p>运行结果如下：</p>
+<pre tabindex="0"><code>$ python server_tcp.py
+server recieved Hello World from client
+server sending reply
+
+$ python client_tcp.py
+client sending: Hello World from client
+client received: server received your message
+</code></pre><p>从上例中可以清楚地看到，如果我们愤怒地（译注：怪怪的副词，不知道怎么翻译会好点？）使用它，很快就要定义一种标准的通信方式，即协议。这将包括消息类型的定义（线文本或者其它
+内容？）、消息长度和处理服务端或客户端请求的方法（包括身份难和标准的错误消息）。这就是 HTTP 的由来。</p>
+<p>在阅读下文之前，运行服务端脚本并尝试在 web 浏览器打开地址(<a href="http://localhost:10000/">http://localhost:10000/</a>)，你应该会看到相同的服务端消息。</p>
+<h3 id="http">HTTP</h3>
+<p>HTTP 是为 web 传输的消息定义的协议。如上所述，通过 HTTP 进行的通信通常使用 socket 和 TCP 传输协议。因此，如果我们要修改上面的 server_tcp
+示例，那么消息应该会是怎样的呢？</p>
+<ol>
+<li>首先是状态行，包括 HTTP 版本号和状态（如果这是一个响应消息的话）。</li>
+<li>头部字段，包括：
+<ul>
+<li>content-type: 如 text/html 或 application/json（消息格式）；</li>
+<li>content-length: （以字节为单位的消息长度）；</li>
+</ul>
+</li>
+<li>空行。</li>
+<li>消息体。</li>
+</ol>
+<p>下面来修改 server_tcp 脚本：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># server_tcp_http.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> socket
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>serversocket <span style="color:#f92672">=</span> socket<span style="color:#f92672">.</span>socket(socket<span style="color:#f92672">.</span>AF_INET, socket<span style="color:#f92672">.</span>SOCK_STREAM)
+</span></span><span style="display:flex;"><span>serversocket<span style="color:#f92672">.</span>bind((<span style="color:#e6db74">&#34;localhost&#34;</span>, <span style="color:#ae81ff">10000</span>))
+</span></span><span style="display:flex;"><span>serversocket<span style="color:#f92672">.</span>listen(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>msg <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">HTTP/1.1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Content-Type: text/html
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;html&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;b&gt;Hello world&lt;/b&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;/body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;/html&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>(clientsocket, address) <span style="color:#f92672">=</span> serversocket<span style="color:#f92672">.</span>accept()
+</span></span><span style="display:flex;"><span>sent <span style="color:#f92672">=</span> clientsocket<span style="color:#f92672">.</span>send(msg)
+</span></span></code></pre></div><p>如你所见，我们在 HTTP 消息体中添加了一些 HTML。运行 server_tcp_server 和 client_tcp 脚本，可以看到 client_tcp 脚本输出如下：</p>
+<pre tabindex="0"><code>$ python server_tcp_http.py
+
+$ python client_tcp.py
+client sending: Hello World from client
+client received:
+HTTP/1.1
+Content-Type: text/html
+
+&lt;html&gt;
+&lt;body&gt;
+&lt;b&gt;Hello world&lt;/b&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>为了让这看起来更真实，我们可以将 client_tcp 脚本换成 web 浏览器。再次运行 server_tcp_http 脚本，现在用浏览器访问<a href="http://localhost:10000/">http://localhost:10000/</a>。
+浏览器现在可以理解 HTTP 消息并渲染 HTML。</p>
+<p><img src="/assets/images/2019/0418/WX20190418-155340.png" alt="browser"></p>
+<p>还可以修改 server_tcp_http 脚本用来解析<code>GET</code>和<code>POST</code>请求（以及其它 HTTP 方法），但这超出了本文的范围。Python 提供了很多库来简化 HTTP 通信，而
+python 本身也包含 SimpleHTTPServer。因此，很少有人需要直接使用套接字开发 web 服务器——但是，嘿，这很有趣。</p>
+<blockquote>
+<p>整理翻译自<a href="http://www.ifnamemain.com/posts/2016/Nov/01/python_sockets_http/">http://www.ifnamemain.com/posts/2016/Nov/01/python_sockets_http/</a></p>
+</blockquote>
+
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2019/04/01/%E6%B5%AE%E7%82%B9%E6%95%B0%E8%A1%A8%E7%A4%BA/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">浮点数表示</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2019/05/06/sql-%E5%9C%A8-excel-%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">SQL 在 Excel 中的应用</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284281"></script>
+  
+</body>
+</html>

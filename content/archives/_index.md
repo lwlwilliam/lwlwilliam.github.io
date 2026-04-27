@@ -1,3 +1,4 @@
 ---
-title: "归档"
+title: Archives
+type: archives
 ---

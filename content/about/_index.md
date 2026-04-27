@@ -1,5 +1,4 @@
 ---
-title: "关于"
+title: About
+type: about
 ---
-
-Just for fun.

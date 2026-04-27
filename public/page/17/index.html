@@ -1,415 +1,274 @@
 <!DOCTYPE html>
-<html lang="zh-cn" dir="ltr">
+<html lang="zh-cn">
 <head>
 	<meta name="generator" content="Hugo 0.160.1"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
-<meta name="viewport" content="width=device-width">
-<title>William A</title>
-
-      <link rel="stylesheet" href="/css/main.css">
-
-
-      <script src="/js/main.js"></script>
-
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content=",William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284281">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
 </head>
 <body>
-  <header>
-    <h1>William A</h1>
-
-  <nav>
-    <ul>
-    <li>
-      <a aria-current="page" class="active" href="/">Home</a>
-    </li>
-    <li>
-      <a href="/posts/">Posts</a>
-    </li>
-    <li>
-      <a href="/tags/">Tags</a>
-    </li>
-    </ul>
-  </nav>
-
-
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link active">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
   </header>
-  <main>
-    
-<div class="home">
-    <h1 class="page-title">最新文章</h1>
-    
-    
-    
-    
-    <div class="posts-list">
-        
-        <article class="post-card">
-            <div class="post-header">
-                <h2 class="post-title">
-                    <a href="/posts/2020-01-09-%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E4%B9%8B%E4%B8%8A%E4%BC%A0/">断点续传之上传</a>
-                </h2>
-                <div class="post-meta">
-                    <time datetime="0001-01-01" class="post-date">
-                        0001年1月1日
-                    </time>
-                </div>
-            </div>
-            
-            <div class="post-excerpt">
-                
-                    这篇文章主要讲断点续传的上传原理。
-断点续传指的是在文件传输时将文件进行切分，每个部分的传输都是独立的，并且在遇到网络故障时，可以在网络通畅之后继续传输的未曾传输的部分，并不需要重新传输。
-根据以上描述，Web 端的文件上传步骤如下。为了思路的清晰，以下代码十分简陋，没有进行相应的错误处理，而且是非并发安全的，千万不要在实际项目中这么写！
-读取文件 var fileEle = …
-                
-            </div>
-            
-            <div class="post-footer">
-                
-                <div class="post-categories">
-                    
-                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
-                    
-                </div>
-                
-                
-                
-            </div>
-        </article>
-        
-        <article class="post-card">
-            <div class="post-header">
-                <h2 class="post-title">
-                    <a href="/posts/2020-04-28-%E6%9C%89%E8%B6%A3%E7%9A%84-screen/">有趣的 screen</a>
-                </h2>
-                <div class="post-meta">
-                    <time datetime="0001-01-01" class="post-date">
-                        0001年1月1日
-                    </time>
-                </div>
-            </div>
-            
-            <div class="post-excerpt">
-                
-                    这几天学习发现了一个很好玩的命令——screen。screen 是一个可以在多个进程之间复用一个物理终端的全屏窗口管理器，只要 screen 本身没有终止，其内部运行的会话都可以恢复，即使是网络中断。
-有时候我们需要远程执行一些任务，如备份，开启的远程终端窗口在任务执行完毕之前不能关掉该窗口，否则任务进程会被杀掉。这时可以通过 screen 命令来同时连接多个本地或远程会话。并在其间自由切换。
-会 …
-                
-            </div>
-            
-            <div class="post-footer">
-                
-                <div class="post-categories">
-                    
-                    <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" class="category-tag">计算机网络</a>
-                    
-                </div>
-                
-                
-                
-            </div>
-        </article>
-        
-        <article class="post-card">
-            <div class="post-header">
-                <h2 class="post-title">
-                    <a href="/posts/2021-01-26-%E6%A0%88%E5%AE%9E%E7%8E%B0%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/">栈实现的表达式求值</a>
-                </h2>
-                <div class="post-meta">
-                    <time datetime="0001-01-01" class="post-date">
-                        0001年1月1日
-                    </time>
-                </div>
-            </div>
-            
-            <div class="post-excerpt">
-                
-                    后进者先出，先进者后出，这就是数据结构中的&quot;栈&quot;。栈是一种相当简单的数据结构，但应用十分广泛，例如编程语言中的函数调用栈、浏览器的前进后退功能。本文讲的是栈的另一个常见应用场景，编译器利用栈实现表达式求值。初次见到这种实现思路的时候，我不禁叫绝，一个简单的栈还能玩出花。
-例如，一个简单的四则运算：10+20*2-30/3。人脑算出这个表达式的结果很简单。但是计算机只认识简单的机 …
-                
-            </div>
-            
-            <div class="post-footer">
-                
-                <div class="post-categories">
-                    
-                    <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86" class="category-tag">编译原理</a>
-                    
-                    <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" class="category-tag">算法与数据结构</a>
-                    
-                </div>
-                
-                
-                
-            </div>
-        </article>
-        
-        <article class="post-card">
-            <div class="post-header">
-                <h2 class="post-title">
-                    <a href="/posts/2020-02-26-%E6%A0%91%E8%8E%93%E6%B4%BE-4b-%E6%8A%98%E8%85%BE%E8%AE%B0%E4%B8%80%E5%88%9D%E8%AF%86/">树莓派 4b 折腾记（一）——初识</a>
-                </h2>
-                <div class="post-meta">
-                    <time datetime="0001-01-01" class="post-date">
-                        0001年1月1日
-                    </time>
-                </div>
-            </div>
-            
-            <div class="post-excerpt">
-                
-                    其实很早就打算入手树莓派玩玩，因为看到了很多让我垂涎的各种花式玩法，当然最主要的是它还可以满足我当前的某些需求。小型，便宜，社区活跃，麻雀虽小，五脏俱全，这是我选择树莓派的主要原因。树莓派其实就是小型的电脑，主板接口排布紧凑，计算机的各种部件一目了解，极大地满足了我对计算机组成的好奇心。
-构造 以下是树莓派 4b 的构造图。
-另外，在主板背面还有一个 microSD 卡槽，SD 卡用来写入树莓派的 …
-                
-            </div>
-            
-            <div class="post-footer">
-                
-                <div class="post-categories">
-                    
-                    <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" class="category-tag">操作系统</a>
-                    
-                </div>
-                
-                
-                
-            </div>
-        </article>
-        
-        <article class="post-card">
-            <div class="post-header">
-                <h2 class="post-title">
-                    <a href="/posts/2021-04-22-%E6%B1%87%E7%BC%96%E7%BA%A7%E8%B0%83%E8%AF%95%E7%A8%8B%E5%BA%8F-debug/">汇编级调试程序 debug</a>
-                </h2>
-                <div class="post-meta">
-                    <time datetime="0001-01-01" class="post-date">
-                        0001年1月1日
-                    </time>
-                </div>
-            </div>
-            
-            <div class="post-excerpt">
-                
-                    其实本文并不是主要介绍 debug 用法的。。。
-最近看了两本汇编的书，里面都提到 debug.exe。写代码嘛，肯定要实践一下，可惜电脑上并没有 debug.exe 了，所以为了方便学习，特意记录一下怎么在 win10 和 macOS(10.14.3) 上搞出 debug.exe。
-debug.exe 属于久远的 dos 时代，所以得先搞个 dos 环境呗，dosbox 就是 dos 的模拟器， …
-                
-            </div>
-            
-            <div class="post-footer">
-                
-                <div class="post-categories">
-                    
-                    <a href="/categories/%E6%B1%87%E7%BC%96" class="category-tag">汇编</a>
-                    
-                </div>
-                
-                
-                
-            </div>
-        </article>
-        
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
     </div>
+  </div>
+
+  <main class="main-content">
     
+<div class="home-page">
+  
+  <div class="post-list">
     
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2020/03/29/docker-%E6%90%AD%E5%BB%BA-lnmp-%E7%8E%AF%E5%A2%83/">Docker 搭建 LNMP 环境</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2020-03-29">2020年3月29日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href="/categories/%E5%B7%A5%E5%85%B7/" class="category-pill-sm">工具</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        下载镜像 $ docker pull nginx $ docker pull mysql:5.7 $ docker pull php:7.1-fpm 启动容器&amp;配置&amp;测试 MySQL 启动容器，注意要添加 MYSQL_ROOT_PASSWORD 环境变量，用来设置 root 密码
+$ …...
+        
+      </div>
+      <a href="/2020/03/29/docker-%E6%90%AD%E5%BB%BA-lnmp-%E7%8E%AF%E5%A2%83/" class="post-card-readmore">Read more →</a>
+    </article>
     
-    <div class="pagination">
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2020/03/27/github-pages-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D/">Github Pages 自定义域名</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2020-03-27">2020年3月27日</time>
         
-        <a href="/page/16/" class="pagination-link">上一页</a>
+        <span class="post-card-categories">
+          
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-pill-sm">计算机网络</a>
+          
+        </span>
         
-        
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-            <a href="/page/15/" class="pagination-link">15</a>
-            
-        
-            
-            <a href="/page/16/" class="pagination-link">16</a>
-            
-        
-            
-            <span class="pagination-link active">17</span>
-            
-        
-            
-            <a href="/page/18/" class="pagination-link">18</a>
-            
-        
-            
-            <a href="/page/19/" class="pagination-link">19</a>
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
+      </div>
+      <div class="post-card-excerpt">
         
         
+        重新注册了个域名，有时候 web 开发没有域名还真是不方便。一下买了五年，美滋滋，当然顺便也要给 Github Pages 加个自己的烙印的。
+为 Github Pages 添加自定义域名 如下进入设置页面，将自定义的域名填入Customer domain下的输入框中，如果要用 HTTPS 传输，则 …...
         
-        <a href="/page/18/" class="pagination-link">下一页</a>
-        
-        
-        <div class="pagination-jump">
-            <span>跳转到:</span>
-            <input type="number" id="page-input" class="pagination-input" min="1" max="24" value="17">
-            <span>页</span>
-        </div>
-    </div>
+      </div>
+      <a href="/2020/03/27/github-pages-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D/" class="post-card-readmore">Read more →</a>
+    </article>
     
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2020/03/25/centos7-%E5%85%81%E8%AE%B8%E7%94%A8%E6%88%B7%E6%88%96%E7%94%A8%E6%88%B7%E7%BB%84-ssh-%E7%99%BB%E5%BD%95/">CentOS7 允许用户或用户组 SSH 登录</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2020-03-25">2020年3月25日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-pill-sm">操作系统</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        平时用惯了root登录，一时间添加新用户倒不太适应。没有什么难度，纯粹记录一下方便查找。
+添加新用户 # useradd -m test # passwd test -m用来在创建用户的同时为其创建home目录。详细参数可见useradd --help。如果需要为用户添加超级用户权限，由将其添加到 …...
+        
+      </div>
+      <a href="/2020/03/25/centos7-%E5%85%81%E8%AE%B8%E7%94%A8%E6%88%B7%E6%88%96%E7%94%A8%E6%88%B7%E7%BB%84-ssh-%E7%99%BB%E5%BD%95/" class="post-card-readmore">Read more →</a>
+    </article>
     
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2020/02/26/%E6%A0%91%E8%8E%93%E6%B4%BE-4b-%E6%8A%98%E8%85%BE%E8%AE%B0%E4%B8%80%E5%88%9D%E8%AF%86/">树莓派 4b 折腾记（一）——初识</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2020-02-26">2020年2月26日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-pill-sm">操作系统</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        其实很早就打算入手树莓派玩玩，因为看到了很多让我垂涎的各种花式玩法，当然最主要的是它还可以满足我当前的某些需求。小型，便宜，社区活跃，麻雀虽小，五脏俱全，这是我选择树莓派的主要原因。树莓派其实就是小型的电脑，主板接口排布紧凑，计算机的各种部件一目了解，极大地满足了我对计算机组成的好奇心。
+构造 以下 …...
+        
+      </div>
+      <a href="/2020/02/26/%E6%A0%91%E8%8E%93%E6%B4%BE-4b-%E6%8A%98%E8%85%BE%E8%AE%B0%E4%B8%80%E5%88%9D%E8%AF%86/" class="post-card-readmore">Read more →</a>
+    </article>
     
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="/2020/01/10/m3u8-%E5%9C%A8%E7%BA%BF%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/">m3u8 在线视频播放</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime="2020-01-10">2020年1月10日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href="/categories/%E8%A7%86%E9%A2%91%E5%A4%84%E7%90%86/" class="category-pill-sm">视频处理</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        自己有个需求，有时候希望能直接下载网站上的视频。以前另存一下就行，但后来发现很多视频网站都不能用这种方法下载了。仔细观察了一下，发现它们都有一个共同点，就是将视频分成大量切片，这种片段的格式也不是常见的， 其中在一种的 URL 都以.ts结尾，并且有个m3u8的链接跟这些.ts的 URL 有一定关系 …...
+        
+      </div>
+      <a href="/2020/01/10/m3u8-%E5%9C%A8%E7%BA%BF%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+  </div>
+
+  
+  
+
+
+
+
+
+
+
+<nav class="pagination">
+  <div class="pagination-controls">
+    
+    <a href="/" class="page-btn" title="First">««</a>
+    <a href="/page/16/" class="page-btn" title="Previous">«</a>
+    
+
+    
+      
+        
+        <a href="/page/15/" class="page-btn">15</a>
+        
+      
+    
+      
+        
+        <a href="/page/16/" class="page-btn">16</a>
+        
+      
+    
+      
+      <span class="page-btn current">17</span>
+      
+    
+      
+        
+        <a href="/page/18/" class="page-btn">18</a>
+        
+      
+    
+      
+        
+        <a href="/page/19/" class="page-btn">19</a>
+        
+      
+    
+
+    
+    <a href="/page/18/" class="page-btn" title="Next">»</a>
+    <a href="/page/23/" class="page-btn" title="Last">»»</a>
+    
+  </div>
+  <div class="pagination-jump">
+    <span>Page</span>
+    <input type="number" id="pageJumpInput" min="1" max="23" value="17" class="page-jump-input" data-base="/">
+    <span>of 23</span>
+    <button class="page-btn page-jump-btn" onclick="jumpToPage()">Go</button>
+  </div>
+</nav>
+
+  
 </div>
 
-<style>
-.posts-list {
-    margin-top: 2rem;
-}
-
-.post-card {
-    background-color: var(--card-bg);
-    border-radius: var(--radius);
-    padding: 2rem;
-    margin-bottom: 2rem;
-    border: 1px solid var(--border-color);
-    transition: var(--transition);
-}
-
-.post-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-}
-
-.post-header {
-    margin-bottom: 1.5rem;
-}
-
-.post-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-.post-title a {
-    color: var(--text-color);
-    text-decoration: none;
-}
-
-.post-title a:hover {
-    color: var(--primary-color);
-}
-
-.post-date {
-    color: var(--secondary-color);
-    font-size: 0.9rem;
-}
-
-.post-excerpt {
-    color: var(--text-color);
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-    font-size: 1rem;
-}
-
-.post-footer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    align-items: center;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-}
-
-.post-categories {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.category-tag {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.85rem;
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-.category-tag:hover {
-    background-color: var(--accent-color);
-    transform: translateY(-1px);
-}
-
-.post-keywords {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.keyword-tag {
-    background-color: var(--card-bg);
-    color: var(--text-color);
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    border: 1px solid var(--border-color);
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-}
-
-@media (max-width: 768px) {
-    .post-card {
-        padding: 1.5rem;
-    }
-    
-    .post-title {
-        font-size: 1.25rem;
-    }
-    
-    .post-footer {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-</style>
-
   </main>
-  <footer>
-    <p>Copyright 2026. All rights reserved.</p>
 
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
   </footer>
+
+  <script src="/assets/js/main.js?v=1777284281"></script>
+  
 </body>
 </html>

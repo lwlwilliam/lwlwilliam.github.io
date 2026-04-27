@@ -1,0 +1,12 @@
+{{ define "main" }}
+<div class="categories-page">
+  <div class="category-grid">
+    {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
+    <a href="/categories/{{ $name | urlize }}/" class="category-card">
+      <span class="category-card-name">{{ $name }}</span>
+      <span class="category-card-count">{{ len $taxonomy }}</span>
+    </a>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

@@ -1,66 +1,65 @@
 baseURL = 'https://pages.lwlinux.cn/'
 languageCode = 'zh-cn'
 title = 'William A'
-theme = 'modern-blog'
 
 [params]
+  keywords = 'William A'
   encoding = 'utf-8'
-  keywords = 'William A, lwlwilliam'
-  description = 'Love sports, love programming, love life.'
   about = 'Just for fun.'
-  
-  author = 'lwlwilliam'
-  location = 'Guangzhou, China'
-  email = 'lwlwilliam@foxmail.com'
-  github_url = 'https://github.com/lwlwilliam'
-  avatar = 'https://avatars1.githubusercontent.com/u/25366940?s=150&v=4'
-  
+  description = 'Love sports, love programming, love life.'
+
+  author = 'William A'
+
   paginate = 5
-  
+  paginationWindow = 2
+  excerptLength = 150
+  dateFormat = '2006-01-02'
+
   [[params.navs]]
     href = '/'
     label = 'cd ~'
-  
+
   [[params.navs]]
     href = '/categories/'
-    label = '分类'
+    label = 'Categories'
 
   [[params.navs]]
     href = '/archives/'
-    label = '归档'
+    label = 'Archives'
 
   [[params.navs]]
     href = '/books/'
-    label = '书籍'
+    label = 'Books'
 
   [[params.navs]]
     href = '/links/'
-    label = '链接'
+    label = 'Links'
 
   [[params.navs]]
     href = '/tools/'
-    label = '工具'
+    label = 'Tools'
 
   [[params.navs]]
     href = '/todo/'
-    label = '待办'
+    label = 'Todo'
 
   [[params.navs]]
     href = '/about/'
-    label = '关于'
+    label = 'About'
 
 [taxonomies]
   category = 'categories'
-  tag = 'tags'
 
 [outputs]
-  home = ['HTML', 'RSS']
+  home = ['HTML', 'RSS', 'SearchJSON']
   page = ['HTML']
   section = ['HTML']
   taxonomy = ['HTML']
   term = ['HTML']
 
 [outputFormats]
+  [outputFormats.RSS]
+    baseName = 'feed'
   [outputFormats.SearchJSON]
     mediaType = 'application/json'
     baseName = 'search'
@@ -75,35 +74,15 @@ theme = 'modern-blog'
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['$$', '$$'], ['\\[', '\\]']]
+          inline = [['$', '$'], ['\\(', '\\)']]
+
   [markup.highlight]
     style = 'monokai'
-  [markup.tableOfContents]
-    startLevel = 2
-    endLevel = 6
 
-[imaging]
-  quality = 75
-  anchor = 'smart'
-  resampleFilter = 'lanczos'
-
-[security]
-  [security.exec]
-    allow = ['^dart-sass-embedded$', '^go$', '^npx$', '^postcss$', '^npm$', '^yarn$']
-  [security.funcs]
-    getenv = ['^HUGO_']
-
-[build]
-  writeStats = true
-  noChmod = true
-  noTimes = true
-
-[build.cachebusters]
-  [build.cachebusters.styles]
-    source = 'assets/.*\.(css|scss|sass|less)$'
-    target = 'css'
-  [build.cachebusters.scripts]
-    source = 'assets/.*\.(js|ts|jsx|tsx)$'
-    target = 'js'
-  [build.cachebusters.images]
-    source = 'assets/.*\.(png|jpg|jpeg|gif|svg|webp|avif)$'
-    target = 'img'
+[permalinks]
+  posts = '/:year/:month/:day/:slug/'

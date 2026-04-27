@@ -1,0 +1,67 @@
+{{ define "main" }}
+<div class="books-page">
+
+  {{ $books := site.Data.books }}
+  {{ $years := slice }}
+  {{ range $year, $_ := $books }}
+    {{ $years = $years | append $year }}
+  {{ end }}
+
+  <div class="books-section">
+    <h2 class="books-section-title">Technical Books</h2>
+    {{ range $year := sort $years "value" "desc" }}
+    {{ $yearBooks := index $books $year }}
+    <div class="book-year">
+      <h3 class="book-year-title">{{ $year }} <span class="book-year-count">{{ len $yearBooks }}</span></h3>
+      <div class="book-grid">
+        {{ range $yearBooks }}
+        <div class="book-card{{ if .collect }} collect{{ else }} neutral{{ end }}">
+          <div class="book-card-header">
+            <h4 class="book-name">{{ .name }}</h4>
+            <span class="book-status">
+              {{ if or .complete .remark }}✅{{ else }}📖{{ end }}
+            </span>
+          </div>
+          {{ if .info }}
+          <div class="book-info">{{ .info | safeHTML }}</div>
+          {{ end }}
+        </div>
+        {{ end }}
+      </div>
+    </div>
+    {{ end }}
+  </div>
+
+  {{ with site.Data.other_books }}
+  {{ $obooks := . }}
+  {{ $oyears := slice }}
+  {{ range $year, $_ := $obooks }}
+    {{ $oyears = $oyears | append $year }}
+  {{ end }}
+  <div class="books-section">
+    <h2 class="books-section-title">Other Books</h2>
+    {{ range $year := sort $oyears "value" "desc" }}
+    {{ $yearBooks := index $obooks $year }}
+    <div class="book-year">
+      <h3 class="book-year-title">{{ $year }} <span class="book-year-count">{{ len $yearBooks }}</span></h3>
+      <div class="book-grid">
+        {{ range $yearBooks }}
+        <div class="book-card{{ if .collect }} collect{{ else }} neutral{{ end }}">
+          <div class="book-card-header">
+            <h4 class="book-name">{{ .name }}</h4>
+            <span class="book-status">
+              {{ if or .complete .remark }}✅{{ else }}📖{{ end }}
+            </span>
+          </div>
+          {{ if .info }}
+          <div class="book-info">{{ .info | safeHTML }}</div>
+          {{ end }}
+        </div>
+        {{ end }}
+      </div>
+    </div>
+    {{ end }}
+  </div>
+  {{ end }}
+</div>
+{{ end }}

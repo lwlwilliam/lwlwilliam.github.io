@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>似乎挺多人不知道 PHP 可以通过 URL 甚至请求体来传递 SESSION_ID - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content="session,cookie,url,php,http,William A">
+  <meta name="author" content="William A">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777284281">
+  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
+  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
+  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="/">William A</a>
+      <nav class="site-nav">
+        
+        <a href="/" class="nav-link">cd ~</a>
+        
+        <a href="/categories/" class="nav-link">Categories</a>
+        
+        <a href="/archives/" class="nav-link">Archives</a>
+        
+        <a href="/books/" class="nav-link">Books</a>
+        
+        <a href="/links/" class="nav-link">Links</a>
+        
+        <a href="/tools/" class="nav-link">Tools</a>
+        
+        <a href="/todo/" class="nav-link">Todo</a>
+        
+        <a href="/about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">似乎挺多人不知道 PHP 可以通过 URL 甚至请求体来传递 SESSION_ID</h1>
+    <div class="post-meta">
+      <time datetime="2024-12-02">2024年12月2日</time>
+      
+      <span class="post-categories">
+        
+        <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-pill">计算机网络</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">session</span>
+      
+      <span class="keyword-tag">cookie</span>
+      
+      <span class="keyword-tag">url</span>
+      
+      <span class="keyword-tag">php</span>
+      
+      <span class="keyword-tag">http</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-content">
+    <p>由于<code>HTTP</code>是无状态的，服务端不知道前一个访问者跟后一个访问者是否为同一人，于是会话机制出现了。<code>session</code>和<code>cookie</code>几乎总是同时出现的。<code>cookie</code>是由服务端创建、由客户端保存的小块数据，在用户再次访问服务时，会带上该服务端对应的<code>cookie</code>，服务端比对后就能辨别出用户身份。而在服务端跟<code>cookie</code>对应的数据就称为<code>session</code>。</p>
+<p>从以上描述可以发现，会话中的<code>cookie</code>是由服务端生成的且要唯一识别用户，称为<code>session_id</code>，<code>PHP</code>默认通过<code>cookie</code>传递<code>session_id</code>。<code>HTTP</code>协议中的响应头<code>Set-Cookie</code>就是用来干这活的，<code>HTTP</code>响应报文无非就响应头和响应体，不用<code>Set-Cookie</code>行不行？当然，自己实现一套<code>session</code>机制也是可以的；既然服务端可以通过其它响应头或响应体来传递<code>session_id</code>，那客户端是不是也能不通过<code>Cookie</code>请求头来传递<code>session_id</code>？确实也可以。</p>
+<h3 id="通过-url-传递">通过 URL 传递</h3>
+<p><code>PHP</code>的<code>session</code>机制除了通过<code>cookie</code>来传递<code>session_id</code>外，还可以通过<code>URL</code>参数来传递，详情查看 <a href="https://www.php.net/manual/en/session.idpassing.php">https://www.php.net/manual/en/session.idpassing.php</a>一节。测试代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ini_set</span>(<span style="color:#e6db74">&#39;session.use_only_cookies&#39;</span>, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ini_set</span>(<span style="color:#e6db74">&#39;session.name&#39;</span>, <span style="color:#e6db74">&#39;phpsid&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">session_start</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isset</span>($_GET[<span style="color:#e6db74">&#39;init&#39;</span>])) {
+</span></span><span style="display:flex;"><span>    $_SESSION[<span style="color:#e6db74">&#39;name&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;lwlinux&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">echo</span> <span style="color:#a6e22e">session_id</span>(), <span style="color:#a6e22e">PHP_EOL</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">print_r</span>($_SESSION);
+</span></span></code></pre></div><p><code>PHP</code>出于安全的考虑，默认只允许通过<code>cookie</code>传递<code>session_id</code>，为了通过<code>URL</code>传递，需要将<code>session.use_only_cookies</code>禁用，同时为了便于测试，可以设置一个易记的<code>session.name</code>。以下命令完整地测试了创建<code>session</code>、无参数无法获取<code>session</code>、<code>URL</code>传参获取<code>session</code>三个功能。至于<code>session_id</code>在客户端怎么保存就不用提了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ curl http://php84.id/programming_practice/php/snippets/php.php?init
+</span></span><span style="display:flex;"><span>73c6fa808fc7e2074a3c68e40b412f3d
+</span></span><span style="display:flex;"><span>Array
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>name<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; lwlinux
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>$ curl http://php84.id/programming_practice/php/snippets/php.php
+</span></span><span style="display:flex;"><span>Array
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>$ curl http://php84.id/programming_practice/php/snippets/php.php?phpsid<span style="color:#f92672">=</span>73c6fa808fc7e2074a3c68e40b412f3d
+</span></span><span style="display:flex;"><span>Array
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>name<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; lwlinux
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>
+</span></span></code></pre></div><h3 id="通过请求体传递">通过请求体传递</h3>
+<p>通过<code>URL</code>传递<code>session_id</code>会存在安全风险，不过在客户端禁用<code>cookie</code>时那也是没办法的，可以使用<code>https</code>等方式来加强安全，只不过<code>URL</code>会保留在访问记录中，依然不安全。事实上，<code>PHP</code>还可以通过请求参数来传递，对比上述<code>PHP</code>代码，多了获取<code>phpsid</code>请求体参数并使用<code>session_id()</code>函数设置当前会话<code>ID</code>的逻辑。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ini_set</span>(<span style="color:#e6db74">&#39;session.use_only_cookies&#39;</span>, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ini_set</span>(<span style="color:#e6db74">&#39;session.name&#39;</span>, <span style="color:#e6db74">&#39;phpsid&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">session_start</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isset</span>($_GET[<span style="color:#e6db74">&#39;init&#39;</span>])) {
+</span></span><span style="display:flex;"><span>    $_SESSION[<span style="color:#e6db74">&#39;name&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;lwlinux&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">echo</span> <span style="color:#a6e22e">session_id</span>(), <span style="color:#a6e22e">PHP_EOL</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;phpsid&#39;</span>])) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">session_id</span>($_POST[<span style="color:#e6db74">&#39;phpsid&#39;</span>]);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">print_r</span>($_SESSION);
+</span></span></code></pre></div><p>沿用上面生成的<code>session_id</code>，对比测试一下是否带参数即可。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ curl http://php84.id/programming_practice/php/snippets/php.php
+</span></span><span style="display:flex;"><span>Array
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>$ curl -d <span style="color:#e6db74">&#39;phpsid=73c6fa808fc7e2074a3c68e40b412f3d&#39;</span> http://php84.id/programming_practice/php/snippets/php.php
+</span></span><span style="display:flex;"><span>Array
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>name<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; lwlinux
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>
+</span></span></code></pre></div>
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="/2024/10/31/%E7%BA%AF%E6%89%8B%E5%B7%A5%E5%88%9B%E5%BB%BA%E4%B8%80%E5%BC%A0%E7%AE%80%E5%8D%95%E7%9A%84-png-%E5%9B%BE%E7%89%87/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">“纯手工”创建一张简单的 PNG 图片</span>
+      </a>
+      
+      
+      <a class="next-post" href="/2024/12/24/%E5%B0%B4%E5%B0%AC%E7%9A%84-curl-%E5%92%8C%E5%B0%B4%E5%B0%AC%E7%9A%84%E6%88%91/">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">尴尬的 curl 和尴尬的我</span>
+      </a>
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+      </div>
+      <div class="footer-right">
+        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js?v=1777284281"></script>
+  
+</body>
+</html>
