@@ -11,12 +11,12 @@
     <ul class="archive-list">
       {{ range .Pages }}
       <li class="archive-item">
-        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "01-02" }}</time>
+        <time datetime='{{ .Date.Format "2006-01-02" }}'>{{ .Date.Format "01-02" }}</time>
         <a href="{{ .RelPermalink }}">{{ .Title }}</a>
         {{ with .Params.categories }}
         <span class="archive-item-cats">
           {{ range . }}
-          <a href="{{ "categories" | relURL }}/{{ . | urlize }}/" class="category-pill-sm">{{ . }}</a>
+          <a href='{{ "categories" | relURL }}/{{ . | urlize }}/' class="category-pill-sm">{{ . }}</a>
           {{ end }}
         </span>
         {{ end }}

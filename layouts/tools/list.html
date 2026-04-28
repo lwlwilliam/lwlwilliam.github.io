@@ -2,7 +2,7 @@
 <div class="tools-page">
   <div class="tool-grid">
     {{ range hugo.Data.tools }}
-    <a href="{{ "tools" | relURL }}/{{ .file_name }}.html" target="_blank" class="tool-card" rel="noopener noreferrer">
+    <a href='{{ "tools" | relURL }}/{{ .file_name }}.html' target="_blank" class="tool-card" rel="noopener noreferrer">
       <span class="tool-card-name">{{ .name }}</span>
       {{ with .desc }}
       <span class="tool-card-desc">{{ . }}</span>
