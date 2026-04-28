@@ -225,10 +225,50 @@ document.getElementById('pageJumpInput') && document.getElementById('pageJumpInp
 (function() {
   var toc = document.getElementById('post-toc');
   if (!toc) return;
-  var title = toc.querySelector('.toc-title');
-  if (!title) return;
-  title.addEventListener('click', function() {
-    toc.classList.toggle('open');
+
+  var nav = toc.querySelector('nav');
+  if (nav) {
+    try {
+      (function() {
+      var changed;
+      do {
+        changed = false;
+        var lis = nav.querySelectorAll('li');
+        for (var i = 0; i < lis.length; i++) {
+          var li = lis[i];
+          if (li.querySelector('a')) continue;
+          if (!li.parentNode) continue;
+          var childUls = [];
+          for (var ci = 0; ci < li.children.length; ci++) {
+            if (li.children[ci].tagName === 'UL') {
+              childUls.push(li.children[ci]);
+            }
+          }
+          if (childUls.length === 0) continue;
+          for (var u = 0; u < childUls.length; u++) {
+            while (childUls[u].firstChild) {
+              li.parentNode.insertBefore(childUls[u].firstChild, li);
+            }
+          }
+          if (li.parentNode) {
+            li.parentNode.removeChild(li);
+            changed = true;
+          }
+        }
+      } while (changed);
+      })();
+    } catch(e) {}
+  }
+
+  toc.addEventListener('toggle', function() {
+    if (toc.open && 'scrollIntoView' in toc) {
+      setTimeout(function() { toc.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+    }
+  });
+  document.addEventListener('click', function(e) {
+    if (toc.open && !toc.contains(e.target)) {
+      toc.open = false;
+    }
   });
 })();
 

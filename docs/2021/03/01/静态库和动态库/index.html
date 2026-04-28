@@ -9,7 +9,7 @@
   <meta name="author" content="William A">
   <link rel="icon" href='../../../../favicon.ico'>
   
-  <link rel="stylesheet" href='../../../../assets/css/main.css?v=1777367573'>
+  <link rel="stylesheet" href='../../../../assets/css/main.css?v=1777374580'>
   
 </head>
 <body>
@@ -95,8 +95,8 @@
   </header>
   
   
-  <nav class="post-toc" id="post-toc">
-    <span class="toc-title">目录</span>
+  <details class="post-toc" id="post-toc">
+    <summary>≡</summary>
     <nav id="TableOfContents">
   <ul>
     <li>
@@ -108,7 +108,7 @@
     </li>
   </ul>
 </nav>
-  </nav>
+  </details>
   
   <div class="post-content">
     <p>顾名思义，静态库可以理解为该库相对于可执行目标文件是静态的，而动态库相对于可执行文件是动态的。静态库跟可执行文件捆绑在一起，不需要依赖操作系统中其它库；动态库则一般固定在操作系统的特定位置，如<code>/usr/lib</code>目录中，如果可执行文件依赖于动态库，一旦该库被移动或损坏，则无法运行。有兴趣可以进行以下测试，我使用的是 docker 中的容器，可千万别用自己的系统试。</p>
@@ -215,7 +215,7 @@
   </footer>
 
   <a id="search-index-url" href='../../../../search.json' hidden></a>
-  <script src='../../../../assets/js/main.js?v=1777367573'></script>
+  <script src='../../../../assets/js/main.js?v=1777374580'></script>
   
 </body>
 </html>

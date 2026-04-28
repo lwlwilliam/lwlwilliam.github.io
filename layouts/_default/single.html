@@ -22,10 +22,10 @@
   </header>
   {{ $toc := .TableOfContents }}
   {{ if and $toc (findRE "<li>" $toc) }}
-  <nav class="post-toc" id="post-toc">
-    <span class="toc-title">目录</span>
+  <details class="post-toc" id="post-toc">
+    <summary>≡</summary>
     {{ $toc }}
-  </nav>
+  </details>
   {{ end }}
   <div class="post-content">
     {{ .Content }}
