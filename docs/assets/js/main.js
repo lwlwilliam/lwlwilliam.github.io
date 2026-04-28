@@ -59,10 +59,14 @@ function resolveSearchUrl(url) {
   var searchHref = document.getElementById('search-index-url').href;
   var siteRoot = searchHref.replace(/[^/]*$/, '');
   var sitePath = siteRoot.replace(/^https?:\/\/[^/]+/, '');
-  if (sitePath && url.indexOf(sitePath) === 0) {
-    url = url.substring(sitePath.length) || '/';
+  var rel = url;
+  if (sitePath !== '/' && sitePath && rel.indexOf(sitePath) === 0) {
+    rel = rel.substring(sitePath.length);
   }
-  return siteRoot + url.substring(1);
+  if (rel.charAt(0) === '/') {
+    rel = rel.substring(1);
+  }
+  return siteRoot + rel;
 }
 
 var searchData = null;
