@@ -53,6 +53,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-height) + 16px);
+  scrollbar-gutter: stable;
 }
 
 body {

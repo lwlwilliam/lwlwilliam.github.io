@@ -1,8 +1,0 @@
-- file_name: rag
-  name: RAG
-
-- file_name: data-urls
-  name: Data URLs
-
-- file_name: base64
-  name: Base64
