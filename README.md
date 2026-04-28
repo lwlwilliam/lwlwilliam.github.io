@@ -76,6 +76,25 @@ def hello():
 
 代码高亮使用 `monokai` 主题（配置在 `hugo.toml` 中）。
 
+### 使用 hugo 代码
+
+默认在文章面`*.md`文件中是无法使用`hugo`变量的，如果非要使用，可以通过如下方式：
+
+首先在`hugo.toml`中设置允许行内短代码。
+
+```toml
+[security]
+  enableInlineShortcodes = true
+```
+
+接着在文章中使用。
+
+```markdown
+今天的日期是：{{< year.inline >}}{{ now.Year }}{{< /year.inline >}}。
+```
+
+其中`{{< year.inline >}}`是内联代码的开始标签，`year`是标签名，随便起；`{{ /year.inline }}`是结束标签，`year`响应开始名称。两个标签之间的就是`hugo`代码。
+
 ---
 
 ## 数学公式 (KaTeX)
