@@ -318,3 +318,33 @@ document.getElementById('pageJumpInput') && document.getElementById('pageJumpInp
 
   checkOverflow();
 })();
+
+(function() {
+  var pres = document.querySelectorAll('.post-content pre');
+  pres.forEach(function(pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copy';
+    btn.textContent = '📋';
+    btn.title = 'Copy code';
+    btn.addEventListener('click', function() {
+      var code = pre.querySelector('code');
+      var text = code ? code.textContent : pre.textContent;
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = '✅';
+        setTimeout(function() { btn.textContent = '📋'; }, 2000);
+      }).catch(function() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = '✅';
+        setTimeout(function() { btn.textContent = '📋'; }, 2000);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
