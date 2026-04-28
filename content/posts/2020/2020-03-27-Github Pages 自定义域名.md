@@ -27,7 +27,7 @@ keywords: [Github, 域名, DNS]
 
 ![record](/assets/images/2020/0327/WX_20200327221025.png)
 
-注意，在设置完成后，需要一段时间 DNS 记录才会生效。用类 Unix 系统的小伙伴可以使用 dig 命令来查看 DNS 记录。如果 DNS 解析生效，命令会返回如下结果，ANSWER SECTION 部分中的有一条记录`github.lwlinux.cn       599     IN      CNAME   lwlwilliam.github.io`，就是以上添加的 DNS CNAME 记录。
+注意，在设置完成后，需要一段时间 DNS 记录才会生效。用类 Unix 系统的小伙伴可以使用 dig 命令来查看 DNS 记录。如果 DNS 解析生效，命令会返回如下结果，ANSWER SECTION 部分中的有一条记录`github.lwlinux.cn       599     IN      CNAME   user.github.io`，就是以上添加的 DNS CNAME 记录。
 
 ```bash
 $ dig github.lwlinux.cn
@@ -44,11 +44,11 @@ $ dig github.lwlinux.cn
 ;github.lwlinux.cn.             IN      A
 
 ;; ANSWER SECTION:
-github.lwlinux.cn.      599     IN      CNAME   lwlwilliam.github.io.
-lwlwilliam.github.io.   3599    IN      A       185.199.110.153
-lwlwilliam.github.io.   3599    IN      A       185.199.109.153
-lwlwilliam.github.io.   3599    IN      A       185.199.108.153
-lwlwilliam.github.io.   3599    IN      A       185.199.111.153
+github.lwlinux.cn.      599     IN      CNAME   user.github.io.
+user.github.io.   3599    IN      A       185.199.110.153
+user.github.io.   3599    IN      A       185.199.109.153
+user.github.io.   3599    IN      A       185.199.108.153
+user.github.io.   3599    IN      A       185.199.111.153
 
 ;; Query time: 90 msec
 ;; SERVER: 8.8.8.8#53(8.8.8.8)

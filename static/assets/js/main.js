@@ -70,7 +70,7 @@ if (searchInput) {
       return;
     }
     if (!searchData) {
-      document.getElementById('searchResults').innerHTML = '<div class="search-hint">Loading search index...</div>';
+      document.getElementById('searchResults').innerHTML = '<div class="search-hint search-loading"><span class="search-spinner"></span> 正在加载搜索索引...</div>';
     }
     searchDebounceTimer = setTimeout(function() {
       if (!searchData) {
@@ -201,3 +201,13 @@ function jumpToPage() {
 document.getElementById('pageJumpInput') && document.getElementById('pageJumpInput').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') jumpToPage();
 });
+
+(function() {
+  var toc = document.getElementById('post-toc');
+  if (!toc) return;
+  var title = toc.querySelector('.toc-title');
+  if (!title) return;
+  title.addEventListener('click', function() {
+    toc.classList.toggle('open');
+  });
+})();

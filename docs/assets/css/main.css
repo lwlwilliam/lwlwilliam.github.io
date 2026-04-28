@@ -245,8 +245,14 @@ a:hover {
   font-size: 0.85rem;
 }
 
-.footer-link:hover {
+.footer-link:hover,
+.footer-beian:hover {
   color: var(--accent);
+}
+
+.footer-beian {
+  color: var(--text-muted);
+  font-size: 0.85rem;
 }
 
 .page-title {
@@ -497,21 +503,90 @@ a:hover {
   color: var(--text-muted);
 }
 
-/* Post TOC */
+/* Post TOC — collapsed: sticky pill at top-right */
 .post-toc {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  margin-bottom: 28px;
-  padding: 14px 18px;
   position: sticky;
   top: calc(var(--header-height) + 8px);
   z-index: 10;
+  width: fit-content;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 999px;
+  padding: 9px 16px;
+  border: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.14);
+  cursor: pointer;
+  margin-bottom: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.4;
+  transition: box-shadow 0.3s, opacity 0.3s;
+}
+
+.post-toc:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+}
+
+.post-toc nav {
+  display: none;
+}
+
+.toc-title {
+  display: inline;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+  user-select: none;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.toc-title::after {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-right: 1.5px solid #fff;
+  border-bottom: 1.5px solid #fff;
+  transform: rotate(45deg);
+  transition: transform 0.2s;
+  margin-left: 6px;
+  vertical-align: middle;
+  margin-top: -2px;
+}
+
+.post-toc.open .toc-title::after {
+  transform: rotate(-135deg);
+  margin-top: 2px;
+}
+
+/* Expanded state — full sticky TOC */
+.post-toc.open {
+  position: sticky;
+  top: calc(var(--header-height) + 8px);
+  bottom: auto;
+  right: auto;
+  z-index: 10;
+  width: auto;
+  display: block;
+  background: var(--bg-secondary);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  margin-bottom: 28px;
+  box-shadow: none;
+  cursor: default;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 
-.toc-title {
+.post-toc.open:hover {
+  box-shadow: none;
+}
+
+.post-toc.open .toc-title {
   display: block;
   font-size: 0.75rem;
   font-weight: 700;
@@ -519,9 +594,20 @@ a:hover {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 10px;
+  padding: 0;
+  cursor: pointer;
 }
 
-.post-toc nav ul {
+.post-toc.open .toc-title::after {
+  border-right-color: var(--text-muted);
+  border-bottom-color: var(--text-muted);
+}
+
+.post-toc.open nav {
+  display: block;
+}
+
+.post-toc.open nav ul {
   list-style: none;
   padding-left: 0;
   margin: 0;
@@ -530,12 +616,12 @@ a:hover {
   gap: 6px;
 }
 
-.post-toc nav li {
+.post-toc.open nav li {
   margin: 0;
   line-height: 1.4;
 }
 
-.post-toc nav a {
+.post-toc.open nav a {
   display: block;
   padding: 4px 12px;
   background: var(--bg-card);
@@ -548,22 +634,26 @@ a:hover {
   white-space: nowrap;
 }
 
-.post-toc nav a:hover {
+.post-toc.open nav a:hover {
   color: var(--accent);
   border-color: var(--accent);
   background: var(--accent-light);
 }
 
-.post-toc nav ul ul {
-  display: none;
+.post-toc.open nav ul ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 0 0 0;
+  list-style: none;
 }
 
-.post-toc nav ul ul ul {
+.post-toc.open nav ul ul ul {
   display: none;
 }
 
 @supports (animation-timeline: scroll()) {
-  .post-toc {
+  .post-toc.open {
     backdrop-filter: blur(6px);
     background: color-mix(in srgb, var(--bg-secondary) 90%, transparent);
   }
@@ -571,16 +661,16 @@ a:hover {
 
 /* On wider screens, show sub-level headings as well */
 @media (min-width: 900px) {
-  .post-toc nav ul {
+  .post-toc.open nav ul {
     display: block;
     gap: 0;
   }
 
-  .post-toc nav li {
+  .post-toc.open nav li {
     margin: 3px 0;
   }
 
-  .post-toc nav a {
+  .post-toc.open nav a {
     background: none;
     border: none;
     border-radius: 4px;
@@ -589,17 +679,17 @@ a:hover {
     font-size: 0.8rem;
   }
 
-  .post-toc nav a:hover {
+  .post-toc.open nav a:hover {
     background: var(--accent-light);
     border-left-color: var(--accent);
   }
 
-  .post-toc nav ul ul {
+  .post-toc.open nav ul ul {
     display: block;
     padding-left: 14px;
   }
 
-  .post-toc nav ul ul ul {
+  .post-toc.open nav ul ul ul {
     display: block;
     padding-left: 14px;
   }
@@ -1280,6 +1370,27 @@ a:hover {
   text-align: center;
   color: var(--text-muted);
   padding: 40px 20px;
+  font-size: 0.9rem;
+}
+
+.search-loading {
+  color: var(--accent);
+}
+
+.search-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: search-spin 0.6s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+@keyframes search-spin {
+  to { transform: rotate(360deg); }
 }
 
 .search-result-item {
@@ -1498,14 +1609,85 @@ a:hover {
   .post-content h2 { font-size: 1.15rem; }
   .post-content h3 { font-size: 1.05rem; }
   .post-toc {
-    position: static;
+    padding: 7px 14px;
+    font-size: 0.72rem;
   }
-  .post-toc nav ul {
-    flex-wrap: nowrap;
+  .post-toc.open {
+    position: sticky;
+    top: var(--header-height);
+    z-index: 9;
+    bottom: auto;
+    right: auto;
+    padding: 0 12px;
+    margin-bottom: 14px;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    border-top: none;
+    backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--bg-secondary) 94%, transparent);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+  }
+  .post-toc.open .toc-title {
+    font-size: 0.7rem;
+    margin-bottom: 0;
+    padding: 7px 0;
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .post-toc.open .toc-title::after {
+    border-right-color: var(--text-muted);
+    border-bottom-color: var(--text-muted);
+  }
+  .post-toc.open nav {
+    padding-bottom: 8px;
+  }
+  .post-toc.open nav ul {
+    display: block;
+    flex-wrap: unset;
+    gap: 0;
+  }
+  .post-toc.open nav li {
+    margin: 1px 0;
+  }
+  .post-toc.open nav a {
+    background: none;
+    border: none;
+    border-radius: 4px;
+    border-left: 2px solid transparent;
+    padding: 3px 8px;
+    font-size: 0.78rem;
+    white-space: normal;
+    line-height: 1.5;
+  }
+  .post-toc.open nav a:hover {
+    background: var(--accent-light);
+    border-left-color: var(--accent);
+  }
+  .post-toc.open nav ul ul {
+    display: block;
+    padding-left: 10px;
   }
 }
 
 @media (max-width: 400px) {
+  .post-toc {
+    padding: 6px 12px;
+    font-size: 0.7rem;
+  }
+  .post-toc.open {
+    padding: 0 8px;
+    margin-bottom: 12px;
+  }
+  .post-toc.open .toc-title {
+    font-size: 0.65rem;
+    padding: 6px 0;
+  }
+  .post-toc.open nav a {
+    font-size: 0.74rem;
+    padding: 2px 6px;
+  }
   .header-inner {
     padding: 8px 10px;
   }

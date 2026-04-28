@@ -9,6 +9,7 @@ title = 'William A'
   encoding = 'utf-8'
   about = 'Just for fun.'
   description = 'Love sports, love programming, love life.'  # 全局站点描述
+  beian = '粤ICP备20026636号-1'                                # ICP 备案号
 
   author = 'William A'
 

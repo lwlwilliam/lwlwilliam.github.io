@@ -10,7 +10,7 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777333712">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1777343654">
   
 </head>
 <body>
@@ -212,9 +212,9 @@
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
 </span></span></code></pre></div><p>关注点放在以上代码的<code>TODO</code>处，分别用四种不同的方式引入文件，并在运行过程中修改 html 文件对比一下。可以用<code>strace php include_require.php</code>命令对比几种引入方式的实质区别。以下是命令在 include 或 require 时输出的片段：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>lstat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/usr/share/php/notes/src/github.com/lwlwilliam/practice/php/common/./include_require.html&#34;</span>, <span style="color:#f92672">{</span>st_mode<span style="color:#f92672">=</span>S_IFREG|0777, st_size<span style="color:#f92672">=</span>158, ...<span style="color:#f92672">})</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-</span></span><span style="display:flex;"><span>lstat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/usr/share/php/notes/src/github.com/lwlwilliam/practice/php/common/include_require.html&#34;</span>, <span style="color:#f92672">{</span>st_mode<span style="color:#f92672">=</span>S_IFREG|0777, st_size<span style="color:#f92672">=</span>158, ...<span style="color:#f92672">})</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-</span></span><span style="display:flex;"><span>openat<span style="color:#f92672">(</span>AT_FDCWD, <span style="color:#e6db74">&#34;/usr/share/php/notes/src/github.com/lwlwilliam/practice/php/common/include_require.html&#34;</span>, O_RDONLY<span style="color:#f92672">)</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>lstat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/usr/share/php/notes/src/github.com/user/practice/php/common/./include_require.html&#34;</span>, <span style="color:#f92672">{</span>st_mode<span style="color:#f92672">=</span>S_IFREG|0777, st_size<span style="color:#f92672">=</span>158, ...<span style="color:#f92672">})</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>lstat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/usr/share/php/notes/src/github.com/user/practice/php/common/include_require.html&#34;</span>, <span style="color:#f92672">{</span>st_mode<span style="color:#f92672">=</span>S_IFREG|0777, st_size<span style="color:#f92672">=</span>158, ...<span style="color:#f92672">})</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>openat<span style="color:#f92672">(</span>AT_FDCWD, <span style="color:#e6db74">&#34;/usr/share/php/notes/src/github.com/user/practice/php/common/include_require.html&#34;</span>, O_RDONLY<span style="color:#f92672">)</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>
 </span></span><span style="display:flex;"><span>fstat<span style="color:#f92672">(</span>5, <span style="color:#f92672">{</span>st_mode<span style="color:#f92672">=</span>S_IFREG|0777, st_size<span style="color:#f92672">=</span>158, ...<span style="color:#f92672">})</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
 </span></span><span style="display:flex;"><span>read<span style="color:#f92672">(</span>5, <span style="color:#e6db74">&#34;&lt;!DOCTYPE html&gt;\r\n&lt;html lang=\&#34;en\&#34;&#34;</span>..., 158<span style="color:#f92672">)</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">158</span>
 </span></span><span style="display:flex;"><span>close<span style="color:#f92672">(</span>5<span style="color:#f92672">)</span>                                <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
@@ -248,6 +248,8 @@
         <span>&copy; 2026 William A</span>
         <span class="footer-sep">|</span>
         <span>Love sports, love programming, love life.</span>
+        <span class="footer-sep">|</span>
+        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">粤ICP备20026636号-1</a>
       </div>
       <div class="footer-right">
         <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
@@ -255,7 +257,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777333712"></script>
+  <script src="/assets/js/main.js?v=1777343654"></script>
   
 </body>
 </html>

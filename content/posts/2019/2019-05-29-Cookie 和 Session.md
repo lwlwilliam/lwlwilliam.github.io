@@ -52,7 +52,7 @@ session 管理涉及到如下几个因素：
 项目结构如下：
 
 ```
-- $GOPATH/src/github.com/lwlwilliam
+- $GOPATH/src/github.com/user
     - sessionDemo
         - session
             - providers
@@ -198,7 +198,7 @@ import (
     "sync"
     "time"
 
-    "github.com/lwlwilliam/sessionDemo/session"
+    "github.com/user/sessionDemo/session"
 )
 
 var pder = &Provider{list: list.New()}
@@ -340,8 +340,8 @@ import (
     "net/http"
     "regexp"
 
-    "github.com/lwlwilliam/sessionDemo/session"
-    _ "github.com/lwlwilliam/sessionDemo/session/providers/memory"
+    "github.com/user/sessionDemo/session"
+    _ "github.com/user/sessionDemo/session/providers/memory"
 )
 
 var globalSessions *session.Manager
