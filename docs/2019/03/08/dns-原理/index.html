@@ -7,10 +7,9 @@
   <meta name="description" content="Love sports, love programming, love life.">
   <meta name="keywords" content="DNS,William A">
   <meta name="author" content="William A">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  <link rel="icon" href="../../../../favicon.ico">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777343654">
+  <link rel="stylesheet" href="../../../../assets/css/main.css?v=1777347565">
   
 </head>
 <body>
@@ -19,24 +18,32 @@
   </script>
   <header class="site-header">
     <div class="header-inner">
-      <a class="site-title" href="/">William A</a>
+      <a class="site-title" href="../../../../">William A</a>
       <nav class="site-nav">
         
-        <a href="/" class="nav-link">cd ~</a>
         
-        <a href="/categories/" class="nav-link">Categories</a>
+        <a href="../../../../" class="nav-link">cd ~</a>
         
-        <a href="/archives/" class="nav-link">Archives</a>
         
-        <a href="/books/" class="nav-link">Books</a>
+        <a href="../../../../categories/" class="nav-link">Categories</a>
         
-        <a href="/links/" class="nav-link">Links</a>
         
-        <a href="/tools/" class="nav-link">Tools</a>
+        <a href="../../../../archives/" class="nav-link">Archives</a>
         
-        <a href="/todo/" class="nav-link">Todo</a>
         
-        <a href="/about/" class="nav-link">About</a>
+        <a href="../../../../books/" class="nav-link">Books</a>
+        
+        
+        <a href="../../../../links/" class="nav-link">Links</a>
+        
+        
+        <a href="../../../../tools/" class="nav-link">Tools</a>
+        
+        
+        <a href="../../../../todo/" class="nav-link">Todo</a>
+        
+        
+        <a href="../../../../about/" class="nav-link">About</a>
         
       </nav>
       <div class="header-actions">
@@ -69,7 +76,7 @@
       
       <span class="post-categories">
         
-        <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-pill">计算机网络</a>
+        <a href="../../../../categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-pill">计算机网络</a>
         
       </span>
       
@@ -153,7 +160,7 @@ github.com.		23	IN	A	13.229.188.59
 13.250.177.223
 </code></pre><h3 id="dns-服务器">DNS 服务器</h3>
 <p>本机要获取 github.com 的 IP 地址，首先要先知道 DNS 服务器的 IP 地址，否则上不了网。</p>
-<p><img src="/assets/images/2019/0308/WX20190308-145406.png" alt="WX20190308-145406.png">;</p>
+<p><img src="../../../../assets/images/2019/0308/WX20190308-145406.png" alt="WX20190308-145406.png">;</p>
 <p>DNS 服务器的 IP 地址有可能是动态的，由网关分配，这叫做<code>DHCP 机制</code>；也有可能是事先指定的固定地址，如上图所示可自行设定。Mac OS 与 Linux 系统
 一样，也可以在<code>/etc/resolv.conf</code>文件中设置 DNS。</p>
 <h3 id="域名层级">域名层级</h3>
@@ -178,7 +185,7 @@ github.com.		23	IN	A	13.229.188.59
 </ol>
 <p>仔细看上面的过程，没有提到 DNS 服务器怎么知道&quot;根域名服务器&quot;的 IP 地址，因为&quot;根域名服务器&quot;的 NS 记录和 IP 地址一般是不会变化的，所以内置在
 DNS 服务器里面。下面是内置的根域名服务器 IP 地址的一个例子。</p>
-<p><img src="/assets/images/2019/0308/bg2016061508.png" alt="bg2016061508.png"></p>
+<p><img src="../../../../assets/images/2019/0308/bg2016061508.png" alt="bg2016061508.png"></p>
 <p>上表中，列出了根域名(<code>.root</code>)的三条 NS 记录<code>A.ROOT-SERVERS.NET</code>、<code>B.ROOT-SERVERS.NET</code>和<code>C.ROOT-SERVERS.NET</code>，以及它们的 IP 地址
 （即 A 记录）<code>198.41.0.4</code>、<code>192.228.79.201</code>、<code>192.33.4.12</code>。</p>
 <p>另外，可以看到所有记录的 TTL 值是 3600000 秒，相当于 1000 小时，也就是每 1000 小时才查询一次根域名服务器列表。目前，世界上一共有十三组域名服务器，从<code>A.ROOT-SERVERS.NET</code>一直到<code>M.ROOT-SERVERS.NET</code>。</p>
@@ -461,13 +468,13 @@ Address: 52.74.223.119
   <footer class="post-footer">
     <nav class="post-nav">
       
-      <a class="prev-post" href="/2019/02/23/%E6%B5%85%E8%B0%88-http/">
+      <a class="prev-post" href="../../../../2019/02/23/%E6%B5%85%E8%B0%88-http/">
         <span class="nav-label">← Prev</span>
         <span class="nav-title">浅谈 HTTP</span>
       </a>
       
       
-      <a class="next-post" href="/2019/03/14/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%85%A5%E9%97%A8/">
+      <a class="next-post" href="../../../../2019/03/14/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%85%A5%E9%97%A8/">
         <span class="nav-label">Next →</span>
         <span class="nav-title">网络协议入门</span>
       </a>
@@ -488,12 +495,13 @@ Address: 52.74.223.119
         <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">粤ICP备20026636号-1</a>
       </div>
       <div class="footer-right">
-        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+        <a href="../../../../feed.xml" target="_blank" class="footer-link">RSS</a>
       </div>
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777343654"></script>
+  <a id="search-index-url" href="../../../../search.json" hidden></a>
+  <script src="../../../../assets/js/main.js?v=1777347565"></script>
   
 </body>
 </html>

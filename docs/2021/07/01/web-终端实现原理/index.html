@@ -7,10 +7,9 @@
   <meta name="description" content="Love sports, love programming, love life.">
   <meta name="keywords" content="终端,ssh,William A">
   <meta name="author" content="William A">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  <link rel="icon" href="../../../../favicon.ico">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777343654">
+  <link rel="stylesheet" href="../../../../assets/css/main.css?v=1777347565">
   
 </head>
 <body>
@@ -19,24 +18,32 @@
   </script>
   <header class="site-header">
     <div class="header-inner">
-      <a class="site-title" href="/">William A</a>
+      <a class="site-title" href="../../../../">William A</a>
       <nav class="site-nav">
         
-        <a href="/" class="nav-link">cd ~</a>
         
-        <a href="/categories/" class="nav-link">Categories</a>
+        <a href="../../../../" class="nav-link">cd ~</a>
         
-        <a href="/archives/" class="nav-link">Archives</a>
         
-        <a href="/books/" class="nav-link">Books</a>
+        <a href="../../../../categories/" class="nav-link">Categories</a>
         
-        <a href="/links/" class="nav-link">Links</a>
         
-        <a href="/tools/" class="nav-link">Tools</a>
+        <a href="../../../../archives/" class="nav-link">Archives</a>
         
-        <a href="/todo/" class="nav-link">Todo</a>
         
-        <a href="/about/" class="nav-link">About</a>
+        <a href="../../../../books/" class="nav-link">Books</a>
+        
+        
+        <a href="../../../../links/" class="nav-link">Links</a>
+        
+        
+        <a href="../../../../tools/" class="nav-link">Tools</a>
+        
+        
+        <a href="../../../../todo/" class="nav-link">Todo</a>
+        
+        
+        <a href="../../../../about/" class="nav-link">About</a>
         
       </nav>
       <div class="header-actions">
@@ -69,7 +76,7 @@
       
       <span class="post-categories">
         
-        <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-pill">计算机网络</a>
+        <a href="../../../../categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-pill">计算机网络</a>
         
       </span>
       
@@ -90,7 +97,7 @@
     <p>平时看到各种云平台提供的 Web 终端操作页面，觉得还挺有意思，恰好最近要实现一个类似的玩意。</p>
 <p>由于前端不是我擅长的方向，所以我的前端并没有使用什么高大上的东西，也没有什么美观可言，仅仅使用了 WebSocket 进行命令的传输（可以用 xterm.js 来做前端，有空再玩玩吧）。终端的关键在于命令的处理，压力都来到 WebSocket 服务端这边。</p>
 <p>最初的方案是打算在所有的远程服务器都部署专门处理命令的服务，而 WebSocket 服务端则将命令发送给该服务，这有点像 noVNC 了吧，不过这个方案实在是太繁琐了，而且远程服务器有增减时徒增工作。当然，远程服务器能被控制，必须需要向外提供服务，既然自己做的服务麻烦，何不使用服务器普遍都有的服务 SSH 呢？于是方案最终确定为&quot;WebSocket+SSH&quot;。以下就是整个服务的工作流程图。</p>
-<p><img src="/assets/images/2021/0701/WX20210701-114904.png" alt="arch"></p>
+<p><img src="../../../../assets/images/2021/0701/WX20210701-114904.png" alt="arch"></p>
 <p>其实最初的方案跟最终的方案相差并不大，主要是代理服务器和目标服务器之间的传输协议不同罢了，工作流程是一致的。</p>
 <p>具体的工作流程：用户使用 SSH 密钥登录，成功之后代理服务端已经为用户提前准备好了 SSH 连接；接着使用 token 来建立 WebSocket 连接，这时代理服务端就可以通过 token 对 WebSocket 连接和 SSH 连接进行关联；假设用户输入的命令没有经过任何处理，WebSocket 服务端将协议消息解析得到命令之后就可以直接通过 SSH 连接转发给远程服务器；命令的执行结果沿着反方向传输到用户的页面上。</p>
 
@@ -98,13 +105,13 @@
   <footer class="post-footer">
     <nav class="post-nav">
       
-      <a class="prev-post" href="/2021/05/13/%E5%9C%A8%E6%B1%87%E7%BC%96%E4%B8%AD%E9%87%8D%E6%96%B0%E8%AE%A4%E8%AF%86%E5%87%BD%E6%95%B0/">
+      <a class="prev-post" href="../../../../2021/05/13/%E5%9C%A8%E6%B1%87%E7%BC%96%E4%B8%AD%E9%87%8D%E6%96%B0%E8%AE%A4%E8%AF%86%E5%87%BD%E6%95%B0/">
         <span class="nav-label">← Prev</span>
         <span class="nav-title">在汇编中重新认识函数</span>
       </a>
       
       
-      <a class="next-post" href="/2021/07/17/%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
+      <a class="next-post" href="../../../../2021/07/17/%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
         <span class="nav-label">Next →</span>
         <span class="nav-title">连接池的实现原理</span>
       </a>
@@ -125,12 +132,13 @@
         <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">粤ICP备20026636号-1</a>
       </div>
       <div class="footer-right">
-        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+        <a href="../../../../feed.xml" target="_blank" class="footer-link">RSS</a>
       </div>
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777343654"></script>
+  <a id="search-index-url" href="../../../../search.json" hidden></a>
+  <script src="../../../../assets/js/main.js?v=1777347565"></script>
   
 </body>
 </html>

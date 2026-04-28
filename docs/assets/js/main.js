@@ -54,6 +54,17 @@ document.getElementById('searchOverlay').addEventListener('click', function(e) {
   if (e.target === this) toggleSearch();
 });
 
+function resolveSearchUrl(url) {
+  if (url.charAt(0) !== '/') return url;
+  var searchHref = document.getElementById('search-index-url').href;
+  var siteRoot = searchHref.replace(/[^/]*$/, '');
+  var sitePath = siteRoot.replace(/^https?:\/\/[^/]+/, '');
+  if (sitePath && url.indexOf(sitePath) === 0) {
+    url = url.substring(sitePath.length) || '/';
+  }
+  return siteRoot + url.substring(1);
+}
+
 var searchData = null;
 var searchLoading = false;
 var searchCallbacks = [];
@@ -89,7 +100,7 @@ if (searchInput) {
 function loadSearchData(callback) {
   searchLoading = true;
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', '/search.json', true);
+  xhr.open('GET', document.getElementById('search-index-url').getAttribute('href'), true);
   xhr.onload = function() {
     if (xhr.status === 200) {
       try { searchData = JSON.parse(xhr.responseText); } catch(e) { searchData = []; }
@@ -173,7 +184,7 @@ function doSearch(query) {
     } else {
       snippet = (p.summary || '').substring(0, 150);
     }
-    html += '<div class="search-result-item" onclick="location.href=\'' + escapeHtml(p.url) + '\'">';
+    html += '<div class="search-result-item" onclick="location.href=\'' + escapeHtml(resolveSearchUrl(p.url)) + '\'">';
     html += '<div class="search-result-title">' + highlightText(p.title, query) + '</div>';
     html += '<div class="search-result-meta">' + escapeHtml(p.date) + '</div>';
     html += '<div class="search-result-snippet">' + highlightText(snippet, query) + '</div>';
@@ -185,13 +196,12 @@ function doSearch(query) {
 function jumpToPage() {
   var input = document.getElementById('pageJumpInput');
   var page = parseInt(input.value);
-  var base = input.getAttribute('data-base');
+  var base = document.getElementById('pagination-base').getAttribute('href');
   if (isNaN(page) || page < 1) return;
 
   if (page === 1) {
     location.href = base;
   } else {
-    var parts = base.split('/');
     var url = base;
     if (url.endsWith('/')) url = url.slice(0, -1);
     location.href = url + '/page/' + page + '/';

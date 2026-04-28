@@ -10,7 +10,7 @@
         {{ end }}
       {{ end }}
     {{ end }}
-    <a href="/categories/{{ $name | urlize }}/" class="category-card">
+    <a href="{{ "categories" | relURL }}/{{ $name | urlize }}/" class="category-card">
       <span class="category-card-name">{{ $title }}</span>
       <span class="category-card-count">{{ len $taxonomy }}</span>
     </a>

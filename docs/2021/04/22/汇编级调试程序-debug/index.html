@@ -7,10 +7,9 @@
   <meta name="description" content="Love sports, love programming, love life.">
   <meta name="keywords" content="汇编,debug,William A">
   <meta name="author" content="William A">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  <link rel="icon" href="../../../../favicon.ico">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777343654">
+  <link rel="stylesheet" href="../../../../assets/css/main.css?v=1777347565">
   
 </head>
 <body>
@@ -19,24 +18,32 @@
   </script>
   <header class="site-header">
     <div class="header-inner">
-      <a class="site-title" href="/">William A</a>
+      <a class="site-title" href="../../../../">William A</a>
       <nav class="site-nav">
         
-        <a href="/" class="nav-link">cd ~</a>
         
-        <a href="/categories/" class="nav-link">Categories</a>
+        <a href="../../../../" class="nav-link">cd ~</a>
         
-        <a href="/archives/" class="nav-link">Archives</a>
         
-        <a href="/books/" class="nav-link">Books</a>
+        <a href="../../../../categories/" class="nav-link">Categories</a>
         
-        <a href="/links/" class="nav-link">Links</a>
         
-        <a href="/tools/" class="nav-link">Tools</a>
+        <a href="../../../../archives/" class="nav-link">Archives</a>
         
-        <a href="/todo/" class="nav-link">Todo</a>
         
-        <a href="/about/" class="nav-link">About</a>
+        <a href="../../../../books/" class="nav-link">Books</a>
+        
+        
+        <a href="../../../../links/" class="nav-link">Links</a>
+        
+        
+        <a href="../../../../tools/" class="nav-link">Tools</a>
+        
+        
+        <a href="../../../../todo/" class="nav-link">Todo</a>
+        
+        
+        <a href="../../../../about/" class="nav-link">About</a>
         
       </nav>
       <div class="header-actions">
@@ -69,7 +76,7 @@
       
       <span class="post-categories">
         
-        <a href="/categories/%E6%B1%87%E7%BC%96/" class="category-pill">汇编</a>
+        <a href="../../../../categories/%E6%B1%87%E7%BC%96/" class="category-pill">汇编</a>
         
       </span>
       
@@ -106,24 +113,24 @@
 <p>最近看了两本汇编的书，里面都提到 debug.exe。写代码嘛，肯定要实践一下，可惜电脑上并没有 debug.exe 了，所以为了方便学习，特意记录一下怎么在 win10 和 macOS(10.14.3) 上搞出 debug.exe。</p>
 <p>debug.exe 属于久远的 dos 时代，所以得先搞个 dos 环境呗，dosbox 就是 dos 的模拟器，直接在官网 <a href="https://www.dosbox.com/">https://www.dosbox.com/</a> 下载安装即可。</p>
 <h3 id="win10">Win10</h3>
-<p>这里我用的是 <a href="/assets/files/DOSBox.exe.zip">DOSBox0.74-3-win32</a>。</p>
-<p>debug.exe 需要另外下载，现在网上乱七八糟的，我就直接上传到这了，<a href="/assets/files/debug.exe.zip">下载debug</a>。下载之后将 debug.exe 放在自己喜欢的目录中，例如<code>D:\Debug</code>。</p>
+<p>这里我用的是 <a href="../../../../assets/files/DOSBox.exe.zip">DOSBox0.74-3-win32</a>。</p>
+<p>debug.exe 需要另外下载，现在网上乱七八糟的，我就直接上传到这了，<a href="../../../../assets/files/debug.exe.zip">下载debug</a>。下载之后将 debug.exe 放在自己喜欢的目录中，例如<code>D:\Debug</code>。</p>
 <p>进入 dosbox 的安装目录，例如<code>D:\Software\dosbox</code>；运行目录中的<code>DOSBox 0.74-3 Options.bat</code>，之后会弹出一个配置文件，如<code>dosbox-0.74-3.conf</code>，这时在文件末尾加上如下配置：</p>
 <pre tabindex="0"><code>MOUNT C D:\Debug
 C:
 debug
 </code></pre><p>其中<code>MOUNT</code>是挂载，<code>C</code>是参数，<code>D:\Debug</code>是 debug.exe 所在目录，其它照抄就得，不用深究了，毕竟只是为了使用 debug.exe。</p>
 <p>现在一切就绪，打开 Dosbox.exe，在光标处输入<code>dss:0</code>后按回车，出现下图界面即搭建成功。</p>
-<p><img src="/assets/images/2021/0422/WX_20210422232611.png" alt="dosbox"></p>
+<p><img src="../../../../assets/images/2021/0422/WX_20210422232611.png" alt="dosbox"></p>
 <p>最后，写条汇编练练手。</p>
-<p><img src="/assets/images/2021/0422/WX_20210422233705.png" alt="asm"></p>
+<p><img src="../../../../assets/images/2021/0422/WX_20210422233705.png" alt="asm"></p>
 <p>输入<code>a</code>进入汇编模式，接着输入汇编<code>mov ax,ds</code>将代码段地址传到 ax 寄存器中，<code>r</code>查看寄存器，<code>t</code>进行追踪，可以发现汇编生效了，ax 寄存器的值跟 ds 一致。</p>
 <p>debug.exe 更多的用法可输入<code>?</code>进行查看。</p>
 <h3 id="macos-10143">macOS 10.14.3</h3>
-<p>在官网下载，也可以直接在这里下载<a href="/assets/files/DOSBox.dmg.zip">DOSBox-0.74-3-3</a>。</p>
+<p>在官网下载，也可以直接在这里下载<a href="../../../../assets/files/DOSBox.dmg.zip">DOSBox-0.74-3-3</a>。</p>
 <p>将<code>debug.exe</code>放在喜欢的目录，如<code>/Users/wu/Bin</code>。</p>
 <p>运行比较简单，直接点击打开，使用<code>mount C /Users/wu/Bin</code>挂载即可，然后就可以使用 debug，其它操作跟 Win10 一致。</p>
-<p><img src="/assets/images/2021/0423/WX20210423-092600.png" alt="macos"></p>
+<p><img src="../../../../assets/images/2021/0423/WX20210423-092600.png" alt="macos"></p>
 <p>如果不想每次都输入以上挂载命令，编辑<code>~/Library/Preferences/DOSBox 0.74-3-3 Preferences</code>文件，在末尾添加以下配置：</p>
 <pre tabindex="0"><code>MOUNT C /Users/wu/Bin
 C:
@@ -138,13 +145,13 @@ output=opengl
   <footer class="post-footer">
     <nav class="post-nav">
       
-      <a class="prev-post" href="/2021/03/24/%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%AE%A2%E9%98%85-%E5%8F%91%E5%B8%83%E6%A8%A1%E5%9E%8B/">
+      <a class="prev-post" href="../../../../2021/03/24/%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%AE%A2%E9%98%85-%E5%8F%91%E5%B8%83%E6%A8%A1%E5%9E%8B/">
         <span class="nav-label">← Prev</span>
         <span class="nav-title">生产者-消费者模型与订阅-发布模型</span>
       </a>
       
       
-      <a class="next-post" href="/2021/05/13/%E5%9C%A8%E6%B1%87%E7%BC%96%E4%B8%AD%E9%87%8D%E6%96%B0%E8%AE%A4%E8%AF%86%E5%87%BD%E6%95%B0/">
+      <a class="next-post" href="../../../../2021/05/13/%E5%9C%A8%E6%B1%87%E7%BC%96%E4%B8%AD%E9%87%8D%E6%96%B0%E8%AE%A4%E8%AF%86%E5%87%BD%E6%95%B0/">
         <span class="nav-label">Next →</span>
         <span class="nav-title">在汇编中重新认识函数</span>
       </a>
@@ -165,12 +172,13 @@ output=opengl
         <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">粤ICP备20026636号-1</a>
       </div>
       <div class="footer-right">
-        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+        <a href="../../../../feed.xml" target="_blank" class="footer-link">RSS</a>
       </div>
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777343654"></script>
+  <a id="search-index-url" href="../../../../search.json" hidden></a>
+  <script src="../../../../assets/js/main.js?v=1777347565"></script>
   
 </body>
 </html>

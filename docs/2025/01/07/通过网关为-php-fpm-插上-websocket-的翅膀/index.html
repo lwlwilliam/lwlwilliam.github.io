@@ -7,10 +7,9 @@
   <meta name="description" content="Love sports, love programming, love life.">
   <meta name="keywords" content="WebSocket,php,php-fpm,Go,William A">
   <meta name="author" content="William A">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  <link rel="icon" href="../../../../favicon.ico">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777343655">
+  <link rel="stylesheet" href="../../../../assets/css/main.css?v=1777347565">
   
 </head>
 <body>
@@ -19,24 +18,32 @@
   </script>
   <header class="site-header">
     <div class="header-inner">
-      <a class="site-title" href="/">William A</a>
+      <a class="site-title" href="../../../../">William A</a>
       <nav class="site-nav">
         
-        <a href="/" class="nav-link">cd ~</a>
         
-        <a href="/categories/" class="nav-link">Categories</a>
+        <a href="../../../../" class="nav-link">cd ~</a>
         
-        <a href="/archives/" class="nav-link">Archives</a>
         
-        <a href="/books/" class="nav-link">Books</a>
+        <a href="../../../../categories/" class="nav-link">Categories</a>
         
-        <a href="/links/" class="nav-link">Links</a>
         
-        <a href="/tools/" class="nav-link">Tools</a>
+        <a href="../../../../archives/" class="nav-link">Archives</a>
         
-        <a href="/todo/" class="nav-link">Todo</a>
         
-        <a href="/about/" class="nav-link">About</a>
+        <a href="../../../../books/" class="nav-link">Books</a>
+        
+        
+        <a href="../../../../links/" class="nav-link">Links</a>
+        
+        
+        <a href="../../../../tools/" class="nav-link">Tools</a>
+        
+        
+        <a href="../../../../todo/" class="nav-link">Todo</a>
+        
+        
+        <a href="../../../../about/" class="nav-link">About</a>
         
       </nav>
       <div class="header-actions">
@@ -69,7 +76,7 @@
       
       <span class="post-categories">
         
-        <a href="/categories/php/" class="category-pill">PHP</a>
+        <a href="../../../../categories/php/" class="category-pill">PHP</a>
         
       </span>
       
@@ -111,7 +118,7 @@
 <code>WebSocket</code>就走不到一块去。</p>
 <p>虽然可以直接使用<code>AMPHP</code>、<code>REACTPHP</code>、<code>Swoole</code>等众多<code>PHP-CLI</code>的库和扩展来让<code>PHP</code>处理<code>WebSocket</code>业务，但这就相当于做一个新项目了，跟原有的<code>PHP-FPM</code>项目不能很好地兼容。通过<code>WebSocket</code>网关跟<code>WebSocket</code>客户端交互，具体的业务仍然由<code>PHP-FPM</code>框架处理，不仅能以零改动的方式让<code>PHP-FPM</code>拥有了处理<code>WebSocket</code>协议的能力，还不会存在<code>PHP-FPM</code>和<code>PHP-CLI</code>之间生态不兼容的问题。当然最重要的就是不需要更换框架。</p>
 <p>架构图如下所示。</p>
-<p><img src="/assets/images/2025/0107/websocket-gateway.png" alt="websocket-gateway"></p>
+<p><img src="../../../../assets/images/2025/0107/websocket-gateway.png" alt="websocket-gateway"></p>
 <p><code>WebSocket 客户端</code>跟<code>WebSocket 网关</code>建立连接，<code>WebSocket 网关</code>接收到<code>WebSocket 客户端</code>发送的数据，通过<code>HTTP</code>协议将数据发送到<code>Nginx</code>，<code>Nginx</code>再用<code>FastCGI</code>协议发送给<code>PHP-FPM</code>，<code>PHP</code>脚本处理完将数据沿原路反方向回传到<code>WebSocket 客户端</code>，这是接收逻辑；如果希望<code>PHP</code>主动推送数据到<code>WebSocket 客户端</code>，则需要额外的<code>HTTP 客户端</code>，因为<code>PHP-FPM</code>不适合持续运行推送，不过这个并不算关键的功能，理论上完全可以通过<code>WebSocket 网关</code>来定时触发，此处不作详细说明。主动推送时，<code>HTTP 客户端</code>向<code>Nginx</code>发起<code>HTTP</code>请求，由<code>PHP-FPM</code>处理，如果<code>PHP</code>脚本判断该请求需要推送到<code>WebSocket 客户端</code>，则将数据发送至<code>WebSocket 网关</code>对内暴露的<code>HTTP</code>接口，<code>WebSocket 网关</code>根据请求选择对应的<code>WebSocket 客户端</code>通信。</p>
 <h3 id="php-业务代码">PHP 业务代码</h3>
 <p><code>websocket.php</code>为<code>PHP</code>和<code>WebSocket 客户端</code>交互的业务逻辑，访问链接为<code>http://localhost/websocket.php</code> 。除了要区分接收和发送行为之外，其它逻辑与一般<code>PHP-FPM</code>项目无异。其中<code>$url</code>变量为<code>WebSocket 网关</code>开放的接口，该接口供<code>PHP</code>主动推送消息给<code>WebSocket 客户端</code>。</p>
@@ -311,13 +318,13 @@ curl -d &#34;message=hello_world_from_curl&amp;type=client&amp;client_id=127.0.0
   <footer class="post-footer">
     <nav class="post-nav">
       
-      <a class="prev-post" href="/2025/01/02/python-%E7%9A%84-bytecode/">
+      <a class="prev-post" href="../../../../2025/01/02/python-%E7%9A%84-bytecode/">
         <span class="nav-label">← Prev</span>
         <span class="nav-title">Python 的 bytecode</span>
       </a>
       
       
-      <a class="next-post" href="/2025/01/08/%E6%8E%A2%E7%B4%A2-php-%E6%BA%90%E7%A0%81%E4%B8%89%E4%BB%8E%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%97%B6%E9%97%B4%E5%87%BD%E6%95%B0%E5%85%A5%E9%97%A8/">
+      <a class="next-post" href="../../../../2025/01/08/%E6%8E%A2%E7%B4%A2-php-%E6%BA%90%E7%A0%81%E4%B8%89%E4%BB%8E%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%97%B6%E9%97%B4%E5%87%BD%E6%95%B0%E5%85%A5%E9%97%A8/">
         <span class="nav-label">Next →</span>
         <span class="nav-title">探索 PHP 源码（三）——从一个简单的时间函数入门</span>
       </a>
@@ -338,12 +345,13 @@ curl -d &#34;message=hello_world_from_curl&amp;type=client&amp;client_id=127.0.0
         <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">粤ICP备20026636号-1</a>
       </div>
       <div class="footer-right">
-        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+        <a href="../../../../feed.xml" target="_blank" class="footer-link">RSS</a>
       </div>
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777343655"></script>
+  <a id="search-index-url" href="../../../../search.json" hidden></a>
+  <script src="../../../../assets/js/main.js?v=1777347565"></script>
   
 </body>
 </html>

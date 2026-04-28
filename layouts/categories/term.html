@@ -21,7 +21,7 @@
         {{ with .Params.categories }}
         <span class="post-card-categories">
           {{ range . }}
-          <a href="/categories/{{ . | urlize }}/" class="category-pill-sm">{{ . }}</a>
+          <a href="{{ "categories" | relURL }}/{{ . | urlize }}/" class="category-pill-sm">{{ . }}</a>
           {{ end }}
         </span>
         {{ end }}

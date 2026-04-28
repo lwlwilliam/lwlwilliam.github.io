@@ -7,10 +7,9 @@
   <meta name="description" content="Love sports, love programming, love life.">
   <meta name="keywords" content="树莓派,树莓派4b,计算机组成,操作系统,Linux,William A">
   <meta name="author" content="William A">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  <link rel="icon" href="../../../../favicon.ico">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777343654">
+  <link rel="stylesheet" href="../../../../assets/css/main.css?v=1777347565">
   
 </head>
 <body>
@@ -19,24 +18,32 @@
   </script>
   <header class="site-header">
     <div class="header-inner">
-      <a class="site-title" href="/">William A</a>
+      <a class="site-title" href="../../../../">William A</a>
       <nav class="site-nav">
         
-        <a href="/" class="nav-link">cd ~</a>
         
-        <a href="/categories/" class="nav-link">Categories</a>
+        <a href="../../../../" class="nav-link">cd ~</a>
         
-        <a href="/archives/" class="nav-link">Archives</a>
         
-        <a href="/books/" class="nav-link">Books</a>
+        <a href="../../../../categories/" class="nav-link">Categories</a>
         
-        <a href="/links/" class="nav-link">Links</a>
         
-        <a href="/tools/" class="nav-link">Tools</a>
+        <a href="../../../../archives/" class="nav-link">Archives</a>
         
-        <a href="/todo/" class="nav-link">Todo</a>
         
-        <a href="/about/" class="nav-link">About</a>
+        <a href="../../../../books/" class="nav-link">Books</a>
+        
+        
+        <a href="../../../../links/" class="nav-link">Links</a>
+        
+        
+        <a href="../../../../tools/" class="nav-link">Tools</a>
+        
+        
+        <a href="../../../../todo/" class="nav-link">Todo</a>
+        
+        
+        <a href="../../../../about/" class="nav-link">About</a>
         
       </nav>
       <div class="header-actions">
@@ -69,7 +76,7 @@
       
       <span class="post-categories">
         
-        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-pill">操作系统</a>
+        <a href="../../../../categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-pill">操作系统</a>
         
       </span>
       
@@ -112,7 +119,7 @@
     <p>其实很早就打算入手树莓派玩玩，因为看到了很多让我垂涎的各种花式玩法，当然最主要的是它还可以满足我当前的某些需求。小型，便宜，社区活跃，麻雀虽小，五脏俱全，这是我选择树莓派的主要原因。树莓派其实就是小型的电脑，主板接口排布紧凑，计算机的各种部件一目了解，极大地满足了我对计算机组成的好奇心。</p>
 <h3 id="构造">构造</h3>
 <p>以下是树莓派 4b 的构造图。</p>
-<p><img src="/assets/images/2020/0226/WX_20200226230509.png" alt="Raspberry"></p>
+<p><img src="../../../../assets/images/2020/0226/WX_20200226230509.png" alt="Raspberry"></p>
 <p>另外，在主板背面还有一个 microSD 卡槽，SD 卡用来写入树莓派的操作系统；至于上图，在入门阶段只需要知道电源接口就行了，就是上图的<code>USB Type-C power in</code>，用的是 Type-C 接口，现在有些手机也已经开始用这种接口了。</p>
 <h3 id="安装与配置">安装与配置</h3>
 <ol>
@@ -121,11 +128,11 @@
 </li>
 <li>
 <p><a href="https://www.raspberrypi.org/downloads/">官网</a>下载树莓派操作系统，注意下载箭头所指的 Raspbian（NOOBS 的安装方式跟这个不太一样）：</p>
-<p><img src="/assets/images/2020/0226/WX_20200226233100.png" alt=""></p>
+<p><img src="../../../../assets/images/2020/0226/WX_20200226233100.png" alt=""></p>
 </li>
 <li>
 <p>用 <a href="https://www.balena.io/etcher/">Etcher</a> 将操作系统写入 SD 卡，如图选择系统镜像以及 SD 卡，点击 Flash! 即可：</p>
-<p><img src="/assets/images/2020/0226/WX_20200226233511.png" alt=""></p>
+<p><img src="../../../../assets/images/2020/0226/WX_20200226233511.png" alt=""></p>
 </li>
 <li>
 <p>在 SD 根目录创建 SSH 空白文件，用来启动 SSH 服务；</p>
@@ -166,20 +173,20 @@ network={
 </li>
 <li>
 <p>打开<code>控制面板-&gt;网络和共享中心-&gt;更改适配器设置</code>，找到笔记本当前连网的适配器，我现在用的是<code>WLAN</code>，如下图。</p>
-<p><img src="/assets/images/2020/0226/WX_20200311232531.png" alt="WLAN"></p>
+<p><img src="../../../../assets/images/2020/0226/WX_20200311232531.png" alt="WLAN"></p>
 </li>
 <li>
 <p>共享给网线接口的网络适配器，我这里是<code>以太网</code>。</p>
-<p><img src="/assets/images/2020/0226/WX_20200311232934.png" alt="WLAN"></p>
+<p><img src="../../../../assets/images/2020/0226/WX_20200311232934.png" alt="WLAN"></p>
 </li>
 <li>
 <p>查看<code>以太网</code>的网卡接口，点击<code>状态-&gt;详细信息</code>。</p>
-<p><img src="/assets/images/2020/0226/WX_20200311233336.png" alt="WLAN"></p>
-<p><img src="/assets/images/2020/0226/WX_20200311233408.png" alt="WLAN"></p>
+<p><img src="../../../../assets/images/2020/0226/WX_20200311233336.png" alt="WLAN"></p>
+<p><img src="../../../../assets/images/2020/0226/WX_20200311233408.png" alt="WLAN"></p>
 </li>
 <li>
 <p>查看<code>以太网</code>连接的主机，这里使用了<code>arp -a</code>命令。</p>
-<p><img src="/assets/images/2020/0226/WX_20200311233450.png" alt="WLAN"></p>
+<p><img src="../../../../assets/images/2020/0226/WX_20200311233450.png" alt="WLAN"></p>
 </li>
 <li>
 <p>上图中的<code>192.168.137.245</code>就是树莓派的 IP 地址。接着就可以 SSH 连接树莓派了。</p>
@@ -191,13 +198,13 @@ network={
   <footer class="post-footer">
     <nav class="post-nav">
       
-      <a class="prev-post" href="/2020/01/10/m3u8-%E5%9C%A8%E7%BA%BF%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/">
+      <a class="prev-post" href="../../../../2020/01/10/m3u8-%E5%9C%A8%E7%BA%BF%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/">
         <span class="nav-label">← Prev</span>
         <span class="nav-title">m3u8 在线视频播放</span>
       </a>
       
       
-      <a class="next-post" href="/2020/03/25/centos7-%E5%85%81%E8%AE%B8%E7%94%A8%E6%88%B7%E6%88%96%E7%94%A8%E6%88%B7%E7%BB%84-ssh-%E7%99%BB%E5%BD%95/">
+      <a class="next-post" href="../../../../2020/03/25/centos7-%E5%85%81%E8%AE%B8%E7%94%A8%E6%88%B7%E6%88%96%E7%94%A8%E6%88%B7%E7%BB%84-ssh-%E7%99%BB%E5%BD%95/">
         <span class="nav-label">Next →</span>
         <span class="nav-title">CentOS7 允许用户或用户组 SSH 登录</span>
       </a>
@@ -218,12 +225,13 @@ network={
         <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">粤ICP备20026636号-1</a>
       </div>
       <div class="footer-right">
-        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+        <a href="../../../../feed.xml" target="_blank" class="footer-link">RSS</a>
       </div>
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777343654"></script>
+  <a id="search-index-url" href="../../../../search.json" hidden></a>
+  <script src="../../../../assets/js/main.js?v=1777347565"></script>
   
 </body>
 </html>

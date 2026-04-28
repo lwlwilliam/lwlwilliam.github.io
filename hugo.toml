@@ -1,6 +1,7 @@
 # ===== 站点基础设置 =====
 baseURL = 'https://pages.lwlinux.cn/'   # 网站域名
 publishDir = "docs"                      # 构建输出目录（GitHub Pages 用）
+relativeURLs = true                      # 使用相对路径，支持部署到子目录
 languageCode = 'zh-cn'
 title = 'William A'
 

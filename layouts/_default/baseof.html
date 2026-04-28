@@ -7,16 +7,15 @@
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}">
   <meta name="keywords" content="{{ with .Params.keywords }}{{ delimit . "," }}{{ end }}{{ with .Site.Params.keywords }},{{ . }}{{ end }}">
   <meta name="author" content="{{ .Site.Params.author }}">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="/feed.xml">
+  <link rel="icon" href="{{ "favicon.ico" | relURL }}">
   {{ with .OutputFormats.Get "rss" }}
   <link rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" href="{{ .RelPermalink }}">
   {{ end }}
-  <link rel="stylesheet" href="/assets/css/main.css?v={{ now.Unix }}">
+  <link rel="stylesheet" href="{{ "assets/css/main.css" | relURL }}?v={{ now.Unix }}">
   {{ if .Params.enableKatex }}
-  <link rel="stylesheet" href="/katex/katex.min.css?v=0.16.9">
-  <script defer src="/katex/katex.min.js?v=0.16.9"></script>
-  <script defer src="/katex/auto-render.min.js?v=0.16.9"></script>
+  <link rel="stylesheet" href="{{ "katex/katex.min.css" | relURL }}?v=0.16.9">
+  <script defer src="{{ "katex/katex.min.js" | relURL }}?v=0.16.9"></script>
+  <script defer src="{{ "katex/auto-render.min.js" | relURL }}?v=0.16.9"></script>
   <script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]})})</script>
   {{ end }}
 </head>
@@ -29,7 +28,8 @@
       <a class="site-title" href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
       <nav class="site-nav">
         {{ range .Site.Params.navs }}
-        <a href="{{ .href }}" class="nav-link{{ if eq $.RelPermalink .href }} active{{ end }}">{{ .label }}</a>
+        {{ $navHref := .href | relURL }}
+        <a href="{{ $navHref }}" class="nav-link{{ if eq $.RelPermalink $navHref }} active{{ end }}">{{ .label }}</a>
         {{ end }}
       </nav>
       <div class="header-actions">
@@ -66,12 +66,13 @@
         {{ with .Site.Params.beian }}<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">{{ . }}</a>{{ end }}
       </div>
       <div class="footer-right">
-        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+        <a href="{{ "feed.xml" | relURL }}" target="_blank" class="footer-link">RSS</a>
       </div>
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v={{ now.Unix }}"></script>
+  <a id="search-index-url" href="{{ "search.json" | relURL }}" hidden></a>
+  <script src="{{ "assets/js/main.js" | relURL }}?v={{ now.Unix }}"></script>
   {{ block "scripts" . }}{{ end }}
 </body>
 </html>

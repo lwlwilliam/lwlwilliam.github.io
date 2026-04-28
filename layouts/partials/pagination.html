@@ -38,7 +38,8 @@
   </div>
   <div class="pagination-jump">
     <span>Page</span>
-    <input type="number" id="pageJumpInput" min="1" max="{{ $total }}" value="{{ $current }}" class="page-jump-input" data-base="{{ .First.URL }}">
+    <a id="pagination-base" href="{{ .First.URL }}" hidden></a>
+    <input type="number" id="pageJumpInput" min="1" max="{{ $total }}" value="{{ $current }}" class="page-jump-input">
     <span>of {{ $total }}</span>
     <button class="page-btn page-jump-btn" onclick="jumpToPage()">Go</button>
   </div>

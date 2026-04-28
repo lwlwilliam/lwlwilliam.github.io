@@ -7,10 +7,9 @@
   <meta name="description" content="Love sports, love programming, love life.">
   <meta name="keywords" content="内网穿透,Socket,NAT,Go,William A">
   <meta name="author" content="William A">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="alternate" type="application/rss+xml" title="William A" href="/feed.xml">
+  <link rel="icon" href="../../../../favicon.ico">
   
-  <link rel="stylesheet" href="/assets/css/main.css?v=1777343654">
+  <link rel="stylesheet" href="../../../../assets/css/main.css?v=1777347565">
   
 </head>
 <body>
@@ -19,24 +18,32 @@
   </script>
   <header class="site-header">
     <div class="header-inner">
-      <a class="site-title" href="/">William A</a>
+      <a class="site-title" href="../../../../">William A</a>
       <nav class="site-nav">
         
-        <a href="/" class="nav-link">cd ~</a>
         
-        <a href="/categories/" class="nav-link">Categories</a>
+        <a href="../../../../" class="nav-link">cd ~</a>
         
-        <a href="/archives/" class="nav-link">Archives</a>
         
-        <a href="/books/" class="nav-link">Books</a>
+        <a href="../../../../categories/" class="nav-link">Categories</a>
         
-        <a href="/links/" class="nav-link">Links</a>
         
-        <a href="/tools/" class="nav-link">Tools</a>
+        <a href="../../../../archives/" class="nav-link">Archives</a>
         
-        <a href="/todo/" class="nav-link">Todo</a>
         
-        <a href="/about/" class="nav-link">About</a>
+        <a href="../../../../books/" class="nav-link">Books</a>
+        
+        
+        <a href="../../../../links/" class="nav-link">Links</a>
+        
+        
+        <a href="../../../../tools/" class="nav-link">Tools</a>
+        
+        
+        <a href="../../../../todo/" class="nav-link">Todo</a>
+        
+        
+        <a href="../../../../about/" class="nav-link">About</a>
         
       </nav>
       <div class="header-actions">
@@ -69,7 +76,7 @@
       
       <span class="post-categories">
         
-        <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-pill">计算机网络</a>
+        <a href="../../../../categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-pill">计算机网络</a>
         
       </span>
       
@@ -96,7 +103,7 @@
 <p>由于 IP 地址（本文指的都是 IPv4）的紧缺，同一局域网内的所有主机一般都共用一个公网 IP 来访问互联网，在 IP 层中必须标明源地址和目标地址，如果局域网内多台主机同时上网会出现什么情况？这多台主机的源地址都是这同一个公网 IP，服务器的响应分组到了拥有这个 IP 的路由器应该把分组传给哪台主机？NAT 路由器都有一个 NAT 转发表，在主机到服务器的分组经过路由器时，路由器会对在 IP 层对其进行解开封装，其实现在很多 NAT 还会处理运输层，把分组的源地址和端口更换为路由器的接口的 IP 和端口，然后重新封装，把处理前后的 IP+端口对应关系记录到 NAT 转发表中，这样就可以对分组进行正确的传输。</p>
 <p>现在如果我们想把本地的 HTTP 服务分享给其他人，但是其他人并不知道我们的本机地址，即使知道了也没有用，因为 NAT 转发表并没有记录我们 HTTP 服务的 IP 和端口。当然，这可以通过路由器对 NAT 转发表进行配置来实现（这个我没有亲自实践过），这种方法也稍显麻烦，还可能会被运营商封（这个我也没试过，道听途说的，哈）。还有没有其它办法呢？</p>
 <p>通过以上的说明，我们知道了 NAT，那么可不可以利用 NAT 呢？答案是肯定的，前题是我们拥有一台自己的服务器。这种方法就是标题所说的<code>内网穿透</code>。内网穿透的原理如下图所示。</p>
-<p><img src="/assets/images/2019/0518/nat.png" alt="nat"></p>
+<p><img src="../../../../assets/images/2019/0518/nat.png" alt="nat"></p>
 <p>客户端 A 想要访问内网主机 A 的 web 服务，必须通过服务器作为中转。首先，服务器的穿透软件需要监听两个 socket，一个用来监听客户端 A 的请求，一个用来监听内网主机 B 的连接；接着内网主机 B 要通过内网穿透软件和服务器建立永久连接；当客户端 A 向服务器请求时，服务器的穿透软件就通过已有的两个 socket 把请求转发到内网主机 B 中，内网主机 B 读取到这个请求，再把这个请求发到 web 服务处进行处理，最后把 web 响应反向传给客户端 A。这就是内网穿透的大概原理。以下是示例代码。</p>
 <p>server.go:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
@@ -242,13 +249,13 @@
   <footer class="post-footer">
     <nav class="post-nav">
       
-      <a class="prev-post" href="/2019/05/06/sql-%E5%9C%A8-excel-%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/">
+      <a class="prev-post" href="../../../../2019/05/06/sql-%E5%9C%A8-excel-%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/">
         <span class="nav-label">← Prev</span>
         <span class="nav-title">SQL 在 Excel 中的应用</span>
       </a>
       
       
-      <a class="next-post" href="/2019/05/22/data-urls/">
+      <a class="next-post" href="../../../../2019/05/22/data-urls/">
         <span class="nav-label">Next →</span>
         <span class="nav-title">Data URLs</span>
       </a>
@@ -269,12 +276,13 @@
         <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">粤ICP备20026636号-1</a>
       </div>
       <div class="footer-right">
-        <a href="/feed.xml" target="_blank" class="footer-link">RSS</a>
+        <a href="../../../../feed.xml" target="_blank" class="footer-link">RSS</a>
       </div>
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1777343654"></script>
+  <a id="search-index-url" href="../../../../search.json" hidden></a>
+  <script src="../../../../assets/js/main.js?v=1777347565"></script>
   
 </body>
 </html>
