@@ -345,6 +345,6 @@ document.getElementById('pageJumpInput') && document.getElementById('pageJumpInp
         setTimeout(function() { btn.textContent = '📋'; }, 2000);
       });
     });
-    pre.appendChild(btn);
+    pre.parentNode.appendChild(btn);
   });
 })();

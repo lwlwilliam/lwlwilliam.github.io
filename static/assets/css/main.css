@@ -682,7 +682,6 @@ body.nav-overflow .nav-link::after {
 }
 
 .post-content pre {
-  position: relative;
   margin: 1.2em 0;
   padding: 18px 20px;
   background: var(--code-bg);
@@ -709,8 +708,12 @@ body.nav-overflow .nav-link::after {
   transition: opacity 0.2s;
   z-index: 1;
 }
-.post-content pre:hover .btn-copy,
-.post-content pre:focus-within .btn-copy {
+.post-content .highlight {
+  position: relative;
+}
+
+.post-content .highlight:hover .btn-copy,
+.post-content .highlight:focus-within .btn-copy {
   opacity: 1;
 }
 
