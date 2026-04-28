@@ -85,6 +85,7 @@ a:hover {
 }
 
 .header-inner {
+  position: relative;
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 20px;
@@ -109,15 +110,15 @@ a:hover {
 .site-nav {
   display: flex;
   align-items: center;
-  gap: 4px;
-  flex-wrap: wrap;
+  gap: 2px;
+  flex-wrap: nowrap;
   justify-content: center;
 }
 
 .nav-link {
-  padding: 5px 10px;
+  padding: 4px 8px;
   border-radius: 6px;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   color: var(--text-secondary);
   transition: all 0.2s ease;
   white-space: nowrap;
@@ -168,7 +169,7 @@ a:hover {
   border: none;
   cursor: pointer;
   padding: 6px 8px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   border-radius: 8px;
   transition: background 0.2s, transform 0.15s;
   color: var(--text);
@@ -178,6 +179,42 @@ a:hover {
 .btn-hamburger:hover {
   background: var(--bg-hover);
   transform: scale(1.1);
+}
+
+body.nav-overflow .btn-hamburger {
+  display: inline-flex;
+}
+
+body.nav-overflow .site-nav {
+  display: none;
+  position: absolute;
+  top: calc(100% + 2px);
+  right: 0;
+  z-index: 110;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  flex-direction: column;
+  gap: 0;
+  padding: 6px;
+  min-width: 150px;
+  flex-wrap: nowrap;
+}
+
+body.nav-overflow .site-nav.open {
+  display: flex;
+}
+
+body.nav-overflow .nav-link {
+  padding: 8px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-size: 0.95rem;
+}
+
+body.nav-overflow .nav-link::after {
+  display: none;
 }
 
 .btn-search,
@@ -517,7 +554,7 @@ a:hover {
   box-shadow: 0 4px 14px rgba(0,0,0,0.14);
   cursor: pointer;
   margin-bottom: 0;
-  font-size: 0.8rem;
+  font-size: 1.05rem;
   font-weight: 600;
   line-height: 1.4;
   transition: box-shadow 0.3s, opacity 0.3s;
@@ -588,7 +625,7 @@ a:hover {
 
 .post-toc.open .toc-title {
   display: block;
-  font-size: 0.75rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -627,7 +664,7 @@ a:hover {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: 1.05rem;
   color: var(--text-secondary);
   text-decoration: none;
   transition: all 0.15s;
@@ -676,7 +713,7 @@ a:hover {
     border-radius: 4px;
     border-left: 2px solid transparent;
     padding: 3px 8px;
-    font-size: 0.8rem;
+    font-size: 1.05rem;
   }
 
   .post-toc.open nav a:hover {
@@ -1489,7 +1526,7 @@ a:hover {
   }
   .nav-link {
     padding: 8px 14px;
-    font-size: 0.95rem;
+    font-size: 0.925rem;
     width: 100%;
     border-radius: 8px;
   }
@@ -1597,7 +1634,7 @@ a:hover {
     font-size: 1.15rem;
   }
   .book-year-title {
-    font-size: 1rem;
+  font-size: 1.05rem;
   }
   .category-term-page .page-title {
     font-size: 1.3rem;
@@ -1610,7 +1647,7 @@ a:hover {
   .post-content h3 { font-size: 1.05rem; }
   .post-toc {
     padding: 7px 14px;
-    font-size: 0.72rem;
+    font-size: 0.925rem;
   }
   .post-toc.open {
     position: sticky;
@@ -1627,7 +1664,7 @@ a:hover {
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
   }
   .post-toc.open .toc-title {
-    font-size: 0.7rem;
+    font-size: 0.925rem;
     margin-bottom: 0;
     padding: 7px 0;
     letter-spacing: 0.3px;
@@ -1657,7 +1694,7 @@ a:hover {
     border-radius: 4px;
     border-left: 2px solid transparent;
     padding: 3px 8px;
-    font-size: 0.78rem;
+    font-size: 0.925rem;
     white-space: normal;
     line-height: 1.5;
   }
@@ -1674,18 +1711,18 @@ a:hover {
 @media (max-width: 400px) {
   .post-toc {
     padding: 6px 12px;
-    font-size: 0.7rem;
+    font-size: 0.925rem;
   }
   .post-toc.open {
     padding: 0 8px;
     margin-bottom: 12px;
   }
   .post-toc.open .toc-title {
-    font-size: 0.65rem;
+    font-size: 0.925rem;
     padding: 6px 0;
   }
   .post-toc.open nav a {
-    font-size: 0.74rem;
+    font-size: 0.925rem;
     padding: 2px 6px;
   }
   .header-inner {
@@ -1693,7 +1730,7 @@ a:hover {
   }
   .nav-link {
     padding: 4px 7px;
-    font-size: 0.75rem;
+    font-size: 0.925rem;
   }
   .main-content {
     padding: 14px 10px 30px;

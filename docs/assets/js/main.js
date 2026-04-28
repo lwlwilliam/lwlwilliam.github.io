@@ -15,7 +15,13 @@ function toggleMenu() {
 
 document.addEventListener('click', function(e) {
   var nav = document.querySelector('.site-nav');
-  if (nav.classList.contains('open') && e.target.closest('.nav-link')) {
+  if (!nav.classList.contains('open')) return;
+  if (e.target.closest('.nav-link')) {
+    nav.classList.remove('open');
+    document.querySelector('.btn-hamburger').textContent = '☰';
+    return;
+  }
+  if (!e.target.closest('.site-nav') && !e.target.closest('.btn-hamburger')) {
     nav.classList.remove('open');
     document.querySelector('.btn-hamburger').textContent = '☰';
   }
@@ -224,4 +230,51 @@ document.getElementById('pageJumpInput') && document.getElementById('pageJumpInp
   title.addEventListener('click', function() {
     toc.classList.toggle('open');
   });
+})();
+
+(function() {
+  var nav = document.querySelector('.site-nav');
+  var btn = document.querySelector('.btn-hamburger');
+  var headerInner = document.querySelector('.header-inner');
+  if (!nav || !btn || !headerInner) return;
+
+  function checkOverflow() {
+    if (window.innerWidth <= 768) {
+      document.body.classList.remove('nav-overflow');
+      return;
+    }
+
+    document.body.classList.remove('nav-overflow');
+    nav.classList.remove('open');
+    btn.textContent = '☰';
+
+    var links = nav.querySelectorAll('.nav-link');
+    if (!links.length) return;
+
+    var totalWidth = 0;
+    links.forEach(function(link) {
+      totalWidth += link.getBoundingClientRect().width;
+    });
+
+    var style = getComputedStyle(nav);
+    var gap = parseFloat(style.gap) || 0;
+    totalWidth += (links.length - 1) * gap;
+
+    var available = headerInner.clientWidth
+      - headerInner.querySelector('.site-title').getBoundingClientRect().width
+      - headerInner.querySelector('.header-actions').getBoundingClientRect().width
+      - parseFloat(getComputedStyle(headerInner).gap || 0) * 2;
+
+    if (totalWidth > available) {
+      document.body.classList.add('nav-overflow');
+    }
+  }
+
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(checkOverflow, 100);
+  });
+
+  checkOverflow();
 })();
