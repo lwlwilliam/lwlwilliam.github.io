@@ -9,7 +9,7 @@
   <meta name="author" content="William A">
   <link rel="icon" href='../../../../favicon.ico'>
   
-  <link rel="stylesheet" href='../../../../assets/css/main.css?v=1777365280'>
+  <link rel="stylesheet" href='../../../../assets/css/main.css?v=1777367573'>
   
 </head>
 <body>
@@ -111,7 +111,7 @@
 </span></span><span style="display:flex;"><span>    $context<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">push</span>($callback);
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>略显抽象，怎么来理解它呢？<code>$context</code>实际上就是一个栈变量，通过<code>&amp;</code>达到作用域内共用一个栈的效果，作用域内所有<code>defer</code>的回调函数都放到<code>$context</code>栈中。</p>
-<p>关键点在于<code>new class extends SplStack</code>一个匿名类继承并改写了<code>SplStack</code>类的<code>__destruct()</code>，使得<code>$context</code>销毁时可以逆序调用入栈的回调函数，用法如下。</p>
+<p>关键点在于<code>new class extends SplStack</code> 一个匿名类继承并改写了 <code>SplStack</code> 类的 <code>__destruct()</code>，使得<code>$context</code>销毁时可以逆序调用入栈的回调函数，用法如下。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">foo</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span> {
@@ -262,7 +262,7 @@
   </footer>
 
   <a id="search-index-url" href='../../../../search.json' hidden></a>
-  <script src='../../../../assets/js/main.js?v=1777365280'></script>
+  <script src='../../../../assets/js/main.js?v=1777367573'></script>
   
 </body>
 </html>

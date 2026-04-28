@@ -25,7 +25,7 @@ function defer(?SplStack &$context, callable $callback): void {
 
 略显抽象，怎么来理解它呢？`$context`实际上就是一个栈变量，通过`&`达到作用域内共用一个栈的效果，作用域内所有`defer`的回调函数都放到`$context`栈中。
 
-关键点在于`new class extends SplStack`一个匿名类继承并改写了`SplStack`类的`__destruct()`，使得`$context`销毁时可以逆序调用入栈的回调函数，用法如下。
+关键点在于`new class extends SplStack` 一个匿名类继承并改写了 `SplStack` 类的 `__destruct()`，使得`$context`销毁时可以逆序调用入栈的回调函数，用法如下。
 
 ```php
 <?php
