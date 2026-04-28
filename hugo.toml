@@ -101,4 +101,4 @@ title = 'William A'
   posts = '/:year/:month/:day/:slug/'    # 文章固定链接格式
 
 [security]
-  enableInlineShortcodes = true
+  enableInlineShortcodes = false          # 设置是否可用内联代码
