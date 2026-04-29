@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset='{{ .Site.Params.encoding | default "utf-8" }}'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="&#x2f;">
+  <title>404 Page not found - {{ .Site.Title }}</title>
+  <meta name="description" content="{{ .Site.Params.description }}">
+  <meta name="keywords" content='{{ .Site.Params.keywords }}'>
+  <meta name="author" content="{{ .Site.Params.author }}">
+  <link rel="icon" href='{{ "favicon.ico" | relURL }}'>
+  <link rel="stylesheet" href='{{ "assets/css/main.css" | relURL }}?v={{ now.Unix }}'>
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href='{{ "/" | relURL }}'>{{ .Site.Title }}</a>
+      <nav class="site-nav">
+        {{ range .Site.Params.navs }}
+        {{ $navHref := .href | relURL }}
+        <a href="{{ $navHref }}" class="nav-link">{{ .label }}</a>
+        {{ end }}
+      </nav>
+      <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <div class="error-page">
+      <div class="error-card">
+        <div class="error-code">404</div>
+        <h1 class="error-title">页面未找到</h1>
+        <p class="error-desc">你访问的页面不存在或已被移除。</p>
+        <a href='{{ "/" | relURL }}' class="error-btn">← 返回首页</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; {{ now.Year }} {{ .Site.Title }}</span>
+        <span class="footer-sep">|</span>
+        <span>{{ .Site.Params.description }}</span>
+        <span class="footer-sep">|</span>
+        {{ with .Site.Params.beian }}<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">{{ . }}</a>{{ end }}
+      </div>
+      <div class="footer-right">
+        <a href='{{ "feed.xml" | relURL }}' target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <a id="search-index-url" href='{{ "search.json" | relURL }}' hidden></a>
+  <script src='{{ "assets/js/main.js" | relURL }}?v={{ now.Unix }}'></script>
+</body>
+</html>
