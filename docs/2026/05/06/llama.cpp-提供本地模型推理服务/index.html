@@ -9,7 +9,7 @@
   <meta name="author" content="William A">
   <link rel="icon" href='../../../../favicon.ico'>
   
-  <link rel="stylesheet" href='../../../../assets/css/main.css?v=1778085124'>
+  <link rel="stylesheet" href='../../../../assets/css/main.css?v=1778124228'>
   
 </head>
 <body>
@@ -97,13 +97,30 @@
   </header>
   
   
+  <details class="post-toc" id="post-toc">
+    <summary>≡</summary>
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#gguf">GGUF</a></li>
+        <li><a href="#llamacpp">llama.cpp</a></li>
+        <li><a href="#rag">RAG</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </details>
+  
   <div class="post-content">
     <p>目前很流行的<code>ollama</code>底层依赖的就是<code>llama.cpp</code>。跟<code>ollama</code>相比，<code>llama.cpp</code>更轻量、灵活，这也是我转向<code>llama.cpp</code>的原因之一。另外，<code>llama.cpp</code>使用的<code>gguf</code>格式也能方便获得，要是社区没有提供的话，还可以自己将模型转为<code>gguf</code>格式，但基本常用的模型都已经有<code>gguf</code>，一般不需要担心这个。</p>
+<h3 id="gguf">GGUF</h3>
 <p>以消费级的电脑来说，像<code>RTX 3060</code>等显卡就可以选择<code>Qwen3.5-9B</code>模型。这些开源模型在<code>huggingface</code>上就可以直接下载。如图，只需要下载适合自己电脑配置的即可，如果运行太慢，可以适当选择更小的。<strong>注意：如果只用 CPU 运行，速度可能会慢得无法接受。</strong></p>
 <p><img src="../../../../assets/images/2026/0506/huggingface-qwen3.5-gguf.png" alt="huggingface-qwen3.5-gguf"></p>
 <p>如果嫌<code>huggingface</code>太慢甚至无法访问，还可以在国内的<code>modelscope</code>上下载，跟<code>huggingface</code>差不多。</p>
 <p><img src="../../../../assets/images/2026/0506/modelscope-qwen3.5-gguf.png" alt="modelscope-qwen3.5-gguf"></p>
 <p>注意，上述两张图片上的<code>mmproj-xxx.gguf</code>用于多模态，如果没有的话，就不需要下载，一般文件名跟选择的模型名匹配，如果没有匹配的，随便下载一个即可。如果用不到多模态，只用文本模式，不下载<code>mmproj-xxx.gguf</code>也行。</p>
+<h3 id="llamacpp">llama.cpp</h3>
 <p>至于<code>llama.cpp</code>，直接在<a href="https://github.com/ggml-org/llama.cpp/releases">llama.cpp</a>选择对应的已编译程序下载即可。以<code>windows</code>下使用<code>cuda</code>运行为例，通过<code>nvidia-smi</code>命令查询<code>cuda</code>版本号，如：</p>
 <pre tabindex="0"><code>go@sea:~$ nvidia-smi.exe
 Wed May  6 23:37:32 2026
@@ -127,9 +144,16 @@ Wed May  6 23:37:32 2026
 </span></span><span style="display:flex;"><span>llama-server.exe -ngl <span style="color:#ae81ff">100</span> --port <span style="color:#ae81ff">8888</span> --models-max <span style="color:#ae81ff">1</span> -c <span style="color:#ae81ff">100000</span> --models-dir D:<span style="color:#ae81ff">\\</span>LLMs<span style="color:#ae81ff">\\</span>gguf
 </span></span></code></pre></div><p>如果没使用<code>wsl2</code>，写批处理脚本应该也一样，不过我个人比较嫌弃批处理。</p>
 <p>什么脚本都不使用的话，就每次在命令行下执行这个吧：</p>
-<pre tabindex="0"><code>llama-server.exe -ngl 100 --port 8888 --models-max 1 -c 100000 --models-dir D:\LLMs\gguf
+<pre tabindex="0"><code>$ llama-server.exe -ngl 100 --port 8888 --models-max 1 -c 100000 --models-dir D:\LLMs\gguf
 </code></pre><p>参数就不多做解释。正常情况下，浏览器访问<a href="http://127.0.0.1:8888">http://127.0.0.1:8888</a>就能使用模型服务了。</p>
 <p><img src="../../../../assets/images/2026/0506/llama.cpp.png" alt="llama.cpp"></p>
+<h3 id="rag">RAG</h3>
+<p><code>llama.cpp</code>还可以提供嵌入模型服务。<code>LLM</code>有了，再加个嵌入模型，就可以尝试一下<code>RAG</code>了。</p>
+<p>支持嵌入模型，启动命令需要加个<code>--embeddings</code>参数，如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ llama-server.exe -ngl <span style="color:#ae81ff">100</span> --port <span style="color:#ae81ff">8888</span> --models-max <span style="color:#ae81ff">1</span> -c <span style="color:#ae81ff">100000</span> --models-dir D:<span style="color:#ae81ff">\L</span>LMs<span style="color:#ae81ff">\g</span>guf --embeddings
+</span></span></code></pre></div><p>我用<code>LLM</code>生成了一个纯前端的<a href="../../../../tools/rag.html">模型测试“平台”</a>。如下填入嵌入模型和<code>LLM</code>的接口地址和模型可测试效果。</p>
+<p><img src="../../../../assets/images/2026/0506/rag1.png" alt="rag1">
+<img src="../../../../assets/images/2026/0506/rag2.png" alt="rag2"></p>
 
   </div>
   <footer class="post-footer">
@@ -163,7 +187,7 @@ Wed May  6 23:37:32 2026
   </footer>
 
   <a id="search-index-url" href='../../../../search.json' hidden></a>
-  <script src='../../../../assets/js/main.js?v=1778085124'></script>
+  <script src='../../../../assets/js/main.js?v=1778124228'></script>
   
 </body>
 </html>
