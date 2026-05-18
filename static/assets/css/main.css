@@ -553,21 +553,30 @@ body.nav-overflow .nav-link::after {
 }
 
 .post-toc summary {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   width: fit-content;
   list-style: none;
   cursor: pointer;
-  padding: 3px 7px;
+  padding: 6px 10px;
   user-select: none;
-  color: var(--text-muted);
-  font-size: 1rem;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 600;
   border-radius: 6px;
   transition: background 0.15s, color 0.15s;
 }
 
+.toc-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
 .post-toc summary:hover {
   background: var(--bg-secondary);
-  color: var(--text);
+  color: var(--accent);
 }
 
 .post-toc summary::-webkit-details-marker,
