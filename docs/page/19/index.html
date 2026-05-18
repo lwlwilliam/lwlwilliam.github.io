@@ -12,7 +12,7 @@
   
   <link rel="alternate" type="application/rss+xml" title="William A" href="../../feed.xml">
   
-  <link rel="stylesheet" href='../../assets/css/main.css?v=1778124305'>
+  <link rel="stylesheet" href='../../assets/css/main.css?v=1779098808'>
   
 </head>
 <body>
@@ -74,6 +74,31 @@
 <div class="home-page">
   
   <div class="post-list">
+    
+    <article class="post-card">
+      <h2 class="post-card-title">
+        <a href="../../2019/12/11/go-%E5%BB%B6%E8%BF%9F%E8%B0%83%E7%94%A8/">Go 延迟调用</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime='2019-12-11'>2019年12月11日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href='../../categories/go/' class="category-pill-sm">Go</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        语句 defer 向当前函数注册稍后执行的函数调用。这些调用被称作延迟调用，因为它们直到当前函数执行结束前才被执行，常用于资源释放、解除锁定以及错误处理等操作。
+延迟调用，注册的是调用，参数在注册时被复制并缓存起来。多个延迟注册按 FILO 的次序执行。
+func main() { x, y := …...
+        
+      </div>
+      <a href="../../2019/12/11/go-%E5%BB%B6%E8%BF%9F%E8%B0%83%E7%94%A8/" class="post-card-readmore">Read more →</a>
+    </article>
     
     <article class="post-card">
       <h2 class="post-card-title">
@@ -173,30 +198,6 @@
       <a href="../../2019/08/19/makefile-%E6%98%AF%E4%BB%80%E4%B9%88%E5%AE%83%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84/" class="post-card-readmore">Read more →</a>
     </article>
     
-    <article class="post-card">
-      <h2 class="post-card-title">
-        <a href="../../2019/08/02/cgi-%E5%88%9D%E6%8E%A2/">CGI 初探</a>
-      </h2>
-      <div class="post-card-meta">
-        <time datetime='2019-08-02'>2019年8月2日</time>
-        
-        <span class="post-card-categories">
-          
-          <a href='../../categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/' class="category-pill-sm">计算机网络</a>
-          
-        </span>
-        
-      </div>
-      <div class="post-card-excerpt">
-        
-        
-        CGI(Common Gateway Interface)，通用网关接口，用于 web 服务器和外部应用程序（CGI 程序）之间的通信。为了探索 CGI 是如何工作的，我分别用 C 和 Python 语言写了段测试程序（均生成可执行程序），以及说明了一下解释型语言的 CGI 写法。
-C 程序 编译 …...
-        
-      </div>
-      <a href="../../2019/08/02/cgi-%E5%88%9D%E6%8E%A2/" class="post-card-readmore">Read more →</a>
-    </article>
-    
   </div>
 
   
@@ -280,7 +281,7 @@ C 程序 编译 …...
   </footer>
 
   <a id="search-index-url" href='../../search.json' hidden></a>
-  <script src='../../assets/js/main.js?v=1778124305'></script>
+  <script src='../../assets/js/main.js?v=1779098808'></script>
   
 </body>
 </html>
