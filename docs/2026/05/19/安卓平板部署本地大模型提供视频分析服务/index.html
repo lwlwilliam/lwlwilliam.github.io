@@ -3,9 +3,9 @@
 <head>
   <meta charset='utf-8'>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>llama.cpp 和 ffmpeg 搭建本地视频分析服务 - William A</title>
+  <title>安卓平板部署本地大模型提供视频分析服务 - William A</title>
   <meta name="description" content="Love sports, love programming, love life.">
-  <meta name="keywords" content='AI,llama.cpp,人工智能,gguf,flask,ffmpeg,William A'>
+  <meta name="keywords" content='安卓,android,LLM,人工智能,大模型,AI,Flask,ffmpeg,视频分析,William A'>
   <meta name="author" content="William A">
   <link rel="icon" href='../../../../favicon.ico'>
   
@@ -71,9 +71,9 @@
     
 <article class="post-single">
   <header class="post-header">
-    <h1 class="post-title">llama.cpp 和 ffmpeg 搭建本地视频分析服务</h1>
+    <h1 class="post-title">安卓平板部署本地大模型提供视频分析服务</h1>
     <div class="post-meta">
-      <time datetime='2026-05-18'>2026年5月18日</time>
+      <time datetime='2026-05-19'>2026年5月19日</time>
       
       <span class="post-categories">
         
@@ -85,17 +85,23 @@
     
     <div class="post-keywords">
       
-      <span class="keyword-tag">AI</span>
+      <span class="keyword-tag">安卓</span>
       
-      <span class="keyword-tag">llama.cpp</span>
+      <span class="keyword-tag">android</span>
+      
+      <span class="keyword-tag">LLM</span>
       
       <span class="keyword-tag">人工智能</span>
       
-      <span class="keyword-tag">gguf</span>
+      <span class="keyword-tag">大模型</span>
       
-      <span class="keyword-tag">flask</span>
+      <span class="keyword-tag">AI</span>
+      
+      <span class="keyword-tag">Flask</span>
       
       <span class="keyword-tag">ffmpeg</span>
+      
+      <span class="keyword-tag">视频分析</span>
       
     </div>
     
@@ -108,12 +114,12 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#为什么用-llamacpp">为什么用 llama.cpp</a></li>
-        <li><a href="#为什么还要-ffmpeg">为什么还要 ffmpeg</a></li>
-        <li><a href="#依赖">依赖</a></li>
-        <li><a href="#代码原理">代码原理</a></li>
-        <li><a href="#运行">运行</a></li>
-        <li><a href="#安卓效果">安卓效果</a></li>
+        <li><a href="#安装-termux">安装 Termux</a></li>
+        <li><a href="#安装-llamacpp">安装 llama.cpp</a></li>
+        <li><a href="#下载大模型">下载大模型</a></li>
+        <li><a href="#安装-ffmpeg">安装 ffmpeg</a></li>
+        <li><a href="#下载-python-及前端代码">下载 python 及前端代码</a></li>
+        <li><a href="#启动服务">启动服务</a></li>
       </ul>
     </li>
   </ul>
@@ -121,25 +127,25 @@
   </details>
   
   <div class="post-content">
-    <p>上一篇文章介绍了如何用<code>llama.cpp</code>搭建本地模型推理服务，这次顺着往下走：有了多模态模型的推理能力，再配合<code>ffmpeg</code>，就能搭一个完全运行在本地的视频分析服务。不需要任何<code>云 API</code>，视频不用上传到第三方，数据隐私完全由自己掌控。核心思路其实不复杂——视频本质上是一帧帧图片的序列，把关键帧拆出来丢给多模态大模型逐帧描述，最后再把所有描述汇总，让<code>LLM</code>根据用户的问题给出一个完整回答。</p>
-<h3 id="为什么用-llamacpp">为什么用 llama.cpp</h3>
-<p><code>llama.cpp</code>的<code>server</code>模式提供了<code>OpenAI</code>兼容的<code>API</code>，不仅支持纯文本的<code>/v1/chat/completions</code>，还支持<code>image_url</code>格式的图片输入——这跟<code>OpenAI</code>的<code>Vision API</code>用法一模一样。也就是说，任何能调用<code>GPT-4V</code>的代码，只要把<code>base_url</code>指向本地的<code>llama-server</code>，就能无缝切换到本地模型。</p>
-<p>另一个关键点是模型格式。<code>llama.cpp</code>使用<code>GGUF</code>格式，目前主流的多模态开源模型（如<code>Qwen2.5-VL</code>、<code>Gemma</code>等）基本都有社区提供的<code>GGUF</code>版本，下载下来配合<code>mmproj</code>文件就能直接加载视觉能力，不需要自己折腾模型转换。</p>
-<h3 id="为什么还要-ffmpeg">为什么还要 ffmpeg</h3>
-<p>大模型本身只能处理图片，不能直接“看”视频。所以需要把视频变成一张张图片让它可以间接“看”到视频——这就是<code>ffmpeg</code>的用武之地。<code>ffmpeg</code>是视频处理的事实标准，几乎所有格式都支持，命令行调用简单，性能极高。代码里用它的一行命令就能按固定时间间隔抽取关键帧，全程自动完成，不需要额外依赖。</p>
-<p>抽取帧时用<code>fps=1/{interval}</code>控制间隔（默认每<code>2</code>秒抽一帧），用<code>-frames:v</code>限制最大帧数（默认<code>16</code>帧）。这样既能覆盖视频的主要时间线，又不会因为帧数过多导致推理时间爆炸。</p>
-<h3 id="依赖">依赖</h3>
-<ul>
-<li><code>llama.cpp</code>及多模态大模型</li>
-<li><code>ffmpeg</code></li>
-<li><code>flask</code></li>
-</ul>
-<h3 id="代码原理">代码原理</h3>
-<p>整个流程分三步，对应<code>analyze_video</code>函数的逻辑：</p>
-<p><strong>第一步：拆帧。</strong><code>ffmpeg</code>将视频按固定间隔抽取成<code>jpg</code>图片，存到临时目录。</p>
-<p><strong>第二步：逐帧描述。</strong> 遍历每一帧，转成<code>base64</code>编码，通过<code>OpenAI</code>兼容的<code>Vision API</code>发给<code>llama-server</code>，让多模态模型描述画面的关键内容（场景、人物、动作、文字等）。这一步是整个流程的性能瓶颈——每帧都要等模型推理完成，<code>16</code>帧的话根据模型大小和硬件不同，可能需要几分钟。</p>
-<p><strong>第三步：汇总总结。</strong> 把所有帧的描述拼接在一起，连同用户的问题一起发给<code>LLM</code>，让它综合所有时间点的信息给出最终回答。这一步用的是纯文本对话，不传图片，所以速度很快。</p>
-<p>前端部分就是一个简单的<code>Flask</code>页面，支持拖拽上传、预设问题、实时显示分析结果。</p>
+    <h3 id="安装-termux">安装 Termux</h3>
+<p>不另外说明。以下操作均在<code>Termux</code>中操作。</p>
+<h3 id="安装-llamacpp">安装 llama.cpp</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ wget https://github.com/ggml-org/llama.cpp/releases/download/b9222/llama-b9222-bin-android-arm64.tar.gz
+</span></span><span style="display:flex;"><span>$ tar -xvf llama-b9222-bin-android-arm64.tar.gz  <span style="color:#75715e"># 解压后应该得到一个 llama-b9222 目录，个人喜欢将它重命名为 llama</span>
+</span></span><span style="display:flex;"><span>$ mv llama-b9222 llama
+</span></span><span style="display:flex;"><span>$ echo <span style="color:#e6db74">&#39;PATH=$PATH:&#39;</span><span style="color:#e6db74">`</span>pwd<span style="color:#e6db74">`</span><span style="color:#e6db74">&#39;/llama&#39;</span> &gt;&gt; ~/.bashrc  <span style="color:#75715e"># 让 llama 的可执行文件可直接执行</span>
+</span></span><span style="display:flex;"><span>$ echo <span style="color:#e6db74">&#39;export LD_LIBRARY_PATH=&#34;&#39;</span><span style="color:#e6db74">`</span>pwd<span style="color:#e6db74">`</span><span style="color:#e6db74">&#39;/llama:$LD_LIBRARY_PATH&#34;&#39;</span> &gt;&gt; ~/.bashrc  <span style="color:#75715e"># 让 llama 可以正常连接动态库</span>
+</span></span><span style="display:flex;"><span>$ . ~/.bashrc
+</span></span><span style="display:flex;"><span>$ llama-sever -h  <span style="color:#75715e"># 测试一下</span>
+</span></span></code></pre></div><h3 id="下载大模型">下载大模型</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ mkdir MiniCPM-V-4.6
+</span></span><span style="display:flex;"><span>$ cd MiniCPM-V-4.6
+</span></span><span style="display:flex;"><span>$ wget https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf/resolve/master/MiniCPM-V-4_6-Q4_K_M.gguf
+</span></span><span style="display:flex;"><span>$ wget https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf/resolve/master/mmproj-model-f16.gguf
+</span></span></code></pre></div><h3 id="安装-ffmpeg">安装 ffmpeg</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ pkg upgrade
+</span></span><span style="display:flex;"><span>$ pkg install ffmpeg
+</span></span></code></pre></div><h3 id="下载-python-及前端代码">下载 python 及前端代码</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># app.py</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> subprocess
@@ -153,7 +159,7 @@
 </span></span><span style="display:flex;"><span>app <span style="color:#f92672">=</span> Flask(__name__)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># ================= 配置区 =================</span>
-</span></span><span style="display:flex;"><span>LLAMA_SERVER_URL <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;LLAMA_SERVER_URL&#34;</span>, <span style="color:#e6db74">&#34;http://localhost:9999&#34;</span>)
+</span></span><span style="display:flex;"><span>LLAMA_SERVER_URL <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;LLAMA_SERVER_URL&#34;</span>, <span style="color:#e6db74">&#34;http://localhost:8080&#34;</span>)
 </span></span><span style="display:flex;"><span>DEFAULT_MODEL <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;DEFAULT_MODEL&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>)  <span style="color:#75715e"># 空则自动选第一个</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>MAX_FRAMES <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span>
@@ -327,8 +333,7 @@
 </span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;默认模型: </span><span style="color:#e6db74">{</span>DEFAULT_MODEL<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    app<span style="color:#f92672">.</span>run(host<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;0.0.0.0&#39;</span>, port<span style="color:#f92672">=</span><span style="color:#ae81ff">7860</span>, debug<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
-</span></span><span style="display:flex;"><span>    
-</span></span></code></pre></div><p>前端页面，支持拖拽上传和预设问题。<code>Flask</code>框架<code>render_template</code>方法默认会读取<code>templates/</code>目录下的模板，以下代码保存在<code>templates/index.html</code>文件即可。</p>
+</span></span></code></pre></div><p><code>templates/index.html</code>。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!DOCTYPE html&gt;</span>
 </span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span> <span style="color:#a6e22e">lang</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;zh-CN&#34;</span>&gt;
 </span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">head</span>&gt;
@@ -732,34 +737,21 @@
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">script</span>&gt;
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
-</span></span></code></pre></div><p>整体目录结构如下：</p>
-<pre tabindex="0"><code>app.py
-templates/
-    index.html
-</code></pre><h3 id="运行">运行</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ python app.py
-</span></span></code></pre></div><p>效果如图：</p>
-<p><img src="../../../../assets/images/2026/0518/llm-video-1.png" alt="llm-video-1">
-<img src="../../../../assets/images/2026/0518/llm-video-2.png" alt="llm-video-2"></p>
-<h3 id="安卓效果">安卓效果</h3>
-<p>这个技术栈甚至在安卓上也能跑通，当然运行速度奇慢，如果只是为了验证技术，还是没问题的。</p>
-<video style="width: 100%;" controls>
-    <source src="../../../../assets/files/llama-ffmpeg.mp4" type="video/mp4">
-</video>
+</span></span></code></pre></div><p>安装依赖。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ pip install flask requests
+</span></span></code></pre></div><h3 id="启动服务">启动服务</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ nohup llama-server -m MiniCPM-V-4_6-Q4_K_M.gguf -mm mmproj-model-f16.gguf &amp;
+</span></span><span style="display:flex;"><span>$ python app.py
+</span></span></code></pre></div>
   </div>
   <footer class="post-footer">
     <nav class="post-nav">
       
-      <a class="prev-post" href="../../../../2026/05/06/llama.cpp-%E6%8F%90%E4%BE%9B%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E6%9C%8D%E5%8A%A1/">
+      <a class="prev-post" href="../../../../2026/05/18/llama.cpp-%E5%92%8C-ffmpeg-%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0%E8%A7%86%E9%A2%91%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1/">
         <span class="nav-label">← Prev</span>
-        <span class="nav-title">llama.cpp 提供本地模型推理服务</span>
+        <span class="nav-title">llama.cpp 和 ffmpeg 搭建本地视频分析服务</span>
       </a>
       
-      
-      <a class="next-post" href="../../../../2026/05/19/%E5%AE%89%E5%8D%93%E5%B9%B3%E6%9D%BF%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8F%90%E4%BE%9B%E8%A7%86%E9%A2%91%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1/">
-        <span class="nav-label">Next →</span>
-        <span class="nav-title">安卓平板部署本地大模型提供视频分析服务</span>
-      </a>
       
     </nav>
   </footer>

@@ -78,6 +78,30 @@
     
     <article class="post-card">
       <h2 class="post-card-title">
+        <a href="../../2023/11/15/python-%E7%9A%84%E5%85%83%E7%BB%84%E7%96%91%E6%83%91/">Python 的元组疑惑</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime='2023-11-15'>2023年11月15日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href='../../categories/python/' class="category-pill-sm">Python</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        发现一个有点意思的问题，代码如下：
+t = ([&#39;a&#39;], 1, 2) try: t[0] += [&#39;b&#39;, &#39;c&#39;] except Exception as e: print(e) print(t) # output: # …...
+        
+      </div>
+      <a href="../../2023/11/15/python-%E7%9A%84%E5%85%83%E7%BB%84%E7%96%91%E6%83%91/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+    <article class="post-card">
+      <h2 class="post-card-title">
         <a href="../../2023/11/09/%E7%94%B1-php-fiber-%E5%BC%95%E5%8F%91%E7%9A%84%E6%80%9D%E8%80%83/">由 PHP Fiber 引发的思考</a>
       </h2>
       <div class="post-card-meta">
@@ -171,30 +195,6 @@ switch (expression) { case constant1: …...
       <a href="../../2023/06/30/%E7%94%A8-if-%E5%92%8C-goto-%E6%A8%A1%E6%8B%9F-switch/" class="post-card-readmore">Read more →</a>
     </article>
     
-    <article class="post-card">
-      <h2 class="post-card-title">
-        <a href="../../2023/06/06/posix-%E7%BB%88%E7%AB%AF%E5%B1%8F%E4%BF%9D/">POSIX 终端屏保</a>
-      </h2>
-      <div class="post-card-meta">
-        <time datetime='2023-06-06'>2023年6月6日</time>
-        
-        <span class="post-card-categories">
-          
-          <a href='../../categories/%E5%B7%A5%E5%85%B7/' class="category-pill-sm">工具</a>
-          
-        </span>
-        
-      </div>
-      <div class="post-card-excerpt">
-        
-        
-        最近在读一本书《PHP Beyond the Web》，内容难度不大，不过感觉挺有意思的。可能是做惯了web应用，或者说潜意识觉得PHP就是做web应用的，没想到在其它领域上，PHP也用得挺顺手，也许这也是一种偏见吧。看了这本书，对PHP有一些许改观，也算是扩展了视野。
-在这里面看到一个挺好玩的小脚 …...
-        
-      </div>
-      <a href="../../2023/06/06/posix-%E7%BB%88%E7%AB%AF%E5%B1%8F%E4%BF%9D/" class="post-card-readmore">Read more →</a>
-    </article>
-    
   </div>
 
   
@@ -245,14 +245,14 @@ switch (expression) { case constant1: …...
 
     
     <a href="../../page/9/" class="page-btn" title="Next">»</a>
-    <a href="../../page/23/" class="page-btn" title="Last">»»</a>
+    <a href="../../page/24/" class="page-btn" title="Last">»»</a>
     
   </div>
   <div class="pagination-jump">
     <span>Page</span>
     <a id="pagination-base" href="../../" hidden></a>
-    <input type="number" id="pageJumpInput" min="1" max="23" value="8" class="page-jump-input">
-    <span>of 23</span>
+    <input type="number" id="pageJumpInput" min="1" max="24" value="8" class="page-jump-input">
+    <span>of 24</span>
     <button class="page-btn page-jump-btn" onclick="jumpToPage()">Go</button>
   </div>
 </nav>

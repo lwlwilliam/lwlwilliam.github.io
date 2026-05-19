@@ -78,6 +78,31 @@
     
     <article class="post-card">
       <h2 class="post-card-title">
+        <a href="../../2026/01/07/%E9%9A%8F%E4%BE%BF%E5%94%A0%E5%94%A0%E5%BC%82%E6%AD%A5/">随便唠唠异步</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime='2026-01-07'>2026年1月7日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href='../../categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/' class="category-pill-sm">操作系统</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        再看操作系统原理时，又“吸收”了一个名词“页缓存”，跟ChatGPT扯了下之后，就有了更深刻的理解，于是灵光一现问了以下问题：
+异步I/O的本质就是提交I/O后，不会阻塞调用者，并在I/O完成后通知调用者结果。
+现在分析一下我的问题。在用户层面实现I/O函数，并通过用户层面实现的“页缓存”（本质上就 …...
+        
+      </div>
+      <a href="../../2026/01/07/%E9%9A%8F%E4%BE%BF%E5%94%A0%E5%94%A0%E5%BC%82%E6%AD%A5/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+    <article class="post-card">
+      <h2 class="post-card-title">
         <a href="../../2025/10/23/%E6%95%B0%E7%BB%84%E8%B6%8A%E7%95%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/">数组越界导致的函数调用</a>
       </h2>
       <div class="post-card-meta">
@@ -171,30 +196,6 @@
       <a href="../../2025/04/30/%E7%94%A8-workerman-%E5%8F%8A-emqx-%E5%81%9A%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84-mqtt-%E7%A4%BA%E4%BE%8B/" class="post-card-readmore">Read more →</a>
     </article>
     
-    <article class="post-card">
-      <h2 class="post-card-title">
-        <a href="../../2025/04/29/%E5%AD%97%E8%8A%82%E7%A0%81%E7%BC%93%E5%AD%98%E6%8F%90%E5%8D%87%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E7%9A%84%E5%8E%9F%E7%90%86%E6%B5%85%E8%B0%88/">字节码缓存提升程序性能的原理浅谈</a>
-      </h2>
-      <div class="post-card-meta">
-        <time datetime='2025-04-29'>2025年4月29日</time>
-        
-        <span class="post-card-categories">
-          
-          <a href='../../categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/' class="category-pill-sm">编译原理</a>
-          
-        </span>
-        
-      </div>
-      <div class="post-card-excerpt">
-        
-        
-        像Java这类语言，编译器会把代码预先编译为字节码，JVM直接解释执行这些字节码，程序就可以运行起来了。PHP使用者在性能优化时可能也会遇到OPcache这个名词，所谓OPcache其实就是opcode的cache，opcode其实类似于字节码，虽然本质上有点差异，但可以类比为同一种事物。
-PHP在 …...
-        
-      </div>
-      <a href="../../2025/04/29/%E5%AD%97%E8%8A%82%E7%A0%81%E7%BC%93%E5%AD%98%E6%8F%90%E5%8D%87%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E7%9A%84%E5%8E%9F%E7%90%86%E6%B5%85%E8%B0%88/" class="post-card-readmore">Read more →</a>
-    </article>
-    
   </div>
 
   
@@ -239,14 +240,14 @@ PHP在 …...
 
     
     <a href="../../page/3/" class="page-btn" title="Next">»</a>
-    <a href="../../page/23/" class="page-btn" title="Last">»»</a>
+    <a href="../../page/24/" class="page-btn" title="Last">»»</a>
     
   </div>
   <div class="pagination-jump">
     <span>Page</span>
     <a id="pagination-base" href="../../" hidden></a>
-    <input type="number" id="pageJumpInput" min="1" max="23" value="2" class="page-jump-input">
-    <span>of 23</span>
+    <input type="number" id="pageJumpInput" min="1" max="24" value="2" class="page-jump-input">
+    <span>of 24</span>
     <button class="page-btn page-jump-btn" onclick="jumpToPage()">Go</button>
   </div>
 </nav>

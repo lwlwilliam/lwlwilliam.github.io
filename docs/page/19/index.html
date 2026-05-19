@@ -78,6 +78,30 @@
     
     <article class="post-card">
       <h2 class="post-card-title">
+        <a href="../../2019/12/18/go-%E5%86%85%E9%83%A8%E5%8C%85/">Go 内部包</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime='2019-12-18'>2019年12月18日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href='../../categories/go/' class="category-pill-sm">Go</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        在 Go 语言中，所有成员在包内均可访问，无论是否在同一源码文件中。但只有名称首字母为大写的成员可导出，在包外可视。
+但是在进行代码重构时，我们会将一些内部模块陆续分离开来，以独立包的形式维护。这时，基于首字母大小写的访问权限控制则显示过于粗犷。我们希望这些包的可导出成员仅在特定范围内可访问，而不是 …...
+        
+      </div>
+      <a href="../../2019/12/18/go-%E5%86%85%E9%83%A8%E5%8C%85/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+    <article class="post-card">
+      <h2 class="post-card-title">
         <a href="../../2019/12/11/go-%E5%BB%B6%E8%BF%9F%E8%B0%83%E7%94%A8/">Go 延迟调用</a>
       </h2>
       <div class="post-card-meta">
@@ -176,29 +200,6 @@ func main() { x, y := …...
       <a href="../../2019/11/28/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8A%A0%E6%B3%95%E5%99%A8/" class="post-card-readmore">Read more →</a>
     </article>
     
-    <article class="post-card">
-      <h2 class="post-card-title">
-        <a href="../../2019/08/19/makefile-%E6%98%AF%E4%BB%80%E4%B9%88%E5%AE%83%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84/">Makefile 是什么？它是如何工作的？</a>
-      </h2>
-      <div class="post-card-meta">
-        <time datetime='2019-08-19'>2019年8月19日</time>
-        
-        <span class="post-card-categories">
-          
-          <a href='../../categories/%E5%B7%A5%E5%85%B7/' class="category-pill-sm">工具</a>
-          
-        </span>
-        
-      </div>
-      <div class="post-card-excerpt">
-        
-        
-        如果想要在某些文件更新时执行或更新任务，make工具会令这个过程变得很方便。make工具需要Makefile(或makefile)文件来定义要执行的一系列任务。你可能已经使用过make将源码编译为程序。大部分开源项目都使用make来编译为二进制的可执行程序，编译后的程序可以使用make …...
-        
-      </div>
-      <a href="../../2019/08/19/makefile-%E6%98%AF%E4%BB%80%E4%B9%88%E5%AE%83%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84/" class="post-card-readmore">Read more →</a>
-    </article>
-    
   </div>
 
   
@@ -249,14 +250,14 @@ func main() { x, y := …...
 
     
     <a href="../../page/20/" class="page-btn" title="Next">»</a>
-    <a href="../../page/23/" class="page-btn" title="Last">»»</a>
+    <a href="../../page/24/" class="page-btn" title="Last">»»</a>
     
   </div>
   <div class="pagination-jump">
     <span>Page</span>
     <a id="pagination-base" href="../../" hidden></a>
-    <input type="number" id="pageJumpInput" min="1" max="23" value="19" class="page-jump-input">
-    <span>of 23</span>
+    <input type="number" id="pageJumpInput" min="1" max="24" value="19" class="page-jump-input">
+    <span>of 24</span>
     <button class="page-btn page-jump-btn" onclick="jumpToPage()">Go</button>
   </div>
 </nav>

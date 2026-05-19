@@ -78,6 +78,30 @@
     
     <article class="post-card">
       <h2 class="post-card-title">
+        <a href="../../2021/05/13/%E5%9C%A8%E6%B1%87%E7%BC%96%E4%B8%AD%E9%87%8D%E6%96%B0%E8%AE%A4%E8%AF%86%E5%87%BD%E6%95%B0/">在汇编中重新认识函数</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime='2021-05-13'>2021年5月13日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href='../../categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/' class="category-pill-sm">编译原理</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        一个简单的 8086 汇编子程序（函数）。
+assume cs:code code segment main: mov ax, 1000h call add1 mov ax, 4c00h int 21h add1: add ax, 1 ret code ends end main 标号main可以简 …...
+        
+      </div>
+      <a href="../../2021/05/13/%E5%9C%A8%E6%B1%87%E7%BC%96%E4%B8%AD%E9%87%8D%E6%96%B0%E8%AE%A4%E8%AF%86%E5%87%BD%E6%95%B0/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+    <article class="post-card">
+      <h2 class="post-card-title">
         <a href="../../2021/04/22/%E6%B1%87%E7%BC%96%E7%BA%A7%E8%B0%83%E8%AF%95%E7%A8%8B%E5%BA%8F-debug/">汇编级调试程序 debug</a>
       </h2>
       <div class="post-card-meta">
@@ -173,32 +197,6 @@ package main import ( …...
       <a href="../../2021/02/02/%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E9%AD%94%E6%95%B0/" class="post-card-readmore">Read more →</a>
     </article>
     
-    <article class="post-card">
-      <h2 class="post-card-title">
-        <a href="../../2021/01/26/%E6%A0%88%E5%AE%9E%E7%8E%B0%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/">栈实现的表达式求值</a>
-      </h2>
-      <div class="post-card-meta">
-        <time datetime='2021-01-26'>2021年1月26日</time>
-        
-        <span class="post-card-categories">
-          
-          <a href='../../categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/' class="category-pill-sm">编译原理</a>
-          
-          <a href='../../categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/' class="category-pill-sm">算法与数据结构</a>
-          
-        </span>
-        
-      </div>
-      <div class="post-card-excerpt">
-        
-        
-        后进者先出，先进者后出，这就是数据结构中的&quot;栈&quot;。栈是一种相当简单的数据结构，但应用十分广泛，例如编程语言中的函数调用栈、浏览器的前进后退功能。本文讲的是栈的另一个常见应用场景，编译器利用栈实现表达式求值。初次见到这种实现思路的时候，我不禁叫绝，一个简单的栈还能玩出花。
-例如，一 …...
-        
-      </div>
-      <a href="../../2021/01/26/%E6%A0%88%E5%AE%9E%E7%8E%B0%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/" class="post-card-readmore">Read more →</a>
-    </article>
-    
   </div>
 
   
@@ -249,14 +247,14 @@ package main import ( …...
 
     
     <a href="../../page/13/" class="page-btn" title="Next">»</a>
-    <a href="../../page/23/" class="page-btn" title="Last">»»</a>
+    <a href="../../page/24/" class="page-btn" title="Last">»»</a>
     
   </div>
   <div class="pagination-jump">
     <span>Page</span>
     <a id="pagination-base" href="../../" hidden></a>
-    <input type="number" id="pageJumpInput" min="1" max="23" value="12" class="page-jump-input">
-    <span>of 23</span>
+    <input type="number" id="pageJumpInput" min="1" max="24" value="12" class="page-jump-input">
+    <span>of 24</span>
     <button class="page-btn page-jump-btn" onclick="jumpToPage()">Go</button>
   </div>
 </nav>
