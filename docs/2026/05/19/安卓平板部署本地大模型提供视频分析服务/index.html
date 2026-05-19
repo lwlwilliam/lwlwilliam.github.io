@@ -136,7 +136,7 @@
 </span></span><span style="display:flex;"><span>$ echo <span style="color:#e6db74">&#39;PATH=$PATH:&#39;</span><span style="color:#e6db74">`</span>pwd<span style="color:#e6db74">`</span><span style="color:#e6db74">&#39;/llama&#39;</span> &gt;&gt; ~/.bashrc  <span style="color:#75715e"># 让 llama 的可执行文件可直接执行</span>
 </span></span><span style="display:flex;"><span>$ echo <span style="color:#e6db74">&#39;export LD_LIBRARY_PATH=&#34;&#39;</span><span style="color:#e6db74">`</span>pwd<span style="color:#e6db74">`</span><span style="color:#e6db74">&#39;/llama:$LD_LIBRARY_PATH&#34;&#39;</span> &gt;&gt; ~/.bashrc  <span style="color:#75715e"># 让 llama 可以正常连接动态库</span>
 </span></span><span style="display:flex;"><span>$ . ~/.bashrc
-</span></span><span style="display:flex;"><span>$ llama-sever -h  <span style="color:#75715e"># 测试一下</span>
+</span></span><span style="display:flex;"><span>$ llama-sever --version  <span style="color:#75715e"># 测试一下</span>
 </span></span></code></pre></div><h3 id="下载大模型">下载大模型</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ mkdir MiniCPM-V-4.6
 </span></span><span style="display:flex;"><span>$ cd MiniCPM-V-4.6
