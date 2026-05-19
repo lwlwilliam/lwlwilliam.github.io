@@ -9,7 +9,8 @@
   <meta name="keywords" content='{{ .Site.Params.keywords }}'>
   <meta name="author" content="{{ .Site.Params.author }}">
   <link rel="icon" href='{{ "favicon.ico" | relURL }}'>
-  <link rel="stylesheet" href='{{ "assets/css/main.css" | relURL }}?v={{ now.Unix }}'>
+<!--  <link rel="stylesheet" href='{{ "assets/css/main.css" | relURL }}?v={{ now.Unix }}'>-->
+  <link rel="stylesheet" href='{{ "assets/css/main.css" | relURL }}'>
 </head>
 <body>
   <script>
@@ -71,6 +72,7 @@
   </footer>
 
   <a id="search-index-url" href='{{ "search.json" | relURL }}' hidden></a>
-  <script src='{{ "assets/js/main.js" | relURL }}?v={{ now.Unix }}'></script>
+<!--  <script src='{{ "assets/js/main.js" | relURL }}?v={{ now.Unix }}'></script>-->
+  <script src='{{ "assets/js/main.js" | relURL }}'></script>
 </body>
 </html>
