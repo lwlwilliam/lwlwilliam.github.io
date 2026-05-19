@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网页版五笔输入法</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>网页版五笔输入法</h1>
+        <div class="input-wrapper">
+            <textarea id="input-area" placeholder="在此输入...点击按钮切换输入法"></textarea>
+            <div id="candidate-box" class="candidate-box hidden">
+                <div class="candidate-header">
+                    <span id="code-display"></span>
+                    <span id="page-info"></span>
+                </div>
+                <div id="candidate-list" class="candidate-list"></div>
+            </div>
+        </div>
+        <div class="settings">
+            <label>
+                每页候选数: <input type="number" id="page-size" value="5" min="1" max="9">
+            </label>
+            <label>
+                <input type="checkbox" id="follow-caret" checked> 候选框跟随光标
+            </label>
+            <label>
+                <input type="checkbox" id="auto-commit" checked> 四码唯一自动上屏
+            </label>
+            <button id="toggle-im">切换输入法 (Ctrl+空格)</button>
+            <span id="im-status" class="im-status">英文</span>
+        </div>
+        <div class="help">
+            <h3>使用说明</h3>
+            <ul>
+                <li>点击按钮切换输入法</li>
+                <li>数字键 <kbd>1</kbd>-<kbd>9</kbd> 选择候选词</li>
+                <li><kbd>+</kbd> / <kbd>-</kbd> 翻页</li>
+                <li><kbd>Enter</kbd> 清除当前编码</li>
+                <li><kbd>Space</kbd> 选择第一个候选词</li>
+                <li><kbd>Backspace</kbd> 删除编码最后一位</li>
+            </ul>
+        </div>
+    </div>
+    <script src="input-method.js"></script>
+</body>
+</html>
