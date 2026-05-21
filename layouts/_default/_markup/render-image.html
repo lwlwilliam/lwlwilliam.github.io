@@ -1,0 +1,6 @@
+{{- $url := .Destination -}}
+{{- $url = replaceRE `(\.\./)+static/` "/" $url -}}
+{{- if not (strings.HasPrefix $url "/") -}}
+{{- $url = print "/" $url -}}
+{{- end -}}
+<img src="{{ $url }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }}>

@@ -292,4 +292,4 @@ func main() {
 
 运行效果。
 
-![cdp](/assets/images/2025/0423/cdp.png)
+![cdp](../../../static/assets/images/2025/0423/cdp.png)

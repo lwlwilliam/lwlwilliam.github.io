@@ -53,6 +53,6 @@ try {
 }
 ```
 
-![dashboard](/assets/images/2025/0430/dashboard.png)
+![dashboard](../../../static/assets/images/2025/0430/dashboard.png)
 
-![subscribe_from_dashboard](/assets/images/2025/0430/subscribe_from_dashboard.png)
+![subscribe_from_dashboard](../../../static/assets/images/2025/0430/subscribe_from_dashboard.png)

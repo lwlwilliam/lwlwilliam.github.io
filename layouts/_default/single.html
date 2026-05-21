@@ -28,7 +28,9 @@
   </details>
   {{ end }}
   <div class="post-content">
-    {{ .Content }}
+    {{- $content := .Content -}}
+    {{- $content = replaceRE `(\.\./)+static/` "/" $content -}}
+    {{- $content | safeHTML -}}
   </div>
   <footer class="post-footer">
     <nav class="post-nav">

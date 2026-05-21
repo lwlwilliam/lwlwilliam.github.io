@@ -68,8 +68,8 @@ jobs:
 
 目前只确保在`arm64`架构下的`ubuntu-22.04`运行正常，需要先确认`yaml`文件中的`apt`命令运行正常，安装好依赖。然后将`GitHub Actions`发布的`zip`文件下载解压。
 
-![github_action](/assets/images/2025/0225/github_actions2.png)
+![github_action](../../../static/assets/images/2025/0225/github_actions2.png)
 
 如下图运行即可。
 
-![github_action](/assets/images/2025/0225/github_actions.png)
+![github_action](../../../static/assets/images/2025/0225/github_actions.png)

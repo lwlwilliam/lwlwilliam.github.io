@@ -132,7 +132,7 @@ $ go run jwt.go
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.O0t7UHnKu0-Q30CpQa1-Oi9TdUQ-fSktY3M4G6O0mPU
 ```
 
-![jwt](/assets/images/2021/0827/WX20210827-150452.png)
+![jwt](../../../static/assets/images/2021/0827/WX20210827-150452.png)
 
 服务器在生成 jwt 时，对生成的 jwt 和 secret 进行绑定保存，在客户端将 jwt 回传时即能过 base64 解码获取对应原内容进行验证。
 

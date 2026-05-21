@@ -61,5 +61,5 @@ $ php -e react.php
 
 效果如图所示：
 
-![cli_raw](/assets/images/2024/0711/cli_raw.png)
-![cli_html](/assets/images/2024/0711/cli_html.png)
+![cli_raw](../../../static/assets/images/2024/0711/cli_raw.png)
+![cli_html](../../../static/assets/images/2024/0711/cli_html.png)
