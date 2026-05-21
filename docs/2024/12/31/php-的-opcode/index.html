@@ -111,8 +111,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p><code>opcode</code>跟<code>PHP</code>，类似于<code>bytecode</code>跟<code>Java</code>的关系，相当于<code>机器码</code>和编译型语言的关系。</p>
+  <div class="post-content"><p><code>opcode</code>跟<code>PHP</code>，类似于<code>bytecode</code>跟<code>Java</code>的关系，相当于<code>机器码</code>和编译型语言的关系。</p>
 <p><code>PHP</code>是一门解释型语言，它的执行单元就是<code>opcode</code>，<code>Zend Engine</code>就是执行<code>opcode</code>的地方，<code>Zend Engine</code>也就是常说的<code>VM</code>。<code>JVM</code>比较出名，它就是针对<code>Java</code>设计的<code>VM</code>，这样说应该理解了<code>PHP</code>的<code>Zend Engine</code>和<code>opcode</code>是什么东西了吧。</p>
 <p>看看如下代码：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
@@ -245,9 +244,13 @@ Array
     [1] =&gt; x
     [2] =&gt; y
 )
-</code></pre><p><code>PHP</code>的<code>opcode</code>并没有详细的文档记录，也没有提供向后兼容性，不像<code>Java</code>那样经过精心设计，因此在内部有如“直接运行<code>opcode</code>”之类的<code>RFC</code>都遭到了一致否决，类似的讨论如 <a href="https://externals.io/message/111965">https://externals.io/message/111965</a>，还可以在 <a href="https://externals.io">https://externals.io</a> 查阅更多相关信息。可能关于<code>opcode</code>最权威的资料就在源码中，例如 <a href="https://github.com/php/php-src/blob/PHP-8.4.2/Zend/zend_vm_opcodes.h">https://github.com/php/php-src/blob/PHP-8.4.2/Zend/zend_vm_opcodes.h</a>。或许 <a href="https://github.com/phpinternalsbook/PHP-Internals-Book">https://github.com/phpinternalsbook/PHP-Internals-Book</a>、<a href="https://github.com/tpunt/php-internals-docs">https://github.com/tpunt/php-internals-docs</a> 对了解也有一定帮助。</p>
-
-  </div>
+</code></pre><p><code>PHP</code>的<code>opcode</code>并没有详细的文档记录，也没有提供向后兼容性，不像<code>Java</code>那样经过精心设计，因此在内部有如“直接运行<code>opcode</code>”之类的<code>RFC</code>都遭到了一致否决，类似的讨论如 <a href="../../../../https://externals.io/message/111965">https://externals.io/message/111965</a>
+，还可以在 <a href="../../../../https://externals.io">https://externals.io</a>
+ 查阅更多相关信息。可能关于<code>opcode</code>最权威的资料就在源码中，例如 <a href="../../../../https://github.com/php/php-src/blob/PHP-8.4.2/Zend/zend_vm_opcodes.h">https://github.com/php/php-src/blob/PHP-8.4.2/Zend/zend_vm_opcodes.h</a>
+。或许 <a href="../../../../https://github.com/phpinternalsbook/PHP-Internals-Book">https://github.com/phpinternalsbook/PHP-Internals-Book</a>
+、<a href="../../../../https://github.com/tpunt/php-internals-docs">https://github.com/tpunt/php-internals-docs</a>
+ 对了解也有一定帮助。</p>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

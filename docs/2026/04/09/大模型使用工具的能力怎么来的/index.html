@@ -92,8 +92,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>大模型会提供一个叫<code>Tool Calls</code>（也有的叫<code>Function Calls</code>）的功能，看起来很神奇，实际上就是<code>LLM</code>根据对话内容提取出需要使用的工具及其参数，再将其以结构化的形式返回给客户端，客户端通过响应的内容判断是否存在“使用工具”这个操作，如果存在，则从中获取所需使用的“工具名”及“参数”来使用工具。</p>
+  <div class="post-content"><p>大模型会提供一个叫<code>Tool Calls</code>（也有的叫<code>Function Calls</code>）的功能，看起来很神奇，实际上就是<code>LLM</code>根据对话内容提取出需要使用的工具及其参数，再将其以结构化的形式返回给客户端，客户端通过响应的内容判断是否存在“使用工具”这个操作，如果存在，则从中获取所需使用的“工具名”及“参数”来使用工具。</p>
 <p>看以下<code>python</code>写的一个示例。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> json
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
@@ -238,8 +237,7 @@
 </span></span><span style="display:flex;"><span>        sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">1</span>)
 </span></span></code></pre></div><p>以上代码会从让<code>LLM</code>从用户的对话中判断是否存在编程语言的名称，如果存在，则返回<code>Tool Calls</code>响应，客户端针对该响应进行调用<code>code</code>工具，再将<code>code</code>工具的返回内容进行再次对话。</p>
 <p>可以看到<code>code</code>其实就是一个普通的<code>python</code>函数，<code>code</code>里面当然可以做其它“神奇”的操作，如打开浏览器做爬虫等。关键点就是第一次请求将<code>code</code>函数作为工具传给了大模型，这时候就需要大模型自行判断是否返回一个工具调用的响应了。如果返回工具调用响应，客户端则可以根据响应使用相应的工具，再根据工具的处理结果进行后续与大模型交互等操作。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

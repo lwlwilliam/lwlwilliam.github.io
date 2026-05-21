@@ -109,8 +109,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>CGI(Common Gateway Interface)，通用网关接口，用于 web 服务器和外部应用程序（CGI 程序）之间的通信。为了探索 CGI 是如何工作的，我分别用 C 和 Python
+  <div class="post-content"><p>CGI(Common Gateway Interface)，通用网关接口，用于 web 服务器和外部应用程序（CGI 程序）之间的通信。为了探索 CGI 是如何工作的，我分别用 C 和 Python
 语言写了段测试程序（均生成可执行程序），以及说明了一下解释型语言的 CGI 写法。</p>
 <h5 id="c-程序">C 程序</h5>
 <p>编译：<code>$ gcc ctest.c -o ctest</code>。</p>
@@ -139,7 +138,9 @@
 <h5 id="验证与总结">验证与总结</h5>
 <p>把以上生成的 <code>ctest</code> 和 <code>pytest</code> 程序放到<code>apache</code>的<code>cgi-bin</code>目录，即可通过浏览器访问。</p>
 <p><img src="../../../../assets/images/2019/0802/WX20190802-171644.png" alt="ctest">
-<img src="../../../../assets/images/2019/0802/WX20190802-171607.png" alt="pytest"></p>
+
+<img src="../../../../assets/images/2019/0802/WX20190802-171607.png" alt="pytest">
+</p>
 <p>试着把程序中带有 <code>Content-Type:text/html;charset=utf-8\r\n\r\n</code> 的代码整行删除，会发现服务器报错。经过测试，程序要包含 HTTP 头部信息，否则是非法的。</p>
 <p>初步结论就是 CGI 程序是可以输出包含 HTTP 首部信息内容的可执行程序。web 服务器和 CGI 程序的交互步骤如下：</p>
 <ol>
@@ -148,8 +149,7 @@
 <li>web 服务器（可能还会对 CGI 的结果进行一定修饰）把 CGI 结果传送到客户端；</li>
 </ol>
 <p>至于 CGI 协议的具体内容则有待深入了解。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

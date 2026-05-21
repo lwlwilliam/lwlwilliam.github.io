@@ -102,8 +102,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>最近在读一本书<code>《PHP Beyond the Web》</code>，内容难度不大，不过感觉挺有意思的。可能是做惯了<code>web</code>应用，或者说潜意识觉得<code>PHP</code>就是做<code>web</code>应用的，没想到在其它领域上，<code>PHP</code>也用得挺顺手，也许这也是一种偏见吧。看了这本书，对<code>PHP</code>有一些许改观，也算是扩展了视野。</p>
+  <div class="post-content"><p>最近在读一本书<code>《PHP Beyond the Web》</code>，内容难度不大，不过感觉挺有意思的。可能是做惯了<code>web</code>应用，或者说潜意识觉得<code>PHP</code>就是做<code>web</code>应用的，没想到在其它领域上，<code>PHP</code>也用得挺顺手，也许这也是一种偏见吧。看了这本书，对<code>PHP</code>有一些许改观，也算是扩展了视野。</p>
 <p>在这里面看到一个挺好玩的小脚本，不过直接运行起来好像是有点小问题，于是在它的基础上改动了一下。</p>
 <p>首先定义三个常量，<code>\033</code>在以前修改颜色时也用过，不过一直都是死记，其实它就是<code>ESC</code>的<code>ASCII</code>码。<code>POSIX</code>终端的转义指令可以实现颜色、光标移动等效果。其中<code>ESC</code>是转义字符，用于表示转义指令的开始，后面紧跟着指令代码。以下代码中的<code>CLEAR</code>常量是清空屏幕的指令，<code>HOME</code>常量用于移动光标的位置（屏幕左上角，第一个<code>1</code>表示行，第二个<code>1</code>表示列），<code>RESET</code>常量用于重置所有属性，包括关闭所有颜色和格式；另外<code>[30m</code>到<code>[37m</code>表示字体颜色，<code>[40m</code>到<code>[47m</code>表示背景颜色。此外，还有其它比较不常见的属性。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
@@ -159,8 +158,7 @@
 </span></span></code></pre></div><p>如果在绘制屏保过程中，用户再次按了<code>Enter</code>键，则重置所有终端属性，并清空屏幕。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">fwrite</span>(<span style="color:#a6e22e">STDOUT</span>, <span style="color:#a6e22e">RESET</span>);
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">fwrite</span>(<span style="color:#a6e22e">STDOUT</span>, <span style="color:#a6e22e">CLEAR</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">HOME</span>);
-</span></span></code></pre></div>
-  </div>
+</span></span></code></pre></div></div>
   <footer class="post-footer">
     <nav class="post-nav">
       

@@ -102,16 +102,14 @@
   </header>
   
   
-  <div class="post-content">
-    <p>后进者先出，先进者后出，这就是数据结构中的&quot;栈&quot;。栈是一种相当简单的数据结构，但应用十分广泛，例如编程语言中的<code>函数调用栈</code>、浏览器的前进后退功能。本文讲的是栈的另一个常见应用场景，编译器利用栈实现<code>表达式求值</code>。初次见到这种实现思路的时候，我不禁叫绝，一个简单的栈还能玩出花。</p>
+  <div class="post-content"><p>后进者先出，先进者后出，这就是数据结构中的&quot;栈&quot;。栈是一种相当简单的数据结构，但应用十分广泛，例如编程语言中的<code>函数调用栈</code>、浏览器的前进后退功能。本文讲的是栈的另一个常见应用场景，编译器利用栈实现<code>表达式求值</code>。初次见到这种实现思路的时候，我不禁叫绝，一个简单的栈还能玩出花。</p>
 <p>例如，一个简单的四则运算：<code>10+20*2-30/3</code>。人脑算出这个表达式的结果很简单。但是计算机只认识简单的机器指令。那么我们怎么将这个&quot;复杂&quot;的表达式编译成更接近机器的语言呢？</p>
 <p>实际上，编译器就是通过两个栈来实现的。其中一个保存操作数的栈，另一个是保存运算符的栈。我们从左向右遍历表达式，当遇到数字，我们就直接压入操作数栈；当遇到运算符，就与运算符栈的栈顶元素进行比较。</p>
 <p>如果比运算符栈顶元素的优先级高，就将当前运算符压入栈；如果比运算符栈顶元素的优先级低或者相同，从运算符栈中取栈顶运算符，从操作数栈的栈顶取 2 个操作数，然后进行计算，再把计算完的结果压入操作数栈，继续比较。</p>
 <p>具体代码如下：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// TODO: practice/golang/main/stackCalculator.go</span>
-</span></span></code></pre></div>
-  </div>
+</span></span></code></pre></div></div>
   <footer class="post-footer">
     <nav class="post-nav">
       

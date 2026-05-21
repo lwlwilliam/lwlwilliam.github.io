@@ -120,8 +120,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>上一篇文章介绍了如何用<code>llama.cpp</code>搭建本地模型推理服务，这次顺着往下走：有了多模态模型的推理能力，再配合<code>ffmpeg</code>，就能搭一个完全运行在本地的视频分析服务。不需要任何<code>云 API</code>，视频不用上传到第三方，数据隐私完全由自己掌控。核心思路其实不复杂——视频本质上是一帧帧图片的序列，把关键帧拆出来丢给多模态大模型逐帧描述，最后再把所有描述汇总，让<code>LLM</code>根据用户的问题给出一个完整回答。</p>
+  <div class="post-content"><p>上一篇文章介绍了如何用<code>llama.cpp</code>搭建本地模型推理服务，这次顺着往下走：有了多模态模型的推理能力，再配合<code>ffmpeg</code>，就能搭一个完全运行在本地的视频分析服务。不需要任何<code>云 API</code>，视频不用上传到第三方，数据隐私完全由自己掌控。核心思路其实不复杂——视频本质上是一帧帧图片的序列，把关键帧拆出来丢给多模态大模型逐帧描述，最后再把所有描述汇总，让<code>LLM</code>根据用户的问题给出一个完整回答。</p>
 <h3 id="为什么用-llamacpp">为什么用 llama.cpp</h3>
 <p><code>llama.cpp</code>的<code>server</code>模式提供了<code>OpenAI</code>兼容的<code>API</code>，不仅支持纯文本的<code>/v1/chat/completions</code>，还支持<code>image_url</code>格式的图片输入——这跟<code>OpenAI</code>的<code>Vision API</code>用法一模一样。也就是说，任何能调用<code>GPT-4V</code>的代码，只要把<code>base_url</code>指向本地的<code>llama-server</code>，就能无缝切换到本地模型。</p>
 <p>另一个关键点是模型格式。<code>llama.cpp</code>使用<code>GGUF</code>格式，目前主流的多模态开源模型（如<code>Qwen2.5-VL</code>、<code>Gemma</code>等）基本都有社区提供的<code>GGUF</code>版本，下载下来配合<code>mmproj</code>文件就能直接加载视觉能力，不需要自己折腾模型转换。</p>
@@ -740,13 +739,14 @@ templates/
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ python app.py
 </span></span></code></pre></div><p>效果如图：</p>
 <p><img src="../../../../assets/images/2026/0518/llm-video-1.png" alt="llm-video-1">
-<img src="../../../../assets/images/2026/0518/llm-video-2.png" alt="llm-video-2"></p>
+
+<img src="../../../../assets/images/2026/0518/llm-video-2.png" alt="llm-video-2">
+</p>
 <h3 id="安卓效果">安卓效果</h3>
 <p>这个技术栈甚至在安卓上也能跑通，当然运行速度奇慢，如果只是为了验证技术，还是没问题的。</p>
 <video style="width: 100%;" controls>
     <source src="../../../../assets/files/llama-ffmpeg.mp4" type="video/mp4">
-</video>
-  </div>
+</video></div>
   <footer class="post-footer">
     <nav class="post-nav">
       

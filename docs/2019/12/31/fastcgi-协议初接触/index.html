@@ -121,8 +121,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <h3 id="准备">准备</h3>
+  <div class="post-content"><h3 id="准备">准备</h3>
 <h5 id="nginx-配置">Nginx 配置</h5>
 <pre tabindex="0"><code>user                         root admin;
 worker_processes             2;
@@ -211,11 +210,13 @@ http {
 </code></pre><blockquote>
 <p>访问不存在的文件</p>
 </blockquote>
-<p><img src="../../../../assets/images/2019/1231/WX20191231-174920.png" alt=""></p>
+<p><img src="../../../../assets/images/2019/1231/WX20191231-174920.png" alt="">
+</p>
 <blockquote>
 <p>访问存在的文件</p>
 </blockquote>
-<p><img src="../../../../assets/images/2019/1231/WX20191231-174846.png" alt=""></p>
+<p><img src="../../../../assets/images/2019/1231/WX20191231-174846.png" alt="">
+</p>
 <p>访问<code>tes.go</code>时，由于文件不存在，Nginx 并不会进行报文转发；访问<code>test.go</code>时，文件存在，符合重定向的规则，于是将 HTTP 报文封装到 FastCGI 报文中，转发到<code>localhost:10000</code>中，如 Go 的 FastCGI 后端代码所示，接收到请求后，Go 程序会将一段 HTML 代码发送回 Nginx 中，Nginx 再将 HTTP 报文发到浏览器，效果如上所示。</p>
 <h3 id="fastcgi-请求报文初探">FastCGI 请求报文初探</h3>
 <p>由于技术还不过关，只能用笨方法分析报文了。用命令<code>strace -p pid</code>看了下 PHP-FPM 的系统调用，发现<code>poll</code>之后调用了五次<code>read</code>，前面三个固定长度的大概就是元信息吧，第四个就是跟转发的内容相关的，最后一个应该就是结束元信息吧？</p>
@@ -230,7 +231,8 @@ http {
 </span></span><span style="display:flex;"><span>read<span style="color:#f92672">(</span>3, <span style="color:#e6db74">&#34;\17:SCRIPT_FILENAME/usr/share/php/&#34;</span>..., 984<span style="color:#f92672">)</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">984</span>
 </span></span><span style="display:flex;"><span>read<span style="color:#f92672">(</span>3, <span style="color:#e6db74">&#34;\1\4\0\1\0\0\0\0&#34;</span>, 8<span style="color:#f92672">)</span>          <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>
 </span></span></code></pre></div><p>下图是用 Wireshark 捕获的 FastCGI 报文中的一部分：</p>
-<p><img src="../../../../assets/images/2020/0714/WX_20200429214529.png" alt="fastcgi"></p>
+<p><img src="../../../../assets/images/2020/0714/WX_20200429214529.png" alt="fastcgi">
+</p>
 <p>看到上图的内容应该感觉很熟悉吧？可见的 ASCII 字符都跟服务器以及 HTTP 请求报文相关的内容。</p>
 <p>也可以使用以下程序简单感受一下。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
@@ -298,7 +300,8 @@ http {
 <p>安全性较差。</p>
 </li>
 </ol>
-<p><img src="../../../../assets/images/2019/1231/WX20191231-181630.png" alt=""></p>
+<p><img src="../../../../assets/images/2019/1231/WX20191231-181630.png" alt="">
+</p>
 <h5 id="fastcgifast-common-gateway-interface">FastCGI(Fast Common Gateway Interface)</h5>
 <p>FastCGI 是 CGI 的增强版本，由 CGI 发展改进而来，主要用于提高 CGI 程序性能，类似于 CGI。</p>
 <blockquote>
@@ -325,9 +328,9 @@ http {
 <p>内存消耗较大，注意进程池的数量。</p>
 </li>
 </ol>
-<p><img src="../../../../assets/images/2019/1231/WX20191231-181617.png" alt=""></p>
-
-  </div>
+<p><img src="../../../../assets/images/2019/1231/WX20191231-181617.png" alt="">
+</p>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

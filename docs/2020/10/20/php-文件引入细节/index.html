@@ -92,8 +92,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>今天在 workerman 的官方群看到有人问 webman 中的一个问题。大意就是 webman 在 windows 中修改 controller 代码需要重启才生效，而修改 view 代码则不需要重启也能生效（注：webman 使用了作者自己写的 FileMonitor 组件。在 Linux 系统中，可以通过监控指定目录，定时更新文件，然后通过 kill 给子进程发送信号达到重新加载的目的；而 windows 系统并没有相应的扩展支持）。这是为什么呢？</p>
+  <div class="post-content"><p>今天在 workerman 的官方群看到有人问 webman 中的一个问题。大意就是 webman 在 windows 中修改 controller 代码需要重启才生效，而修改 view 代码则不需要重启也能生效（注：webman 使用了作者自己写的 FileMonitor 组件。在 Linux 系统中，可以通过监控指定目录，定时更新文件，然后通过 kill 给子进程发送信号达到重新加载的目的；而 windows 系统并没有相应的扩展支持）。这是为什么呢？</p>
 <p>感觉这个问题有点意思，但自己又从来没有玩过 webman，于是运行之后稍微看了下 controller 调用 view 的逻辑，很快顺藤摸瓜找到了其中的调用路径<code>app/controller/Index:view</code>，<code>suppport/helpers:view</code>，<code>support/view/Raw|ThinkPHP...:render</code>，最后将问题关键锁定在<code>include $view_path</code>上，如下：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">namespace</span> <span style="color:#a6e22e">support\view</span>;
@@ -228,8 +227,7 @@
 </span></span><span style="display:flex;"><span>close<span style="color:#f92672">(</span>5<span style="color:#f92672">)</span>                                <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
 </span></span></code></pre></div><p>经过比较，发现 include 和 require 的系统调用完全一致，而 include_once 和 require_once 则在第一次引入时的系统调用亦一致，区别就在于第一次之后的引入则完全被忽略。可以看出，引入文件的本质就是 open，read，close 这几个常见的读操作。</p>
 <p>到这里，应该比较清晰地回答了文章开头的问题，由于 webman 框架在调用 view 时使用了 include，相当于每次都重新读取文件，因此，即使在 cli 模式常驻内存时，仍然能即时更新 view 内容。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

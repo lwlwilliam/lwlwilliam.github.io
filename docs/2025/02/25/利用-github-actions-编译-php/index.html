@@ -92,8 +92,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>使用<code>GitHub Actions</code>编译方便不使用<code>Docker</code>等工具还要定制<code>PHP</code>版本的用户，降低了部署成本，只需要下载编译后的压缩包即可使用（前提是部署的环境跟编译的环境保持一致，也就是运行与<code>yaml</code>文件的<code>dependence</code>相同的命令解决依赖问题）。</p>
+  <div class="post-content"><p>使用<code>GitHub Actions</code>编译方便不使用<code>Docker</code>等工具还要定制<code>PHP</code>版本的用户，降低了部署成本，只需要下载编译后的压缩包即可使用（前提是部署的环境跟编译的环境保持一致，也就是运行与<code>yaml</code>文件的<code>dependence</code>相同的命令解决依赖问题）。</p>
 <p>用于公共存储库的<code>GitHub</code>托管的标准运行器。对于公共存储库，使用下表所示工作流标签的作业可在具有关联规范的虚拟机上运行。可以在公共存储库上免费且无限制地使用这些运行器。</p>
 <table>
   <thead>
@@ -195,11 +194,12 @@
 </span></span><span style="display:flex;"><span>          <span style="color:#f92672">path</span>: <span style="color:#ae81ff">${{ env.ZIP_DIR }}/${{ env.ZIP_FILE }}</span>
 </span></span><span style="display:flex;"><span>          <span style="color:#f92672">retention-days</span>: <span style="color:#ae81ff">7</span>
 </span></span></code></pre></div><p>目前只确保在<code>arm64</code>架构下的<code>ubuntu-22.04</code>运行正常，需要先确认<code>yaml</code>文件中的<code>apt</code>命令运行正常，安装好依赖。然后将<code>GitHub Actions</code>发布的<code>zip</code>文件下载解压。</p>
-<p><img src="../../../../assets/images/2025/0225/github_actions2.png" alt="github_action"></p>
+<p><img src="../../../../assets/images/2025/0225/github_actions2.png" alt="github_action">
+</p>
 <p>如下图运行即可。</p>
-<p><img src="../../../../assets/images/2025/0225/github_actions.png" alt="github_action"></p>
-
-  </div>
+<p><img src="../../../../assets/images/2025/0225/github_actions.png" alt="github_action">
+</p>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

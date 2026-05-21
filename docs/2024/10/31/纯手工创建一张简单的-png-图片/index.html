@@ -100,8 +100,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>每个人的计算机里都保存着各种各样的文件，有没有想过为什么纯文本文件可以方便地编辑，只需要输入、删除文字即可，而图片则需要使用一些“重量级”的软件才能处理？图片跟纯文本文件有什么区别？</p>
+  <div class="post-content"><p>每个人的计算机里都保存着各种各样的文件，有没有想过为什么纯文本文件可以方便地编辑，只需要输入、删除文字即可，而图片则需要使用一些“重量级”的软件才能处理？图片跟纯文本文件有什么区别？</p>
 <p>《深入理解计算机系统》第<code>1.7.4</code>节首句话——文件就是字节序列，仅此而已。从这点上看，图片跟纯文本文件可以说没区别。它们之所以表现出这么大的差异性，完全是“位”+“上下文”不同所造成的。先看看一个纯文本文件的十六进制是怎样的，<code>test.txt</code>文件内容如下：</p>
 <pre tabindex="0"><code>abc
 </code></pre><p>查看文件十六进制数据：</p>
@@ -187,10 +186,11 @@
 </span></span><span style="display:flex;"><span>                 $filterType<span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xFF\x00\x00</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xFF\x00\x00</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xFF\x00\x00</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>
 </span></span><span style="display:flex;"><span>                 $filterType<span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xFF\xFF\xFF</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xFF\x00\x00</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xFF\xFF\xFF</span><span style="color:#e6db74">&#34;</span>;
 </span></span></code></pre></div><p>修改前后图片对比如下，由于网页显示尺寸太大，会导致图片失真，但大概也能看出效果，下载图片放大查看会更清蜥。</p>
-<p><img src="../../../../assets/images/2024/1031/output1.png" alt="output1.png"></p>
-<p><img src="../../../../assets/images/2024/1031/output2.png" alt="output2.png"></p>
-
-  </div>
+<p><img src="../../../../assets/images/2024/1031/output1.png" alt="output1.png">
+</p>
+<p><img src="../../../../assets/images/2024/1031/output2.png" alt="output2.png">
+</p>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

@@ -92,8 +92,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p><code>PHP</code>内置函数太多，记不住怎么办？尤其<code>PHP</code>
+  <div class="post-content"><p><code>PHP</code>内置函数太多，记不住怎么办？尤其<code>PHP</code>
 一直被人垢病函数名不统一，这就导致更不容易记忆了。这时候是不是在想，要是我随便定义一个变量，就能列出可以对其进行操作的函数就好了，虽然列出来也不一定知道用哪个，但起码一般情况下可以根据函数名猜到哪个才是要用的函数。例如<code>$a = &quot;Hello world&quot;;</code>，我在<code>IDE</code>上输入<code>$a-&gt;</code>，<code>IDE</code>就能将可用函数显示出来。简单，这不就是面向对象吗？那就动手吧。</p>
 <p>首先定义一个函数，用于将基础类型封装成类，以字符串为例，<code>Str</code>类有一个静态函数<code>wrap</code>接收一个字符串参数，返回<code>Str</code>的实例，并且将<code>$value</code>参数赋给<code>$value</code>属性，那么<code>wrap</code>的返回值就是对象，可以以<code>-&gt;</code>符号来调用属于<code>Str</code>的方法了。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
@@ -342,11 +341,11 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">echo</span> $e<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getMessage</span>(), <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>可能会由于文档注释过多，<code>PhpStorm</code>会比较卡（解决方法就是不直接打开使用封装类，而是在另一个文件引入封装类文件），<code>vs code</code>则没那么卡，提示效果如下。</p>
-<p><img src="../../../../assets/images/2025/0214/hint.png" alt="res"></p>
+<p><img src="../../../../assets/images/2025/0214/hint.png" alt="res">
+</p>
 <p>注意的是，这样做虽然写起来很方便，但性能会比直接调用原生函数差。</p>
 <p><strong>本文参考代码：<a href="https://github.com/sebastiaanluca/php-pipe-operator" target="_blank">php-pipe-operator</a>。</strong></p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

@@ -102,8 +102,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>由于水平有限，可能有些术语并不是那么准确。</p>
+  <div class="post-content"><p>由于水平有限，可能有些术语并不是那么准确。</p>
 <p><code>PHP 8.1</code>的新特性<code>Fiber</code>，可能让很多<code>PHPer</code>误解了，以为<code>Fiber</code>的出现可以解决<code>PHP</code>生态的很多问题，如官方多线程方案的缺失、<code>PHP-FPM</code>多进程阻塞模型的优化。但实际上<code>Fiber</code>目前解决的问题并不多，只是在底层引入了用户栈空间切换的原语，并不能像进程和线程那样，在同步阻塞时，仍然可以在操作系统层面进行上下文切换，不至于让整个程序无法往后执行。</p>
 <p>现在<code>PHP</code>生态中，目前在这个方向可能走得最远的还是<code>Swoole</code>，在<code>PHP</code>内核层面将同步阻塞的函数进行<code>hook</code>，让标准库的同步阻塞函数和类不再阻塞整个程序。而同类的如<code>Workerman</code>、<code>ReactPHP</code>、<code>AMPHP</code>都无法做到，它们在使用所以造很多异步非阻塞的轮子。正如<code>AMPHP</code>的官网上写的一句话“<strong>It’s important to avoid using blocking functions in concurrent code, such as sleep, usleep, fwrite, fread and other built-in functions doing I/O. We offer a great variety of non-blocking I/O implementations you can use instead.</strong>”。像<code>Swoole</code>、<code>Workerman</code>之类的库，一个很明显的特征就是使用了<code>Event Loop</code>（事件循环）。什么是事件循环？事件，就是读、写、异常、时间等事件，循环就很好理解了，以下就是一个简单的事件循环事例：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
@@ -241,8 +240,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">print_r</span>($output);
 </span></span></code></pre></div><p>然后去除<code>// todo: 注释</code>下面一行代码对比耗时。</p>
 <p>说到这里，不得不再提一下<code>Go</code>语言的协程，同样遇到同步阻塞操作，<code>Go</code>的运行时可以利用多线程，让空闲的线程执行其它协程，而不需要等业务将控制权手动交还给事件循环，从而避免协程阻塞导致整个进程等待，而且调度不依赖于用户的行为。这倒有点像操作系统调度器的进化历史，协作式调度(<code>PHP</code>)和抢占式调度(<code>Go</code>)，有点意思，之前看过这么一个说法<strong>所以，一个完备的协程库你可以把它理解为用户态的操作系统，而协程就是用户态操作系统里面的 “进程”</strong>。而<code>Go</code>语言就实现了这么一个完备的协程库。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

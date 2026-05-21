@@ -96,8 +96,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>出于现实的考虑，不得不使用多台性能不怎么样的电脑一起玩耍，主要还是为了分摊机器的内存。最先考虑到的是 docker，毕竟现在运行环境都是用 docker 部署的，我想通过<code>docker run -v 远程目录:容器目录 image</code>一条命令来实现，果真是图样图森破，sometime naive，docker 目前还不支持挂载远程目录吧。</p>
+  <div class="post-content"><p>出于现实的考虑，不得不使用多台性能不怎么样的电脑一起玩耍，主要还是为了分摊机器的内存。最先考虑到的是 docker，毕竟现在运行环境都是用 docker 部署的，我想通过<code>docker run -v 远程目录:容器目录 image</code>一条命令来实现，果真是图样图森破，sometime naive，docker 目前还不支持挂载远程目录吧。</p>
 <p>后来在小动物们的帮忙下，找到了 sshfs，具体安装过程我就不一一列举了，顶多就是在挂载时会遇到小坑。</p>
 <p>sshfs 具体干的工作就是通过 ssh 来访问远程的目录，达到共享的目的。跟同系列的命令差不多，sshfs 基本的用法很简单：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sshfs root@192.168.10.66:/Users/Hello/world ~/Desktop/www
@@ -113,8 +112,7 @@
 <p>在断网时可能会对 sshfs 造成一些麻烦，重新连网之后似乎并不会重新生效。尤其是有些程序还在使用 sshfs 挂载的目录时，<code>umount</code>失效，重新<code>sshfs</code>也不行。这时就需要查找什么进程在占用资源了。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ fuser -u ~/Desktop/lnmp
 </span></span></code></pre></div><p>通过以上命令就可以找到实际占用挂载目录的进程，退出这些进程就可以<code>umount</code>，重新<code>sshfs</code>挂载。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

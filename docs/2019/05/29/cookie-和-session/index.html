@@ -121,8 +121,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>HTTP 协议是无状态的，用户的每一次请求都是独立的。有时候我们需要知道哪些请求是跟用户相关的，例如，购物车的商品属于哪个用户。web 规范给出的解决方案是经典的 cookie 和 session。cookie 是一种客户端机制，将用户的数据保存到客户端；session 是一种服务端机制，将数据以类似于散列表的结构来保存信息，这是用 PHP 内置函数生成的 session 数据格式：<code>last_regenerate|i:1550546460;app_id|s:1:&quot;2&quot;;</code>。每个网站访客都会被分配一个唯一的标识符，即 sessionID。</p>
+  <div class="post-content"><p>HTTP 协议是无状态的，用户的每一次请求都是独立的。有时候我们需要知道哪些请求是跟用户相关的，例如，购物车的商品属于哪个用户。web 规范给出的解决方案是经典的 cookie 和 session。cookie 是一种客户端机制，将用户的数据保存到客户端；session 是一种服务端机制，将数据以类似于散列表的结构来保存信息，这是用 PHP 内置函数生成的 session 数据格式：<code>last_regenerate|i:1550546460;app_id|s:1:&quot;2&quot;;</code>。每个网站访客都会被分配一个唯一的标识符，即 sessionID。</p>
 <h3 id="cookie">Cookie</h3>
 <p>cookie 是由服务端生成的，客户端通过请求获取 cookie 并保存在用户计算机，在之后的请求会把 cookie 附在 HTTP 报文中，用于标识用户身份。cookie 类似于我们的身份证，是由政府（服务端）生成用于标识我们的身份。Cookie 是有时间限制的。服务端是通过 HTTP 响应报文通知客户端设置 cookie 的，如下<code>Set-Cookie</code>头部所示：</p>
 <pre tabindex="0"><code>HTTP/1.1 200 OK
@@ -465,9 +464,9 @@ Cookie: test=testValue
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="参考">参考</h3>
-<p><a href="https://github.com/astaxie/build-web-application-with-golang">https://github.com/astaxie/build-web-application-with-golang</a></p>
-
-  </div>
+<p><a href="../../../../https://github.com/astaxie/build-web-application-with-golang">https://github.com/astaxie/build-web-application-with-golang</a>
+</p>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

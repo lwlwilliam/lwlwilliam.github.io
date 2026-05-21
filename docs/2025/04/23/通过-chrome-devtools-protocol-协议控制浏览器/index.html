@@ -100,8 +100,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>之前写过<code>Selenium</code>是怎么指挥浏览器运行的，其中提到过通过<code>CDP(Chrome DevTools Protocol)</code>协议可以直接绕过浏览器驱动来控制浏览器。<code>CDP</code>本质上就是通过<code>WebSocket</code>协议传输<code>JSON</code>格式的命令。</p>
+  <div class="post-content"><p>之前写过<code>Selenium</code>是怎么指挥浏览器运行的，其中提到过通过<code>CDP(Chrome DevTools Protocol)</code>协议可以直接绕过浏览器驱动来控制浏览器。<code>CDP</code>本质上就是通过<code>WebSocket</code>协议传输<code>JSON</code>格式的命令。</p>
 <p>使用<code>CDP</code>时，无需浏览器驱动，但依然依赖浏览器。因此，控制浏览器的第一步就是启动浏览器。这里我们使用<code>ps ajx</code>命令结果是否包含<code>Chrome</code>、<code>headless</code>两个关键词来判断是否已启动<code>CDP</code>服务，也就是代码中的<code>chromeHeadlessRunning</code>函数：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">chromeHeadlessRunning</span>() (<span style="color:#66d9ef">bool</span>, <span style="color:#66d9ef">error</span>) {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">cmd</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">exec</span>.<span style="color:#a6e22e">Command</span>(<span style="color:#e6db74">&#34;ps&#34;</span>, <span style="color:#e6db74">&#34;ajx&#34;</span>)
@@ -366,9 +365,9 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">testWeb</span>()
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>运行效果。</p>
-<p><img src="../../../../assets/images/2025/0423/cdp.png" alt="cdp"></p>
-
-  </div>
+<p><img src="../../../../assets/images/2025/0423/cdp.png" alt="cdp">
+</p>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

@@ -92,8 +92,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>跟 Windows 不同，在 Linux 中的文件扩展名仅仅是方便用户肉眼判断类型而已，将扩展名换掉并不会影响使用。</p>
+  <div class="post-content"><p>跟 Windows 不同，在 Linux 中的文件扩展名仅仅是方便用户肉眼判断类型而已，将扩展名换掉并不会影响使用。</p>
 <p>本质上，所有文件的内容都是以二进制保存的。程序之所以能将文件识别成不同的类型，无非就是不同类型的文件内容有区别于其他类型的特征。举个简单的例子，现在有一个系统，文件类型只有两种，那我们就可以将文件的第一个字节用于区分类型，将第一个字节为<code>0000</code>都视为同一类型的文件，第一个字节为<code>0001</code>的视为另一种文件。这个字节我们就称之为<code>魔数</code>，这种情况下，<code>魔数</code>用于区分文件类型。</p>
 <p>现在通过 Linux 系统的<code>file</code>命令来看看这个魔数是怎么影响类型的。如下，创建一个名为<code>helloworld.jpeg</code>的文件，通过<code>file</code>命令知道这是一个 ASCII 编码的文本文件。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ echo <span style="color:#e6db74">&#39;Hello world&#39;</span> &gt; helloworld.jpeg
@@ -121,8 +120,7 @@ Hello world
 </span></span><span style="display:flex;"><span>helloworld.jpeg: JPEG image data, JFIF standard 1.01, aspect ratio, density 1x, segment length 16, thumbnail 0x
 </span></span></code></pre></div><p>通过以上实验，可以发现<code>file</code>就是用了魔数来判断文件类型的，有些程序在用户上传文件时就可能会直接调用<code>file</code>命令辅助校验。</p>
 <p>顺带说一下，所谓的字符编码，如 UTF-8，GBK 之类的，在识别具体编码时，原理也是相似的，不同的编码规则字节特征都不同。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

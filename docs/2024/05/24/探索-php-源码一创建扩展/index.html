@@ -94,11 +94,11 @@
   </header>
   
   
-  <div class="post-content">
-    <p>有时候还是得逼自己一把，自从写了下玩具编译器后，就对语言底层原理产生了浓厚的兴趣。但是，<code>C</code>语言本身呢，看起来似乎语言本身的内容不多，但真的太灵活了，一个宏就能让人晕头转向；还有各种贴近硬件的类型，未定义行为，指针，想写好真的不简单。<code>PHP</code>解释器是用<code>C</code>实现的，因此也容易让我产生畏难情绪。</p>
+  <div class="post-content"><p>有时候还是得逼自己一把，自从写了下玩具编译器后，就对语言底层原理产生了浓厚的兴趣。但是，<code>C</code>语言本身呢，看起来似乎语言本身的内容不多，但真的太灵活了，一个宏就能让人晕头转向；还有各种贴近硬件的类型，未定义行为，指针，想写好真的不简单。<code>PHP</code>解释器是用<code>C</code>实现的，因此也容易让我产生畏难情绪。</p>
 <p>其实学<code>C</code>语言的时间也不短了，却一直没用它写过像样的程序。最近又翻了下一本<code>C</code>语言书，有了些许收获，也许会让我能沉下心来钻进<code>PHP</code>解释器中。同时，<code>PHP</code>基金会的成立也让我对这门语言越来越有了接近之意，关注了很多社区中的大牛，也许受了感染吧，感觉就挺有意思。</p>
 <p>最重要的就是想深入一门语言，探究其本质，对其它语言的使用也有帮助。语言不计其数，究其源头是相通的，不给自己限定为<code>XX</code>语言的开发者，对语言少些敬畏，减少其带来的束缚。</p>
-<p>下面直接点吧，先给<code>PHP</code>加上自己想要的函数，就 <a href="https://github.com/phpinternalsbook/PHP-Internals-Book">https://github.com/phpinternalsbook/PHP-Internals-Book</a> 书中简单的<code>dump</code>函数以及自己加的<code>helloworld</code>函数。</p>
+<p>下面直接点吧，先给<code>PHP</code>加上自己想要的函数，就 <a href="../../../../https://github.com/phpinternalsbook/PHP-Internals-Book">https://github.com/phpinternalsbook/PHP-Internals-Book</a>
+ 书中简单的<code>dump</code>函数以及自己加的<code>helloworld</code>函数。</p>
 <p><code>PHP</code>的库函数基本都位于<code>ext</code>目录中，其中<code>standard</code>又是最小化安装时仅剩的几个扩展之一，因此我决定将这两个函数放在这里，该目录中又以<code>basic_functions.c</code>最得我心，就放这了，在<code>ext/standard/basic_functions.c</code>末尾加上以下代码：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">// ext/standard/basic_functions.c
 </span></span></span><span style="display:flex;"><span>PHP_FUNCTION(dump)
@@ -165,8 +165,7 @@
 </span></span><span style="display:flex;"><span>STRING: value<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Hello world&#34;</span>, length<span style="color:#f92672">=</span><span style="color:#ae81ff">11</span>
 </span></span><span style="display:flex;"><span>Hello world
 </span></span></code></pre></div><p>有点意思，顿时来了兴趣，希望以后能更深入地了解<code>PHP</code>底层原理。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

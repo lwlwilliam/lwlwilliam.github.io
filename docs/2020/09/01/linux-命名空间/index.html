@@ -96,11 +96,11 @@
   </header>
   
   
-  <div class="post-content">
-    <blockquote>
+  <div class="post-content"><blockquote>
 <p>暂时没那个水平。以下内容摘自《Docker技术入门与实战》。</p>
 </blockquote>
-<p>今天在回顾 Docker 时看到了<code>容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的命名空间</code>，这里有一个以前自己不理解的知识点，其实也听说过的很多次了，但是之前基础不够，最后不了了之。最近在补基础，于是就想深挖一下。查了下<a href="https://en.wikipedia.org/wiki/Linux_namespaces">维基百科</a>，到 Linux 5.6 为止，命名空间有以下八种：</p>
+<p>今天在回顾 Docker 时看到了<code>容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的命名空间</code>，这里有一个以前自己不理解的知识点，其实也听说过的很多次了，但是之前基础不够，最后不了了之。最近在补基础，于是就想深挖一下。查了下<a href="../../../../https://en.wikipedia.org/wiki/Linux_namespaces">维基百科</a>
+，到 Linux 5.6 为止，命名空间有以下八种：</p>
 <ol>
 <li>
 <p>Mount (mnt)</p>
@@ -146,8 +146,7 @@
 <p>Proposed namespaces: syslog namespace。这个是建议的命名空间，也就是暂未实现。</p>
 </blockquote>
 <p>其实大部分都还挺熟悉的，有没有？我还从中看到了<code>cgroup</code>，这个单词我也是见过很多次了，当然也是只停留在见过的层面上。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

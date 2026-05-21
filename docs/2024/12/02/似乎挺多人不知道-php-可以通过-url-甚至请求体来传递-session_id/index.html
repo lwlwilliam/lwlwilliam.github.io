@@ -114,11 +114,11 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>由于<code>HTTP</code>是无状态的，服务端不知道前一个访问者跟后一个访问者是否为同一人，于是会话机制出现了。<code>session</code>和<code>cookie</code>几乎总是同时出现的。<code>cookie</code>是由服务端创建、由客户端保存的小块数据，在用户再次访问服务时，会带上该服务端对应的<code>cookie</code>，服务端比对后就能辨别出用户身份。而在服务端跟<code>cookie</code>对应的数据就称为<code>session</code>。</p>
+  <div class="post-content"><p>由于<code>HTTP</code>是无状态的，服务端不知道前一个访问者跟后一个访问者是否为同一人，于是会话机制出现了。<code>session</code>和<code>cookie</code>几乎总是同时出现的。<code>cookie</code>是由服务端创建、由客户端保存的小块数据，在用户再次访问服务时，会带上该服务端对应的<code>cookie</code>，服务端比对后就能辨别出用户身份。而在服务端跟<code>cookie</code>对应的数据就称为<code>session</code>。</p>
 <p>从以上描述可以发现，会话中的<code>cookie</code>是由服务端生成的且要唯一识别用户，称为<code>session_id</code>，<code>PHP</code>默认通过<code>cookie</code>传递<code>session_id</code>。<code>HTTP</code>协议中的响应头<code>Set-Cookie</code>就是用来干这活的，<code>HTTP</code>响应报文无非就响应头和响应体，不用<code>Set-Cookie</code>行不行？当然，自己实现一套<code>session</code>机制也是可以的；既然服务端可以通过其它响应头或响应体来传递<code>session_id</code>，那客户端是不是也能不通过<code>Cookie</code>请求头来传递<code>session_id</code>？确实也可以。</p>
 <h3 id="通过-url-传递">通过 URL 传递</h3>
-<p><code>PHP</code>的<code>session</code>机制除了通过<code>cookie</code>来传递<code>session_id</code>外，还可以通过<code>URL</code>参数来传递，详情查看 <a href="https://www.php.net/manual/en/session.idpassing.php">https://www.php.net/manual/en/session.idpassing.php</a>一节。测试代码如下：</p>
+<p><code>PHP</code>的<code>session</code>机制除了通过<code>cookie</code>来传递<code>session_id</code>外，还可以通过<code>URL</code>参数来传递，详情查看 <a href="../../../../https://www.php.net/manual/en/session.idpassing.php">https://www.php.net/manual/en/session.idpassing.php</a>
+一节。测试代码如下：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">ini_set</span>(<span style="color:#e6db74">&#39;session.use_only_cookies&#39;</span>, <span style="color:#ae81ff">0</span>);
@@ -177,8 +177,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>name<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; lwlinux
 </span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>
-</span></span></code></pre></div>
-  </div>
+</span></span></code></pre></div></div>
   <footer class="post-footer">
     <nav class="post-nav">
       

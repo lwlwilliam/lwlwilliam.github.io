@@ -111,8 +111,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <h3 id="diffie-hellman-算法">Diffie-Hellman 算法</h3>
+  <div class="post-content"><h3 id="diffie-hellman-算法">Diffie-Hellman 算法</h3>
 <p>对于一个素数<code>p</code>来说，当一个数<code>g</code>满足以下条件：当<code>1 &lt;= x &lt;= p-1</code>时，如果<code>(g^x) mod p</code>能产生<code>[1, p-1]</code>的<code>所有数值</code>，就称<code>g</code>是<code>p</code>的<code>generator</code>。例如，对素数<code>p = 7</code>来说，<code>g = 3</code>就是它的<code>generator</code>。</p>
 <pre tabindex="0"><code>3^1 mod 7 = 3
 3^2 mod 7 = 2
@@ -134,10 +133,10 @@
 <p>Alice 收到 Bob 发过来的<code>numberBobSent = 5</code>后，按以下公式进行计算：<code>(numberBobSent^secretAlice) mod p</code>，即<code>5^4 mod 7 = 2</code>；Bob 收到 Alice 发过来的<code>numberAliceSent = 4</code>后，按以下公式进行计算：：<code>(numberAliceSent^secretBob) mod p</code>，即<code>4^5 mod 7 = 2</code>。</p>
 <p>Alice 和 Bob 的共享密钥就是 2。无论是谁都可以获取 p，g，numberAliceSent 和 numberBobSent。其他人都不知道 Alice 和 Bob 的私钥或者共享密钥。现在 Alice 和 Bob 就可以使用他们的共享密钥进行加密解密通信了。</p>
 <blockquote>
-<p>原文：<a href="https://dev.to/ruidfigueiredo/briefish-explanation-of-how-https-works">Brief(ish) explanation of how https works</a></p>
+<p>原文：<a href="../../../../https://dev.to/ruidfigueiredo/briefish-explanation-of-how-https-works">Brief(ish) explanation of how https works</a>
+</p>
 </blockquote>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

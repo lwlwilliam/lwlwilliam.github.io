@@ -115,8 +115,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>自己有个需求，有时候希望能直接下载网站上的视频。以前另存一下就行，但后来发现很多视频网站都不能用这种方法下载了。仔细观察了一下，发现它们都有一个共同点，就是将视频分成大量切片，这种片段的格式也不是常见的， 其中在一种的 URL 都以<code>.ts</code>结尾，并且有个<code>m3u8</code>的链接跟这些<code>.ts</code>的 URL 有一定关系。于是就这样我就又开始愉快地玩了起来。</p>
+  <div class="post-content"><p>自己有个需求，有时候希望能直接下载网站上的视频。以前另存一下就行，但后来发现很多视频网站都不能用这种方法下载了。仔细观察了一下，发现它们都有一个共同点，就是将视频分成大量切片，这种片段的格式也不是常见的， 其中在一种的 URL 都以<code>.ts</code>结尾，并且有个<code>m3u8</code>的链接跟这些<code>.ts</code>的 URL 有一定关系。于是就这样我就又开始愉快地玩了起来。</p>
 <h3 id="生成-ts-及-m3u8-文件">生成 ts 及 m3u8 文件</h3>
 <p>经过查阅一些资料，发现这些<code>.ts</code>文件是可以通过 mp4 等视频格式生成的。以下是<code>ffmpeg</code>生成<code>.ts</code>文件以及相关<code>m3u8</code>播放列表的方法，没错，<code>m3u8</code>本质上就是一个播放列表。<code>ffmpeg</code>的安装步骤就不多说了。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ffmpeg -i file.ext -c:v libx264 -strict -2 ./test.mp4 <span style="color:#75715e"># 如果视频为 mp4，可省略该步骤。如果 file.ext 视频不是 mp4，则转为 mp4 格式</span>
@@ -193,8 +192,7 @@ nxb-0006.ts
 <p>下载 m3u8 视频同样用到 ffmpeg，大概的原理就是根据 m3u8 列表下载，最后合并多个 ts 文件。命令如下：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ffmpeg -i http://example.com/index.m3u8 <span style="color:#e6db74">&#34;file.mp4&#34;</span>
 </span></span></code></pre></div><p>以上命令可以将 index.m3u8 文件中的视频列表合并到 file.mp4 文件中。至于具体的解码、编码细节，就不是我熟悉的领域了。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

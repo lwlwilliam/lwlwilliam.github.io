@@ -96,8 +96,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p><code>HTTP</code>路由是一个负责将<code>HTTP</code>请求路由到对应控制器的组件，它可以将应用的逻辑解耦到不同的控制器中，让代码易于维护。</p>
+  <div class="post-content"><p><code>HTTP</code>路由是一个负责将<code>HTTP</code>请求路由到对应控制器的组件，它可以将应用的逻辑解耦到不同的控制器中，让代码易于维护。</p>
 <p>路由有很多实现的方式，例如通过注解如<code>#[Route('/foo/bar', methods: ['GET', 'POST'])]</code>、路由配置文件、编程语言本身等等。下面以<code>PHP</code>的路由作为示例，路由需要两个基本的功能：1、注册；2、分发。</p>
 <p>注册功能并不复杂，只需要将请求方法、请求路径以及回调方法一一映射即可，将要实现的路由简单支持的全路径、命名正则以及命名路径匹配，全路径如<code>/foo/bar</code>，命名正则如<code>{id:\d+}</code>将匹配<code>\d+</code>正则的路径命名为<code>id</code>，<code>{name}</code>将普通路径命名为<code>name</code>。代码：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Router</span>
@@ -338,8 +337,7 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">echo</span> $t<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getMessage</span>();
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>更复杂的路由可以在以上代码的基础上修改，如添加路由分组等特性。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

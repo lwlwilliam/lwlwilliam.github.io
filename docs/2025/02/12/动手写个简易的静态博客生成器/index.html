@@ -118,8 +118,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p><code>github</code>带火了类似<code>jekyll</code>的静态博客生成器，可以将<code>markdown</code>文件转换为<code>html</code>文件，然后发布到网站上，对喜欢<code>markdown</code>简洁的人来说，简直太棒了，尤其现在大量的网站可以免费托管这种小型的博客，当然，我也是因<code>github pages</code>的服务而接触到它，懒人必备。</p>
+  <div class="post-content"><p><code>github</code>带火了类似<code>jekyll</code>的静态博客生成器，可以将<code>markdown</code>文件转换为<code>html</code>文件，然后发布到网站上，对喜欢<code>markdown</code>简洁的人来说，简直太棒了，尤其现在大量的网站可以免费托管这种小型的博客，当然，我也是因<code>github pages</code>的服务而接触到它，懒人必备。</p>
 <p>但用久了<code>jekyll</code>就觉得不爽，毕竟我对<code>ruby</code>不太熟悉，有时候想定制一些功能稍显不太方便，既然这样，那就自己写一个吧。先思考下静态博客生成器的核心功能是啥？首先是将<code>markdown</code>文件转换为<code>html</code>文件，然后生成首页，最后是生成文章页，这三个功能是最基本的，当然还有一些其他功能，比如<code>watch</code>功能，当<code>markdown</code>文件发生变化时，自动重新生成<code>html</code>文件，这样就不用每次都手动去执行生成器了。<code>markdown</code>转<code>html</code>就不在这写了，毕竟也是一个解释器，有一定代码量，这里就直接使用第三方的<code>markdown</code>组件了，要真想写，其实也可以使用字符串替代来将就一下，但这里先不考虑这个。</p>
 <p>生成首页和文章页我们这里只有三个关键的<code>header</code>、实际内容、<code>footer</code>三类模板，这三个模板是固定的，只是内容不同，所以我们可以将这三个模板放在一个目录下，然后在生成器中读取这三个模板，将标签内容替换掉，最后生成<code>html</code>文件。关于标签部分，我定义了几个<code>$$post$$</code>、<code>$$content$$</code>、<code>$$nav$$</code>、<code>$$header$$</code>和<code>$$footer$$</code>，分别代表文章列表、文章内容、导航、页头和页脚，这样我们就可以在模板中使用这些标签，然后在生成器中将这些标签替换为实际内容。要更强大的标签，则需要定制一门模板语言。</p>
 <p><code>$$post$$</code>可以通过扫描<code>content</code>目录来获取，<code>$$content$$</code>的内容需要经过<code>markdown</code>解释器转换，<code>$$nav$$</code>是自定义的，<code>$$header$$</code>特指<code>templates/header.html</code>文件，<code>$$footer$$</code>则指<code>templates/footer.html</code>。</p>
@@ -390,13 +389,15 @@ generator.php
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">println</span>($e<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getMessage</span>());
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="运行效果图">运行效果图</h3>
-<p><img src="../../../../assets/images/2025/0212/run.png" alt="run"></p>
+<p><img src="../../../../assets/images/2025/0212/run.png" alt="run">
+</p>
 <h3 id="首页效果图">首页效果图</h3>
-<p><img src="../../../../assets/images/2025/0212/homepage.png" alt="homepage"></p>
+<p><img src="../../../../assets/images/2025/0212/homepage.png" alt="homepage">
+</p>
 <h3 id="文章效果图">文章效果图</h3>
-<p><img src="../../../../assets/images/2025/0212/detail.png" alt="detail"></p>
-
-  </div>
+<p><img src="../../../../assets/images/2025/0212/detail.png" alt="detail">
+</p>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

@@ -94,8 +94,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>事情的起因是这样的，对接某个接口，一个<code>POST</code>请求的请求体比较大（注：跟系统和<code>curl</code>的版本有关，有的并不会发送<code>Except</code>请求头），<code>curl</code>默认给我发送了<code>Expect</code>请求头，事前我并不知道，但一直没调通，对方就提出要看看我的<code>HTTP</code>报文。</p>
+  <div class="post-content"><p>事情的起因是这样的，对接某个接口，一个<code>POST</code>请求的请求体比较大（注：跟系统和<code>curl</code>的版本有关，有的并不会发送<code>Except</code>请求头），<code>curl</code>默认给我发送了<code>Expect</code>请求头，事前我并不知道，但一直没调通，对方就提出要看看我的<code>HTTP</code>报文。</p>
 <p>糟糕，你让我手写一个<code>HTTP</code>请求报文，我分分钟就能写出来，不就这么简单么：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">POST</span> /xxx <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
 </span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">localhost</span>
@@ -181,8 +180,7 @@ Expect: 100-continue
 </code></pre><p>看到了吧，<code>POST /programming_practice/php/snippets/php.php HTTP/1.1</code>之后就是完整的请求头，只需要字符串操作一下就可以获取。当然<code>curl</code>命令的<code>-v</code>参数输出的样式看起来会相对舒服。记住，不是所有<code>curl</code>命令都会发送<code>Expect</code>请求头，这个是由<code>curl</code>版本和系统决定的。</p>
 <p>有没有<code>Expect</code>不是重点，重点是学会怎么查看<code>curl</code>的请求报文，这样对于调试接口会有很大的帮助。</p>
 <p><code>curl</code>虽说方便，但也有用着不舒服的地方；<code>php</code>也是，获取原始请求报文和响应报文这方面，确实令人不愉快。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

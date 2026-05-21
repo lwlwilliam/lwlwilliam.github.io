@@ -106,8 +106,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>像<code>Java</code>这类语言，编译器会把代码预先编译为字节码，<code>JVM</code>直接解释执行这些字节码，程序就可以运行起来了。<code>PHP</code>使用者在性能优化时可能也会遇到<code>OPcache</code>这个名词，所谓<code>OPcache</code>其实就是<code>opcode</code>的<code>cache</code>，<code>opcode</code>其实类似于字节码，虽然本质上有点差异，但可以类比为同一种事物。</p>
+  <div class="post-content"><p>像<code>Java</code>这类语言，编译器会把代码预先编译为字节码，<code>JVM</code>直接解释执行这些字节码，程序就可以运行起来了。<code>PHP</code>使用者在性能优化时可能也会遇到<code>OPcache</code>这个名词，所谓<code>OPcache</code>其实就是<code>opcode</code>的<code>cache</code>，<code>opcode</code>其实类似于字节码，虽然本质上有点差异，但可以类比为同一种事物。</p>
 <p><code>PHP</code>在开启<code>OPcache</code>扩展后，传统的<code>PHP</code>程序运行速度会提升很多，究其原因，就是<code>OPcache</code>扩展会将代码编译中间结果<code>opcode</code>进行缓存，而<code>php-fpm</code>的运行模式又是每次请求都会重新解释代码，也就是每次请求都会省略了前面的编译过程，所以单位时间内就能节省很多实际运行时间。与之相反，<code>php-cli</code>运行模式下的程序，<code>OPcache</code>对其起到的作用不大，因为<code>php-cli</code>下，程序由于常驻内存而只需要解释一次执行多次。</p>
 <h3 id="代码">代码</h3>
 <p>以下是一个用<code>PHP</code>写的小型编译器。</p>
@@ -1218,7 +1217,9 @@
 </span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">Exception</span> $e) {
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;Error: &#34;</span> <span style="color:#f92672">.</span> $e<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getMessage</span>() <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>虽然代码很多，但我们只需要将目光集中到<code>// 主程序</code>以下部分，这么多代码的目的就是运行<code>$source</code>中的代码。程序主要分成四个部分：<code>Lexer</code>、<code>Parser</code>、<code>CodeGenerator</code>和<code>VirtualMachine</code>。如果以<code>Java</code>为例，<code>Lexer</code>、<code>Parser</code>、<code>CodeGenerator</code>部分就是<code>javac</code>做的，<code>VirtualMachine</code>就是<code>java</code>对应的部分。<code>Java</code>程序可以预先将代码编译成字节码，再单独运行字节码。而<code>PHP</code>在明面上就没分得这么清晰，大部分<code>PHPer</code>可能只知道<code>PHP</code>的热更新很方便，不知道背后的解释器做了多少工作，可能以为解释器只是傻傻的逐行解释执行。其实<code>PHP</code>的编译过程跟<code>Java</code>大差不差，也可以生成字节码同一层次的<code>opcode</code>，<code>opcode</code>跟字节码当然是有点差异的，但为了易于理解，可以当成是同一类型的东西。既然如此，<code>PHP</code>的<code>opcode</code>当然也可以像字节码一样单独执行，<code>Opcache</code>就因此而生。可惜，则于历史原因，<code>PHP</code>的<code>opcode</code>并没有规范，所以官方实现无法单独生成<code>opcode</code>经由<code>ZendVM</code>直接执行，内部社区其实也有相关的讨论如 <a href="https://externals.io/message/111965">https://externals.io/message/111965</a>，还可以在 <a href="https://externals.io">https://externals.io</a> 查阅更多相关信息。</p>
+</span></span></code></pre></div><p>虽然代码很多，但我们只需要将目光集中到<code>// 主程序</code>以下部分，这么多代码的目的就是运行<code>$source</code>中的代码。程序主要分成四个部分：<code>Lexer</code>、<code>Parser</code>、<code>CodeGenerator</code>和<code>VirtualMachine</code>。如果以<code>Java</code>为例，<code>Lexer</code>、<code>Parser</code>、<code>CodeGenerator</code>部分就是<code>javac</code>做的，<code>VirtualMachine</code>就是<code>java</code>对应的部分。<code>Java</code>程序可以预先将代码编译成字节码，再单独运行字节码。而<code>PHP</code>在明面上就没分得这么清晰，大部分<code>PHPer</code>可能只知道<code>PHP</code>的热更新很方便，不知道背后的解释器做了多少工作，可能以为解释器只是傻傻的逐行解释执行。其实<code>PHP</code>的编译过程跟<code>Java</code>大差不差，也可以生成字节码同一层次的<code>opcode</code>，<code>opcode</code>跟字节码当然是有点差异的，但为了易于理解，可以当成是同一类型的东西。既然如此，<code>PHP</code>的<code>opcode</code>当然也可以像字节码一样单独执行，<code>Opcache</code>就因此而生。可惜，则于历史原因，<code>PHP</code>的<code>opcode</code>并没有规范，所以官方实现无法单独生成<code>opcode</code>经由<code>ZendVM</code>直接执行，内部社区其实也有相关的讨论如 <a href="../../../../https://externals.io/message/111965">https://externals.io/message/111965</a>
+，还可以在 <a href="../../../../https://externals.io">https://externals.io</a>
+ 查阅更多相关信息。</p>
 <p>经过上面的解释，如果我们要提升性能，可以像<code>Java</code>一样，将<code>Lexer</code>、<code>Parser</code>和<code>CodeGenerator</code>三个部分的生成物——<code>$instructions</code>及<code>$functions</code>保存到文件，运行的时候也可以将这三个部分去除，只保留<code>$vm = new VirtualMachine($instruction, $functions); $vm-&gt;run();</code>。</p>
 <h3 id="比较">比较</h3>
 <p>以上面的<code>$source</code>为例简单测试一下运行时间，</p>
@@ -1300,8 +1301,7 @@
   </tbody>
 </table>
 <p>可以看到，解释执行大体上是要比直接执行字节码慢上很多的，代码量越大量，差距越明显。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

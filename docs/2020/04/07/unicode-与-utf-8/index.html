@@ -115,8 +115,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <blockquote>
+  <div class="post-content"><blockquote>
 <p>目前对字符集、字符编码、编码规则等概念分得还是不太清，可能术语方面会不太准确，有待加强认识</p>
 </blockquote>
 <p>计算机内部的所有信息都是二进制形式的，二进制对计算机来说最简单的，但却并不人类友好。于是美国人制定了 ASCII 码作为二进制和英文字符的映射。但随着计算机在世界范围内的流行，ASCII 码的容量无法满足各国的需求；很多国家都开发了自己独有的字符编码方式，但是在拥有不同编码方式的计算机之间通信，会造成乱码。各国间的通信促使了统一字符编码的出现，这正是 Unicode。</p>
@@ -191,8 +190,7 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%s\n&#34;</span>, <span style="color:#a6e22e">buf</span>.<span style="color:#a6e22e">Bytes</span>()) <span style="color:#75715e">// 汉</span>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>同理，也可以通过 UTF-8 的编码规则反推出 Unicode 码，主要是通过判断字节的前面四位来推断字节长度，这里用到了状态机（随便了解过一下，大概知道在这可以用），大概步骤：第 1 个字节第 1 位是 0，则 UTF-8 编码占 1 字节；否则，字节长度超过1，如果第 2 个字节是 1 且第 3 个字节是 0，则占 2 个字节；否则，一直判断，直到第 5 位，如此而已，当然编码会麻烦点。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

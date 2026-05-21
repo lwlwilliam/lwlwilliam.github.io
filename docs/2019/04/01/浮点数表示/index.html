@@ -111,9 +111,9 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>根据国际标准 IEEE 754，任意一个二进制小数 V 可以表示成以下形式：</p>
-<p><img src="../../../../assets/images/2019/0401/WX20190401-121514.png" alt="WX20190401-121514.png"></p>
+  <div class="post-content"><p>根据国际标准 IEEE 754，任意一个二进制小数 V 可以表示成以下形式：</p>
+<p><img src="../../../../assets/images/2019/0401/WX20190401-121514.png" alt="WX20190401-121514.png">
+</p>
 <ol>
 <li>
 $$(-1)^s$$表示符号位，当 s 为 0 时，V 为正数；当 s 为 1 时，V 为负数；</li>
@@ -230,8 +230,7 @@ $$2^E$$表示指数位，E 可为负数；</li>
 </span></span></code></pre></div><p>小端的结果是：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>[<span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span>]
 </span></span></code></pre></div><p>可以发现，两个结果恰好按字节为单位，顺序完全相反，这就是大小端字节序最直观的区别。由于大端字节序更符合人类的习惯，先读取的是高位；而小端字节序更适合计算机处理，先读取低位，因此两者都有其存在价值，在读取时需要注意。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

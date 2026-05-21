@@ -94,8 +94,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>连接池是什么东西？所谓连接，指的是TCP连接，而池，则是容器，普通的池子可以容纳水等物体，而连接池，则是容纳TCP连接的容器。</p>
+  <div class="post-content"><p>连接池是什么东西？所谓连接，指的是TCP连接，而池，则是容器，普通的池子可以容纳水等物体，而连接池，则是容纳TCP连接的容器。</p>
 <p>现实中的容器可以是多种材质的，连接池也不例外，连接池可以用各种数据结构来实现，只要能保存并允许使用连接即可。为了方便，本文仅用一个变量来模拟连接池。以下是完整的示例。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 </span></span><span style="display:flex;"><span>
@@ -257,11 +256,11 @@
 </ol>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ go run test.go
 </span></span></code></pre></div><p>如无意外，应该能看到以下效果：</p>
-<p><img src="../../../../assets/images/2021/0717/WX20210804-151459.png" alt="demo"></p>
+<p><img src="../../../../assets/images/2021/0717/WX20210804-151459.png" alt="demo">
+</p>
 <p>以上代码模拟了三个端，客户端、代理端、服务端，其中连接池 pool 的模拟在 tunnel 代理端。tunnel 创建与 server 之间的连接，在 client 连接时自动复用该连接进行数据的转发。</p>
 <p>虽然只用了一个变量，但也起到了连接池的作用了：<code>复用连接，减少因创建连接而产生的资源消耗</code>。当然，真正的连接池还得做很多处理，例如使用心跳保持连接，及时将断开的连接清除掉并重新创建连接令连接池的连接保持在一定数量，获取连接时判断一下连接是否有效，使用完将连接放回连接池，连接池自动扩容等。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

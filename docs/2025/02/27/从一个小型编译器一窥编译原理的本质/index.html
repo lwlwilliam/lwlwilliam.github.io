@@ -109,8 +109,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>编译器可以粗略地分为几个简单的部分：词法分析器、语法分析器、代码生成器。其中语义分析器、代码优化器这些不影响本文示例功能。另外，本文的编译器生成的是字节码，因此还需要一个虚拟机来执行。</p>
+  <div class="post-content"><p>编译器可以粗略地分为几个简单的部分：词法分析器、语法分析器、代码生成器。其中语义分析器、代码优化器这些不影响本文示例功能。另外，本文的编译器生成的是字节码，因此还需要一个虚拟机来执行。</p>
 <h3 id="lexer-词法分析器">Lexer 词法分析器</h3>
 <p><code>Lexer</code>的功能是将代码串不同的符号进行标记分组，例如<code>(3 + 5) * 2</code>可以拆分为不同的<code>token</code>，分别是<code>(</code>、<code>3</code>、<code>+</code>、<code>5</code>、<code>)</code>、<code>*</code>、<code>2</code>，包含五个分类，有左括号、右括号、加号、乘号以及整数，其中的空白符号需要忽略。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Lexer</span>
@@ -483,8 +482,7 @@
 </span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">Exception</span> $e) {
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;Error: &#34;</span> <span style="color:#f92672">.</span> $e<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getMessage</span>();
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div>
-  </div>
+</span></span></code></pre></div></div>
   <footer class="post-footer">
     <nav class="post-nav">
       

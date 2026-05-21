@@ -92,8 +92,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>WebSocket 究竟是什么东西呢？貌似有人看到 WebSocket 里面有 <code>Socket</code> 就以为它跟 Socket 有什么关系。呃，要真说它们有什么关系，也确实有，WebSocket 跟 Socket 之间还隔着一层 HTTP，姑且算是有关系吧。</p>
+  <div class="post-content"><p>WebSocket 究竟是什么东西呢？貌似有人看到 WebSocket 里面有 <code>Socket</code> 就以为它跟 Socket 有什么关系。呃，要真说它们有什么关系，也确实有，WebSocket 跟 Socket 之间还隔着一层 HTTP，姑且算是有关系吧。</p>
 <p>WebSocket 协议是基于 HTTP 实现的，具体来说，WebSocket 通过 HTTP 实现握手，握手之后就没 HTTP 什么事了。</p>
 <p>为了深刻理解 WebSocket 原理，我特意写了个 WebSocket 服务，目前仅能握手、接发简短的文本信息，但用于简单说明 WebSocket 工作机制已经足够了。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
@@ -291,8 +290,7 @@ payload: hello
 sendData: 0x8105776f726c64(�world)
 </code></pre><p>以上就是一个完整简单可测试的 WebSocket 服务示例。</p>
 <p>WebSocket 也并不是什么特别高端的玩意。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

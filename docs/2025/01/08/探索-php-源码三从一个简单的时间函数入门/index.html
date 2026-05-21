@@ -100,8 +100,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>想必<code>phper</code>对<code>date()</code>函数不会陌生，<code>date('Y-m-d H:i:s')</code>是常见的用法。<code>date</code>扩展代码行数不少，而且一大块宏让人摸不着头脑。先根据自己的思路写一个吧，给<code>PHP</code>添加一个打印当前时间格式化形式的函数。函数原型位于<code>ext/standard/basic_functions.stub.php</code>，<code>function pmydate(string $value): void {}</code>函数接收一个格式化字符串，仅支持<code>Y</code>、<code>m</code>、<code>d</code>、<code>H</code>、<code>i</code>、<code>s</code>几种格式，没有返回值，直接输出结果。</p>
+  <div class="post-content"><p>想必<code>phper</code>对<code>date()</code>函数不会陌生，<code>date('Y-m-d H:i:s')</code>是常见的用法。<code>date</code>扩展代码行数不少，而且一大块宏让人摸不着头脑。先根据自己的思路写一个吧，给<code>PHP</code>添加一个打印当前时间格式化形式的函数。函数原型位于<code>ext/standard/basic_functions.stub.php</code>，<code>function pmydate(string $value): void {}</code>函数接收一个格式化字符串，仅支持<code>Y</code>、<code>m</code>、<code>d</code>、<code>H</code>、<code>i</code>、<code>s</code>几种格式，没有返回值，直接输出结果。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">// ext/standard/basic_functions.stub.php
 </span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">pmydate</span>(<span style="color:#a6e22e">string</span> $value)<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span> {}
 </span></span></code></pre></div><p>扩展代码：</p>
@@ -195,8 +194,7 @@
 <li>其中大片的<code>switch</code>分支不作详细解释，应该很好理解；</li>
 <li>为什么不使用<code>printf</code>而要使用<code>php_printf</code>？因为<code>PHP</code>有多种<code>SAPI</code>，如果只是使用<code>printf</code>只会默认在控制台输出，封装的<code>php_printf</code>则会将数据保存到缓冲中，根据不同的<code>SAPI</code>写入不同的输出流；</li>
 </ol>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

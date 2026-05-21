@@ -113,8 +113,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>随着基于 web 的软件（web 应用、微服务、REST、SOAP 等）的日益流行，思考其背后的原理总是好的。当我冒险进入 Flask 或者 Django 这样的框架时
+  <div class="post-content"><p>随着基于 web 的软件（web 应用、微服务、REST、SOAP 等）的日益流行，思考其背后的原理总是好的。当我冒险进入 Flask 或者 Django 这样的框架时
 这对我特别有用。</p>
 <p>那么我们对其深入了解到什么程度呢？协议栈中最主要的传输协议 TCP 和 UDP。</p>
 <h3 id="tcp-和-udp">TCP 和 UDP</h3>
@@ -192,7 +191,8 @@ client sending: Hello World from client
 client received: server received your message
 </code></pre><p>从上例中可以清楚地看到，如果我们愤怒地（译注：怪怪的副词，不知道怎么翻译会好点？）使用它，很快就要定义一种标准的通信方式，即协议。这将包括消息类型的定义（线文本或者其它
 内容？）、消息长度和处理服务端或客户端请求的方法（包括身份难和标准的错误消息）。这就是 HTTP 的由来。</p>
-<p>在阅读下文之前，运行服务端脚本并尝试在 web 浏览器打开地址(<a href="http://localhost:10000/">http://localhost:10000/</a>)，你应该会看到相同的服务端消息。</p>
+<p>在阅读下文之前，运行服务端脚本并尝试在 web 浏览器打开地址(<a href="../../../../http://localhost:10000/">http://localhost:10000/</a>
+)，你应该会看到相同的服务端消息。</p>
 <h3 id="http">HTTP</h3>
 <p>HTTP 是为 web 传输的消息定义的协议。如上所述，通过 HTTP 进行的通信通常使用 socket 和 TCP 传输协议。因此，如果我们要修改上面的 server_tcp
 示例，那么消息应该会是怎样的呢？</p>
@@ -242,16 +242,18 @@ Content-Type: text/html
 &lt;b&gt;Hello world&lt;/b&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-</code></pre><p>为了让这看起来更真实，我们可以将 client_tcp 脚本换成 web 浏览器。再次运行 server_tcp_http 脚本，现在用浏览器访问<a href="http://localhost:10000/">http://localhost:10000/</a>。
+</code></pre><p>为了让这看起来更真实，我们可以将 client_tcp 脚本换成 web 浏览器。再次运行 server_tcp_http 脚本，现在用浏览器访问<a href="../../../../http://localhost:10000/">http://localhost:10000/</a>
+。
 浏览器现在可以理解 HTTP 消息并渲染 HTML。</p>
-<p><img src="../../../../assets/images/2019/0418/WX20190418-155340.png" alt="browser"></p>
+<p><img src="../../../../assets/images/2019/0418/WX20190418-155340.png" alt="browser">
+</p>
 <p>还可以修改 server_tcp_http 脚本用来解析<code>GET</code>和<code>POST</code>请求（以及其它 HTTP 方法），但这超出了本文的范围。Python 提供了很多库来简化 HTTP 通信，而
 python 本身也包含 SimpleHTTPServer。因此，很少有人需要直接使用套接字开发 web 服务器——但是，嘿，这很有趣。</p>
 <blockquote>
-<p>整理翻译自<a href="http://www.ifnamemain.com/posts/2016/Nov/01/python_sockets_http/">http://www.ifnamemain.com/posts/2016/Nov/01/python_sockets_http/</a></p>
+<p>整理翻译自<a href="../../../../http://www.ifnamemain.com/posts/2016/Nov/01/python_sockets_http/">http://www.ifnamemain.com/posts/2016/Nov/01/python_sockets_http/</a>
+</p>
 </blockquote>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

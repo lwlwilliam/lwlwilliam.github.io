@@ -114,8 +114,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <h3 id="生产者消费者模型">生产者/消费者模型</h3>
+  <div class="post-content"><h3 id="生产者消费者模型">生产者/消费者模型</h3>
 <p>简单来说，生产者生产一些数据，然后放到队列中，同时消费者从队列中取数据。这样就让生产和消费变成了异步的两个过程。当队列中没有数据时，消费者就进入饥饿的等待中；而队列中数据已满时，生产者则面临因产品积压导致 CPU 被剥夺的问题。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 </span></span><span style="display:flex;"><span>
@@ -296,8 +295,7 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;quit (%v)\n&#34;</span>, <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">sig</span>)
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>生产者/消费者模型和订阅/发布模型的关系，类似于网络协议中的&quot;pull&quot;协议和&quot;push&quot;协议；生产者/消费者模型的数据传输不需要生产者发送给消费者，而是消费者主动&quot;pull&quot;数据；订阅/发布模型需要发布者将数据&quot;push&quot;给订阅者。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

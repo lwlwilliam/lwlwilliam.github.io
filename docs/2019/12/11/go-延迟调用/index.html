@@ -107,8 +107,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>语句 defer 向当前函数注册稍后执行的函数调用。这些调用被称作延迟调用，因为它们直到当前函数执行结束前才被执行，常用于资源释放、解除锁定以及错误处理等操作。</p>
+  <div class="post-content"><p>语句 defer 向当前函数注册稍后执行的函数调用。这些调用被称作延迟调用，因为它们直到当前函数执行结束前才被执行，常用于资源释放、解除锁定以及错误处理等操作。</p>
 <p>延迟调用，注册的是调用，参数在注册时被复制并缓存起来。多个延迟注册按 FILO 的次序执行。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">y</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>
@@ -207,8 +206,7 @@
 </span></span><span style="display:flex;"><span>PASS
 </span></span><span style="display:flex;"><span>ok    _/var/gonotes/src/github.com/user/deferBenchmark    3.691s
 </span></span></code></pre></div><p>可以看出，延迟调用跟普通调用的速度相差了几倍，因此，对那些性能要求高且压力大的算法，应避免使用延迟调用。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

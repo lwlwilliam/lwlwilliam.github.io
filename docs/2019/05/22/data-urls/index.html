@@ -117,8 +117,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <h3 id="语法">语法</h3>
+  <div class="post-content"><h3 id="语法">语法</h3>
 <p>Data URLs，即前缀为<code>data:</code>协议的 URL，其允许内容创建者向文档中嵌入小文件。</p>
 <p>Data URLs 由四个部分组成：前缀(<code>data:</code>)、指示数据类型的 MIME 类型、如果非文本则为可选的<code>base64</code>标记、数据本身：</p>
 <pre tabindex="0"><code>data:[&lt;mediatype&gt;][;base64],&lt;data&gt;
@@ -205,7 +204,8 @@
 <h4 id="语法-1">语法</h4>
 <p>Data URLs 的格式很简单，但很容易会忘记<code>data:[&lt;mediatype&gt;][;base64],&lt;data&gt;</code>中的<code>&lt;data&gt;</code>前面是有<code>,</code>的。</p>
 <h4 id="html-代码格式化">HTML 代码格式化</h4>
-<p>Data URLs 是文件中的文件，相对文档来说这个文件可能非常长。因为 Data URLs 也是 URL，所以 data 会用空白符来对它进行格式化。但如果数据是经过 base64 编码的，就可能会遇到<a href="http://bugzilla.mozilla.org/show_bug.cgi?id=73026#c12">一些问题</a>。</p>
+<p>Data URLs 是文件中的文件，相对文档来说这个文件可能非常长。因为 Data URLs 也是 URL，所以 data 会用空白符来对它进行格式化。但如果数据是经过 base64 编码的，就可能会遇到<a href="../../../../http://bugzilla.mozilla.org/show_bug.cgi?id=73026#c12">一些问题</a>
+。</p>
 <h4 id="长度限制">长度限制</h4>
 <h4 id="缺乏错误处理">缺乏错误处理</h4>
 <p>Data URLs 无法被解析时不会有任何相关提示。</p>
@@ -214,10 +214,10 @@
 </span></span></code></pre></div><p>这个 Data URL 代表的 HTMl 源文件内容为：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>lots of text...&lt;<span style="color:#f92672">p</span>&gt;&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">name</span><span style="color:#960050;background-color:#1e0010">%</span><span style="color:#a6e22e">3D</span><span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">bottom</span><span style="color:#960050;background-color:#1e0010">&#34;</span>&gt;bottom&lt;/<span style="color:#f92672">a</span>&gt;?arg=val
 </span></span></code></pre></div><blockquote>
-<p>本文整理自 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/data_URIs">Data URLs</a></p>
+<p>本文整理自 <a href="../../../../https://developer.mozilla.org/zh-CN/docs/Web/HTTP/data_URIs">Data URLs</a>
+</p>
 </blockquote>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

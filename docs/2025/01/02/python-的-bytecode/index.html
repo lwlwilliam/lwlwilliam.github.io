@@ -96,8 +96,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>喜欢上了通过字节码来分析代码差异的感觉，前几天机缘巧合之下玩了下<code>PHP</code>的<code>opcode</code>，今天来看看<code>Python</code>的<code>bytecode</code>。今天也是巧合，恰好群里有人问<code>Python</code>中<code>3 &gt; 2 == 2</code>为什么结果是<code>True</code>？很多语言其实并没有这种表达式。如果用过<code>JavaScript</code>，就会发现它的结果跟<code>Python</code>不一样，正因为如此，我就对<code>3 &gt; 3 == 2</code>在<code>Python</code>中的底层逻辑有点好奇，那就直接动手吧。</p>
+  <div class="post-content"><p>喜欢上了通过字节码来分析代码差异的感觉，前几天机缘巧合之下玩了下<code>PHP</code>的<code>opcode</code>，今天来看看<code>Python</code>的<code>bytecode</code>。今天也是巧合，恰好群里有人问<code>Python</code>中<code>3 &gt; 2 == 2</code>为什么结果是<code>True</code>？很多语言其实并没有这种表达式。如果用过<code>JavaScript</code>，就会发现它的结果跟<code>Python</code>不一样，正因为如此，我就对<code>3 &gt; 3 == 2</code>在<code>Python</code>中的底层逻辑有点好奇，那就直接动手吧。</p>
 <p>有人猜测<code>3 &gt; 2 == 2</code>可能跟<code>3 &gt; 2 and 2 == 2</code>是一样的，这就对比一下两段代码。跟编译型语言有疑问时就看看编译产生的汇编类似，要知道<code>Python</code>代码的逻辑，就得研究它的字节码。<code>dis</code>模块通过反汇编支持<code>CPython</code>的<code>bytecode</code>分析。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># bc.py</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> dis
@@ -238,8 +237,7 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ./python3.13jit/cpython-3.13.1/output/bin/python3 cmp.py
 </span></span><span style="display:flex;"><span>9.997729628999878
 </span></span><span style="display:flex;"><span>9.506675130000076
-</span></span></code></pre></div>
-  </div>
+</span></span></code></pre></div></div>
   <footer class="post-footer">
     <nav class="post-nav">
       

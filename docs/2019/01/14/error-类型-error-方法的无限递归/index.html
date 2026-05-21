@@ -96,8 +96,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>在 Go 语言中使用 error 值来表示错误状态。事实上，error 类型是内置的接口，定义如下：</p>
+  <div class="post-content"><p>在 Go 语言中使用 error 值来表示错误状态。事实上，error 类型是内置的接口，定义如下：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#66d9ef">error</span> <span style="color:#66d9ef">interface</span> {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Error</span>() <span style="color:#66d9ef">string</span>
 </span></span><span style="display:flex;"><span>}
@@ -144,8 +143,7 @@
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>现在来看 Error() 方法体，两个 fmt.Sprintf() 调用的区别就在于是否对 e 进行了类型转换，没有进行类型转换的会导致死循环。这是由于没有进行转换时，fmt.Sprintf() 使用
 e 参数时会调用 e.Error()，e.Error() 调用时又会导致 e.Error() 被递归调用，无限递归下去，于是就产生了死循环。对其进行类型转换则避免了 e.Error() 的递归调用。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

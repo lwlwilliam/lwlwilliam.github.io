@@ -92,8 +92,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>在 Workerman 源码中看到这么一段代码，用于终止进程。</p>
+  <div class="post-content"><p>在 Workerman 源码中看到这么一段代码，用于终止进程。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">static</span><span style="color:#f92672">::</span>$_gracefulStop) {
@@ -166,8 +165,7 @@
 </span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">16</span>   <span style="color:#ae81ff">192</span>   <span style="color:#ae81ff">192</span>    <span style="color:#ae81ff">16</span> pts/0      <span style="color:#ae81ff">207</span> R        <span style="color:#ae81ff">0</span>   1:37 php demo.php
 </span></span></code></pre></div><p>除了以上三个信号，还有两个跟停止相关的信号<code>SIGQUIT</code>和<code>SIGSTOP</code>。<code>SIGQUIT</code>跟<code>SIGINT</code>、<code>SIGTERM</code>类似，<code>SIGQUIT</code>可以在命令行上通过<code>Ctrl+\</code>发出。<code>SIGSTOP</code>只是暂停进程，并不会终止，在接收到<code>SIGSTOP</code>之后，<code>SIGTERM</code>、<code>SIGINT</code>、<code>SIGQUIT</code>都会无效，但是<code>SIGKILL</code>仍然可以终止进程。</p>
 <p>在<code>SIGSTOP</code>之后，通过<code>SIGCONT</code>信号让进程继续运行。<code>SIGSTOP</code>和<code>SIGCONT</code>这对命令挺好用的，可以用于定时器之类的情景下，暂停任务时，通过<code>SIGSTOP</code>来实现，<code>SIGCONT</code>则用于恢复任务。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

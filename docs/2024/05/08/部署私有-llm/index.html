@@ -98,8 +98,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>目前对<code>LLM(Large Language Models，大语言模型)</code>一无所知，万事开头难，虽然部署了，但并不知道原理，不过起码兴趣点上了，好歹以兴趣入手，搞一个私有的知识库倒是不错。</p>
+  <div class="post-content"><p>目前对<code>LLM(Large Language Models，大语言模型)</code>一无所知，万事开头难，虽然部署了，但并不知道原理，不过起码兴趣点上了，好歹以兴趣入手，搞一个私有的知识库倒是不错。</p>
 <p>还是得<code>Linux</code>环境方便，<code>Ollama</code>和<code>Anything LLM</code>一起构成了我所要的知识库。<code>Ollama</code>应该是目前本地构建运行<code>LLM</code>最好的工具了，但我不仅是想本地构建，而且要是私人知识库，因此，嵌入自己的知识数据就是另一个重要的部分。以我目前粗浅的见识来看，<code>Ollama</code>给<code>LLM</code>嵌入数据还是需要其它工具协助的，<code>Anything LLM</code>正好符合我的要求。</p>
 <p><code>Anything LLM</code>有很好的易用性，而且还有开箱即用的<code>RAG(检索增强生成，Retrieval-augmented Generation)</code>、<code>AI Agents(人工智能体)</code>等工具。<code>RAG</code>生成模型结合了语言模型和信息检索技术，当模型需要生成信息时，它会从一个庞大的文档集合中检索相关数据，然后利用其生成对应的信息，从而提高预测的质量和准确性；<code>AI Agents</code>与传统的人工智能相比，可以通过调用工具逐步完成既定目标。</p>
 <p><code>Ollama</code>加<code>Anything LLM</code>的优点这么多，部署起来却一点也不难，前提是会使用<code>Docker</code>。以下是部署命令：</p>
@@ -122,11 +121,11 @@
 </span></span></code></pre></div><p>首先创建一个网络<code>llm</code>，让<code>Ollama</code>和<code>Anything LLM</code>们于同一网络，毕竟它们之间需要通信。<code>Ollama</code>的安装倒没什么可说的，<code>Anything LLM</code>的安装命令根据实际情况对官网的进行了一定修改。其中包含两个<code>chmod</code>命令，如果不加权限，可能由于<code>Docker</code>跟宿主系统用户不一致导致权限不足；另外<code>-e OPENAI_API_KEY=foo</code>这个是因为<code>Anything LLM</code>也支持选择<code>openai</code>，需要为它添加一个环境变量<code>OPENAI_API_KEY</code>，至于变量值如果不使用的话填一个非空值即可，这两个问题可能是导致<code>Anything LLM</code>运行异常的重要原因。</p>
 <p>还有一个值得注意的是在<code>Anything LLM</code>界面选择模型运行工具时，选择<code>Ollama</code>填入的链接上填入<code>http://ollama:11434</code>，这个“域名”<code>ollama</code>就是<code>Docker</code>容器的名称。</p>
 <p>至此，已经将本地的<code>LLM</code>部署完成，通过<code>http://localhost:3001</code>即可访问，通过上述的步骤即可看到以下界面。</p>
-<p><img src="../../../../assets/images/2024/0508/20240508-161906.png" alt="document"></p>
+<p><img src="../../../../assets/images/2024/0508/20240508-161906.png" alt="document">
+</p>
 <p>上图红色方框的按钮用于上传个人文件，“训练”大模型，让其成为知识库，支持多种格式文件。除了界面外，<code>Anything LLM</code>还开放了<code>API</code>，便于企业对接嵌入内部数据，形成企业领域专用模型。</p>
 <p>服务器性能不要太差喔。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

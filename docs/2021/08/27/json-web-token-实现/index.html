@@ -112,8 +112,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <h3 id="结构">结构</h3>
+  <div class="post-content"><h3 id="结构">结构</h3>
 <p>JSON Web Token 由<code>.</code>分隔为三个部分，分别是：</p>
 <ul>
 <li><code>Header</code></li>
@@ -212,11 +211,11 @@ secret)
 </span></span></code></pre></div><p>以上代码结果如下，可以跟官网的结果进行对比验证。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ go run jwt.go
 </span></span><span style="display:flex;"><span>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.O0t7UHnKu0-Q30CpQa1-Oi9TdUQ-fSktY3M4G6O0mPU
-</span></span></code></pre></div><p><img src="../../../../assets/images/2021/0827/WX20210827-150452.png" alt="jwt"></p>
+</span></span></code></pre></div><p><img src="../../../../assets/images/2021/0827/WX20210827-150452.png" alt="jwt">
+</p>
 <p>服务器在生成 jwt 时，对生成的 jwt 和 secret 进行绑定保存，在客户端将 jwt 回传时即能过 base64 解码获取对应原内容进行验证。</p>
 <p>由于 JSON Web Token 保存在客户端，所以不要存放敏感数据。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

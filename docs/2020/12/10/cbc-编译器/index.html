@@ -94,8 +94,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>cbc 编译器是《自制编译器》中实现的。由于 cbc 编译器是在 32 位机器上工作的，而现在大部分都是 64 位，即使按照官方文档进行处理，编译时也会出现各种错误，因此想到了用 docker 搭建 32 位的系统。</p>
+  <div class="post-content"><p>cbc 编译器是《自制编译器》中实现的。由于 cbc 编译器是在 32 位机器上工作的，而现在大部分都是 64 位，即使按照官方文档进行处理，编译时也会出现各种错误，因此想到了用 docker 搭建 32 位的系统。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ docker run -d -ti --name cbc -v /path/cbc-1.0:/var/www/html -w /var/www/html i386/ubuntu
 </span></span><span style="display:flex;"><span>$ docker exec -ti cbc bash
 </span></span><span style="display:flex;"><span>root@261c13a74c73:/var/www/html# sed -i <span style="color:#e6db74">&#39;s/archive.ubuntu.com/mirrors.163.com/&#39;</span> /etc/apt/source.list
@@ -118,10 +117,10 @@
 </span></span><span style="display:flex;"><span>root@261c13a74c73:/var/www/html# cbc hello.cb
 </span></span><span style="display:flex;"><span>root@261c13a74c73:/var/www/html# ./hello 
 </span></span><span style="display:flex;"><span>Hello, world
-</span></span></code></pre></div><p>为了防止资源失效，特地将 <a href="../../../../assets/files/cbc-1.0.tar.gz">cbc</a> 的源码进行了备份，另外将以上操作都打包到 docker 镜像中，之后直接拉镜像即可使用。</p>
+</span></span></code></pre></div><p>为了防止资源失效，特地将 <a href="../../../../assets/files/cbc-1.0.tar.gz">cbc</a>
+ 的源码进行了备份，另外将以上操作都打包到 docker 镜像中，之后直接拉镜像即可使用。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ docker run -d -ti --name cbc_test lwlwufeng/cbc-compiler:1.0
-</span></span></code></pre></div>
-  </div>
+</span></span></code></pre></div></div>
   <footer class="post-footer">
     <nav class="post-nav">
       

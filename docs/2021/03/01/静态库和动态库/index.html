@@ -111,8 +111,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>顾名思义，静态库可以理解为该库相对于可执行目标文件是静态的，而动态库相对于可执行文件是动态的。静态库跟可执行文件捆绑在一起，不需要依赖操作系统中其它库；动态库则一般固定在操作系统的特定位置，如<code>/usr/lib</code>目录中，如果可执行文件依赖于动态库，一旦该库被移动或损坏，则无法运行。有兴趣可以进行以下测试，我使用的是 docker 中的容器，可千万别用自己的系统试。</p>
+  <div class="post-content"><p>顾名思义，静态库可以理解为该库相对于可执行目标文件是静态的，而动态库相对于可执行文件是动态的。静态库跟可执行文件捆绑在一起，不需要依赖操作系统中其它库；动态库则一般固定在操作系统的特定位置，如<code>/usr/lib</code>目录中，如果可执行文件依赖于动态库，一旦该库被移动或损坏，则无法运行。有兴趣可以进行以下测试，我使用的是 docker 中的容器，可千万别用自己的系统试。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@b64869b93f5d:~# mv /usr/lib/ /usr/lib.bak
 </span></span><span style="display:flex;"><span>root@b64869b93f5d:~# mv /usr/lib.bak/ /usr/lib
 </span></span><span style="display:flex;"><span>mv: error <span style="color:#66d9ef">while</span> loading shared libraries: libacl.so.1: cannot open shared object file: No such file or directory
@@ -178,8 +177,7 @@
 </span></span><span style="display:flex;"><span>$ ./dynamic
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">3</span>
 </span></span></code></pre></div><p>当然，除了修改配置之外，还可以直接将动态库移动到<code>/usr/lib</code>或者<code>/usr/lib64</code>等默认加载路径中。</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

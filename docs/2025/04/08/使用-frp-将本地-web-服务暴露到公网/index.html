@@ -108,8 +108,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>使用 <a href="https://github.com/fatedier/frp" target="_blank">frp</a> 的前提条件是有公网<code>IP</code>的服务器，毕竟标题所讲的就是内网穿透。内网穿透，要么买服务，要么就自己搭，<code>frp</code>就是一款高性能的反向代理应用，专注于内网穿透，主打一个免安装，<code>Go</code>语言写的嘛，交叉静态编译就是香。</p>
+  <div class="post-content"><p>使用 <a href="https://github.com/fatedier/frp" target="_blank">frp</a> 的前提条件是有公网<code>IP</code>的服务器，毕竟标题所讲的就是内网穿透。内网穿透，要么买服务，要么就自己搭，<code>frp</code>就是一款高性能的反向代理应用，专注于内网穿透，主打一个免安装，<code>Go</code>语言写的嘛，交叉静态编译就是香。</p>
 <p>像微信以及一些服务，需要提供公网<code>HTTP</code>地址甚至必须是<code>HTTPS</code>服务才能申请或测试，频繁同步代码到服务器也不方便，而且如果是新的服务器还得搭环境，那还是做个内网穿透服务到本地比较舒服，非常适合个人做测试。</p>
 <p>本文使用的是<code>frp 0.61.2</code>，下载即可使用，解压后只有以下文件：</p>
 <pre tabindex="0"><code>frpc
@@ -164,8 +163,7 @@ LICENSE
 <li><code>[proxies.plugin]</code>的<code>crtPath</code>为<code>TLS</code>证书文件路径；</li>
 <li><code>[proxies.plugin]</code>的<code>hostHeaderRewrite</code>改写请求报文的<code>Host</code>；</li>
 </ul>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

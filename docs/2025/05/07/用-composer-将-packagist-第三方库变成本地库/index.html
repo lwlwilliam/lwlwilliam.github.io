@@ -92,9 +92,9 @@
   </header>
   
   
-  <div class="post-content">
-    <p>之所以有这个想法，是因为部分第三方库版本约束没有做好，导致版本不匹配的库也可以安装，库版本不兼容到运行时才得以暴露，影响很大。</p>
-<p>以<code>workerman/mqtt</code>为例，<code>2.1</code>版本跟<code>workerman/workerman:^4.0</code>是不兼容的，但 <a href="https://github.com/walkor/mqtt/blob/v2.1/composer.json#L34">composer.json</a> 的<code>require</code>是<code>&quot;workerman/workerman&quot; : &quot;^4.0 | ^5.0&quot;</code>。当然直接<code>composer require workerman/mqtt:2.1</code>是没有问题的，如果是在已有的<code>workerman/workerman:^4.0</code>项目中<code>require</code>可以安装<code>2.1</code>版本，但运行时就会产生不兼容的错误提示。</p>
+  <div class="post-content"><p>之所以有这个想法，是因为部分第三方库版本约束没有做好，导致版本不匹配的库也可以安装，库版本不兼容到运行时才得以暴露，影响很大。</p>
+<p>以<code>workerman/mqtt</code>为例，<code>2.1</code>版本跟<code>workerman/workerman:^4.0</code>是不兼容的，但 <a href="../../../../https://github.com/walkor/mqtt/blob/v2.1/composer.json#L34">composer.json</a>
+ 的<code>require</code>是<code>&quot;workerman/workerman&quot; : &quot;^4.0 | ^5.0&quot;</code>。当然直接<code>composer require workerman/mqtt:2.1</code>是没有问题的，如果是在已有的<code>workerman/workerman:^4.0</code>项目中<code>require</code>可以安装<code>2.1</code>版本，但运行时就会产生不兼容的错误提示。</p>
 <pre tabindex="0"><code>Fatal error: Declaration of Workerman\Mqtt\Protocols\Mqtt::input(string $buffer, Workerman\Connection\ConnectionInterface $connection): int must be compatible with Workerman\Protocols\ProtocolInterface::input($recv_buffer, Workerman\Connection\ConnectionInterface $connection) in /usr/share/php/programming_practice/php/php-frameworks-test/workerman4_mqtt2/vendor/workerman/mqtt/src/Protocols/Mqtt.php on line 136
 </code></pre><p>如果第三方库没有及时修改，我们就需要自己来调整一下。<code>composer</code>默认会从<code>packagist</code>查询依赖地址并依此下载，在将第三方库变成本地库时，可以沿用<code>composer</code>的依赖加载机制。</p>
 <p>首先将有问题的库移出<code>vendor</code>目录统一放到项目根目录的<code>third_party</code>目录中，并将当前使用的库版本<code>&quot;version&quot;: &quot;2.1&quot;</code>记录到库的<code>composer.json</code>中，再将<code>workerman/workerman</code>的版本约束改为<code>^5.0</code>。</p>
@@ -139,8 +139,7 @@ Use the option --with-all-dependencies (-W) to allow upgrades, downgrades and re
 </span></span><span style="display:flex;"><span>    ]
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ... 省略其它 key:value
 </span></span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div>
-  </div>
+</span></span></code></pre></div></div>
   <footer class="post-footer">
     <nav class="post-nav">
       

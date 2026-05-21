@@ -98,8 +98,7 @@
   </header>
   
   
-  <div class="post-content">
-    <p>字节序，指的就是在计算机中存储的数据字节顺序，分为大端字节序和小端字节序。先看看以下代码，直观感受一下什么叫字节序。</p>
+  <div class="post-content"><p>字节序，指的就是在计算机中存储的数据字节顺序，分为大端字节序和小端字节序。先看看以下代码，直观感受一下什么叫字节序。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
@@ -156,8 +155,7 @@
 </span></span></code></pre></div><p>这两个结果以<code>-</code>符号对每个字节进行了分隔。很明显，两个结果的字节顺序刚好相反。其中，大端的结果转为十进制就是 258，跟我们写入的数据一致；而小端的结果则显然是不对的。</p>
 <p>大端字节序更符合人类习惯，跟我们平时用的十进制数据一样，高位在左，低位在右；而小端字节序则更适合计算机处理，计算机只会按顺序读取字节，先读取第一个字节，再依次读取其余字节，从低位开始效率比较高，因此低位在右，也就是小端字节序。</p>
 <p>之前看到过字节序的一些内容，有些老旧系统还是使用小端字节序的，但现在大部分都用的大端字节序，一般情况下也不需要关注这些。更深入的内容有待以后学习～</p>
-
-  </div>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

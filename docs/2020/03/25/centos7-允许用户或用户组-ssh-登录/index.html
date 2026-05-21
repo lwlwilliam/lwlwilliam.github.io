@@ -110,8 +110,7 @@
 </nav>
   </details>
   
-  <div class="post-content">
-    <p>平时用惯了<code>root</code>登录，一时间添加新用户倒不太适应。没有什么难度，纯粹记录一下方便查找。</p>
+  <div class="post-content"><p>平时用惯了<code>root</code>登录，一时间添加新用户倒不太适应。没有什么难度，纯粹记录一下方便查找。</p>
 <h3 id="添加新用户">添加新用户</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># useradd -m test</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># passwd test</span>
@@ -134,8 +133,7 @@
 </span></span></code></pre></div><p>将<code>AllowUsers username1 username2</code>或者<code>AllowGroups groupname1 groupname2</code>添加到该文件。如果还要允许<code>root</code>登录，则将<code>PermitRootLogin yes</code>的注释去掉（另外还要将<code>root</code>添加到允许登录的用户或用户组中）。</p>
 <h3 id="重启-sshd">重启 sshd</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># systemctl restart sshd</span>
-</span></span></code></pre></div>
-  </div>
+</span></span></code></pre></div></div>
   <footer class="post-footer">
     <nav class="post-nav">
       
