@@ -224,9 +224,9 @@ kbd {
 /* ===== 虚拟键盘 ===== */
 .virtual-keyboard {
     display: none;
-    background: #e8e8e8;
-    border-radius: 8px;
-    padding: 10px;
+    background: #d1d5db;
+    border-radius: 12px;
+    padding: 12px;
     margin-bottom: 15px;
     user-select: none;
     -webkit-user-select: none;
@@ -237,7 +237,7 @@ kbd {
     display: flex;
     justify-content: center;
     gap: 6px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .vk-row:last-child {
@@ -247,23 +247,25 @@ kbd {
 .vk-btn {
     flex: 1;
     height: 44px;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    background: #ffffff;
+    border: none;
+    border-radius: 8px;
     font-size: 16px;
-    font-weight: 500;
-    color: #333;
+    font-weight: 600;
+    color: #1f2937;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.1s, transform 0.05s;
+    transition: background 0.1s, transform 0.05s, box-shadow 0.05s;
     -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.08);
 }
 
 .vk-btn:active {
-    background: #d0d0d0;
-    transform: scale(0.96);
+    background: #e5e7eb;
+    transform: scale(0.97);
+    box-shadow: 0 0 1px rgba(0,0,0,0.08);
 }
 
 /* 字母键统一宽度（按每行10个计算） */
@@ -286,13 +288,13 @@ kbd {
 }
 
 .vk-btn.vk-fn {
-    background: #c7c7cc;
-    color: #333;
+    background: #c8cdd4;
+    color: #374151;
     font-size: 14px;
 }
 
 .vk-btn.vk-fn:active {
-    background: #a7a7ab;
+    background: #b0b6bf;
 }
 
 /* ===== 移动端固定底部面板 ===== */
@@ -302,8 +304,9 @@ kbd {
     left: 0;
     width: 100%;
     z-index: 999;
-    background: #e8e8e8;
-    border-top: 1px solid #ccc;
+    background: #d1d5db;
+    border-top: 1px solid #b0b6bf;
+    padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 /* 触屏设备默认显示虚拟键盘 */
@@ -401,7 +404,7 @@ kbd {
     .virtual-keyboard {
         display: block;
         border-radius: 0;
-        padding: 2px 10px 10px;
+        padding: 4px 10px 12px;
         margin-bottom: 0;
     }
 
@@ -418,25 +421,25 @@ kbd {
     }
 
     .vk-row {
-        gap: 4px;
-        margin-bottom: 6px;
+        gap: 5px;
+        margin-bottom: 8px;
     }
 
     .vk-btn {
         height: 48px;
         font-size: 18px;
-        border-radius: 5px;
+        border-radius: 8px;
     }
 
-    /* 移动端字母键同样统一宽度（gap 4px，9个gap共36px） */
+    /* 移动端字母键同样统一宽度（gap 5px，9个gap共45px） */
     .vk-row .vk-btn:not(.vk-wide):not(.vk-space):not(.vk-fn) {
-        width: calc((100% - 36px) / 10);
+        width: calc((100% - 45px) / 10);
         max-width: 60px;
     }
 
     .vk-btn.vk-wide,
     .vk-btn.vk-fn {
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .help {

@@ -13,7 +13,7 @@ class WebInputMethod {
         this.enabled = true;       // 默认开启中文输入模式
         this.code = '';            // 当前编码
         this.page = 0;             // 当前页码
-        this.pageSize = 5;         // 每页候选数
+        this.pageSize = 3;         // 每页候选数
         this.candidates = [];      // 当前候选列表
         this.followCaret = true;   // 候选框是否跟随光标
         this.autoCommit = true;    // 四码唯一是否自动上屏
@@ -155,7 +155,9 @@ class WebInputMethod {
             if (val >= 1 && val <= 9) {
                 this.pageSize = val;
                 this.page = 0;
-                this.updateCandidates();
+                if (this.code) {
+                    this.updateCandidates();
+                }
             }
         });
 
