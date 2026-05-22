@@ -10,14 +10,7 @@
     <div class="container">
         <h1>网页版五笔输入法</h1>
         <div class="input-wrapper">
-            <textarea id="input-area" placeholder="在此输入...点击按钮切换输入法"></textarea>
-            <div id="candidate-box" class="candidate-box hidden">
-                <div class="candidate-header">
-                    <span id="code-display"></span>
-                    <span id="page-info"></span>
-                </div>
-                <div id="candidate-list" class="candidate-list"></div>
-            </div>
+            <textarea id="input-area" placeholder="在此输入...点击按钮切换输入法" inputmode="none"></textarea>
         </div>
         <div class="settings">
             <label>
@@ -32,6 +25,15 @@
             <button id="toggle-im">切换输入法</button>
             <span id="im-status" class="im-status">英文</span>
         </div>
+        <div id="candidate-box" class="candidate-box hidden">
+            <div class="candidate-header">
+                <span id="code-display"></span>
+                <span id="page-info"></span>
+            </div>
+            <div id="candidate-list" class="candidate-list"></div>
+        </div>
+        <div id="virtual-keyboard" class="virtual-keyboard"></div>
+
         <div class="help">
             <h3>使用说明</h3>
             <ul>

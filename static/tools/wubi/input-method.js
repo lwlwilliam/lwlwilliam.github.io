@@ -64,6 +64,7 @@ class WebInputMethod {
         this.statusSpan = document.getElementById('im-status');
         this.followCaretCheckbox = document.getElementById('follow-caret');
         this.autoCommitCheckbox = document.getElementById('auto-commit');
+        this.vkContainer = document.getElementById('virtual-keyboard');
 
         this.init();
     }
@@ -71,6 +72,8 @@ class WebInputMethod {
     async init() {
         await this.loadDict();
         this.bindEvents();
+        this.initVirtualKeyboard();
+        this.initMobilePanel();
         this.updateStatus();
     }
     
@@ -188,6 +191,185 @@ class WebInputMethod {
         // 窗口大小改变时更新位置
         window.addEventListener('resize', () => this.updateCandidatePosition());
         window.addEventListener('scroll', () => this.updateCandidatePosition(), true);
+    }
+
+    /**
+     * 移动端：创建固定底部面板，把候选框和键盘放进去
+     */
+    initMobilePanel() {
+        const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        if (!isMobile || !this.vkContainer) return;
+
+        const panel = document.createElement('div');
+        panel.id = 'mobile-input-panel';
+
+        // 把候选框和键盘移入面板
+        if (this.candidateBox && this.candidateBox.parentNode) {
+            this.candidateBox.parentNode.removeChild(this.candidateBox);
+        }
+        if (this.vkContainer && this.vkContainer.parentNode) {
+            this.vkContainer.parentNode.removeChild(this.vkContainer);
+        }
+
+        panel.appendChild(this.candidateBox);
+        panel.appendChild(this.vkContainer);
+        document.body.appendChild(panel);
+    }
+
+    /**
+     * 初始化虚拟键盘
+     */
+    initVirtualKeyboard() {
+        if (!this.vkContainer) return;
+
+        const rows = [
+            ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+            ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+            ['z', 'x', 'c', 'v', 'b', 'n', 'm']
+        ];
+
+        // 字母键行
+        rows.forEach(rowKeys => {
+            const row = document.createElement('div');
+            row.className = 'vk-row';
+            rowKeys.forEach(key => {
+                const btn = this.createVkBtn(key.toUpperCase(), key);
+                row.appendChild(btn);
+            });
+            this.vkContainer.appendChild(row);
+        });
+
+        // 功能键行
+        const fnRow = document.createElement('div');
+        fnRow.className = 'vk-row';
+
+        const toggleBtn = this.createVkBtn('中/英', 'toggle', 'vk-wide vk-fn');
+        const prevBtn = this.createVkBtn('←', 'prev', 'vk-fn');
+        const spaceBtn = this.createVkBtn('空格', 'space', 'vk-space vk-fn');
+        const nextBtn = this.createVkBtn('→', 'next', 'vk-fn');
+        const backBtn = this.createVkBtn('⌫', 'backspace', 'vk-wide vk-fn');
+        const enterBtn = this.createVkBtn('↵', 'enter', 'vk-wide vk-fn');
+
+        fnRow.appendChild(toggleBtn);
+        fnRow.appendChild(prevBtn);
+        fnRow.appendChild(spaceBtn);
+        fnRow.appendChild(nextBtn);
+        fnRow.appendChild(backBtn);
+        fnRow.appendChild(enterBtn);
+        this.vkContainer.appendChild(fnRow);
+    }
+
+    /**
+     * 创建虚拟键盘按钮
+     */
+    createVkBtn(label, key, extraClass = '') {
+        const btn = document.createElement('button');
+        btn.className = `vk-btn ${extraClass}`;
+        btn.textContent = label;
+        btn.type = 'button';
+
+        const handler = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.handleVirtualKey(key);
+        };
+
+        // 移动端 touchstart，PC 端 mousedown，避免 click 延迟或重复触发
+        btn.addEventListener('touchstart', handler, { passive: false });
+        btn.addEventListener('mousedown', handler);
+        return btn;
+    }
+
+    /**
+     * 处理虚拟键盘按键
+     */
+    handleVirtualKey(key) {
+        if (!this.enabled) {
+            // 英文模式下，字母直接插入，功能键特殊处理
+            if (/^[a-z]$/.test(key)) {
+                this.insertText(key);
+                return;
+            }
+            if (key === 'space') {
+                this.insertText(' ');
+                return;
+            }
+            if (key === 'enter') {
+                this.insertText('\n');
+                return;
+            }
+            if (key === 'backspace') {
+                this.handleBackspaceNative();
+                return;
+            }
+            if (key === 'toggle') {
+                this.toggle();
+                return;
+            }
+            return;
+        }
+
+        // 中文模式
+        if (/^[a-z]$/.test(key)) {
+            this.appendCode(key);
+            return;
+        }
+
+        switch (key) {
+            case 'backspace':
+                if (this.code.length > 0) {
+                    this.backspace();
+                } else {
+                    this.handleBackspaceNative();
+                }
+                break;
+            case 'space':
+                if (this.code.length > 0) {
+                    this.selectCandidate(0);
+                } else {
+                    this.insertText(' ');
+                }
+                break;
+            case 'enter':
+                if (this.code.length > 0) {
+                    this.reset();
+                } else {
+                    this.insertText('\n');
+                }
+                break;
+            case 'toggle':
+                this.toggle();
+                break;
+            case 'prev':
+                if (this.code.length > 0) {
+                    this.prevPage();
+                }
+                break;
+            case 'next':
+                if (this.code.length > 0) {
+                    this.nextPage();
+                }
+                break;
+        }
+    }
+
+    /**
+     * 原生退格（删除输入框内容）
+     */
+    handleBackspaceNative() {
+        const el = this.inputArea;
+        const start = el.selectionStart;
+        const end = el.selectionEnd;
+        if (start === end && start > 0) {
+            const value = el.value;
+            el.value = value.substring(0, start - 1) + value.substring(end);
+            el.setSelectionRange(start - 1, start - 1);
+        } else if (start !== end) {
+            const value = el.value;
+            el.value = value.substring(0, start) + value.substring(end);
+            el.setSelectionRange(start, start);
+        }
+        el.focus();
     }
     
     /**
@@ -470,42 +652,39 @@ class WebInputMethod {
             this.hideCandidates();
             return;
         }
-        
+
         const totalPages = Math.ceil(this.candidates.length / this.pageSize);
         if (this.page >= totalPages) this.page = totalPages - 1;
         if (this.page < 0) this.page = 0;
-        
+
         const start = this.page * this.pageSize;
         const end = Math.min(start + this.pageSize, this.candidates.length);
         const pageCandidates = this.candidates.slice(start, end);
-        
+
         // 更新编码显示
         this.codeDisplay.textContent = this.code;
-        this.pageInfo.textContent = `${this.page + 1}/${totalPages} (${this.candidates.length})`;
-        
+        this.pageInfo.textContent = `${this.page + 1}/${totalPages}`;
+
         // 渲染候选列表
         this.candidateList.innerHTML = '';
+        const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
         pageCandidates.forEach((item, idx) => {
             const div = document.createElement('div');
             div.className = 'candidate-item';
             div.dataset.index = idx;
-            
-            const globalIndex = start + idx;
+
             const isExact = item.isExact;
-            
-            div.innerHTML = `
-                <span class="candidate-index">${idx + 1}</span>
-                <span class="candidate-text">${this.escapeHtml(item.word)}</span>
-                <span class="candidate-code">(${this.escapeHtml(item.code)})</span>
-            `;
-            
+
+            // 统一渲染：序号小字 + 候选词文本
+            div.innerHTML = `<span class="candidate-num">${idx + 1}</span>${this.escapeHtml(item.word)}`;
             if (isExact) {
-                div.style.fontWeight = 'bold';
+                div.classList.add('exact-match');
             }
-            
+
             this.candidateList.appendChild(div);
         });
-        
+
         this.candidateBox.classList.remove('hidden');
 
         // 更新候选框位置
@@ -603,6 +782,11 @@ class WebInputMethod {
      */
     updateCandidatePosition() {
         if (this.candidates.length === 0) return;
+
+        // 触屏设备由 CSS 控制候选框位置（固定在输入框上方）
+        if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
+            return;
+        }
 
         if (this.followCaret) {
             const caret = this.getCaretCoordinates();
