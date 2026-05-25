@@ -8,7 +8,11 @@ class WebInputMethod {
         this.dict = new Map();
         // 所有编码集合，用于前缀匹配
         this.allCodes = new Set();
-        
+        // 拼音映射: Map<拼音, 汉字数组>
+        this.pinyinMap = new Map();
+        // 反向索引: Map<汉字, 编码数组>（用于拼音反查显示编码）
+        this.reverseDict = new Map();
+
         // 状态
         this.enabled = true;       // 默认开启中文输入模式
         this.code = '';            // 当前编码
@@ -17,6 +21,7 @@ class WebInputMethod {
         this.candidates = [];      // 当前候选列表
         this.followCaret = true;   // 候选框是否跟随光标
         this.autoCommit = true;    // 四码唯一是否自动上屏
+        this.showCodeHint = true;  // 是否显示编码提示
 
         // 中英文标点映射表
         this.punctuationMap = {
@@ -64,6 +69,7 @@ class WebInputMethod {
         this.statusSpan = document.getElementById('im-status');
         this.followCaretCheckbox = document.getElementById('follow-caret');
         this.autoCommitCheckbox = document.getElementById('auto-commit');
+        this.codeHintCheckbox = document.getElementById('show-code-hint');
         this.vkContainer = document.getElementById('virtual-keyboard');
 
         this.init();
@@ -71,6 +77,8 @@ class WebInputMethod {
     
     async init() {
         await this.loadDict();
+        await this.loadPinyin();
+        this.buildReverseDict();
         this.bindEvents();
         this.initVirtualKeyboard();
         this.initMobilePanel();
@@ -135,6 +143,75 @@ class WebInputMethod {
     }
     
     /**
+     * 加载拼音字典
+     */
+    async loadPinyin() {
+        try {
+            const response = await fetch('pinyin.txt');
+            const text = await response.text();
+            this.parsePinyin(text);
+            console.log(`拼音表加载完成，共 ${this.pinyinMap.size} 个拼音`);
+        } catch (err) {
+            console.error('加载拼音表失败:', err);
+        }
+    }
+
+    /**
+     * 解析拼音表文本
+     * 格式: 拼音 汉字串（无空格分隔）
+     * 例: ni 你您拟...
+     */
+    parsePinyin(text) {
+        const lines = text.split('\n');
+        for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed.startsWith('#')) continue;
+
+            // 移除行首序号
+            let content = trimmed;
+            const prefixMatch = trimmed.match(/^\d+[\.:]\s*(.+)$/);
+            if (prefixMatch) {
+                content = prefixMatch[1];
+            }
+
+            const parts = content.split(/[\s\t]+/);
+            if (parts.length < 2) continue;
+
+            const py = parts[0].toLowerCase();
+            // 第二个部分是连续汉字，按单个字符拆开
+            const chars = parts[1].split('').filter(c => c.length > 0);
+            if (py && chars.length > 0) {
+                this.pinyinMap.set(py, chars);
+            }
+        }
+    }
+
+    /**
+     * 根据 dict 构建汉字 -> 编码列表的反向索引
+     */
+    buildReverseDict() {
+        for (const [code, words] of this.dict) {
+            for (const word of words) {
+                // word 可能是单字或多字词，只对单字建立反向索引
+                if (word.length === 1) {
+                    if (!this.reverseDict.has(word)) {
+                        this.reverseDict.set(word, []);
+                    }
+                    const arr = this.reverseDict.get(word);
+                    if (!arr.includes(code)) {
+                        arr.push(code);
+                    }
+                }
+            }
+        }
+        // 对每个汉字的编码列表按长度排序（短码在前）
+        for (const [word, codes] of this.reverseDict) {
+            codes.sort((a, b) => a.length - b.length);
+        }
+        console.log(`反向索引构建完成，共 ${this.reverseDict.size} 个单字`);
+    }
+
+    /**
      * 绑定事件
      */
     bindEvents() {
@@ -170,6 +247,14 @@ class WebInputMethod {
         // 四码唯一自动上屏开关
         this.autoCommitCheckbox.addEventListener('change', () => {
             this.autoCommit = this.autoCommitCheckbox.checked;
+        });
+
+        // 编码提示开关
+        this.codeHintCheckbox.addEventListener('change', () => {
+            this.showCodeHint = this.codeHintCheckbox.checked;
+            if (this.code) {
+                this.renderCandidates();
+            }
         });
 
         // 点击候选词
@@ -543,6 +628,11 @@ class WebInputMethod {
         this.page = 0;
         this.updateCandidates();
 
+        // 反查模式（z开头）不自动清空，不自动上屏
+        if (this.code.startsWith('z')) {
+            return;
+        }
+
         // 如果没有候选，说明编码无效，自动清空
         if (this.candidates.length === 0) {
             this.reset();
@@ -577,9 +667,12 @@ class WebInputMethod {
             this.page = 0;
             this.updateCandidates();
 
-            // 删除后如果编码不为空但没有候选，说明变成了无效编码，自动清空
-            if (this.code.length > 0 && this.candidates.length === 0) {
-                this.reset();
+            // 反查模式下不自动清空
+            if (!this.code.startsWith('z')) {
+                // 删除后如果编码不为空但没有候选，说明变成了无效编码，自动清空
+                if (this.code.length > 0 && this.candidates.length === 0) {
+                    this.reset();
+                }
             }
         }
         if (this.code.length === 0) {
@@ -593,11 +686,31 @@ class WebInputMethod {
      * 1. 先加入完全匹配的候选
      * 2. 再加入前缀匹配的候选（编码以当前编码开头）
      * 3. 去重：同一个词只保留编码最短的那个
+     *
+     * 反查模式（z开头）:
+     * 提取 z 后的拼音，从 pinyinMap 查找汉字，再通过 reverseDict 取编码
      */
     getCandidates() {
+        // 反查模式
+        if (this.code.startsWith('z')) {
+            const py = this.code.slice(1);
+            const result = [];
+            const chars = this.pinyinMap.get(py);
+            if (!chars) return result;
+
+            for (const ch of chars) {
+                const codes = this.reverseDict.get(ch);
+                if (codes && codes.length > 0) {
+                    // 取最短编码用于显示
+                    result.push({ word: ch, code: codes[0], isExact: true });
+                }
+            }
+            return result;
+        }
+
         const result = [];
         const seen = new Map(); // word -> { code, isExact }
-        
+
         // 1. 完全匹配
         const exact = this.dict.get(this.code);
         if (exact) {
@@ -607,7 +720,7 @@ class WebInputMethod {
                 }
             }
         }
-        
+
         // 2. 前缀匹配
         for (const code of this.allCodes) {
             if (code.startsWith(this.code) && code !== this.code) {
@@ -622,19 +735,19 @@ class WebInputMethod {
                 }
             }
         }
-        
+
         // 转换为数组，完全匹配优先，然后按编码长度排序
         for (const [word, info] of seen) {
             result.push({ word, code: info.code, isExact: info.isExact });
         }
-        
+
         // 排序：完全匹配优先，然后编码短优先，然后字母顺序
         result.sort((a, b) => {
             if (a.isExact !== b.isExact) return b.isExact - a.isExact;
             if (a.code.length !== b.code.length) return a.code.length - b.code.length;
             return a.code.localeCompare(b.code);
         });
-        
+
         return result;
     }
     
@@ -650,8 +763,33 @@ class WebInputMethod {
      * 渲染候选框
      */
     renderCandidates() {
+        const isReverse = this.code.startsWith('z');
+
+        // 始终更新编码显示，只要当前有编码输入
+        if (this.code.length > 0) {
+            if (isReverse) {
+                const py = this.code.slice(1) || '';
+                this.codeDisplay.textContent = `z→拼音:${py}`;
+            } else {
+                this.codeDisplay.textContent = this.code;
+            }
+        }
+
         if (this.candidates.length === 0) {
-            this.hideCandidates();
+            // 反查模式下没有候选时，显示提示而不是直接消失
+            if (isReverse && this.code.length > 0) {
+                const py = this.code.slice(1);
+                this.candidateList.innerHTML = '';
+                const div = document.createElement('div');
+                div.className = 'candidate-item candidate-hint';
+                div.textContent = py.length === 0 ? '请输入拼音反查五笔编码…' : '无匹配拼音';
+                this.candidateList.appendChild(div);
+                this.candidateBox.classList.remove('hidden');
+                this.pageInfo.textContent = '-';
+                requestAnimationFrame(() => this.updateCandidatePosition());
+            } else {
+                this.hideCandidates();
+            }
             return;
         }
 
@@ -663,13 +801,19 @@ class WebInputMethod {
         const end = Math.min(start + this.pageSize, this.candidates.length);
         const pageCandidates = this.candidates.slice(start, end);
 
-        // 更新编码显示
-        this.codeDisplay.textContent = this.code;
         this.pageInfo.textContent = `${this.page + 1}/${totalPages}`;
 
         // 渲染候选列表
         this.candidateList.innerHTML = '';
         const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+        // 找出当前页第一个全码匹配的索引（不显示编码提示）
+        let firstExactIndex = -1;
+        pageCandidates.forEach((item, idx) => {
+            if (firstExactIndex === -1 && item.code === this.code) {
+                firstExactIndex = idx;
+            }
+        });
 
         pageCandidates.forEach((item, idx) => {
             const div = document.createElement('div');
@@ -678,10 +822,20 @@ class WebInputMethod {
 
             const isExact = item.isExact;
 
-            // 统一渲染：序号小字 + 候选词文本
-            div.innerHTML = `<span class="candidate-num">${idx + 1}</span>${this.escapeHtml(item.word)}`;
-            if (isExact) {
-                div.classList.add('exact-match');
+            if (isReverse) {
+                // 反查模式：显示汉字 + 五笔编码
+                div.innerHTML = `<span class="candidate-num">${idx + 1}</span>${this.escapeHtml(item.word)}<span class="wubi-code">[${item.code}]</span>`;
+            } else {
+                // 统一渲染：序号小字 + 候选词文本
+                let html = `<span class="candidate-num">${idx + 1}</span>${this.escapeHtml(item.word)}`;
+                // 编码提示：全码匹配的第一个不显示，其他显示完整编码
+                if (this.showCodeHint && idx !== firstExactIndex) {
+                    html += `<span class="wubi-code">(${item.code})</span>`;
+                }
+                div.innerHTML = html;
+                if (isExact) {
+                    div.classList.add('exact-match');
+                }
             }
 
             this.candidateList.appendChild(div);

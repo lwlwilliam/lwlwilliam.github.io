@@ -110,6 +110,25 @@ h1 {
     background: #e3f2fd;
 }
 
+/* 反查模式下的提示文本 */
+.candidate-item.candidate-hint {
+    color: #999;
+    font-size: 14px;
+    cursor: default;
+    pointer-events: none;
+}
+.candidate-item.candidate-hint:hover {
+    background: transparent;
+}
+
+/* 反查模式下的五笔编码提示 */
+.candidate-item .wubi-code {
+    color: #888;
+    font-size: 13px;
+    margin-left: 4px;
+    font-family: monospace;
+}
+
 /* PC端序号小字 */
 .candidate-num {
     color: #999;
