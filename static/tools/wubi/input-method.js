@@ -691,6 +691,18 @@ class WebInputMethod {
         } else {
             // 没有编码时
 
+            // Backspace: 删除文字
+            if (e.key === 'Backspace') {
+                e.preventDefault();
+                this.handleBackspaceNative();
+                return;
+            }
+            if (e.key === 'Delete') {
+                e.preventDefault();
+                this.handleDeleteNative();
+                return;
+            }
+
             // 字母键：开始输入编码（排除 Ctrl/Alt/Meta 组合键）
             if (!e.ctrlKey && !e.altKey && !e.metaKey && e.key.length === 1 && /[a-z]/i.test(e.key)) {
                 e.preventDefault();
