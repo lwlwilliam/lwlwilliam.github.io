@@ -329,11 +329,25 @@ document.getElementById('pageJumpInput') && document.getElementById('pageJumpInp
     btn.addEventListener('click', function() {
       var code = pre.querySelector('code');
       var text = code ? code.textContent : pre.textContent;
-      navigator.clipboard.writeText(text).then(function() {
-        btn.textContent = '✅';
-        setTimeout(function() { btn.textContent = '📋'; }, 2000);
-      }).catch(function() {
-        var ta = document.createElement('textarea');
+      var ta;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.textContent = '✅';
+          setTimeout(function() { btn.textContent = '📋'; }, 2000);
+        }).catch(function() {
+          ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          btn.textContent = '✅';
+          setTimeout(function() { btn.textContent = '📋'; }, 2000);
+        });
+      } else {
+        ta = document.createElement('textarea');
         ta.value = text;
         ta.style.position = 'fixed';
         ta.style.opacity = '0';
@@ -343,7 +357,7 @@ document.getElementById('pageJumpInput') && document.getElementById('pageJumpInp
         document.body.removeChild(ta);
         btn.textContent = '✅';
         setTimeout(function() { btn.textContent = '📋'; }, 2000);
-      });
+      }
     });
     pre.parentNode.appendChild(btn);
   });
