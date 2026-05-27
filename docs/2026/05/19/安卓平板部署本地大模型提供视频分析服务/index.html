@@ -112,23 +112,26 @@
     <summary><svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3.75A.75.75 0 012.75 3h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zm0 4A.75.75 0 012.75 7h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 7.75zm0 4a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"/></svg></summary>
     <nav id="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li><a href="#安装-termux">安装 Termux</a></li>
-        <li><a href="#安装-llamacpp">安装 llama.cpp</a></li>
-        <li><a href="#下载大模型">下载大模型</a></li>
-        <li><a href="#安装-ffmpeg">安装 ffmpeg</a></li>
-        <li><a href="#下载-python-及前端代码">下载 python 及前端代码</a></li>
-        <li><a href="#启动服务">启动服务</a></li>
-      </ul>
-    </li>
+    <li><a href="#安装-termux">安装 Termux</a></li>
+    <li><a href="#安装-llamacpp">安装 llama.cpp</a></li>
+    <li><a href="#下载大模型">下载大模型</a></li>
+    <li><a href="#安装-ffmpeg">安装 ffmpeg</a></li>
+    <li><a href="#python-及前端代码">Python 及前端代码</a></li>
+    <li><a href="#安装-python-依赖">安装 Python 依赖</a></li>
+    <li><a href="#启动服务">启动服务</a></li>
+    <li><a href="#注意事项">注意事项</a></li>
+    <li><a href="#总结">总结</a></li>
   </ul>
 </nav>
   </details>
   
-  <div class="post-content"><h3 id="安装-termux">安装 Termux</h3>
-<p>不另外说明。以下操作均在<code>Termux</code>中操作。</p>
-<h3 id="安装-llamacpp">安装 llama.cpp</h3>
+  <div class="post-content"><p>最近在研究如何在本地设备上跑大模型，发现现在移动端硬件已经相当强大。普通的安卓平板完全可以运行小参数量的多模态大模型。这篇文章记录我在安卓平板上部署<code>MiniCPM-V-4.6</code>多模态模型，并通过<code>Flask</code>搭建一个<code>Web</code>服务，实现上传视频即可自动分析内容的过程。</p>
+<p>整个方案的核心思路是：利用<code>Termux</code>在安卓上构建<code>Linux</code>环境，用<code>llama.cpp</code>运行<code>GGUF</code>格式的多模态模型，结合<code>ffmpeg</code>抽取视频关键帧，最后通过<code>OpenAI</code>兼容<code>API</code>逐帧分析并汇总生成完整回答。所有数据都在本地处理，无需联网，隐私性很好。</p>
+<h2 id="安装-termux">安装 Termux</h2>
+<p><code>Termux</code>是一个强大的<code>Android</code>终端模拟器，无需<code>root</code>就能提供一个完整的<code>Linux</code>环境，支持包管理器、编程语言和各种开源工具。</p>
+<p>安装完成后打开应用，以下所有操作均在<code>Termux</code>中执行。</p>
+<h2 id="安装-llamacpp">安装 llama.cpp</h2>
+<p><code>llama.cpp</code>是一个用<code>C/C++</code>编写的高性能大模型推理框架，支持<code>CPU</code>推理，对<code>ARM</code>架构优化良好，是移动端部署的首选。它提供<code>llama-server</code>组件，可以启动一个兼容<code>OpenAI API</code>的服务端，非常方便与我们的<code>Web</code>应用对接。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ wget https://github.com/ggml-org/llama.cpp/releases/download/b9222/llama-b9222-bin-android-arm64.tar.gz
 </span></span><span style="display:flex;"><span>$ tar -xvf llama-b9222-bin-android-arm64.tar.gz  <span style="color:#75715e"># 解压后应该得到一个 llama-b9222 目录，个人喜欢将它重命名为 llama</span>
 </span></span><span style="display:flex;"><span>$ mv llama-b9222 llama
@@ -136,15 +139,31 @@
 </span></span><span style="display:flex;"><span>$ echo <span style="color:#e6db74">&#39;export LD_LIBRARY_PATH=&#34;&#39;</span><span style="color:#e6db74">`</span>pwd<span style="color:#e6db74">`</span><span style="color:#e6db74">&#39;/llama:$LD_LIBRARY_PATH&#34;&#39;</span> &gt;&gt; ~/.bashrc  <span style="color:#75715e"># 让 llama 可以正常连接动态库</span>
 </span></span><span style="display:flex;"><span>$ . ~/.bashrc
 </span></span><span style="display:flex;"><span>$ llama-sever --version  <span style="color:#75715e"># 测试一下</span>
-</span></span></code></pre></div><h3 id="下载大模型">下载大模型</h3>
+</span></span></code></pre></div><h2 id="下载大模型">下载大模型</h2>
+<p><code>MiniCPM-V-4.6</code>是面壁智能开源的多模态大模型，支持图文理解，参数适中，非常适合移动端部署。<code>GGUF</code>格式是目前<code>llama.cpp</code>生态最通用的模型格式。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ mkdir MiniCPM-V-4.6
 </span></span><span style="display:flex;"><span>$ cd MiniCPM-V-4.6
 </span></span><span style="display:flex;"><span>$ wget https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf/resolve/master/MiniCPM-V-4_6-Q4_K_M.gguf
 </span></span><span style="display:flex;"><span>$ wget https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf/resolve/master/mmproj-model-f16.gguf
-</span></span></code></pre></div><h3 id="安装-ffmpeg">安装 ffmpeg</h3>
+</span></span></code></pre></div><p>其中：</p>
+<ul>
+<li><code>MiniCPM-V-4_6-Q4_K_M.gguf</code>：主模型权重文件（<code>Q4_K_M</code>量化，平衡了精度和体积）</li>
+<li><code>mmproj-model-f16.gguf</code>：多模态投影层（<code>vision</code> <code>encoder</code>），负责将图片转换为模型能理解的向量</li>
+</ul>
+<h2 id="安装-ffmpeg">安装 ffmpeg</h2>
+<p>视频分析的第一步是将视频拆分为关键帧。<code>ffmpeg</code>是开源多媒体处理神器，在<code>Termux</code>中可以直接通过包管理器安装：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ pkg upgrade
 </span></span><span style="display:flex;"><span>$ pkg install ffmpeg
-</span></span></code></pre></div><h3 id="下载-python-及前端代码">下载 python 及前端代码</h3>
+</span></span></code></pre></div><p>安装完成后可以执行 <code>ffmpeg -version</code> 确认是否成功。</p>
+<h2 id="python-及前端代码">Python 及前端代码</h2>
+<p>后端使用<code>Flask</code>提供<code>Web</code>服务和<code>API</code>，前端是一个纯<code>HTML/CSS/JS</code>的单页面应用。整体架构如下：</p>
+<ol>
+<li>视频上传：用户通过浏览器上传视频文件</li>
+<li>帧提取：后端调用<code>ffmpeg</code>按固定时间间隔抽取关键帧（默认每<code>2</code>秒一帧，最多<code>16</code>帧）</li>
+<li>逐帧分析：将每一帧编码为<code>base64</code>，调用本地<code>llama-server</code>的<code>OpenAI</code>兼容<code>API</code>进行图片理解</li>
+<li>汇总回答：将所有帧的描述拼接，再次调用模型生成最终回答</li>
+</ol>
+<p>下面是完整代码：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># app.py</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> subprocess
@@ -736,12 +755,25 @@
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">script</span>&gt;
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
-</span></span></code></pre></div><p>安装依赖。</p>
+</span></span></code></pre></div><h2 id="安装-python-依赖">安装 Python 依赖</h2>
+<p><code>Termux</code>自带<code>Python</code>环境，只需安装<code>Flask</code>和<code>requests</code>：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ pip install flask requests
-</span></span></code></pre></div><h3 id="启动服务">启动服务</h3>
+</span></span></code></pre></div><h2 id="启动服务">启动服务</h2>
+<p>首先需要启动<code>llama-server</code>作为模型推理后端。这里使用 <code>nohup</code> 让服务在后台运行。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ nohup llama-server -m MiniCPM-V-4_6-Q4_K_M.gguf -mm mmproj-model-f16.gguf &amp;
-</span></span><span style="display:flex;"><span>$ python app.py
-</span></span></code></pre></div></div>
+</span></span></code></pre></div><p>然后启动<code>Flask</code>服务：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ python app.py
+</span></span></code></pre></div><p>启动后，在平板上打开浏览器访问 <code>http://localhost:7860</code>，或者局域网内其他设备访问平板的<code>IP</code>地址和<code>7860</code>端口，即可看到视频分析页面。</p>
+<h2 id="注意事项">注意事项</h2>
+<ol>
+<li>内存管理：多模态模型推理需要占用较多内存，建议分析视频前关闭其他后台应用</li>
+<li>散热：长时间高负载推理会导致设备发热，属于正常现象</li>
+<li>模型选择：如果对速度要求更高，可以尝试更小的模型或更低量化级别（如<code>Q3_K_M</code>）</li>
+<li>局域网访问：确保平板和其他设备在同一<code>WiFi</code>下，使用 <code>ifconfig</code> 查看平板局域网<code>IP</code></li>
+</ol>
+<h2 id="总结">总结</h2>
+<p>通过这个方案，我们可以把一台普通的安卓平板变成一台本地<code>AI</code>视频分析服务器，整个过程无需云端、无需订阅、数据完全本地处理。这在隐私敏感场景（如家庭监控内容分析、私人视频归档整理）中非常实用。当然，移动端算力有限，更适合轻量级任务，如果需要分析长视频或高频调用，还是需要更强劲的硬件。</p>
+</div>
   <footer class="post-footer">
     <nav class="post-nav">
       

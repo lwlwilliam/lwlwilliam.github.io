@@ -48,7 +48,7 @@ def create_hugo_post(title, category):
 date: {date_str}
 title: {title}
 categories: [{category}]
-keywords: []
+keywords: [{category}]
 ---
 
 """

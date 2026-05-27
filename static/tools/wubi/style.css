@@ -318,6 +318,8 @@ kbd {
 
 /* ===== 移动端固定底部面板 ===== */
 #mobile-input-panel {
+    display: flex;
+    flex-direction: column;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -325,7 +327,6 @@ kbd {
     z-index: 999;
     background: #d1d5db;
     border-top: 1px solid #b0b6bf;
-    padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 /* 触屏设备默认显示虚拟键盘 */
@@ -356,8 +357,9 @@ kbd {
         width: calc(100% - 16px);
         min-width: auto;
         max-width: none;
-        margin: 0 8px 6px;
+        margin: 6px 8px 0;
         padding: 8px 12px;
+        flex-shrink: 0;
         background: #fff;
         border: none;
         border-radius: 10px;
@@ -425,6 +427,8 @@ kbd {
         border-radius: 0;
         padding: 4px 10px 12px;
         margin-bottom: 0;
+        flex-shrink: 0;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
     }
 
     .settings {
@@ -474,4 +478,20 @@ kbd {
 /* PC 端可手动展开虚拟键盘（添加 .show-on-pc 类） */
 .virtual-keyboard.show-on-pc {
     display: block;
+}
+
+/* 自定义光标（英文模式下 readOnly textarea 无原生 caret） */
+.custom-caret {
+    position: fixed;
+    width: 2px;
+    background: #333;
+    pointer-events: none;
+    z-index: 1000;
+    animation: caret-blink 1s step-end infinite;
+    display: none;
+}
+
+@keyframes caret-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }

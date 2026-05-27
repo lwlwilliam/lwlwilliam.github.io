@@ -21,6 +21,7 @@ class WebInputMethod {
         this.candidates = [];      // 当前候选列表
         this.followCaret = true;   // 候选框是否跟随光标
         this.autoCommit = true;    // 四码唯一是否自动上屏
+        this.autoCommitTimer = null; // 自动上屏定时器
         this.showCodeHint = true;  // 是否显示编码提示
 
         // 中英文标点映射表
@@ -82,6 +83,7 @@ class WebInputMethod {
         this.bindEvents();
         this.initVirtualKeyboard();
         this.initMobilePanel();
+        this.initCustomCaret();
         this.updateStatus();
     }
     
@@ -215,13 +217,39 @@ class WebInputMethod {
      * 绑定事件
      */
     bindEvents() {
-        // 键盘事件
-        this.inputArea.addEventListener('keydown', (e) => this.handleKeyDown(e));
+        // 键盘事件（capture 阶段，在系统输入法之前拦截）
+        this.inputArea.addEventListener('keydown', (e) => this.handleKeyDown(e), true);
 
-        // 光标移动时更新候选框位置
+        // 粘贴事件：英文模式（readOnly）时手动插入，避免系统输入法通过粘贴介入
+        this.inputArea.addEventListener('paste', (e) => {
+            if (this.inputArea.readOnly) {
+                e.preventDefault();
+                const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+                if (text) {
+                    this.insertText(text);
+                }
+            }
+        });
+
+        // 光标移动时更新候选框位置和自定义光标
         this.inputArea.addEventListener('input', () => this.updateCandidatePosition());
-        this.inputArea.addEventListener('click', () => this.updateCandidatePosition());
-        this.inputArea.addEventListener('keyup', () => this.updateCandidatePosition());
+        this.inputArea.addEventListener('click', () => {
+            this.updateCandidatePosition();
+            this.updateCustomCaret();
+        });
+        this.inputArea.addEventListener('keyup', () => {
+            this.updateCandidatePosition();
+            this.updateCustomCaret();
+        });
+        this.inputArea.addEventListener('focus', () => this.updateCustomCaret());
+        this.inputArea.addEventListener('blur', () => {
+            if (this.customCaret) this.customCaret.style.display = 'none';
+        });
+        document.addEventListener('selectionchange', () => {
+            if (document.activeElement === this.inputArea) {
+                this.updateCustomCaret();
+            }
+        });
 
         // 切换输入法按钮
         this.toggleBtn.addEventListener('click', () => this.toggle());
@@ -457,6 +485,27 @@ class WebInputMethod {
             el.setSelectionRange(start, start);
         }
         el.focus();
+        this.updateCustomCaret();
+    }
+    
+    /**
+     * 原生删除（删除光标后字符）
+     */
+    handleDeleteNative() {
+        const el = this.inputArea;
+        const start = el.selectionStart;
+        const end = el.selectionEnd;
+        if (start === end && start < el.value.length) {
+            const value = el.value;
+            el.value = value.substring(0, start) + value.substring(end + 1);
+            el.setSelectionRange(start, start);
+        } else if (start !== end) {
+            const value = el.value;
+            el.value = value.substring(0, start) + value.substring(end);
+            el.setSelectionRange(start, start);
+        }
+        el.focus();
+        this.updateCustomCaret();
     }
     
     /**
@@ -471,18 +520,66 @@ class WebInputMethod {
     }
     
     /**
+     * 初始化自定义光标（英文模式下替代浏览器原生 caret）
+     */
+    initCustomCaret() {
+        this.customCaret = document.createElement('div');
+        this.customCaret.className = 'custom-caret';
+        document.body.appendChild(this.customCaret);
+    }
+
+    /**
+     * 更新自定义光标位置和显隐
+     */
+    updateCustomCaret() {
+        if (!this.customCaret) return;
+
+        // 失去焦点时隐藏
+        if (document.activeElement !== this.inputArea) {
+            this.customCaret.style.display = 'none';
+            return;
+        }
+
+        const start = this.inputArea.selectionStart;
+        const end = this.inputArea.selectionEnd;
+
+        // 有选区时隐藏光标
+        if (start !== end) {
+            this.customCaret.style.display = 'none';
+            return;
+        }
+
+        const caret = this.getCaretCoordinates();
+
+        // 光标不在 textarea 可视区域内也隐藏
+        if (!caret.inViewport) {
+            this.customCaret.style.display = 'none';
+            return;
+        }
+
+        this.customCaret.style.display = 'block';
+        this.customCaret.style.left = caret.x + 'px';
+        this.customCaret.style.top = caret.y + 'px';
+        this.customCaret.style.height = caret.height + 'px';
+    }
+
+    /**
      * 更新状态显示
      */
     updateStatus() {
+        this.inputArea.readOnly = true;
         if (this.enabled) {
             this.statusSpan.textContent = '中文';
             this.statusSpan.className = 'im-status chinese';
             this.inputArea.placeholder = '输入法已开启，输入编码...';
+            this.inputArea.inputMode = 'text';
         } else {
             this.statusSpan.textContent = '英文';
             this.statusSpan.className = 'im-status english';
             this.inputArea.placeholder = '在此输入...点击按钮切换输入法';
+            this.inputArea.inputMode = 'none';
         }
+        this.updateCustomCaret();
     }
     
     /**
@@ -490,8 +587,49 @@ class WebInputMethod {
      */
     handleKeyDown(e) {
         try {
-            // 输入法未开启时，不拦截任何键
-            if (!this.enabled) return;
+            // 全局快捷键：Ctrl+Shift+' 切换输入法
+            const isQuoteKey = e.code === 'Quote' || e.key === "'" || e.key === '"';
+            if (e.ctrlKey && e.shiftKey && !e.altKey && !e.metaKey && isQuoteKey) {
+                e.preventDefault();
+                this.toggle();
+                return;
+            }
+
+            // 输入法未开启时，手动接管输入（readOnly 屏蔽系统输入法）
+            if (!this.enabled) {
+                // 放行组合键（Ctrl/Alt/Meta）
+                if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+                // 手动处理需修改内容的键（readOnly 下浏览器不会处理）
+                if (e.key === 'Backspace') {
+                    e.preventDefault();
+                    this.handleBackspaceNative();
+                    return;
+                }
+                if (e.key === 'Delete') {
+                    e.preventDefault();
+                    this.handleDeleteNative();
+                    return;
+                }
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.insertText('\n');
+                    return;
+                }
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    this.insertText('\t');
+                    return;
+                }
+
+                // 放行纯光标移动/功能键（Arrow, Home, End, Escape 等，readOnly 仍支持）
+                if (e.key.length > 1) return;
+
+                // 可打印字符：手动插入
+                e.preventDefault();
+                this.insertText(e.key);
+                return;
+            }
 
             // 有编码输入时，拦截相关按键
             if (this.code.length > 0) {
@@ -501,7 +639,7 @@ class WebInputMethod {
                 this.appendCode(e.key.toLowerCase());
                 return;
             }
-            
+
             // 数字键 1-9: 选择候选
             if (/^[1-9]$/.test(e.key)) {
                 e.preventDefault();
@@ -509,7 +647,7 @@ class WebInputMethod {
                 this.selectCandidate(index);
                 return;
             }
-            
+
             // +/-: 翻页
             if (e.key === '+' || e.key === '=') {
                 e.preventDefault();
@@ -521,21 +659,21 @@ class WebInputMethod {
                 this.prevPage();
                 return;
             }
-            
+
             // Backspace: 删除编码最后一位
             if (e.key === 'Backspace') {
                 e.preventDefault();
                 this.backspace();
                 return;
             }
-            
+
             // Space: 选择第一个候选
             if (e.key === ' ') {
                 e.preventDefault();
                 this.selectCandidate(0);
                 return;
             }
-            
+
             // Enter: 清除编码
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -600,6 +738,7 @@ class WebInputMethod {
         const newPos = start + text.length;
         el.setSelectionRange(newPos, newPos);
         el.focus();
+        this.updateCustomCaret();
     }
 
     /**
@@ -618,12 +757,36 @@ class WebInputMethod {
 
         this.reset();
         el.focus();
+        this.updateCustomCaret();
     }
 
     /**
      * 添加编码字符
      */
     appendCode(char) {
+        // 四码满后继续输入：上屏第一个候选，用新字符重新开始编码
+        if (this.code.length >= 4 && !this.code.startsWith('z') && this.candidates.length > 0) {
+            if (this.autoCommitTimer) {
+                clearTimeout(this.autoCommitTimer);
+                this.autoCommitTimer = null;
+            }
+            this.insertText(this.candidates[0].word);
+            this.code = char;
+            this.page = 0;
+            this.updateCandidates();
+            if (this.code.startsWith('z')) {
+                return;
+            }
+            if (this.candidates.length === 0) {
+                this.reset();
+                return;
+            }
+            if (this.autoCommit && this.code.length === 4) {
+                this.checkAutoCommit();
+            }
+            return;
+        }
+
         this.code += char;
         this.page = 0;
         this.updateCandidates();
@@ -651,8 +814,8 @@ class WebInputMethod {
     checkAutoCommit() {
         const exact = this.dict.get(this.code);
         if (exact && exact.length === 1) {
-            // 四码唯一，自动上屏
-            setTimeout(() => {
+            this.autoCommitTimer = setTimeout(() => {
+                this.autoCommitTimer = null;
                 this.commitText(exact[0]);
             }, 0);
         }
@@ -918,15 +1081,24 @@ class WebInputMethod {
 
         document.body.appendChild(mirror);
         const spanRect = span.getBoundingClientRect();
+        const mirrorRect = mirror.getBoundingClientRect();
         document.body.removeChild(mirror);
 
+        // 光标在 mirror 内的偏移 = 在 textarea 内容区内的偏移
+        const offsetX = spanRect.left - mirrorRect.left;
+        const offsetY = spanRect.top - mirrorRect.top;
+
+        // 映射回 textarea 的视口坐标（考虑滚动）
+        const x = contentRect.left + offsetX - el.scrollLeft;
+        const y = contentRect.top + offsetY - el.scrollTop;
+
         // 判断光标是否在 textarea 可见区域内
-        const inViewport = spanRect.top >= contentRect.top &&
-                          spanRect.bottom <= contentRect.bottom;
+        const inViewport = y >= contentRect.top &&
+                          (y + spanRect.height) <= contentRect.bottom;
 
         return {
-            x: spanRect.left,
-            y: spanRect.top,
+            x,
+            y,
             height: spanRect.height,
             contentRect,
             inViewport
@@ -1039,6 +1211,10 @@ class WebInputMethod {
      * 上屏文本到输入框
      */
     commitText(text) {
+        if (this.autoCommitTimer) {
+            clearTimeout(this.autoCommitTimer);
+            this.autoCommitTimer = null;
+        }
         const el = this.inputArea;
         const start = el.selectionStart;
         const end = el.selectionEnd;
@@ -1050,6 +1226,7 @@ class WebInputMethod {
         
         this.reset();
         el.focus();
+        this.updateCustomCaret();
     }
     
     /**
@@ -1063,6 +1240,10 @@ class WebInputMethod {
         this.page = 0;
         this.candidates = [];
         this.hideCandidates();
+        if (this.autoCommitTimer) {
+            clearTimeout(this.autoCommitTimer);
+            this.autoCommitTimer = null;
+        }
         this.inputArea.focus();
     }
 }
