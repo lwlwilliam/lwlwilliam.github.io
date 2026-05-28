@@ -24,6 +24,53 @@ class WebInputMethod {
         this.autoCommitTimer = null; // 自动上屏定时器
         this.showCodeHint = true;  // 是否显示编码提示
 
+        // 符号面板状态与数据
+        this.symbolMode = false;
+        this.symbolList = {
+            en: [
+                '~','`','!','@','#','$','%','^','&','*',
+                '(',')','_','-','+','=','{','}','[',']',
+                '|','\\',':',';','"','\'','<','>',',','.',
+                '?','/',' ','¥','€','£','§','°','·','…',
+                '※','∞','≈','≠','≤','≥','±','×','÷','√',
+                '∑','∏','∫','∂','∈','∉','∩','∪','→','←',
+                '↑','↓','↔','⇒','⇐','①','②','③','④','⑤',
+                '⑥','⑦','⑧','⑨','⑩','⑴','⑵','⑶','⒈','⒉',
+                '⒊','♠','♥','♦','♣','★','☆','□','■','△',
+                '▲','○','●','◇','◆','♂','♀','⊙','◎','℃',
+                '℉','№','™','©','®','§','¶','†','‡','‥',
+                '─','━','│','┃','┄','┅','┆','┇','┈','┉',
+                '┊','┋','┌','┍','┎','┏','┐','┑','┒','┓',
+                '└','┕','┖','┗','┘','┙','┚','┛','├','┝',
+                '┞','┟','┠','┡','┢','┣','┤','┥','┦','┧',
+                '┨','┩','┪','┫','┬','┭','┮','┯','┰','┱',
+                '┲','┳','┴','┵','┶','┷','┸','┹','┺','┻',
+                '┼','┽','┾','┿','╀','╁','╂','╃','╄','╅',
+                '╆','╇','╈','╉','╊','╋'
+            ],
+            cn: [
+                '～','｀','！','＠','＃','＄','％','……','＆','＊',
+                '（','）','——','－','＋','＝','｛','｝','【','】',
+                '｜','、','：','；','＂','＇','《','》','，','。',
+                '？','／',' ','¥','€','£','§','°','·','…',
+                '※','∞','≈','≠','≤','≥','±','×','÷','√',
+                '∑','∏','∫','∂','∈','∉','∩','∪','→','←',
+                '↑','↓','↔','⇒','⇐','①','②','③','④','⑤',
+                '⑥','⑦','⑧','⑨','⑩','⑴','⑵','⑶','⒈','⒉',
+                '⒊','♠','♥','♦','♣','★','☆','□','■','△',
+                '▲','○','●','◇','◆','♂','♀','⊙','◎','℃',
+                '℉','№','™','©','®','§','¶','†','‡','‥',
+                '─','━','│','┃','┄','┅','┆','┇','┈','┉',
+                '┊','┋','┌','┍','┎','┏','┐','┑','┒','┓',
+                '└','┕','┖','┗','┘','┙','┚','┛','├','┝',
+                '┞','┟','┠','┡','┢','┣','┤','┥','┦','┧',
+                '┨','┩','┪','┫','┬','┭','┮','┯','┰','┱',
+                '┲','┳','┴','┵','┶','┷','┸','┹','┺','┻',
+                '┼','┽','┾','┿','╀','╁','╂','╃','╄','╅',
+                '╆','╇','╈','╉','╊','╋'
+            ]
+        };
+
         // 中英文标点映射表
         this.punctuationMap = {
             ',': '，',
@@ -83,6 +130,7 @@ class WebInputMethod {
         this.bindEvents();
         this.initVirtualKeyboard();
         this.initMobilePanel();
+        this.initCandidateNav();
         this.initCustomCaret();
         this.updateStatus();
     }
@@ -337,13 +385,25 @@ class WebInputMethod {
     initVirtualKeyboard() {
         if (!this.vkContainer) return;
 
+        // 字母键盘视图
+        this.vkLetterView = document.createElement('div');
+        this.vkLetterView.className = 'vk-view vk-letter-view';
+
+        // 数字行
+        const numRow = document.createElement('div');
+        numRow.className = 'vk-row';
+        '1234567890'.split('').forEach(key => {
+            numRow.appendChild(this.createVkBtn(key, key));
+        });
+        this.vkLetterView.appendChild(numRow);
+
+        // 字母行
         const rows = [
             ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
             ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
             ['z', 'x', 'c', 'v', 'b', 'n', 'm']
         ];
 
-        // 字母键行
         rows.forEach(rowKeys => {
             const row = document.createElement('div');
             row.className = 'vk-row';
@@ -351,27 +411,52 @@ class WebInputMethod {
                 const btn = this.createVkBtn(key.toUpperCase(), key);
                 row.appendChild(btn);
             });
-            this.vkContainer.appendChild(row);
+            this.vkLetterView.appendChild(row);
         });
 
         // 功能键行
         const fnRow = document.createElement('div');
         fnRow.className = 'vk-row';
 
+        const symbolBtn = this.createVkBtn('符', 'symbol', 'vk-wide vk-fn');
         const toggleBtn = this.createVkBtn('中/英', 'toggle', 'vk-wide vk-fn');
-        const prevBtn = this.createVkBtn('←', 'prev', 'vk-fn');
         const spaceBtn = this.createVkBtn('空格', 'space', 'vk-space vk-fn');
-        const nextBtn = this.createVkBtn('→', 'next', 'vk-fn');
-        const backBtn = this.createVkBtn('⌫', 'backspace', 'vk-wide vk-fn');
         const enterBtn = this.createVkBtn('↵', 'enter', 'vk-wide vk-fn');
+        const backBtn = this.createVkBtn('⌫', 'backspace', 'vk-wide vk-fn');
 
+        fnRow.appendChild(symbolBtn);
         fnRow.appendChild(toggleBtn);
-        fnRow.appendChild(prevBtn);
         fnRow.appendChild(spaceBtn);
-        fnRow.appendChild(nextBtn);
-        fnRow.appendChild(backBtn);
         fnRow.appendChild(enterBtn);
-        this.vkContainer.appendChild(fnRow);
+        fnRow.appendChild(backBtn);
+        this.vkLetterView.appendChild(fnRow);
+
+        // 符号面板视图
+        this.vkSymbolView = document.createElement('div');
+        this.vkSymbolView.className = 'vk-view vk-symbol-view hidden';
+
+        const symbolGrid = document.createElement('div');
+        symbolGrid.className = 'vk-symbol-grid';
+        this.vkSymbolGrid = symbolGrid;
+        this.vkSymbolView.appendChild(symbolGrid);
+
+        const symbolFnRow = document.createElement('div');
+        symbolFnRow.className = 'vk-row';
+        const abcBtn = this.createVkBtn('ABC', 'symbol', 'vk-wide vk-fn');
+        const symSpaceBtn = this.createVkBtn('空格', 'space', 'vk-space vk-fn');
+        const symBackBtn = this.createVkBtn('⌫', 'backspace', 'vk-wide vk-fn');
+        const symEnterBtn = this.createVkBtn('↵', 'enter', 'vk-wide vk-fn');
+
+        symbolFnRow.appendChild(abcBtn);
+        symbolFnRow.appendChild(symSpaceBtn);
+        symbolFnRow.appendChild(symBackBtn);
+        symbolFnRow.appendChild(symEnterBtn);
+        this.vkSymbolView.appendChild(symbolFnRow);
+
+        this.vkContainer.appendChild(this.vkLetterView);
+        this.vkContainer.appendChild(this.vkSymbolView);
+
+        this.buildSymbolGrid();
     }
 
     /**
@@ -399,9 +484,21 @@ class WebInputMethod {
      * 处理虚拟键盘按键
      */
     handleVirtualKey(key) {
+        // 符号面板直接插入符号
+        if (key.startsWith('sym:')) {
+            this.insertText(key.slice(4));
+            return;
+        }
+
+        // 切换符号面板
+        if (key === 'symbol') {
+            this.toggleSymbolMode();
+            return;
+        }
+
         if (!this.enabled) {
             // 英文模式下，字母直接插入，功能键特殊处理
-            if (/^[a-z]$/.test(key)) {
+            if (/^[a-z0-9]$/.test(key)) {
                 this.insertText(key);
                 return;
             }
@@ -430,6 +527,17 @@ class WebInputMethod {
             return;
         }
 
+        // 数字键：有候选时选择候选(1-9)，无候选时直接输入
+        if (/^[0-9]$/.test(key)) {
+            const num = parseInt(key);
+            if (this.code.length > 0 && num >= 1 && num <= 9) {
+                this.selectCandidate(num - 1);
+            } else {
+                this.insertText(key);
+            }
+            return;
+        }
+
         switch (key) {
             case 'backspace':
                 if (this.code.length > 0) {
@@ -454,16 +562,6 @@ class WebInputMethod {
                 break;
             case 'toggle':
                 this.toggle();
-                break;
-            case 'prev':
-                if (this.code.length > 0) {
-                    this.prevPage();
-                }
-                break;
-            case 'next':
-                if (this.code.length > 0) {
-                    this.nextPage();
-                }
                 break;
         }
     }
@@ -517,6 +615,10 @@ class WebInputMethod {
             this.reset();
         }
         this.updateStatus();
+        // 如果当前在符号面板，刷新符号显示
+        if (this.symbolMode && this.vkSymbolGrid) {
+            this.buildSymbolGrid();
+        }
     }
     
     /**
@@ -1018,6 +1120,15 @@ class WebInputMethod {
 
         this.candidateBox.classList.remove('hidden');
 
+        // 更新候选框翻页按钮状态
+        if (this.candidateNavPrev && this.candidateNavNext) {
+            const hasPages = totalPages > 1;
+            this.candidateNavPrev.style.display = hasPages ? 'flex' : 'none';
+            this.candidateNavNext.style.display = hasPages ? 'flex' : 'none';
+            this.candidateNavPrev.disabled = this.page <= 0;
+            this.candidateNavNext.disabled = this.page >= totalPages - 1;
+        }
+
         // 更新候选框位置
         requestAnimationFrame(() => this.updateCandidatePosition());
     }
@@ -1257,6 +1368,82 @@ class WebInputMethod {
             this.autoCommitTimer = null;
         }
         this.inputArea.focus();
+    }
+
+    /**
+     * 初始化候选框左右翻页按钮
+     */
+    initCandidateNav() {
+        if (!this.candidateBox) return;
+
+        this.candidateNavPrev = document.createElement('button');
+        this.candidateNavPrev.className = 'candidate-nav candidate-nav-prev';
+        this.candidateNavPrev.innerHTML = '‹';
+        this.candidateNavPrev.title = '上一页';
+        this.candidateNavPrev.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.prevPage();
+        });
+
+        this.candidateNavNext = document.createElement('button');
+        this.candidateNavNext.className = 'candidate-nav candidate-nav-next';
+        this.candidateNavNext.innerHTML = '›';
+        this.candidateNavNext.title = '下一页';
+        this.candidateNavNext.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.nextPage();
+        });
+
+        const body = document.createElement('div');
+        body.className = 'candidate-body';
+
+        // 把 candidate-list 移入 body
+        if (this.candidateList.parentNode === this.candidateBox) {
+            this.candidateBox.insertBefore(body, this.candidateList);
+            body.appendChild(this.candidateNavPrev);
+            body.appendChild(this.candidateList);
+            body.appendChild(this.candidateNavNext);
+        }
+    }
+
+    /**
+     * 构建符号面板网格
+     */
+    buildSymbolGrid() {
+        if (!this.vkSymbolGrid) return;
+        const symbols = this.enabled ? this.symbolList.cn : this.symbolList.en;
+        this.vkSymbolGrid.innerHTML = '';
+        symbols.forEach(sym => {
+            const btn = document.createElement('button');
+            btn.className = 'vk-symbol-btn';
+            btn.textContent = sym;
+            btn.type = 'button';
+
+            const handler = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.insertText(sym);
+            };
+
+            btn.addEventListener('touchstart', handler, { passive: false });
+            btn.addEventListener('mousedown', handler);
+            this.vkSymbolGrid.appendChild(btn);
+        });
+    }
+
+    /**
+     * 切换符号面板显示
+     */
+    toggleSymbolMode() {
+        this.symbolMode = !this.symbolMode;
+        if (this.symbolMode) {
+            this.vkLetterView.classList.add('hidden');
+            this.vkSymbolView.classList.remove('hidden');
+            this.buildSymbolGrid();
+        } else {
+            this.vkSymbolView.classList.add('hidden');
+            this.vkLetterView.classList.remove('hidden');
+        }
     }
 }
 

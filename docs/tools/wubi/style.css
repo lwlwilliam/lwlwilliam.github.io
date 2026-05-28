@@ -84,10 +84,49 @@ h1 {
     font-size: 12px;
 }
 
+.candidate-body {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.candidate-nav {
+    display: none;
+    width: 28px;
+    height: 36px;
+    border: none;
+    border-radius: 6px;
+    background: #f0f0f0;
+    color: #666;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    transition: background 0.15s;
+}
+
+.candidate-nav:hover {
+    background: #e0e0e0;
+}
+
+.candidate-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.candidate-nav:active {
+    background: #d0d0d0;
+}
+
 .candidate-list {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    flex: 1;
+    min-width: 0;
 }
 
 .candidate-item {
@@ -332,7 +371,7 @@ kbd {
 /* 触屏设备默认显示虚拟键盘 */
 @media (hover: none) and (pointer: coarse) {
     body {
-        padding: 10px 10px 260px;
+        padding: 10px 10px 320px;
     }
 
     .container {
@@ -374,6 +413,24 @@ kbd {
 
     #code-display {
         color: #4a90d9;
+    }
+
+    .candidate-body {
+        gap: 2px;
+    }
+
+    .candidate-nav {
+        display: flex;
+        width: 32px;
+        height: 38px;
+        border-radius: 8px;
+        background: #e8eaed;
+        font-size: 20px;
+        color: #555;
+    }
+
+    .candidate-nav:active {
+        background: #d0d3d8;
     }
 
     .candidate-list {
@@ -465,6 +522,25 @@ kbd {
         font-size: 14px;
     }
 
+    /* 移动端数字行按键同字母键宽度 */
+    .vk-letter-view .vk-row:first-child .vk-btn:not(.vk-wide):not(.vk-space):not(.vk-fn) {
+        width: calc((100% - 45px) / 10);
+        max-width: 60px;
+    }
+
+    /* 移动端符号面板网格 */
+    .vk-symbol-grid {
+        grid-template-columns: repeat(10, 1fr);
+        gap: 4px;
+        max-height: 220px;
+    }
+
+    .vk-symbol-btn {
+        height: 42px;
+        font-size: 17px;
+        border-radius: 6px;
+    }
+
     .help {
         padding: 15px;
         font-size: 13px;
@@ -473,6 +549,49 @@ kbd {
     .help h3 {
         font-size: 15px;
     }
+}
+
+/* ===== 符号面板 ===== */
+.vk-view.hidden {
+    display: none;
+}
+
+.vk-symbol-view {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vk-symbol-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+    padding: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.vk-symbol-btn {
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #1f2937;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.1s, transform 0.05s;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.vk-symbol-btn:active {
+    background: #e5e7eb;
+    transform: scale(0.95);
 }
 
 /* PC 端可手动展开虚拟键盘（添加 .show-on-pc 类） */
