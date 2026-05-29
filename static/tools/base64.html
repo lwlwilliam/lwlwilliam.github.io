@@ -275,5 +275,17 @@
         setTimeout(() => { toastEl.classList.remove('show'); }, 2000);
     }
 </script>
+<script>
+(function(){
+  var s=document.createElement('style');
+  s.textContent='body.dark{background:#111827;color:#e2e8f0}body.dark nav{border-color:#2d3a4f}body.dark .nav-content{background:transparent}body.dark .logo{color:#e2e8f0}body.dark .logo-icon{background:#3b82f6}body.dark .container{background:#1e293b;border-color:#374151;box-shadow:0 4px 20px rgba(0,0,0,.3)}body.dark textarea{background:#1a2332;border-color:#374151;color:#e2e8f0}body.dark textarea:focus{background:#1e293b;border-color:#3b82f6;box-shadow:0 0 0 4px rgba(59,130,246,.2)}body.dark .btn-primary{background:#3b82f6;color:#fff}body.dark .btn-primary:hover{background:#2563eb}body.dark .btn-dark{background:#374151;color:#e2e8f0}body.dark .btn-text{color:#60a5fa}body.dark .btn-clear{color:#f87171}body.dark .section-header .label{color:#94a3b8}body.dark .section-header .count{color:#64748b}body.dark #toast{background:#334155!important;color:#e2e8f0!important}';
+  document.head.appendChild(s);
+  window.addEventListener('message',function(e){
+    if(e.data&&e.data.type==='theme'){
+      document.body.classList.toggle('dark',e.data.theme==='dark');
+    }
+  });
+})();
+</script>
 </body>
 </html>

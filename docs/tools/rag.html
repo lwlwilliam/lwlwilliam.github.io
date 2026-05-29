@@ -653,5 +653,22 @@
     (async function init() { await openDB(); await loadKnowledgeBaseWithCache(); appendLog('✨ 轻量RAG已启动 (智能向量复用模式 — 仅新知识调用API)'); if (currentKbText.trim() === '') appendLog('📭 知识库为空，纯LLM对话模式'); else appendLog('🔍 向量缓存就绪，智能导入将自动复用已有向量'); })();
 })();
 </script>
+<script>
+(function(){
+  window.addEventListener('message',function(e){
+    if(e.data&&e.data.type==='theme'){
+      var d=e.data.theme==='dark';
+      document.body.classList.toggle('dark',d);
+      var b=document.getElementById('themeToggle');
+      if(b)b.textContent=d?'☀️ 亮色模式':'🌙 暗色模式';
+      localStorage.setItem('kb_theme',d?'dark':'light');
+    }
+  });
+  if(window.parent!==window){
+    var b=document.getElementById('themeToggle');
+    if(b)b.style.display='none';
+  }
+})();
+</script>
 </body>
 </html>

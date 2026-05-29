@@ -69,41 +69,61 @@
 
   <main class="main-content">
     
-<div class="tools-page">
-  <div class="tool-grid">
+<div class="tools-page" id="toolsPage">
+  <div class="tool-grid" id="toolGrid">
     
-    <a href='../tools/rag.html' target="_blank" class="tool-card" rel="noopener noreferrer">
+    <a href='../tools/rag.html' class="tool-card" data-tool="rag" onclick="return openTool('rag', event)">
       <span class="tool-card-name">RAG</span>
       
       <span class="tool-card-desc">AI 知识库检索增强生成工具</span>
       
-      <span class="tool-card-action">Open →</span>
+      <span class="tool-card-action">打开 →</span>
     </a>
     
-    <a href='../tools/data-urls.html' target="_blank" class="tool-card" rel="noopener noreferrer">
+    <a href='../tools/data-urls.html' class="tool-card" data-tool="data-urls" onclick="return openTool('data-urls', event)">
       <span class="tool-card-name">Data URLs</span>
       
       <span class="tool-card-desc">Data URL 编码/解码工具</span>
       
-      <span class="tool-card-action">Open →</span>
+      <span class="tool-card-action">打开 →</span>
     </a>
     
-    <a href='../tools/base64.html' target="_blank" class="tool-card" rel="noopener noreferrer">
+    <a href='../tools/base64.html' class="tool-card" data-tool="base64" onclick="return openTool('base64', event)">
       <span class="tool-card-name">Base64</span>
       
       <span class="tool-card-desc">Base64 编解码及文本互转工具</span>
       
-      <span class="tool-card-action">Open →</span>
+      <span class="tool-card-action">打开 →</span>
     </a>
     
-    <a href='../tools/wubi/index.html' target="_blank" class="tool-card" rel="noopener noreferrer">
+    <a href='../tools/wubi/index.html' class="tool-card" data-tool="wubi/index" onclick="return openTool('wubi\/index', event)">
       <span class="tool-card-name">Web Wubi Input Method</span>
       
       <span class="tool-card-desc">网页版五笔输入法</span>
       
-      <span class="tool-card-action">Open →</span>
+      <span class="tool-card-action">打开 →</span>
     </a>
     
+  </div>
+  <div class="tool-tab-bar" id="toolTabBar" style="display:none;">
+    <div class="tool-tab-bar-inner">
+      
+      <button class="tool-tab" data-tool="rag" data-href='../tools/rag.html' onclick="switchTool('rag')">RAG</button>
+      
+      <button class="tool-tab" data-tool="data-urls" data-href='../tools/data-urls.html' onclick="switchTool('data-urls')">Data URLs</button>
+      
+      <button class="tool-tab" data-tool="base64" data-href='../tools/base64.html' onclick="switchTool('base64')">Base64</button>
+      
+      <button class="tool-tab" data-tool="wubi/index" data-href='../tools/wubi/index.html' onclick="switchTool('wubi\/index')">Web Wubi Input Method</button>
+      
+      <span class="tool-tab-sep"></span>
+      <button class="tool-tab-close" onclick="closeTool()" title="返回工具列表">✕</button>
+    </div>
+  </div>
+  <div class="tool-embed-view" id="toolEmbedView" style="display:none;">
+    <div class="tool-iframe-container">
+      <iframe id="toolFrame" src="" allowfullscreen></iframe>
+    </div>
   </div>
 </div>
 
@@ -128,5 +148,108 @@
 
   <script src='../assets/js/main.js'></script>
   
+<script>
+(function() {
+  var currentTool = '';
+
+  function getToolUrl(fileName) {
+    var btn = document.querySelector('.tool-tab[data-tool="' + fileName + '"]');
+    return btn ? btn.getAttribute('data-href') : '';
+  }
+
+  function showTool(fileName) {
+    var grid = document.getElementById('toolGrid');
+    var tabBar = document.getElementById('toolTabBar');
+    var embedView = document.getElementById('toolEmbedView');
+    var frame = document.getElementById('toolFrame');
+
+    currentTool = fileName;
+
+    var tabs = tabBar.querySelectorAll('.tool-tab');
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tool') === fileName);
+    }
+
+    grid.style.display = 'none';
+    tabBar.style.display = '';
+    embedView.style.display = '';
+    document.body.classList.add('tool-embedded');
+
+    frame.src = getToolUrl(fileName);
+    frame.onload = function() { syncThemeToFrame(); };
+
+    history.pushState({ tool: fileName }, '', '#tool=' + fileName);
+  }
+
+  window.openTool = function(fileName, event) {
+    if (event && (event.ctrlKey || event.metaKey || event.shiftKey)) {
+      return true;
+    }
+    showTool(fileName);
+    return false;
+  };
+
+  window.closeTool = function() {
+    var grid = document.getElementById('toolGrid');
+    var tabBar = document.getElementById('toolTabBar');
+    var embedView = document.getElementById('toolEmbedView');
+    var frame = document.getElementById('toolFrame');
+
+    currentTool = '';
+    grid.style.display = '';
+    tabBar.style.display = 'none';
+    embedView.style.display = 'none';
+    frame.src = '';
+    document.body.classList.remove('tool-embedded');
+
+    history.pushState({}, '', location.pathname);
+  };
+
+  window.switchTool = function(fileName) {
+    if (currentTool === fileName) return;
+    var frame = document.getElementById('toolFrame');
+    var tabs = document.getElementById('toolTabBar').querySelectorAll('.tool-tab');
+    currentTool = fileName;
+
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tool') === fileName);
+    }
+
+    frame.src = getToolUrl(fileName);
+    frame.onload = function() { syncThemeToFrame(); };
+
+    history.pushState({ tool: fileName }, '', '#tool=' + fileName);
+  };
+
+  function syncThemeToFrame() {
+    var frame = document.getElementById('toolFrame');
+    if (!frame || !frame.contentWindow) return;
+    var theme = localStorage.getItem('theme') || 'light';
+    try {
+      frame.contentWindow.postMessage({ type: 'theme', theme: theme }, '*');
+    } catch(e) {}
+  }
+
+  var origToggleTheme = window.toggleTheme;
+  window.toggleTheme = function() {
+    if (origToggleTheme) origToggleTheme();
+    setTimeout(syncThemeToFrame, 100);
+  };
+
+  window.addEventListener('popstate', function(e) {
+    if (e.state && e.state.tool) {
+      showTool(e.state.tool);
+    } else if (currentTool) {
+      closeTool();
+    }
+  });
+
+  var hash = location.hash;
+  if (hash && hash.indexOf('#tool=') === 0) {
+    showTool(hash.substring(6));
+  }
+})();
+</script>
+
 </body>
 </html>

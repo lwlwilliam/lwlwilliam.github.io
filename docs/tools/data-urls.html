@@ -247,6 +247,17 @@
         });
     }
 </script>
-
+<script>
+(function(){
+  var s=document.createElement('style');
+  s.textContent='body.dark{background:#111827;color:#e2e8f0}body.dark .card{background:#1e293b;border-color:#374151;box-shadow:0 10px 25px rgba(0,0,0,.3)}body.dark h2{color:#60a5fa}body.dark select{background:#1a2332;border-color:#374151;color:#e2e8f0}body.dark textarea{background:#1a2332;border-color:#374151;color:#e2e8f0}body.dark .checkbox-group{background:#1a2332}body.dark button{background:#3b82f6}body.dark button:hover{background:#2563eb}body.dark .file-upload-wrapper{border-color:#374151;background:#1a2332}body.dark .file-upload-wrapper:hover{border-color:#3b82f6;background:#1e3a5f}body.dark #resultArea{background:#1a2332;color:#e2e8f0}body.dark .copy-btn{background:#374151}body.dark .hidden{display:none}body.dark label{color:#94a3b8}';
+  document.head.appendChild(s);
+  window.addEventListener('message',function(e){
+    if(e.data&&e.data.type==='theme'){
+      document.body.classList.toggle('dark',e.data.theme==='dark');
+    }
+  });
+})();
+</script>
 </body>
 </html>

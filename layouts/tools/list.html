@@ -1,15 +1,134 @@
 {{ define "main" }}
-<div class="tools-page">
-  <div class="tool-grid">
+<div class="tools-page" id="toolsPage">
+  <div class="tool-grid" id="toolGrid">
     {{ range hugo.Data.tools }}
-    <a href='{{ "tools" | relURL }}/{{ .file_name }}.html' target="_blank" class="tool-card" rel="noopener noreferrer">
+    <a href='{{ "tools" | relURL }}/{{ .file_name }}.html' class="tool-card" data-tool="{{ .file_name }}" onclick="return openTool('{{ .file_name }}', event)">
       <span class="tool-card-name">{{ .name }}</span>
       {{ with .desc }}
       <span class="tool-card-desc">{{ . }}</span>
       {{ end }}
-      <span class="tool-card-action">Open →</span>
+      <span class="tool-card-action">打开 →</span>
     </a>
     {{ end }}
   </div>
+  <div class="tool-tab-bar" id="toolTabBar" style="display:none;">
+    <div class="tool-tab-bar-inner">
+      {{ range hugo.Data.tools }}
+      <button class="tool-tab" data-tool="{{ .file_name }}" data-href='{{ "tools" | relURL }}/{{ .file_name }}.html' onclick="switchTool('{{ .file_name }}')">{{ .name }}</button>
+      {{ end }}
+      <span class="tool-tab-sep"></span>
+      <button class="tool-tab-close" onclick="closeTool()" title="返回工具列表">✕</button>
+    </div>
+  </div>
+  <div class="tool-embed-view" id="toolEmbedView" style="display:none;">
+    <div class="tool-iframe-container">
+      <iframe id="toolFrame" src="" allowfullscreen></iframe>
+    </div>
+  </div>
 </div>
+{{ end }}
+
+{{ define "scripts" }}
+<script>
+(function() {
+  var currentTool = '';
+
+  function getToolUrl(fileName) {
+    var btn = document.querySelector('.tool-tab[data-tool="' + fileName + '"]');
+    return btn ? btn.getAttribute('data-href') : '';
+  }
+
+  function showTool(fileName) {
+    var grid = document.getElementById('toolGrid');
+    var tabBar = document.getElementById('toolTabBar');
+    var embedView = document.getElementById('toolEmbedView');
+    var frame = document.getElementById('toolFrame');
+
+    currentTool = fileName;
+
+    var tabs = tabBar.querySelectorAll('.tool-tab');
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tool') === fileName);
+    }
+
+    grid.style.display = 'none';
+    tabBar.style.display = '';
+    embedView.style.display = '';
+    document.body.classList.add('tool-embedded');
+
+    frame.src = getToolUrl(fileName);
+    frame.onload = function() { syncThemeToFrame(); };
+
+    history.pushState({ tool: fileName }, '', '#tool=' + fileName);
+  }
+
+  window.openTool = function(fileName, event) {
+    if (event && (event.ctrlKey || event.metaKey || event.shiftKey)) {
+      return true;
+    }
+    showTool(fileName);
+    return false;
+  };
+
+  window.closeTool = function() {
+    var grid = document.getElementById('toolGrid');
+    var tabBar = document.getElementById('toolTabBar');
+    var embedView = document.getElementById('toolEmbedView');
+    var frame = document.getElementById('toolFrame');
+
+    currentTool = '';
+    grid.style.display = '';
+    tabBar.style.display = 'none';
+    embedView.style.display = 'none';
+    frame.src = '';
+    document.body.classList.remove('tool-embedded');
+
+    history.pushState({}, '', location.pathname);
+  };
+
+  window.switchTool = function(fileName) {
+    if (currentTool === fileName) return;
+    var frame = document.getElementById('toolFrame');
+    var tabs = document.getElementById('toolTabBar').querySelectorAll('.tool-tab');
+    currentTool = fileName;
+
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tool') === fileName);
+    }
+
+    frame.src = getToolUrl(fileName);
+    frame.onload = function() { syncThemeToFrame(); };
+
+    history.pushState({ tool: fileName }, '', '#tool=' + fileName);
+  };
+
+  function syncThemeToFrame() {
+    var frame = document.getElementById('toolFrame');
+    if (!frame || !frame.contentWindow) return;
+    var theme = localStorage.getItem('theme') || 'light';
+    try {
+      frame.contentWindow.postMessage({ type: 'theme', theme: theme }, '*');
+    } catch(e) {}
+  }
+
+  var origToggleTheme = window.toggleTheme;
+  window.toggleTheme = function() {
+    if (origToggleTheme) origToggleTheme();
+    setTimeout(syncThemeToFrame, 100);
+  };
+
+  window.addEventListener('popstate', function(e) {
+    if (e.state && e.state.tool) {
+      showTool(e.state.tool);
+    } else if (currentTool) {
+      closeTool();
+    }
+  });
+
+  var hash = location.hash;
+  if (hash && hash.indexOf('#tool=') === 0) {
+    showTool(hash.substring(6));
+  }
+})();
+</script>
 {{ end }}

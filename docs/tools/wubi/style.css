@@ -88,6 +88,7 @@ h1 {
     display: flex;
     align-items: center;
     gap: 4px;
+    min-height: 36px;
 }
 
 .candidate-nav {
@@ -100,11 +101,12 @@ h1 {
     color: #666;
     font-size: 18px;
     font-weight: bold;
+    line-height: 1;
     cursor: pointer;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    padding: 0;
+    padding: 0 0 4px 0;
     transition: background 0.15s;
 }
 
@@ -417,20 +419,19 @@ kbd {
 
     .candidate-body {
         gap: 2px;
+        min-height: 38px;
     }
 
     .candidate-nav {
-        display: flex;
-        width: 32px;
-        height: 38px;
-        border-radius: 8px;
-        background: #e8eaed;
-        font-size: 20px;
-        color: #555;
+        display: none;
     }
 
     .candidate-nav:active {
         background: #d0d3d8;
+    }
+
+    .candidate-scroll-track {
+        display: block;
     }
 
     .candidate-list {
@@ -608,6 +609,26 @@ kbd {
     z-index: 1000;
     animation: caret-blink 1s step-end infinite;
     display: none;
+}
+
+/* ===== 候选词滚动进度条 ===== */
+.candidate-scroll-track {
+    display: none;
+    height: 2px;
+    background: #e0e0e0;
+    border-radius: 1px;
+    margin-top: 6px;
+    position: relative;
+    overflow: hidden;
+}
+
+.candidate-scroll-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #aaa;
+    border-radius: 1px;
 }
 
 @keyframes caret-blink {

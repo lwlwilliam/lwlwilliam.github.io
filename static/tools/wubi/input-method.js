@@ -422,7 +422,7 @@ class WebInputMethod {
         const toggleBtn = this.createVkBtn('中/英', 'toggle', 'vk-wide vk-fn');
         const spaceBtn = this.createVkBtn('空格', 'space', 'vk-space vk-fn');
         const enterBtn = this.createVkBtn('↵', 'enter', 'vk-wide vk-fn');
-        const backBtn = this.createVkBtn('⌫', 'backspace', 'vk-wide vk-fn');
+        const backBtn = this.createBackspaceBtn();
 
         fnRow.appendChild(symbolBtn);
         fnRow.appendChild(toggleBtn);
@@ -444,7 +444,7 @@ class WebInputMethod {
         symbolFnRow.className = 'vk-row';
         const abcBtn = this.createVkBtn('ABC', 'symbol', 'vk-wide vk-fn');
         const symSpaceBtn = this.createVkBtn('空格', 'space', 'vk-space vk-fn');
-        const symBackBtn = this.createVkBtn('⌫', 'backspace', 'vk-wide vk-fn');
+        const symBackBtn = this.createBackspaceBtn();
         const symEnterBtn = this.createVkBtn('↵', 'enter', 'vk-wide vk-fn');
 
         symbolFnRow.appendChild(abcBtn);
@@ -477,6 +477,49 @@ class WebInputMethod {
         // 移动端 touchstart，PC 端 mousedown，避免 click 延迟或重复触发
         btn.addEventListener('touchstart', handler, { passive: false });
         btn.addEventListener('mousedown', handler);
+        return btn;
+    }
+
+    /**
+     * 创建退格按钮（支持上滑清空编码手势）
+     */
+    createBackspaceBtn() {
+        const btn = document.createElement('button');
+        btn.className = 'vk-btn vk-wide vk-fn';
+        btn.textContent = '⌫';
+        btn.type = 'button';
+
+        const SWIPE_THRESHOLD = 30;
+        let touchStartY = 0;
+        let handledByTouch = false;
+
+        btn.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+            handledByTouch = false;
+        }, { passive: true });
+
+        btn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            const dy = touchStartY - e.changedTouches[0].clientY;
+            handledByTouch = true;
+            if (dy > SWIPE_THRESHOLD) {
+                this.reset();
+            } else {
+                this.handleVirtualKey('backspace');
+            }
+        });
+
+        btn.addEventListener('touchcancel', () => {
+            handledByTouch = false;
+        });
+
+        btn.addEventListener('mousedown', (e) => {
+            if (handledByTouch) return;
+            e.preventDefault();
+            e.stopPropagation();
+            this.handleVirtualKey('backspace');
+        });
+
         return btn;
     }
 
@@ -1074,15 +1117,15 @@ class WebInputMethod {
         if (this.page >= totalPages) this.page = totalPages - 1;
         if (this.page < 0) this.page = 0;
 
-        const start = this.page * this.pageSize;
-        const end = Math.min(start + this.pageSize, this.candidates.length);
-        const pageCandidates = this.candidates.slice(start, end);
+        const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        const pageCandidates = isMobile
+            ? this.candidates
+            : this.candidates.slice(this.page * this.pageSize, Math.min((this.page + 1) * this.pageSize, this.candidates.length));
 
         this.pageInfo.textContent = `${this.page + 1}/${totalPages}`;
 
         // 渲染候选列表
         this.candidateList.innerHTML = '';
-        const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
         // 找出当前页第一个全码匹配的索引（不显示编码提示）
         let firstExactIndex = -1;
@@ -1120,13 +1163,26 @@ class WebInputMethod {
 
         this.candidateBox.classList.remove('hidden');
 
-        // 更新候选框翻页按钮状态
+        // 更新候选框翻页按钮状态（移动端用滚动，隐藏按钮）
         if (this.candidateNavPrev && this.candidateNavNext) {
-            const hasPages = totalPages > 1;
-            this.candidateNavPrev.style.display = hasPages ? 'flex' : 'none';
-            this.candidateNavNext.style.display = hasPages ? 'flex' : 'none';
-            this.candidateNavPrev.disabled = this.page <= 0;
-            this.candidateNavNext.disabled = this.page >= totalPages - 1;
+            if (isMobile) {
+                this.candidateNavPrev.style.display = 'none';
+                this.candidateNavNext.style.display = 'none';
+            } else {
+                const hasPages = totalPages > 1;
+                this.candidateNavPrev.style.display = hasPages ? 'flex' : 'none';
+                this.candidateNavNext.style.display = hasPages ? 'flex' : 'none';
+                this.candidateNavPrev.disabled = this.page <= 0;
+                this.candidateNavNext.disabled = this.page >= totalPages - 1;
+            }
+        }
+
+        // 移动端：渲染后滚动到开头，更新进度条
+        if (isMobile) {
+            requestAnimationFrame(() => {
+                this.candidateList.scrollLeft = 0;
+                this.updateScrollIndicator();
+            });
         }
 
         // 更新候选框位置
@@ -1302,8 +1358,9 @@ class WebInputMethod {
      * 选择候选词
      */
     selectCandidate(index) {
-        const start = this.page * this.pageSize;
-        const candidate = this.candidates[start + index];
+        const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        const candidateIndex = isMobile ? index : this.page * this.pageSize + index;
+        const candidate = this.candidates[candidateIndex];
         if (candidate) {
             this.commitText(candidate.word);
         }
@@ -1313,6 +1370,10 @@ class WebInputMethod {
      * 下一页
      */
     nextPage() {
+        if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
+            this.candidateList.scrollBy({ left: this.candidateList.clientWidth * 0.8, behavior: 'smooth' });
+            return;
+        }
         const totalPages = Math.ceil(this.candidates.length / this.pageSize);
         if (this.page < totalPages - 1) {
             this.page++;
@@ -1324,6 +1385,10 @@ class WebInputMethod {
      * 上一页
      */
     prevPage() {
+        if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
+            this.candidateList.scrollBy({ left: -this.candidateList.clientWidth * 0.8, behavior: 'smooth' });
+            return;
+        }
         if (this.page > 0) {
             this.page--;
             this.renderCandidates();
@@ -1404,6 +1469,76 @@ class WebInputMethod {
             body.appendChild(this.candidateList);
             body.appendChild(this.candidateNavNext);
         }
+
+        // 创建滚动进度条
+        this.scrollTrack = document.createElement('div');
+        this.scrollTrack.className = 'candidate-scroll-track';
+        this.scrollThumb = document.createElement('div');
+        this.scrollThumb.className = 'candidate-scroll-thumb';
+        this.scrollTrack.appendChild(this.scrollThumb);
+        this.candidateBox.appendChild(this.scrollTrack);
+
+        // 绑定滚动事件以追踪移动端翻页位置
+        this.candidateList.addEventListener('scroll', () => {
+            this.handleCandidateScroll();
+        });
+    }
+
+    /**
+     * 移动端滚动时更新页码和进度条
+     */
+    handleCandidateScroll() {
+        if (!this.scrollThumb) return;
+
+        const items = this.candidateList.querySelectorAll('.candidate-item');
+        if (items.length === 0) return;
+
+        const listRect = this.candidateList.getBoundingClientRect();
+        const listLeft = listRect.left;
+        const listRight = listRect.right;
+
+        let firstVisible = 0;
+        for (let i = 0; i < items.length; i++) {
+            const rect = items[i].getBoundingClientRect();
+            const visibleRight = Math.min(rect.right, listRight);
+            const visibleLeft = Math.max(rect.left, listLeft);
+            if (visibleRight - visibleLeft > rect.width * 0.3) {
+                firstVisible = i;
+                break;
+            }
+        }
+
+        const newPage = Math.floor(firstVisible / this.pageSize);
+        if (this.page !== newPage) {
+            this.page = newPage;
+            const totalPages = Math.ceil(this.candidates.length / this.pageSize);
+            this.pageInfo.textContent = `${this.page + 1}/${totalPages}`;
+        }
+
+        this.updateScrollIndicator();
+    }
+
+    /**
+     * 更新滚动进度条
+     */
+    updateScrollIndicator() {
+        if (!this.scrollThumb) return;
+
+        const list = this.candidateList;
+        const maxScroll = list.scrollWidth - list.clientWidth;
+
+        if (maxScroll <= 0) {
+            this.scrollTrack.style.opacity = '0';
+            return;
+        }
+
+        this.scrollTrack.style.opacity = '1';
+
+        const visibleRatio = list.clientWidth / list.scrollWidth;
+        const scrollRatio = maxScroll > 0 ? list.scrollLeft / maxScroll : 0;
+
+        this.scrollThumb.style.width = (visibleRatio * 100) + '%';
+        this.scrollThumb.style.left = (scrollRatio * (100 - visibleRatio * 100)) + '%';
     }
 
     /**
