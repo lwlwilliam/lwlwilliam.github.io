@@ -51,5 +51,17 @@
         </div>
     </div>
     <script src="input-method.js"></script>
+<script>
+(function(){
+  var s=document.createElement('style');
+  s.textContent='body.dark{background:#0b0f19;color:#e2e8f0}body.dark h1{color:#e2e8f0}body.dark #input-area{background:#1a2235;border-color:#1f2a3f;color:#e2e8f0}body.dark #input-area:focus{border-color:#3b82f6}body.dark .settings{background:#1a2235;color:#e2e8f0}body.dark .settings label{color:#e2e8f0}body.dark #page-size{background:#111827;border-color:#1f2a3f;color:#e2e8f0}body.dark #toggle-im{background:#3b82f6}body.dark #toggle-im:hover{background:#2563eb}body.dark .im-status.english{background:#374151;color:#9ca3af}body.dark .im-status.chinese{background:#1e2450;color:#60a5fa}body.dark .candidate-box{background:#1a2235;border-color:#1f2a3f;box-shadow:0 4px 16px rgba(0,0,0,.3)}body.dark .candidate-header{border-color:#1f2a3f}body.dark #code-display{color:#60a5fa}body.dark #page-info{color:#9ca3af}body.dark .candidate-item{color:#e2e8f0}body.dark .candidate-item:hover{background:#1f2a40}body.dark .candidate-item.exact-match{background:#1e2450;color:#60a5fa}body.dark .candidate-nav{background:#1f2a40;color:#9ca3af}body.dark .candidate-nav:hover{background:#273548}body.dark .candidate-num{color:#64748b}body.dark .candidate-item .wubi-code{color:#94a3b8}body.dark .help{background:#1a2235;color:#e2e8f0}body.dark .help h3{color:#e2e8f0}body.dark .help li{color:#9ca3af}body.dark kbd{background:#1f2a40;border-color:#374151;color:#e2e8f0}body.dark .virtual-keyboard{background:#1f2a3f}body.dark .vk-btn{background:#1a2235;color:#e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.3)}body.dark .vk-btn:active{background:#273548}body.dark .vk-btn.vk-fn{background:#374151;color:#e2e8f0}body.dark #mobile-input-panel{background:#1f2a3f;border-color:#374151}body.dark .candidate-scroll-track{background:#374151}body.dark .candidate-scroll-thumb{background:#64748b}body.dark .custom-caret{background:#e2e8f0}body.dark .vk-symbol-btn{background:#1a2235;color:#e2e8f0}body.dark .vk-symbol-btn:active{background:#273548}';
+  document.head.appendChild(s);
+  window.addEventListener('message',function(e){
+    if(e.data&&e.data.type==='theme'){
+      document.body.classList.toggle('dark',e.data.theme==='dark');
+    }
+  });
+})();
+</script>
 </body>
 </html>
