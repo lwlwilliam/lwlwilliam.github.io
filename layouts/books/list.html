@@ -2,20 +2,40 @@
 <div class="books-page">
 
   {{ $books := hugo.Data.books }}
-  {{ $years := slice }}
+  {{ $obooks := hugo.Data.other_books }}
+
+  {{ $allYears := slice }}
   {{ range $year, $_ := $books }}
-    {{ $years = $years | append $year }}
+    {{ $allYears = $allYears | append $year }}
+  {{ end }}
+  {{ range $year, $_ := $obooks }}
+    {{ if not (in $allYears $year) }}
+      {{ $allYears = $allYears | append $year }}
+    {{ end }}
+  {{ end }}
+
+  {{ if gt (len $allYears) 1 }}
+  <details class="year-toc" id="yearToc">
+    <summary class="year-toc-toggle">
+      <svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3.75A.75.75 0 012.75 3h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zm0 4A.75.75 0 012.75 7h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 7.75zm0 4a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"/></svg>
+      <span class="toc-icon-arrow">▼</span>
+    </summary>
+    <nav class="year-toc-nav">
+      {{ range sort $allYears "value" "desc" }}
+      <a href="#book-year-{{ . }}" class="year-toc-link" data-year="{{ . }}">{{ . }}</a>
+      {{ end }}
+    </nav>
+  </details>
   {{ end }}
 
   <div class="books-section">
     <h2 class="books-section-title">Technical Books</h2>
-    {{ range $year := sort $years "value" "desc" }}
-    {{ $yearBooks := index $books $year }}
-    <div class="book-year">
+    {{ range $year, $yearBooks := $books }}
+    <div id="book-year-{{ $year }}" class="book-year">
       <h3 class="book-year-title">{{ $year }} <span class="book-year-count">{{ len $yearBooks }}</span></h3>
       <div class="book-grid">
         {{ range $yearBooks }}
-        <div class="book-card{{ if .collect }} collect{{ else }} neutral{{ end }}">
+        <div class="book-card fade-in-up{{ if .collect }} collect{{ else }} neutral{{ end }}">
           <div class="book-card-header">
             <h4 class="book-name">{{ .name }}</h4>
             <span class="book-status">
@@ -32,21 +52,15 @@
     {{ end }}
   </div>
 
-  {{ with hugo.Data.other_books }}
-  {{ $obooks := . }}
-  {{ $oyears := slice }}
-  {{ range $year, $_ := $obooks }}
-    {{ $oyears = $oyears | append $year }}
-  {{ end }}
+  {{ with $obooks }}
   <div class="books-section">
     <h2 class="books-section-title">Other Books</h2>
-    {{ range $year := sort $oyears "value" "desc" }}
-    {{ $yearBooks := index $obooks $year }}
-    <div class="book-year">
+    {{ range $year, $yearBooks := . }}
+    <div id="book-year-{{ $year }}" class="book-year">
       <h3 class="book-year-title">{{ $year }} <span class="book-year-count">{{ len $yearBooks }}</span></h3>
       <div class="book-grid">
         {{ range $yearBooks }}
-        <div class="book-card{{ if .collect }} collect{{ else }} neutral{{ end }}">
+        <div class="book-card fade-in-up{{ if .collect }} collect{{ else }} neutral{{ end }}">
           <div class="book-card-header">
             <h4 class="book-name">{{ .name }}</h4>
             <span class="book-status">

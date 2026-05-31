@@ -2,7 +2,7 @@
 <div class="tools-page" id="toolsPage">
   <div class="tool-grid" id="toolGrid">
     {{ range hugo.Data.tools }}
-    <a href='{{ "tools" | relURL }}/{{ .file_name }}.html' class="tool-card" data-tool="{{ .file_name }}" onclick="return openTool('{{ .file_name }}', event)">
+    <a href='{{ "tools" | relURL }}/{{ .file_name }}.html' class="tool-card fade-in-up" data-tool="{{ .file_name }}" onclick="return openTool('{{ .file_name }}', event)">
       <span class="tool-card-name">{{ .name }}</span>
       {{ with .desc }}
       <span class="tool-card-desc">{{ . }}</span>

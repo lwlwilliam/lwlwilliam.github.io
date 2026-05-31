@@ -1,3 +1,9 @@
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
 :root {
   --bg: #f8fafc;
   --bg-secondary: #f1f5f9;
@@ -33,6 +39,30 @@
   --radius-lg: 16px;
   --max-width: 880px;
   --header-height: 60px;
+  --grid-dot: rgba(59, 130, 246, 0.12);
+  --border-angle: 0deg;
+}
+
+.dark {
+  --grid-dot: rgba(96, 165, 250, 0.15);
+}
+
+/* Cursor Glow Effect */
+.cursor-glow {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, rgba(59, 130, 246, 0.08) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+}
+
+.dark .cursor-glow {
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.28) 0%, rgba(96, 165, 250, 0.1) 40%, transparent 70%);
 }
 
 .dark {
@@ -105,7 +135,10 @@ body::after {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(ellipse 40% 30% at 80% 15%, rgba(37, 99, 235, 0.04) 0%, transparent 60%);
+  background:
+    radial-gradient(ellipse 40% 30% at 80% 15%, rgba(37, 99, 235, 0.04) 0%, transparent 60%),
+    radial-gradient(var(--grid-dot) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px;
   pointer-events: none;
   animation: orbFloat2 25s ease-in-out infinite alternate;
 }
@@ -253,11 +286,32 @@ a:hover { color: var(--accent-hover); }
   white-space: nowrap;
   font-weight: 500;
   letter-spacing: -0.005em;
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 0;
+  height: 2.5px;
+  background: var(--gradient-accent);
+  border-radius: 2px;
+  transition: width 0.3s ease, left 0.3s ease;
+  opacity: 1;
+  box-shadow: 0 0 8px var(--accent-glow);
 }
 
 .nav-link:hover {
   color: var(--accent);
   background: var(--accent-light);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 70%;
+  left: 15%;
 }
 
 .nav-link.active {
@@ -420,10 +474,31 @@ body.nav-overflow .nav-link {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: var(--gradient-accent);
+  padding: 2px;
+  background: linear-gradient(
+    var(--border-angle, 0deg),
+    var(--accent) 0%,
+    transparent 30%,
+    var(--accent) 50%,
+    transparent 70%,
+    var(--accent) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
   pointer-events: none;
+  animation: borderRotate 4s linear infinite;
+}
+
+@keyframes borderRotate {
+  0% { --border-angle: 0deg; }
+  100% { --border-angle: 360deg; }
+}
+
+.post-card:hover::before {
+  opacity: 0.6;
 }
 
 .post-card::after {
@@ -442,10 +517,9 @@ body.nav-overflow .nav-link {
 
 .post-card:hover {
   box-shadow: var(--shadow-glow);
-  border-color: var(--accent);
+  border-color: transparent;
   transform: translateY(-3px);
 }
-.post-card:hover::before { opacity: 0.02; }
 .post-card:hover::after { transform: scaleX(1); }
 
 .post-card-title {
@@ -1072,7 +1146,108 @@ body.nav-overflow .nav-link {
 
 /* Archives */
 .archives-page { padding-top: 8px; }
-.archive-year { margin-bottom: 44px; }
+.archive-year { margin-bottom: 44px; scroll-margin-top: calc(var(--header-height) + 80px); }
+
+/* Year TOC Navigation */
+.year-toc {
+  margin-bottom: 32px;
+  position: sticky;
+  top: calc(var(--header-height) + 8px);
+  z-index: 40;
+}
+
+.year-toc-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--glass-bg-strong);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 560;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.year-toc-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 2px 12px var(--accent-glow);
+}
+
+.year-toc-toggle .toc-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.year-toc-toggle .toc-icon-arrow {
+  font-size: 0.65rem;
+  transition: transform 0.3s ease;
+  line-height: 1;
+}
+
+.year-toc[open] > .year-toc-toggle .toc-icon-arrow {
+  transform: rotate(180deg);
+}
+
+.year-toc-nav {
+  display: none;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 14px 16px;
+  margin-top: 8px;
+  background: var(--glass-bg-strong);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  animation: tocSlideIn 0.2s ease;
+  justify-content: center;
+}
+
+@keyframes tocSlideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.year-toc[open] > .year-toc-nav {
+  display: flex;
+}
+
+.year-toc-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.84rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.year-toc-link:hover {
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+.year-toc-link.active {
+  color: #fff;
+  background: var(--gradient-accent);
+  box-shadow: 0 2px 10px var(--accent-glow);
+}
 
 .archive-year-title {
   font-size: 1.5rem;
@@ -1121,6 +1296,8 @@ body.nav-overflow .nav-link {
 /* Books */
 .books-page { padding-top: 8px; }
 .books-section { margin-bottom: 56px; }
+
+.book-year { scroll-margin-top: calc(var(--header-height) + 80px); margin-bottom: 32px; }
 
 .books-section-title {
   font-size: 1.28rem;
@@ -1670,6 +1847,10 @@ body.tool-embedded .main-content { padding-top: 0; padding-bottom: 0; }
   .archive-item { font-size: 0.85rem; gap: 8px; }
   .archive-item time { font-size: 0.74rem; }
   .archive-item-cats { margin-left: 0; width: 100%; margin-top: 3px; }
+  .year-toc-toggle { padding: 8px 14px; }
+  .year-toc-toggle .toc-icon { width: 14px; height: 14px; }
+  .year-toc-nav { padding: 10px 12px; gap: 4px; }
+  .year-toc-link { min-width: 46px; height: 30px; font-size: 0.8rem; padding: 0 10px; }
   .books-section-title { font-size: 1.14rem; }
   .book-year-title { font-size: 1rem; }
   .category-term-page .page-title { font-size: 1.28rem; }
@@ -1710,4 +1891,25 @@ body.tool-embedded .main-content { padding-top: 0; padding-bottom: 0; }
 @media print {
   .site-header, .site-footer, .post-nav, .search-overlay, .scroll-progress, .back-to-top { display: none; }
   body { background: #fff; color: #000; }
+}
+
+/* Scroll Reveal Animation */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 3D Card Tilt - Base Style */
+.post-card,
+.category-card,
+.tool-card,
+.book-card {
+  transform-style: preserve-3d;
+  will-change: transform;
 }

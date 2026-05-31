@@ -427,3 +427,137 @@ function scrollToTop() {
     pre.parentNode.appendChild(btn);
   });
 })();
+
+/* ============================================
+   NEW EFFECTS: Cursor Glow, 3D Tilt, Scroll Reveal
+   ============================================ */
+
+(function() {
+  // Cursor Glow Effect
+  var glow = document.getElementById('cursorGlow');
+  if (glow) {
+    var glowVisible = false;
+    
+    document.addEventListener('mousemove', function(e) {
+      if (!glowVisible) {
+        glow.style.opacity = '1';
+        glowVisible = true;
+      }
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+
+    document.addEventListener('mouseleave', function() {
+      glow.style.opacity = '0';
+      glowVisible = false;
+    });
+  }
+
+  // 3D Card Tilt Effect with Shine
+  var tiltCards = document.querySelectorAll('.post-card, .category-card, .tool-card, .book-card');
+  
+  tiltCards.forEach(function(card) {
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      var centerX = rect.width / 2;
+      var centerY = rect.height / 2;
+      
+      var rotateX = ((y - centerY) / centerY) * -6;
+      var rotateY = ((x - centerX) / centerX) * 6;
+      
+      // Calculate shine position
+      var shineX = (x / rect.width) * 100;
+      var shineY = (y / rect.height) * 100;
+      
+      card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-5px)';
+      card.style.background = 'linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card) 100%), radial-gradient(circle at ' + shineX + '% ' + shineY + '%, rgba(255,255,255,0.15) 0%, transparent 60%)';
+    });
+
+    card.addEventListener('mouseleave', function() {
+      card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+      card.style.transition = 'transform 0.4s ease';
+      card.style.background = 'var(--bg-card)';
+    });
+
+    card.addEventListener('mouseenter', function() {
+      card.style.transition = 'transform 0.1s ease';
+    });
+  });
+
+  // Scroll Reveal Animation
+  if ('IntersectionObserver' in window) {
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in-up').forEach(function(el) {
+      revealObserver.observe(el);
+    });
+  } else {
+    document.querySelectorAll('.fade-in-up').forEach(function(el) {
+      el.classList.add('visible');
+    });
+  }
+
+  // Year TOC Scroll Highlight & Close on Outside Click
+  var yearToc = document.getElementById('yearToc');
+  if (yearToc) {
+    var yearLinks = yearToc.querySelectorAll('.year-toc-link');
+    var yearSections = [];
+    
+    yearLinks.forEach(function(link) {
+      var year = link.getAttribute('data-year');
+      var sectionId = link.getAttribute('href').substring(1);
+      var section = document.getElementById(sectionId);
+      if (section) {
+        yearSections.push({ link: link, section: section });
+      }
+    });
+
+    if (yearSections.length > 0) {
+      var headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 60;
+      
+      function updateActiveYear() {
+        var scrollPos = window.scrollY + headerHeight + 100;
+        var current = yearSections[0];
+        
+        for (var i = 0; i < yearSections.length; i++) {
+          var sectionTop = yearSections[i].section.offsetTop;
+          if (scrollPos >= sectionTop) {
+            current = yearSections[i];
+          }
+        }
+        
+        yearLinks.forEach(function(link) { link.classList.remove('active'); });
+        if (current) current.link.classList.add('active');
+      }
+
+      window.addEventListener('scroll', updateActiveYear);
+      updateActiveYear();
+    }
+
+    // Close TOC when clicking outside
+    document.addEventListener('click', function(e) {
+      if (yearToc.open && !yearToc.contains(e.target)) {
+        yearToc.open = false;
+      }
+    });
+
+    // Close TOC when clicking a link (after scroll)
+    yearToc.querySelectorAll('.year-toc-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        var self = this;
+        setTimeout(function() {
+          yearToc.open = false;
+        }, 300);
+      });
+    });
+  }
+})();

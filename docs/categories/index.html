@@ -17,6 +17,7 @@
   <script>
     (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
   </script>
+  <div class="cursor-glow" id="cursorGlow"></div>
   <div class="scroll-progress" id="scrollProgress"></div>
   <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="Back to top">↑</button>
   <header class="site-header">
@@ -84,7 +85,7 @@
         
       
     
-    <a href='../categories/go/' class="category-card">
+    <a href='../categories/go/' class="category-card fade-in-up">
       <span class="category-card-name">Go</span>
       <span class="category-card-count">6</span>
     </a>
@@ -97,7 +98,7 @@
         
       
     
-    <a href='../categories/gui/' class="category-card">
+    <a href='../categories/gui/' class="category-card fade-in-up">
       <span class="category-card-name">GUI</span>
       <span class="category-card-count">1</span>
     </a>
@@ -110,7 +111,7 @@
         
       
     
-    <a href='../categories/php/' class="category-card">
+    <a href='../categories/php/' class="category-card fade-in-up">
       <span class="category-card-name">PHP</span>
       <span class="category-card-count">18</span>
     </a>
@@ -123,7 +124,7 @@
         
       
     
-    <a href='../categories/php8.2.6-%E6%BA%90%E7%A0%81%E6%8E%A2%E7%B4%A2/' class="category-card">
+    <a href='../categories/php8.2.6-%E6%BA%90%E7%A0%81%E6%8E%A2%E7%B4%A2/' class="category-card fade-in-up">
       <span class="category-card-name">PHP8.2.6-源码探索</span>
       <span class="category-card-count">4</span>
     </a>
@@ -136,7 +137,7 @@
         
       
     
-    <a href='../categories/python/' class="category-card">
+    <a href='../categories/python/' class="category-card fade-in-up">
       <span class="category-card-name">Python</span>
       <span class="category-card-count">2</span>
     </a>
@@ -149,7 +150,7 @@
         
       
     
-    <a href='../categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/' class="category-card">
+    <a href='../categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/' class="category-card fade-in-up">
       <span class="category-card-name">人工智能</span>
       <span class="category-card-count">6</span>
     </a>
@@ -162,7 +163,7 @@
         
       
     
-    <a href='../categories/%E5%85%B6%E4%BB%96/' class="category-card">
+    <a href='../categories/%E5%85%B6%E4%BB%96/' class="category-card fade-in-up">
       <span class="category-card-name">其他</span>
       <span class="category-card-count">1</span>
     </a>
@@ -175,7 +176,7 @@
         
       
     
-    <a href='../categories/%E5%B7%A5%E5%85%B7/' class="category-card">
+    <a href='../categories/%E5%B7%A5%E5%85%B7/' class="category-card fade-in-up">
       <span class="category-card-name">工具</span>
       <span class="category-card-count">8</span>
     </a>
@@ -188,7 +189,7 @@
         
       
     
-    <a href='../categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/' class="category-card">
+    <a href='../categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/' class="category-card fade-in-up">
       <span class="category-card-name">操作系统</span>
       <span class="category-card-count">11</span>
     </a>
@@ -201,7 +202,7 @@
         
       
     
-    <a href='../categories/%E6%B1%87%E7%BC%96/' class="category-card">
+    <a href='../categories/%E6%B1%87%E7%BC%96/' class="category-card fade-in-up">
       <span class="category-card-name">汇编</span>
       <span class="category-card-count">1</span>
     </a>
@@ -214,7 +215,7 @@
         
       
     
-    <a href='../categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/' class="category-card">
+    <a href='../categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/' class="category-card fade-in-up">
       <span class="category-card-name">算法与数据结构</span>
       <span class="category-card-count">2</span>
     </a>
@@ -227,7 +228,7 @@
         
       
     
-    <a href='../categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/' class="category-card">
+    <a href='../categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/' class="category-card fade-in-up">
       <span class="category-card-name">编译原理</span>
       <span class="category-card-count">14</span>
     </a>
@@ -240,7 +241,7 @@
         
       
     
-    <a href='../categories/%E8%A7%86%E9%A2%91%E5%A4%84%E7%90%86/' class="category-card">
+    <a href='../categories/%E8%A7%86%E9%A2%91%E5%A4%84%E7%90%86/' class="category-card fade-in-up">
       <span class="category-card-name">视频处理</span>
       <span class="category-card-count">1</span>
     </a>
@@ -253,7 +254,7 @@
         
       
     
-    <a href='../categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8E%9F%E7%90%86/' class="category-card">
+    <a href='../categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8E%9F%E7%90%86/' class="category-card fade-in-up">
       <span class="category-card-name">计算机原理</span>
       <span class="category-card-count">13</span>
     </a>
@@ -266,7 +267,7 @@
         
       
     
-    <a href='../categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/' class="category-card">
+    <a href='../categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/' class="category-card fade-in-up">
       <span class="category-card-name">计算机网络</span>
       <span class="category-card-count">34</span>
     </a>

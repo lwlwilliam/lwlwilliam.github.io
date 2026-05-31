@@ -17,6 +17,7 @@
   <script>
     (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
   </script>
+  <div class="cursor-glow" id="cursorGlow"></div>
   <div class="scroll-progress" id="scrollProgress"></div>
   <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="Back to top">↑</button>
   <header class="site-header">
@@ -73,7 +74,37 @@
     
 <div class="archives-page">
   
-  <div class="archive-year">
+  
+  
+  <details class="year-toc" id="yearToc">
+    <summary class="year-toc-toggle">
+      <svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3.75A.75.75 0 012.75 3h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zm0 4A.75.75 0 012.75 7h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 7.75zm0 4a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"/></svg>
+      <span class="toc-icon-arrow">▼</span>
+    </summary>
+    <nav class="year-toc-nav">
+      
+      <a href="#year-2026" class="year-toc-link" data-year="2026">2026</a>
+      
+      <a href="#year-2025" class="year-toc-link" data-year="2025">2025</a>
+      
+      <a href="#year-2024" class="year-toc-link" data-year="2024">2024</a>
+      
+      <a href="#year-2023" class="year-toc-link" data-year="2023">2023</a>
+      
+      <a href="#year-2022" class="year-toc-link" data-year="2022">2022</a>
+      
+      <a href="#year-2021" class="year-toc-link" data-year="2021">2021</a>
+      
+      <a href="#year-2020" class="year-toc-link" data-year="2020">2020</a>
+      
+      <a href="#year-2019" class="year-toc-link" data-year="2019">2019</a>
+      
+    </nav>
+  </details>
+  
+
+  
+  <div id="year-2026" class="archive-year fade-in-up">
     <h2 class="archive-year-title">
       <span>2026</span>
       <span class="archive-count">6</span>
@@ -168,7 +199,7 @@
     
   </div>
   
-  <div class="archive-year">
+  <div id="year-2025" class="archive-year fade-in-up">
     <h2 class="archive-year-title">
       <span>2025</span>
       <span class="archive-count">17</span>
@@ -410,7 +441,7 @@
     
   </div>
   
-  <div class="archive-year">
+  <div id="year-2024" class="archive-year fade-in-up">
     <h2 class="archive-year-title">
       <span>2024</span>
       <span class="archive-count">10</span>
@@ -563,7 +594,7 @@
     
   </div>
   
-  <div class="archive-year">
+  <div id="year-2023" class="archive-year fade-in-up">
     <h2 class="archive-year-title">
       <span>2023</span>
       <span class="archive-count">12</span>
@@ -745,7 +776,7 @@
     
   </div>
   
-  <div class="archive-year">
+  <div id="year-2022" class="archive-year fade-in-up">
     <h2 class="archive-year-title">
       <span>2022</span>
       <span class="archive-count">3</span>
@@ -799,7 +830,7 @@
     
   </div>
   
-  <div class="archive-year">
+  <div id="year-2021" class="archive-year fade-in-up">
     <h2 class="archive-year-title">
       <span>2021</span>
       <span class="archive-count">13</span>
@@ -1017,7 +1048,7 @@
     
   </div>
   
-  <div class="archive-year">
+  <div id="year-2020" class="archive-year fade-in-up">
     <h2 class="archive-year-title">
       <span>2020</span>
       <span class="archive-count">28</span>
@@ -1429,7 +1460,7 @@
     
   </div>
   
-  <div class="archive-year">
+  <div id="year-2019" class="archive-year fade-in-up">
     <h2 class="archive-year-title">
       <span>2019</span>
       <span class="archive-count">27</span>

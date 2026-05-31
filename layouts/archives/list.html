@@ -1,7 +1,23 @@
 {{ define "main" }}
 <div class="archives-page">
-  {{ range (where .Site.RegularPages "Type" "posts").GroupByDate "2006" }}
-  <div class="archive-year">
+  {{ $years := (where .Site.RegularPages "Type" "posts").GroupByDate "2006" }}
+  
+  {{ if gt (len $years) 1 }}
+  <details class="year-toc" id="yearToc">
+    <summary class="year-toc-toggle">
+      <svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3.75A.75.75 0 012.75 3h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zm0 4A.75.75 0 012.75 7h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 7.75zm0 4a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"/></svg>
+      <span class="toc-icon-arrow">▼</span>
+    </summary>
+    <nav class="year-toc-nav">
+      {{ range $years }}
+      <a href="#year-{{ .Key }}" class="year-toc-link" data-year="{{ .Key }}">{{ .Key }}</a>
+      {{ end }}
+    </nav>
+  </details>
+  {{ end }}
+
+  {{ range $years }}
+  <div id="year-{{ .Key }}" class="archive-year fade-in-up">
     <h2 class="archive-year-title">
       <span>{{ .Key }}</span>
       <span class="archive-count">{{ len .Pages }}</span>

@@ -17,6 +17,7 @@
   <script>
     (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
   </script>
+  <div class="cursor-glow" id="cursorGlow"></div>
   <div class="scroll-progress" id="scrollProgress"></div>
   <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="Back to top">↑</button>
   <header class="site-header">
@@ -74,7 +75,7 @@
 <div class="tools-page" id="toolsPage">
   <div class="tool-grid" id="toolGrid">
     
-    <a href='../tools/rag.html' class="tool-card" data-tool="rag" onclick="return openTool('rag', event)">
+    <a href='../tools/rag.html' class="tool-card fade-in-up" data-tool="rag" onclick="return openTool('rag', event)">
       <span class="tool-card-name">RAG</span>
       
       <span class="tool-card-desc">AI 知识库检索增强生成工具</span>
@@ -82,7 +83,7 @@
       <span class="tool-card-action">打开 →</span>
     </a>
     
-    <a href='../tools/data-urls.html' class="tool-card" data-tool="data-urls" onclick="return openTool('data-urls', event)">
+    <a href='../tools/data-urls.html' class="tool-card fade-in-up" data-tool="data-urls" onclick="return openTool('data-urls', event)">
       <span class="tool-card-name">Data URLs</span>
       
       <span class="tool-card-desc">Data URL 编码/解码工具</span>
@@ -90,7 +91,7 @@
       <span class="tool-card-action">打开 →</span>
     </a>
     
-    <a href='../tools/base64.html' class="tool-card" data-tool="base64" onclick="return openTool('base64', event)">
+    <a href='../tools/base64.html' class="tool-card fade-in-up" data-tool="base64" onclick="return openTool('base64', event)">
       <span class="tool-card-name">Base64</span>
       
       <span class="tool-card-desc">Base64 编解码及文本互转工具</span>
@@ -98,7 +99,7 @@
       <span class="tool-card-action">打开 →</span>
     </a>
     
-    <a href='../tools/wubi/index.html' class="tool-card" data-tool="wubi/index" onclick="return openTool('wubi\/index', event)">
+    <a href='../tools/wubi/index.html' class="tool-card fade-in-up" data-tool="wubi/index" onclick="return openTool('wubi\/index', event)">
       <span class="tool-card-name">Web Wubi Input Method</span>
       
       <span class="tool-card-desc">网页版五笔输入法</span>

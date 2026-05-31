@@ -2,7 +2,7 @@
 <div class="links-page">
   <div class="link-grid">
     {{ range $index, $link := hugo.Data.links }}
-    <a href="{{ $link.url }}" target="_blank" class="link-card" rel="noopener noreferrer">
+    <a href="{{ $link.url }}" target="_blank" class="link-card fade-in-up" rel="noopener noreferrer">
       <div class="link-card-body">
         <h3 class="link-card-name">{{ $link.name }}</h3>
         <span class="link-card-arrow">→</span>
