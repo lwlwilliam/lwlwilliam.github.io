@@ -95,7 +95,17 @@
   
   
   <div class="post-content"><p>再看操作系统原理时，又“吸收”了一个名词“页缓存”，跟<code>ChatGPT</code>扯了下之后，就有了更深刻的理解，于是灵光一现问了以下问题：</p>
-<p><img src="../../../../assets/images/2026/0107/async.png" alt="async">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2026/0107/async.png" alt="async" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>异步<code>I/O</code>的本质就是提交<code>I/O</code>后，不会阻塞调用者，并在<code>I/O</code>完成后通知调用者结果。</p>
 <p>现在分析一下我的问题。在用户层面实现<code>I/O</code>函数，并通过用户层面实现的“页缓存”（本质上就是内存）来处理数据。也就是说，在数据落盘前，<code>I/O</code>函数只需要跟内存打交道，只要在内存层面处理好数据即可返回处理结果，因此实际上<code>I/O</code>操作并不会阻塞调用者，而可以在后台线程统一对这些用户层面的“页缓存”同步到<code>I/O</code>设备，完成后再通知业务线程。所以这种实现方式在原理上可行的，当然实际上还有很多细节要处理。</p>

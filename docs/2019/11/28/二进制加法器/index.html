@@ -313,10 +313,30 @@
   </tbody>
 </table>
 <p>可以发现，只有在<code>或门输出</code>和<code>与非门输出</code>都为 1 时，加法结果才为 1，其它情况的加法结果为 0，这跟<code>与门</code>的情况一样，因此加法表可以将<code>或门输出</code>和<code>与非门输出</code>作为<code>与门</code>的输入来得到。电路如下图。</p>
-<p><img src="../../../../assets/images/2019/1128/WX20191128-165822.png" alt="">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/1128/WX20191128-165822.png" alt="" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>实际上这个电路有个专门的名称，叫做<code>异或门</code>，简写为<code>XOR</code>。<code>异或门</code>可以用以下特定电气符号来表示。</p>
-<p><img src="../../../../assets/images/2019/1128/WX20191128-170307.png" alt="">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/1128/WX20191128-170307.png" alt="" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>异或门的特征如下表所示。</p>
 <table>
@@ -343,19 +363,59 @@
 <p>加法位用<code>异或门</code>来表示。</p>
 <h3 id="半加器">半加器</h3>
 <p>从上文可以得知两个二进制相加数的加法位由<code>异或门</code>输出给出，而进位位由<code>与门</code>的输出给出。因此，可以将<code>与门</code>和<code>异或门</code>连在一起来计算两个二进制数（即 A 和 B）的和。</p>
-<p><img src="../../../../assets/images/2019/1128/WX20191128-170839.png" alt="">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/1128/WX20191128-170839.png" alt="" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>还可以简化如下图。</p>
-<p><img src="../../../../assets/images/2019/1128/WX20191128-170918.png" alt="">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/1128/WX20191128-170918.png" alt="" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>这个符号被称为<code>半加器(Half Adder)</code>。之所以叫<code>半加器</code>是因为它只是将两个二进制数相加，得出一个加法位和一个进位位。但是绝大多数二进制数是多于 1 位的。</p>
 <h3 id="全加器">全加器</h3>
 <p>半加器并没有将之前一次的进位位纳入到运算中，因此我们需要将两个<code>半加器</code>和一个<code>或门</code>进行如下连接。</p>
-<p><img src="../../../../assets/images/2019/1128/WX20191128-181256.png" alt="">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/1128/WX20191128-181256.png" alt="" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>原理：先从最左边第一个<code>半加器</code>的输入 A 和输入 B 开始，其输出是一个加和及相应的进位，这个加和需要跟前一列的进位输入相加，也就相当于前一列的进位和这个加个当成第二个<code>半加器</code>的输入 A 和输入 B，第二个<code>半加器</code>的加和就是最终的加和。另外，两个<code>半加器</code>的进位输入到一个<code>或门</code>中，这是因为两个半加器的进位输出是不会同时为 1 的，其中有一个产生进位即可。</p>
 <p>上图可以简化如下。</p>
-<p><img src="../../../../assets/images/2019/1128/WX20191128-182426.png" alt="">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/1128/WX20191128-182426.png" alt="" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>这称为<code>全加器(Full Adder)</code>。</p>
 <p>以下是<code>全加器</code>的输入和输出。</p>
@@ -429,10 +489,30 @@
   </tbody>
 </table>
 <p>当 8 个<code>全加器</code>首尾连接起来时，就是一个 8 位的二进制加法器。</p>
-<p><img src="../../../../assets/images/2019/1129/WX20191129-103246.png" alt="">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/1129/WX20191129-103246.png" alt="" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>下面将输入 A 和输入 B 分开，就可以方便地通过控制开关来输入两个 8 位的二进制数相加。</p>
-<p><img src="../../../../assets/images/2019/1129/WX20191129-103828.png" alt="">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/1129/WX20191129-103828.png" alt="" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>将<code>加法位（上图的输出和）</code>以及<code>进位位（上图的进位输出）</code>接上灯泡即可看到效果。</p>
 </div>

@@ -348,6 +348,43 @@ function scrollToTop() {
 }
 
 (function() {
+  document.querySelectorAll('.img-lazy').forEach(function(img) {
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('loaded');
+    }
+  });
+
+  if ('IntersectionObserver' in window) {
+    var videoObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        var video = entry.target;
+        video.setAttribute('preload', 'metadata');
+        var sources = video.querySelectorAll('source[data-src]');
+        sources.forEach(function(source) {
+          source.setAttribute('src', source.getAttribute('data-src'));
+          source.removeAttribute('data-src');
+        });
+        videoObserver.unobserve(video);
+      });
+    }, { rootMargin: '400px' });
+
+    document.querySelectorAll('.post-content video').forEach(function(video) {
+      if (!video.hasAttribute('preload') || video.getAttribute('preload') === 'auto') {
+        video.setAttribute('preload', 'none');
+      }
+      videoObserver.observe(video);
+    });
+  } else {
+    document.querySelectorAll('.post-content video').forEach(function(video) {
+      if (!video.hasAttribute('preload') || video.getAttribute('preload') === 'auto') {
+        video.setAttribute('preload', 'none');
+      }
+    });
+  }
+})();
+
+(function() {
   var pres = document.querySelectorAll('.post-content pre');
   pres.forEach(function(pre) {
     var btn = document.createElement('button');

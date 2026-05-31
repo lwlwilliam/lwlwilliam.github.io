@@ -131,7 +131,17 @@
 <p>IP 用来区分主机，端口号用来区分进程。一般来说，服务器端都是被动访问的，所以大家需要知道它提供服务的端口
 号，例如 80，443 等，就是所谓知名端口号；而客户端访问服务器的时候，自己的端口号可以随机生成一个，只要不
 和别的应用冲突即可。</p>
-<p><img src="../../../../assets/images/2019/0322/netlayer.webp" alt="socket">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/0322/netlayer.webp" alt="socket" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>Socket 编程要分为客户端和服务器端。对于客户端来说很简单，需要创建一个 socket，然后向服务器发起连接，
 连接上就可以发送，接收数据了，以下是伪代码。</p>
@@ -157,7 +167,17 @@ while(true) {
 来表示，因此后面的操作都是基于 connfd 来做的。accept() 相当于和客户端的 connect() 一起完成了 TCP
 的三次握手，至于之前的 listenfd，只是起到一个大门的作用了，意思是说，欢迎敲门，进门后我将为你生成一个
 独一无二的 socket 描述符。</p>
-<p><img src="../../../../assets/images/2019/0322/socket.webp" alt="socket">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/0322/socket.webp" alt="socket" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>到这里，似乎有一个漏洞。socket 指的是 ip+port，现在已经有了一个 listenfd 的 socket，端口为 80，
 然后每次客户端发起连接还要创建新的 socket，因为 80 端口已经被占用，难道服务器会为每个连接都创建新的

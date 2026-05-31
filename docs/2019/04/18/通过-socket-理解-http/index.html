@@ -247,7 +247,17 @@ Content-Type: text/html
 </code></pre><p>为了让这看起来更真实，我们可以将 client_tcp 脚本换成 web 浏览器。再次运行 server_tcp_http 脚本，现在用浏览器访问<a href="../../../../http://localhost:10000/">http://localhost:10000/</a>
 。
 浏览器现在可以理解 HTTP 消息并渲染 HTML。</p>
-<p><img src="../../../../assets/images/2019/0418/WX20190418-155340.png" alt="browser">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/0418/WX20190418-155340.png" alt="browser" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>还可以修改 server_tcp_http 脚本用来解析<code>GET</code>和<code>POST</code>请求（以及其它 HTTP 方法），但这超出了本文的范围。Python 提供了很多库来简化 HTTP 通信，而
 python 本身也包含 SimpleHTTPServer。因此，很少有人需要直接使用套接字开发 web 服务器——但是，嘿，这很有趣。</p>

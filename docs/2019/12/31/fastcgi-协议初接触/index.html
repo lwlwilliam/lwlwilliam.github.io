@@ -212,12 +212,32 @@ http {
 </code></pre><blockquote>
 <p>访问不存在的文件</p>
 </blockquote>
-<p><img src="../../../../assets/images/2019/1231/WX20191231-174920.png" alt="">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/1231/WX20191231-174920.png" alt="" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <blockquote>
 <p>访问存在的文件</p>
 </blockquote>
-<p><img src="../../../../assets/images/2019/1231/WX20191231-174846.png" alt="">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/1231/WX20191231-174846.png" alt="" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>访问<code>tes.go</code>时，由于文件不存在，Nginx 并不会进行报文转发；访问<code>test.go</code>时，文件存在，符合重定向的规则，于是将 HTTP 报文封装到 FastCGI 报文中，转发到<code>localhost:10000</code>中，如 Go 的 FastCGI 后端代码所示，接收到请求后，Go 程序会将一段 HTML 代码发送回 Nginx 中，Nginx 再将 HTTP 报文发到浏览器，效果如上所示。</p>
 <h3 id="fastcgi-请求报文初探">FastCGI 请求报文初探</h3>
@@ -233,7 +253,17 @@ http {
 </span></span><span style="display:flex;"><span>read<span style="color:#f92672">(</span>3, <span style="color:#e6db74">&#34;\17:SCRIPT_FILENAME/usr/share/php/&#34;</span>..., 984<span style="color:#f92672">)</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">984</span>
 </span></span><span style="display:flex;"><span>read<span style="color:#f92672">(</span>3, <span style="color:#e6db74">&#34;\1\4\0\1\0\0\0\0&#34;</span>, 8<span style="color:#f92672">)</span>          <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>
 </span></span></code></pre></div><p>下图是用 Wireshark 捕获的 FastCGI 报文中的一部分：</p>
-<p><img src="../../../../assets/images/2020/0714/WX_20200429214529.png" alt="fastcgi">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2020/0714/WX_20200429214529.png" alt="fastcgi" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>看到上图的内容应该感觉很熟悉吧？可见的 ASCII 字符都跟服务器以及 HTTP 请求报文相关的内容。</p>
 <p>也可以使用以下程序简单感受一下。</p>
@@ -302,7 +332,17 @@ http {
 <p>安全性较差。</p>
 </li>
 </ol>
-<p><img src="../../../../assets/images/2019/1231/WX20191231-181630.png" alt="">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/1231/WX20191231-181630.png" alt="" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <h5 id="fastcgifast-common-gateway-interface">FastCGI(Fast Common Gateway Interface)</h5>
 <p>FastCGI 是 CGI 的增强版本，由 CGI 发展改进而来，主要用于提高 CGI 程序性能，类似于 CGI。</p>
@@ -330,7 +370,17 @@ http {
 <p>内存消耗较大，注意进程池的数量。</p>
 </li>
 </ol>
-<p><img src="../../../../assets/images/2019/1231/WX20191231-181617.png" alt="">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/1231/WX20191231-181617.png" alt="" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 </div>
   <footer class="post-footer">

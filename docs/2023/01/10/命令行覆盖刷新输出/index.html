@@ -97,7 +97,17 @@
   
   
   <div class="post-content"><p>命令行覆盖刷新输出的效果如下图。</p>
-<p><img src="../../../../assets/images/2023/0110/command.gif" alt="command.gif">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2023/0110/command.gif" alt="command.gif" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>覆盖刷新的原理：删除已输出字符（用空白字符屏蔽），重新输出新字符。</p>
 <p>删除字符需要用到一个特殊字符<code>\b</code>退格符。注意：在很多语言里语言<code>\b</code>退格符跟键盘上的 Backspace 键不太一样，退格符仅仅是回退，并不会删除字符，因此回退后还需要使用一个空白字符覆盖原有字符，才能完成覆盖刷新功能。示例如下：</p>

@@ -139,9 +139,29 @@
 </span></span></code></pre></div><p>这种写法的关键是通过 <code>#!/usr/bin/env perl</code> 调用相应解释器，同样的 PHP 语言等也是一样的；包括以上的 Python 在头部添加 <code>#!/usr/bin/env python</code> 即可，那就可以省略 pyinstaller 了。</p>
 <h5 id="验证与总结">验证与总结</h5>
 <p>把以上生成的 <code>ctest</code> 和 <code>pytest</code> 程序放到<code>apache</code>的<code>cgi-bin</code>目录，即可通过浏览器访问。</p>
-<p><img src="../../../../assets/images/2019/0802/WX20190802-171644.png" alt="ctest">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/0802/WX20190802-171644.png" alt="ctest" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 
-<img src="../../../../assets/images/2019/0802/WX20190802-171607.png" alt="pytest">
+<figure class="img-figure">
+  <img src="../../../../assets/images/2019/0802/WX20190802-171607.png" alt="pytest" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>试着把程序中带有 <code>Content-Type:text/html;charset=utf-8\r\n\r\n</code> 的代码整行删除，会发现服务器报错。经过测试，程序要包含 HTTP 头部信息，否则是非法的。</p>
 <p>初步结论就是 CGI 程序是可以输出包含 HTTP 首部信息内容的可执行程序。web 服务器和 CGI 程序的交互步骤如下：</p>

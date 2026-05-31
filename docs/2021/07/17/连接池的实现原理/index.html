@@ -258,7 +258,17 @@
 </ol>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ go run test.go
 </span></span></code></pre></div><p>如无意外，应该能看到以下效果：</p>
-<p><img src="../../../../assets/images/2021/0717/WX20210804-151459.png" alt="demo">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2021/0717/WX20210804-151459.png" alt="demo" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>以上代码模拟了三个端，客户端、代理端、服务端，其中连接池 pool 的模拟在 tunnel 代理端。tunnel 创建与 server 之间的连接，在 client 连接时自动复用该连接进行数据的转发。</p>
 <p>虽然只用了一个变量，但也起到了连接池的作用了：<code>复用连接，减少因创建连接而产生的资源消耗</code>。当然，真正的连接池还得做很多处理，例如使用心跳保持连接，及时将断开的连接清除掉并重新创建连接令连接池的连接保持在一定数量，获取连接时判断一下连接是否有效，使用完将连接放回连接池，连接池自动扩容等。</p>

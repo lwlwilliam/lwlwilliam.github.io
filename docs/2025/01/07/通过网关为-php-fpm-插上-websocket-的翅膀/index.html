@@ -120,7 +120,17 @@
 <code>WebSocket</code>就走不到一块去。</p>
 <p>虽然可以直接使用<code>AMPHP</code>、<code>REACTPHP</code>、<code>Swoole</code>等众多<code>PHP-CLI</code>的库和扩展来让<code>PHP</code>处理<code>WebSocket</code>业务，但这就相当于做一个新项目了，跟原有的<code>PHP-FPM</code>项目不能很好地兼容。通过<code>WebSocket</code>网关跟<code>WebSocket</code>客户端交互，具体的业务仍然由<code>PHP-FPM</code>框架处理，不仅能以零改动的方式让<code>PHP-FPM</code>拥有了处理<code>WebSocket</code>协议的能力，还不会存在<code>PHP-FPM</code>和<code>PHP-CLI</code>之间生态不兼容的问题。当然最重要的就是不需要更换框架。</p>
 <p>架构图如下所示。</p>
-<p><img src="../../../../assets/images/2025/0107/websocket-gateway.png" alt="websocket-gateway">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2025/0107/websocket-gateway.png" alt="websocket-gateway" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p><code>WebSocket 客户端</code>跟<code>WebSocket 网关</code>建立连接，<code>WebSocket 网关</code>接收到<code>WebSocket 客户端</code>发送的数据，通过<code>HTTP</code>协议将数据发送到<code>Nginx</code>，<code>Nginx</code>再用<code>FastCGI</code>协议发送给<code>PHP-FPM</code>，<code>PHP</code>脚本处理完将数据沿原路反方向回传到<code>WebSocket 客户端</code>，这是接收逻辑；如果希望<code>PHP</code>主动推送数据到<code>WebSocket 客户端</code>，则需要额外的<code>HTTP 客户端</code>，因为<code>PHP-FPM</code>不适合持续运行推送，不过这个并不算关键的功能，理论上完全可以通过<code>WebSocket 网关</code>来定时触发，此处不作详细说明。主动推送时，<code>HTTP 客户端</code>向<code>Nginx</code>发起<code>HTTP</code>请求，由<code>PHP-FPM</code>处理，如果<code>PHP</code>脚本判断该请求需要推送到<code>WebSocket 客户端</code>，则将数据发送至<code>WebSocket 网关</code>对内暴露的<code>HTTP</code>接口，<code>WebSocket 网关</code>根据请求选择对应的<code>WebSocket 客户端</code>通信。</p>
 <h3 id="php-业务代码">PHP 业务代码</h3>

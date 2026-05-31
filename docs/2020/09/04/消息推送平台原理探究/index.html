@@ -102,7 +102,17 @@
 <li>友盟的推送平台向指定的手机分发消息，手机接收到消息；</li>
 </ol>
 <p>这里贴张友盟推送平台的原理图吧。</p>
-<p><img src="../../../../assets/images/2020/0904/TB10NA2txD1gK0jSZFKXXcJrVXa-1569-782.png" alt="upush">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2020/0904/TB10NA2txD1gK0jSZFKXXcJrVXa-1569-782.png" alt="upush" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>先从第 1 步说起，这里很容易理解，友盟推送平台作为推送的服务端，开发者可以通过它开放的<code>API</code>设置需要推送的消息，就是常见的接口调用。那么推送平台是怎么将消息推送到指定手机的呢？</p>
 <p>关键就在于<code>SDK</code>。<code>APP</code>集成的<code>SDK</code>在安装后是作为服务形式存在的，简单来说就是只要手机不关机，它就会永久运行，并可以定时跟推送平台交换信息。在集成<code>SDK</code>时，需要绑定友盟账号的相关配置，这可以区分不同<code>APP</code>的推送。<code>SDK</code>在运行时会自动获取或生成能唯一识别该手机的<code>deviceToken</code>，然后跟推送平台建立连接，将<code>deviceToken</code>发给推送平台，推送平台就会将该连接跟<code>deviceToken</code>以及<code>APP</code>进行绑定。至此，推送平台即获取到该<code>APP</code>的所有设备信息，通过已建立的连接，指定<code>deviceToken</code>之后即可进行广播、组播以及单播。</p>

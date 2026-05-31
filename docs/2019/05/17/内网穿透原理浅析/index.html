@@ -105,7 +105,17 @@
 <p>由于 IP 地址（本文指的都是 IPv4）的紧缺，同一局域网内的所有主机一般都共用一个公网 IP 来访问互联网，在 IP 层中必须标明源地址和目标地址，如果局域网内多台主机同时上网会出现什么情况？这多台主机的源地址都是这同一个公网 IP，服务器的响应分组到了拥有这个 IP 的路由器应该把分组传给哪台主机？NAT 路由器都有一个 NAT 转发表，在主机到服务器的分组经过路由器时，路由器会对在 IP 层对其进行解开封装，其实现在很多 NAT 还会处理运输层，把分组的源地址和端口更换为路由器的接口的 IP 和端口，然后重新封装，把处理前后的 IP+端口对应关系记录到 NAT 转发表中，这样就可以对分组进行正确的传输。</p>
 <p>现在如果我们想把本地的 HTTP 服务分享给其他人，但是其他人并不知道我们的本机地址，即使知道了也没有用，因为 NAT 转发表并没有记录我们 HTTP 服务的 IP 和端口。当然，这可以通过路由器对 NAT 转发表进行配置来实现（这个我没有亲自实践过），这种方法也稍显麻烦，还可能会被运营商封（这个我也没试过，道听途说的，哈）。还有没有其它办法呢？</p>
 <p>通过以上的说明，我们知道了 NAT，那么可不可以利用 NAT 呢？答案是肯定的，前题是我们拥有一台自己的服务器。这种方法就是标题所说的<code>内网穿透</code>。内网穿透的原理如下图所示。</p>
-<p><img src="../../../../assets/images/2019/0518/nat.png" alt="nat">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/0518/nat.png" alt="nat" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>客户端 A 想要访问内网主机 A 的 web 服务，必须通过服务器作为中转。首先，服务器的穿透软件需要监听两个 socket，一个用来监听客户端 A 的请求，一个用来监听内网主机 B 的连接；接着内网主机 B 要通过内网穿透软件和服务器建立永久连接；当客户端 A 向服务器请求时，服务器的穿透软件就通过已有的两个 socket 把请求转发到内网主机 B 中，内网主机 B 读取到这个请求，再把这个请求发到 web 服务处进行处理，最后把 web 响应反向传给客户端 A。这就是内网穿透的大概原理。以下是示例代码。</p>
 <p>server.go:</p>

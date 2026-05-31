@@ -163,7 +163,17 @@ github.com.		23	IN	A	13.229.188.59
 13.250.177.223
 </code></pre><h3 id="dns-服务器">DNS 服务器</h3>
 <p>本机要获取 github.com 的 IP 地址，首先要先知道 DNS 服务器的 IP 地址，否则上不了网。</p>
-<p><img src="../../../../assets/images/2019/0308/WX20190308-145406.png" alt="WX20190308-145406.png">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/0308/WX20190308-145406.png" alt="WX20190308-145406.png" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 ;</p>
 <p>DNS 服务器的 IP 地址有可能是动态的，由网关分配，这叫做<code>DHCP 机制</code>；也有可能是事先指定的固定地址，如上图所示可自行设定。Mac OS 与 Linux 系统
 一样，也可以在<code>/etc/resolv.conf</code>文件中设置 DNS。</p>
@@ -189,7 +199,17 @@ github.com.		23	IN	A	13.229.188.59
 </ol>
 <p>仔细看上面的过程，没有提到 DNS 服务器怎么知道&quot;根域名服务器&quot;的 IP 地址，因为&quot;根域名服务器&quot;的 NS 记录和 IP 地址一般是不会变化的，所以内置在
 DNS 服务器里面。下面是内置的根域名服务器 IP 地址的一个例子。</p>
-<p><img src="../../../../assets/images/2019/0308/bg2016061508.png" alt="bg2016061508.png">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2019/0308/bg2016061508.png" alt="bg2016061508.png" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>上表中，列出了根域名(<code>.root</code>)的三条 NS 记录<code>A.ROOT-SERVERS.NET</code>、<code>B.ROOT-SERVERS.NET</code>和<code>C.ROOT-SERVERS.NET</code>，以及它们的 IP 地址
 （即 A 记录）<code>198.41.0.4</code>、<code>192.228.79.201</code>、<code>192.33.4.12</code>。</p>

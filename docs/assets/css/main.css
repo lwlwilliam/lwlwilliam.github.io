@@ -812,12 +812,85 @@ body.nav-overflow .nav-link {
   position: relative;
 }
 
-.post-content img {
+.post-content img:not(.img-lazy) {
   width: 100%;
   height: auto;
   border-radius: var(--radius);
   margin: 1.4em 0;
   box-shadow: var(--shadow-md);
+}
+
+.img-figure {
+  width: 100%;
+  margin: 1.4em 0;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  background: var(--bg-secondary);
+  position: relative;
+  min-height: 200px;
+}
+
+.img-lazy {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.img-lazy.loaded {
+  opacity: 1;
+}
+
+.img-shimmer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease;
+}
+
+.img-lazy.loaded ~ .img-shimmer {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.img-shimmer-track {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    var(--accent-light) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: imgShimmer 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.img-shimmer-icon {
+  width: 44px;
+  height: 44px;
+  color: var(--text-muted);
+  opacity: 0.5;
+  position: relative;
+  z-index: 1;
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes imgShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes iconPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
 }
 
 .post-content code {

@@ -115,17 +115,57 @@
   <div class="post-content"><p>重新注册了个域名，有时候 web 开发没有域名还真是不方便。一下买了五年，美滋滋，当然顺便也要给 Github Pages 加个自己的烙印的。</p>
 <h3 id="为-github-pages-添加自定义域名">为 Github Pages 添加自定义域名</h3>
 <p>如下进入设置页面，将自定义的域名填入<code>Customer domain</code>下的输入框中，如果要用 HTTPS 传输，则勾选<code>Enforce HTTPS</code>复选框。</p>
-<p><img src="../../../../assets/images/2020/0327/WX_20200327220016.png" alt="setting">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2020/0327/WX_20200327220016.png" alt="setting" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
-<p><img src="../../../../assets/images/2020/0327/WX_20200327220401.png" alt="pages">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2020/0327/WX_20200327220401.png" alt="pages" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>效果就是在仓库中生成了一个 CNAME 文件，文件内容就是自定义的域名。目的就是在前台用户访问 user.github.io 时指向自定义域名（<strong>不知道说得对不对，毕竟现在还不是很专业</strong>）。</p>
 <h3 id="dns-解析">DNS 解析</h3>
 <p>前提是你已经拥有一个域名，如果没有就看看好了。我用的是阿里云，其它云服务端操作是一样的。进入添加 DNS 记录的表单。</p>
-<p><img src="../../../../assets/images/2020/0327/WX_20200327220930.png" alt="add">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2020/0327/WX_20200327220930.png" alt="add" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>为 user.github.io 域名添加 CNAME 记录，CNAME 就是别名的意思，添加之后访问自定义域名时，DNS 会将 IP 解析为 user.github.io 对应的 IP。</p>
-<p><img src="../../../../assets/images/2020/0327/WX_20200327221025.png" alt="record">
+<p><figure class="img-figure">
+  <img src="../../../../assets/images/2020/0327/WX_20200327221025.png" alt="record" loading="lazy" decoding="async" class="img-lazy" onload="this.classList.add('loaded')" onerror="this.style.opacity='0'">
+  <div class="img-shimmer" aria-hidden="true">
+    <div class="img-shimmer-track"></div>
+    <svg class="img-shimmer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </div>
+</figure>
 </p>
 <p>注意，在设置完成后，需要一段时间 DNS 记录才会生效。用类 Unix 系统的小伙伴可以使用 dig 命令来查看 DNS 记录。如果 DNS 解析生效，命令会返回如下结果，ANSWER SECTION 部分中的有一条记录<code>github.lwlinux.cn       599     IN      CNAME   user.github.io</code>，就是以上添加的 DNS CNAME 记录。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ dig github.lwlinux.cn
