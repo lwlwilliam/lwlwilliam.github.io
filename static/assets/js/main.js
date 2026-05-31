@@ -265,6 +265,13 @@ document.getElementById('pageJumpInput') && document.getElementById('pageJumpInp
       setTimeout(function() { toc.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
     }
   });
+
+  toc.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      setTimeout(function() { toc.open = true; }, 0);
+    });
+  });
+
   document.addEventListener('click', function(e) {
     if (toc.open && !toc.contains(e.target)) {
       toc.open = false;
@@ -318,6 +325,27 @@ document.getElementById('pageJumpInput') && document.getElementById('pageJumpInp
 
   checkOverflow();
 })();
+
+(function() {
+  var progress = document.getElementById('scrollProgress');
+  var backBtn = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    var h = document.documentElement;
+    var scrollTop = h.scrollTop || document.body.scrollTop;
+    var scrollHeight = h.scrollHeight || document.body.scrollHeight;
+    var clientHeight = h.clientHeight;
+    var pct = scrollHeight > clientHeight ? (scrollTop / (scrollHeight - clientHeight)) * 100 : 0;
+    if (progress) progress.style.width = Math.min(pct, 100) + '%';
+    if (backBtn) {
+      if (scrollTop > 400) backBtn.classList.add('visible');
+      else backBtn.classList.remove('visible');
+    }
+  });
+})();
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 (function() {
   var pres = document.querySelectorAll('.post-content pre');
