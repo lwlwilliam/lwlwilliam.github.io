@@ -30,7 +30,13 @@
 
   <div class="books-section">
     <h2 class="books-section-title">Technical Books</h2>
-    {{ range $year, $yearBooks := $books }}
+    {{ $sortedYears := slice }}
+    {{ range $year, $_ := $books }}
+      {{ $sortedYears = $sortedYears | append $year }}
+    {{ end }}
+    {{ range sort $sortedYears "value" "desc" }}
+      {{ $year := . }}
+      {{ $yearBooks := index $books $year }}
     <div id="book-year-{{ $year }}" class="book-year">
       <h3 class="book-year-title">{{ $year }} <span class="book-year-count">{{ len $yearBooks }}</span></h3>
       <div class="book-grid">
@@ -55,7 +61,13 @@
   {{ with $obooks }}
   <div class="books-section">
     <h2 class="books-section-title">Other Books</h2>
-    {{ range $year, $yearBooks := . }}
+    {{ $sortedOtherYears := slice }}
+    {{ range $year, $_ := . }}
+      {{ $sortedOtherYears = $sortedOtherYears | append $year }}
+    {{ end }}
+    {{ range sort $sortedOtherYears "value" "desc" }}
+      {{ $year := . }}
+      {{ $yearBooks := index $obooks $year }}
     <div id="book-year-{{ $year }}" class="book-year">
       <h3 class="book-year-title">{{ $year }} <span class="book-year-count">{{ len $yearBooks }}</span></h3>
       <div class="book-grid">
