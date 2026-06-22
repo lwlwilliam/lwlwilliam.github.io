@@ -1,4 +1,12 @@
 [{
+    "title": "用 python 运行大模型",
+    "url": "/2026/06/22/%E7%94%A8-python-%E8%BF%90%E8%A1%8C%E5%A4%A7%E6%A8%A1%E5%9E%8B/",
+    "date": "2026-06-22",
+    "categories": ["AI"],
+    "keywords": ["AI","大模型","python"],
+    "content": "下载依赖 $ pip install transformer torch modelscope 从 modelscope 下载大模型镜像 from modelscope import snapshot_download snapshot_download(model_id=\u0026#39;google/gemma-4-E2B-it-qat-mobile-transformers\u0026#39;, cache_dir=\u0026#39;/Users/x/.cache/huggingface/hub\u0026#39;) 运行大模型 from transformers import AutoModelForCausalLM, AutoTokenizer model_id = \u0026#39;/Users/x/.cache/huggingface/hub/Qwen/Qwen3.5-0.8B\u0026#39; model = AutoModelForCausalLM.from_pretrained( model_id, torch_dtype=\u0026#39;auto\u0026#39;, trust_remote_code=True, ) tn = AutoTokenizer.from_pretrained(model_id) prompt = (\u0026#39;用中文给起个艺名，姓『赵』。\u0026#39;) input_ids = tn.encode(prompt, return_tensors=\u0026#39;pt\u0026#39;) generation_output = model.generate( input_ids=input_ids, max_new_tokens=10000 ) ",
+    "summary": "下载依赖 $ pip install transformer torch modelscope 从 modelscope 下载大模型镜像 from modelscope import snapshot_download snapshot_download(model_id=\u0026#39;google/gemma-4-E2B-it-qat-mobile-transformers\u0026#39;, cache_dir=\u0026#39;/Users/x/.cache/huggingface/hub\u0026#39;) 运行大模型 from transformers import AutoModelForCausalLM, AutoTokenizer model_id = \u0026#39;/Users/x/.cache/huggingface/hub/Qwen/Qwen3.5-0.8B\u0026#39; model = AutoModelForCausalLM.from_pretrained( model_id, torch_dtype=\u0026#39;auto\u0026#39;, trust_remote_code=True, ) tn = AutoTokenizer.from_pretrained(model_id) prompt = (\u0026#39;用中文给起个艺名，姓『赵』。\u0026#39;) input_ids = tn.encode(prompt, return_tensors=\u0026#39;pt\u0026#39;) generation_output = model.generate( input_ids=input_ids, max_new_tokens=10000 ) "
+  },{
     "title": "安卓平板部署本地大模型提供视频分析服务",
     "url": "/2026/05/19/%E5%AE%89%E5%8D%93%E5%B9%B3%E6%9D%BF%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8F%90%E4%BE%9B%E8%A7%86%E9%A2%91%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1/",
     "date": "2026-05-19",
