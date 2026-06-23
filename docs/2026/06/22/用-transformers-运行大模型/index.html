@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset='utf-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用 transformers 运行大模型 - William A</title>
+  <meta name="description" content="Love sports, love programming, love life.">
+  <meta name="keywords" content='AI,大模型,python,transformers,William A'>
+  <meta name="author" content="William A">
+  <link rel="icon" href='../../../../favicon.ico'>
+  
+
+  <link rel="stylesheet" href='../../../../assets/css/main.css'>
+  
+</head>
+<body>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+  </script>
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="Back to top">↑</button>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="../../../../">William A</a>
+      <nav class="site-nav">
+        
+        
+        <a href="../../../../" class="nav-link">cd ~</a>
+        
+        
+        <a href="../../../../categories/" class="nav-link">Categories</a>
+        
+        
+        <a href="../../../../archives/" class="nav-link">Archives</a>
+        
+        
+        <a href="../../../../books/" class="nav-link">Books</a>
+        
+        
+        <a href="../../../../links/" class="nav-link">Links</a>
+        
+        
+        <a href="../../../../tools/" class="nav-link">Tools</a>
+        
+        
+        <a href="../../../../todo/" class="nav-link">Todo</a>
+        
+        
+        <a href="../../../../about/" class="nav-link">About</a>
+        
+      </nav>
+      <div class="header-actions">
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
+        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-header">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <button class="search-close" onclick="toggleSearch()">✕</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">Enter keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">用 transformers 运行大模型</h1>
+    <div class="post-meta">
+      <time datetime='2026-06-22'>2026年6月22日</time>
+      
+      <span class="post-categories">
+        
+        <a href='../../../../categories/ai/' class="category-pill">AI</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-keywords">
+      
+      <span class="keyword-tag">AI</span>
+      
+      <span class="keyword-tag">大模型</span>
+      
+      <span class="keyword-tag">python</span>
+      
+      <span class="keyword-tag">transformers</span>
+      
+    </div>
+    
+  </header>
+  
+  
+  <details class="post-toc" id="post-toc">
+    <summary><svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3.75A.75.75 0 012.75 3h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zm0 4A.75.75 0 012.75 7h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 7.75zm0 4a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"/></svg></summary>
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#下载依赖">下载依赖</a></li>
+        <li><a href="#从-modelscope-下载大模型镜像">从 modelscope 下载大模型镜像</a></li>
+        <li><a href="#运行大模型">运行大模型</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </details>
+  
+  <div class="post-content"><p><code>Hugging Face</code>的<code>transformers</code>库是目前最主流的大模型推理框架之一，几行代码就能在本地跑起一个对话模型。本文将使用<code>Qwen/Qwen3.5-0.8B</code>这个小模型作为示例，整个流程分为三步：安装依赖、下载模型、运行推理。</p>
+<h3 id="下载依赖">下载依赖</h3>
+<p>首先安装必要的<code>Python</code>包。<code>transformers</code>负责模型加载与推理，<code>torch</code>是底层计算框架，<code>modelscope</code>则提供国内更快的模型下载通道。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ pip install transformers torch modelscope
+</span></span></code></pre></div><h3 id="从-modelscope-下载大模型镜像">从 modelscope 下载大模型镜像</h3>
+<p>直接从<code>Hugging Face</code>拉取模型有时会比较慢，这里通过<code>modelscope</code>的<code>snapshot_download</code>下载，并指定到<code>huggingface</code>的缓存目录以便后续加载。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> modelscope <span style="color:#f92672">import</span> snapshot_download
+</span></span><span style="display:flex;"><span>snapshot_download(model_id<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Qwen/Qwen3.5-0.8B&#39;</span>, cache_dir<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/home/go/.cache/huggingface/hub&#39;</span>)
+</span></span></code></pre></div><h3 id="运行大模型">运行大模型</h3>
+<p>下载完成后，使用<code>transformers</code>加载模型和分词器。<code>AutoModelForCausalLM</code>是因果语言模型的通用入口，能自动匹配<code>Qwen</code>的架构；<code>torch_dtype='auto'</code>会让框架根据模型配置自动选择合适的精度。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> transformers <span style="color:#f92672">import</span> AutoModelForCausalLM, AutoTokenizer
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model_id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/home/go/.cache/huggingface/hub/Qwen/Qwen3.5-0.8B&#39;</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> AutoModelForCausalLM<span style="color:#f92672">.</span>from_pretrained(
+</span></span><span style="display:flex;"><span>    model_id,
+</span></span><span style="display:flex;"><span>    torch_dtype<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;auto&#39;</span>,
+</span></span><span style="display:flex;"><span>    trust_remote_code<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tn <span style="color:#f92672">=</span> AutoTokenizer<span style="color:#f92672">.</span>from_pretrained(model_id)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>prompt <span style="color:#f92672">=</span> (<span style="color:#e6db74">&#39;&#34;平静&#34;的英文是什么？&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>input_ids <span style="color:#f92672">=</span> tn<span style="color:#f92672">.</span>encode(prompt, return_tensors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;pt&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>generation_output <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>generate(
+</span></span><span style="display:flex;"><span>    input_ids<span style="color:#f92672">=</span>input_ids,
+</span></span><span style="display:flex;"><span>    max_new_tokens<span style="color:#f92672">=</span><span style="color:#ae81ff">10000</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(tn<span style="color:#f92672">.</span>decode(generation_output[<span style="color:#ae81ff">0</span>]))
+</span></span></code></pre></div><p>就这样，一个最简的大模型本地推理就完成了。当然，这只是一个起点——实际项目中还可以进一步配置<code>temperature</code>、<code>top_p</code>等生成参数，或者用<code>pipeline</code>的<code>API</code>进一步简化调用。</p>
+</div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      
+      <a class="prev-post" href="../../../../2026/05/19/%E5%AE%89%E5%8D%93%E5%B9%B3%E6%9D%BF%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8F%90%E4%BE%9B%E8%A7%86%E9%A2%91%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1/">
+        <span class="nav-label">← Prev</span>
+        <span class="nav-title">安卓平板部署本地大模型提供视频分析服务</span>
+      </a>
+      
+      
+    </nav>
+  </footer>
+</article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 William A</span>
+        <span class="footer-sep">|</span>
+        <span>Love sports, love programming, love life.</span>
+        <span class="footer-sep">|</span>
+        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">粤ICP备20026636号-1</a>
+      </div>
+      <div class="footer-right">
+        <a href='../../../../feed.xml' target="_blank" class="footer-link">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <a id="search-index-url" href='../../../../search.json' hidden></a>
+
+  <script src='../../../../assets/js/main.js'></script>
+  
+</body>
+</html>
