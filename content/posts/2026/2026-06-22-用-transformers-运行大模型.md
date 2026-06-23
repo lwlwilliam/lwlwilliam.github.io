@@ -1,8 +1,8 @@
 ---
 date: 2026-06-22
 title: 用 transformers 运行大模型
-categories: [AI]
-keywords: [AI,大模型,python,transformers]
+categories: [人工智能]
+keywords: [AI,人工智能,大模型,python,transformers]
 ---
 
 `Hugging Face`的`transformers`库是目前最主流的大模型推理框架之一，几行代码就能在本地跑起一个对话模型。本文将使用`Qwen/Qwen3.5-0.8B`这个小模型作为示例，整个流程分为三步：安装依赖、下载模型、运行推理。
