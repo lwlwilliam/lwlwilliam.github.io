@@ -13,3 +13,7 @@
 - file_name: wubi/index
   name: Web Wubi Input Method
   desc: 网页版五笔输入法
+
+- file_name: json
+  name: JSON 工具
+  desc: JSON 工具
