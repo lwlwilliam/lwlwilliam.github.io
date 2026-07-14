@@ -78,7 +78,7 @@
     <a href='../tools/rag.html' class="tool-card fade-in-up" data-tool="rag" onclick="return openTool('rag', event)">
       <span class="tool-card-name">RAG</span>
       
-      <span class="tool-card-desc">AI 知识库检索增强生成工具</span>
+      <span class="tool-card-desc">本地知识库 &#43; 向量检索增强 AI 问答，支持向量缓存复用</span>
       
       <span class="tool-card-action">打开 →</span>
     </a>
@@ -86,7 +86,7 @@
     <a href='../tools/data-urls.html' class="tool-card fade-in-up" data-tool="data-urls" onclick="return openTool('data-urls', event)">
       <span class="tool-card-name">Data URLs</span>
       
-      <span class="tool-card-desc">Data URL 编码/解码工具</span>
+      <span class="tool-card-desc">文本与图片转 Data URL 链接，支持 Base64 编码</span>
       
       <span class="tool-card-action">打开 →</span>
     </a>
@@ -94,7 +94,7 @@
     <a href='../tools/base64.html' class="tool-card fade-in-up" data-tool="base64" onclick="return openTool('base64', event)">
       <span class="tool-card-name">Base64</span>
       
-      <span class="tool-card-desc">Base64 编解码及文本互转工具</span>
+      <span class="tool-card-desc">Base64 编码与解码，原生支持 UTF-8 中文</span>
       
       <span class="tool-card-action">打开 →</span>
     </a>
@@ -102,7 +102,7 @@
     <a href='../tools/wubi/index.html' class="tool-card fade-in-up" data-tool="wubi/index" onclick="return openTool('wubi\/index', event)">
       <span class="tool-card-name">Web Wubi Input Method</span>
       
-      <span class="tool-card-desc">网页版五笔输入法</span>
+      <span class="tool-card-desc">浏览器内运行的五笔输入法，支持拼音反查</span>
       
       <span class="tool-card-action">打开 →</span>
     </a>
@@ -110,7 +110,7 @@
     <a href='../tools/json.html' class="tool-card fade-in-up" data-tool="json" onclick="return openTool('json', event)">
       <span class="tool-card-name">JSON</span>
       
-      <span class="tool-card-desc">JSON 工具</span>
+      <span class="tool-card-desc">JSON 格式化、压缩、校验与语法高亮</span>
       
       <span class="tool-card-action">打开 →</span>
     </a>
@@ -118,7 +118,15 @@
     <a href='../tools/datetime.html' class="tool-card fade-in-up" data-tool="datetime" onclick="return openTool('datetime', event)">
       <span class="tool-card-name">Datetime</span>
       
-      <span class="tool-card-desc">实时时钟与时间戳互转工具</span>
+      <span class="tool-card-desc">实时时钟、时间戳互转与多格式时间转换</span>
+      
+      <span class="tool-card-action">打开 →</span>
+    </a>
+    
+    <a href='../tools/qrcode.html' class="tool-card fade-in-up" data-tool="qrcode" onclick="return openTool('qrcode', event)">
+      <span class="tool-card-name">QR Code</span>
+      
+      <span class="tool-card-desc">本地生成二维码，支持中文、配色与 PNG/SVG 下载</span>
       
       <span class="tool-card-action">打开 →</span>
     </a>
@@ -126,20 +134,23 @@
   </div>
   <div class="tool-tab-bar" id="toolTabBar" style="display:none;">
     <div class="tool-tab-bar-inner">
-      
-      <button class="tool-tab" data-tool="rag" data-href='../tools/rag.html' onclick="switchTool('rag')">RAG</button>
-      
-      <button class="tool-tab" data-tool="data-urls" data-href='../tools/data-urls.html' onclick="switchTool('data-urls')">Data URLs</button>
-      
-      <button class="tool-tab" data-tool="base64" data-href='../tools/base64.html' onclick="switchTool('base64')">Base64</button>
-      
-      <button class="tool-tab" data-tool="wubi/index" data-href='../tools/wubi/index.html' onclick="switchTool('wubi\/index')">Web Wubi Input Method</button>
-      
-      <button class="tool-tab" data-tool="json" data-href='../tools/json.html' onclick="switchTool('json')">JSON</button>
-      
-      <button class="tool-tab" data-tool="datetime" data-href='../tools/datetime.html' onclick="switchTool('datetime')">Datetime</button>
-      
-      <span class="tool-tab-sep"></span>
+      <div class="tool-tab-scroll" id="toolTabScroll">
+        
+        <button class="tool-tab" data-tool="rag" data-href='../tools/rag.html' onclick="switchTool('rag')">RAG</button>
+        
+        <button class="tool-tab" data-tool="data-urls" data-href='../tools/data-urls.html' onclick="switchTool('data-urls')">Data URLs</button>
+        
+        <button class="tool-tab" data-tool="base64" data-href='../tools/base64.html' onclick="switchTool('base64')">Base64</button>
+        
+        <button class="tool-tab" data-tool="wubi/index" data-href='../tools/wubi/index.html' onclick="switchTool('wubi\/index')">Web Wubi Input Method</button>
+        
+        <button class="tool-tab" data-tool="json" data-href='../tools/json.html' onclick="switchTool('json')">JSON</button>
+        
+        <button class="tool-tab" data-tool="datetime" data-href='../tools/datetime.html' onclick="switchTool('datetime')">Datetime</button>
+        
+        <button class="tool-tab" data-tool="qrcode" data-href='../tools/qrcode.html' onclick="switchTool('qrcode')">QR Code</button>
+        
+      </div>
       <button class="tool-tab-close" onclick="closeTool()" title="返回工具列表">✕</button>
     </div>
   </div>
@@ -271,6 +282,46 @@
   if (hash && hash.indexOf('#tool=') === 0) {
     showTool(hash.substring(6));
   }
+
+   
+  (function() {
+    var scrollEl = document.getElementById('toolTabScroll');
+    if (!scrollEl) return;
+    var isDown = false, startX = 0, startScroll = 0, moved = false;
+
+    scrollEl.addEventListener('pointerdown', function(e) {
+      isDown = true;
+      moved = false;
+      startX = e.pageX - scrollEl.offsetLeft;
+      startScroll = scrollEl.scrollLeft;
+      scrollEl.classList.add('dragging');
+      if (scrollEl.setPointerCapture) {
+        try { scrollEl.setPointerCapture(e.pointerId); } catch (err) {}
+      }
+    });
+
+    scrollEl.addEventListener('pointermove', function(e) {
+      if (!isDown) return;
+      var x = e.pageX - scrollEl.offsetLeft;
+      var walk = x - startX;
+      if (Math.abs(walk) > 4) moved = true;
+      scrollEl.scrollLeft = startScroll - walk;
+    });
+
+    function endDrag() {
+      if (!isDown) return;
+      isDown = false;
+      scrollEl.classList.remove('dragging');
+    }
+    scrollEl.addEventListener('pointerup', endDrag);
+    scrollEl.addEventListener('pointercancel', endDrag);
+    scrollEl.addEventListener('pointerleave', endDrag);
+
+     
+    scrollEl.addEventListener('click', function(e) {
+      if (moved) { e.preventDefault(); e.stopPropagation(); }
+    }, true);
+  })();
 })();
 </script>
 

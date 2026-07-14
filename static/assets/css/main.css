@@ -1540,12 +1540,21 @@ body.tool-embedded .main-content { padding-top: 0; padding-bottom: 0; }
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.tool-tab-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  cursor: grab;
+  scroll-behavior: smooth;
 }
-
-.tool-tab-bar-inner::-webkit-scrollbar { display: none; }
+.tool-tab-scroll::-webkit-scrollbar { display: none; }
+.tool-tab-scroll.dragging { cursor: grabbing; scroll-behavior: auto; }
 
 .tool-tab {
   padding: 8px 22px;
@@ -1581,7 +1590,8 @@ body.tool-embedded .main-content { padding-top: 0; padding-bottom: 0; }
 .tool-tab-sep { flex: 1; min-width: 8px; }
 
 .tool-tab-close {
-  background: none;
+  flex-shrink: 0;
+  background: var(--bg-card-solid);
   border: 1px solid var(--border);
   padding: 8px 20px;
   border-radius: 999px;

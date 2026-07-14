@@ -1,23 +1,27 @@
 - file_name: rag
   name: RAG
-  desc: AI 知识库检索增强生成工具
+  desc: 本地知识库 + 向量检索增强 AI 问答，支持向量缓存复用
 
 - file_name: data-urls
   name: Data URLs
-  desc: Data URL 编码/解码工具
+  desc: 文本与图片转 Data URL 链接，支持 Base64 编码
 
 - file_name: base64
   name: Base64
-  desc: Base64 编解码及文本互转工具
+  desc: Base64 编码与解码，原生支持 UTF-8 中文
 
 - file_name: wubi/index
   name: Web Wubi Input Method
-  desc: 网页版五笔输入法
+  desc: 浏览器内运行的五笔输入法，支持拼音反查
 
 - file_name: json
   name: JSON
-  desc: JSON 工具
+  desc: JSON 格式化、压缩、校验与语法高亮
 
 - file_name: datetime
   name: Datetime
-  desc: 实时时钟与时间戳互转工具
+  desc: 实时时钟、时间戳互转与多格式时间转换
+
+- file_name: qrcode
+  name: QR Code
+  desc: 本地生成二维码，支持中文、配色与 PNG/SVG 下载

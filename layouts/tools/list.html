@@ -13,10 +13,11 @@
   </div>
   <div class="tool-tab-bar" id="toolTabBar" style="display:none;">
     <div class="tool-tab-bar-inner">
-      {{ range hugo.Data.tools }}
-      <button class="tool-tab" data-tool="{{ .file_name }}" data-href='{{ "tools" | relURL }}/{{ .file_name }}.html' onclick="switchTool('{{ .file_name }}')">{{ .name }}</button>
-      {{ end }}
-      <span class="tool-tab-sep"></span>
+      <div class="tool-tab-scroll" id="toolTabScroll">
+        {{ range hugo.Data.tools }}
+        <button class="tool-tab" data-tool="{{ .file_name }}" data-href='{{ "tools" | relURL }}/{{ .file_name }}.html' onclick="switchTool('{{ .file_name }}')">{{ .name }}</button>
+        {{ end }}
+      </div>
       <button class="tool-tab-close" onclick="closeTool()" title="返回工具列表">✕</button>
     </div>
   </div>
@@ -129,6 +130,46 @@
   if (hash && hash.indexOf('#tool=') === 0) {
     showTool(hash.substring(6));
   }
+
+  /* 标签栏拖拽滚动：隐藏滚动条时仍可水平拖动查看全部工具 */
+  (function() {
+    var scrollEl = document.getElementById('toolTabScroll');
+    if (!scrollEl) return;
+    var isDown = false, startX = 0, startScroll = 0, moved = false;
+
+    scrollEl.addEventListener('pointerdown', function(e) {
+      isDown = true;
+      moved = false;
+      startX = e.pageX - scrollEl.offsetLeft;
+      startScroll = scrollEl.scrollLeft;
+      scrollEl.classList.add('dragging');
+      if (scrollEl.setPointerCapture) {
+        try { scrollEl.setPointerCapture(e.pointerId); } catch (err) {}
+      }
+    });
+
+    scrollEl.addEventListener('pointermove', function(e) {
+      if (!isDown) return;
+      var x = e.pageX - scrollEl.offsetLeft;
+      var walk = x - startX;
+      if (Math.abs(walk) > 4) moved = true;
+      scrollEl.scrollLeft = startScroll - walk;
+    });
+
+    function endDrag() {
+      if (!isDown) return;
+      isDown = false;
+      scrollEl.classList.remove('dragging');
+    }
+    scrollEl.addEventListener('pointerup', endDrag);
+    scrollEl.addEventListener('pointercancel', endDrag);
+    scrollEl.addEventListener('pointerleave', endDrag);
+
+    /* 拖动后抑制子按钮的点击，避免误切换工具 */
+    scrollEl.addEventListener('click', function(e) {
+      if (moved) { e.preventDefault(); e.stopPropagation(); }
+    }, true);
+  })();
 })();
 </script>
 {{ end }}
