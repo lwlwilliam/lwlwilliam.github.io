@@ -143,23 +143,28 @@
       startX = e.pageX - scrollEl.offsetLeft;
       startScroll = scrollEl.scrollLeft;
       scrollEl.classList.add('dragging');
-      if (scrollEl.setPointerCapture) {
-        try { scrollEl.setPointerCapture(e.pointerId); } catch (err) {}
-      }
     });
 
     scrollEl.addEventListener('pointermove', function(e) {
       if (!isDown) return;
       var x = e.pageX - scrollEl.offsetLeft;
       var walk = x - startX;
-      if (Math.abs(walk) > 4) moved = true;
+      if (Math.abs(walk) > 4) {
+        moved = true;
+        if (scrollEl.setPointerCapture && !scrollEl.hasPointerCapture(e.pointerId)) {
+          try { scrollEl.setPointerCapture(e.pointerId); } catch (err) {}
+        }
+      }
       scrollEl.scrollLeft = startScroll - walk;
     });
 
-    function endDrag() {
+    function endDrag(e) {
       if (!isDown) return;
       isDown = false;
       scrollEl.classList.remove('dragging');
+      if (e && scrollEl.releasePointerCapture && scrollEl.hasPointerCapture(e.pointerId)) {
+        try { scrollEl.releasePointerCapture(e.pointerId); } catch (err) {}
+      }
     }
     scrollEl.addEventListener('pointerup', endDrag);
     scrollEl.addEventListener('pointercancel', endDrag);
