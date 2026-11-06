@@ -26,6 +26,8 @@
   var treeSearchBoxEl = treeSearchEl.closest(".tree-search-box");
 
   var currentPath = null;
+  // 当前文章打开时 / 最近保存后的内容；切换文章时整体替换，不保留上一篇。
+  var savedContent = "";
   var dirty = false;
   var loadingFile = false;
   var previewTimer = null;
@@ -125,7 +127,7 @@
 
   cm.on("change", function () {
     if (loadingFile || !currentPath) return;
-    setDirty(true);
+    setDirty(cm.getValue() !== savedContent);
     schedulePreview();
     updateCountersSoon();
   });
@@ -239,15 +241,28 @@
       markTreeActive(currentPath);
       return;
     }
+    var wasOpen = !!currentPath;
+    // 加载期间锁住编辑器，避免旧文章内容被误改。
+    cm.setOption("readOnly", "nocursor");
+    loadingFile = true;
     fetch("/api/file?path=" + encodeURIComponent(path))
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (d.error) { toast(d.error, true); return; }
-        currentPath = d.path;
-        setEditorReady(true);
-        loadingFile = true;
+        if (d.error) {
+          toast(d.error, true);
+          loadingFile = false;
+          setEditorReady(wasOpen);
+          return;
+        }
+        // 切换文章时彻底丢弃上一篇的内存状态，只保留当前文件内容。
+        currentPath = null;
+        savedContent = "";
         cm.setValue(d.content);
+        cm.clearHistory();
         loadingFile = false;
+        currentPath = d.path;
+        savedContent = d.content;
+        setEditorReady(true);
         draftBadgeEl.classList.toggle("hidden", !isDraft(d.content));
         fileNameEl.textContent = d.path;
         fileMetaEl.title = "content/" + d.path;
@@ -257,24 +272,40 @@
         updateCounters();
         cm.focus();
         cm.refresh();
+      })
+      .catch(function (e) {
+        loadingFile = false;
+        setEditorReady(wasOpen);
+        toast("打开失败：" + e, true);
       });
   }
 
   function saveCurrent() {
     if (!currentPath || !dirty) return;
+    var content = cm.getValue();
     saveStateEl.textContent = "保存中…";
     fetch("/api/save", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path: currentPath, content: cm.getValue() })
+      body: JSON.stringify({ path: currentPath, content: content })
     }).then(function (r) { return r.json(); }).then(function (d) {
-      if (d.error) { toast(d.error, true); setDirty(true); return; }
-      setDirty(false);
-      var now = new Date();
-      var t = ("0" + now.getHours()).slice(-2) + ":" + ("0" + now.getMinutes()).slice(-2) + ":" + ("0" + now.getSeconds()).slice(-2);
-      saveStateEl.textContent = "已保存 " + t;
+      if (d.error) {
+        toast(d.error, true);
+        setDirty(cm.getValue() !== savedContent);
+        return;
+      }
+      savedContent = content;
+      setDirty(cm.getValue() !== savedContent);
+      if (!dirty) {
+        var now = new Date();
+        var t = ("0" + now.getHours()).slice(-2) + ":" + ("0" + now.getMinutes()).slice(-2) + ":" + ("0" + now.getSeconds()).slice(-2);
+        saveStateEl.textContent = "已保存 " + t;
+      }
       draftBadgeEl.classList.toggle("hidden", !isDraft(cm.getValue()));
-    }).catch(function (e) { toast("保存失败：" + e, true); });
+    }).catch(function (e) {
+      toast("保存失败：" + e, true);
+      setDirty(cm.getValue() !== savedContent);
+    });
   }
 
   /* ---------------- 目录树与模糊搜索 ---------------- */
@@ -600,6 +631,7 @@
 
   function clearCurrentFile() {
     currentPath = null;
+    savedContent = "";
     loadingFile = true;
     cm.setValue("");
     loadingFile = false;
