@@ -7,6 +7,7 @@
   <meta name="description" content="Love sports, love programming, love life.">
   <meta name="keywords" content='Data URLs,Go,William A'>
   <meta name="author" content="William A">
+  <meta name="theme-color" content="#f7f8fa">
   <link rel="icon" href='../../../../favicon.ico'>
   
 
@@ -15,11 +16,11 @@
 </head>
 <body>
   <script>
-    (function(){var t=localStorage.getItem('theme')||'light';document.body.className=t})();
+    (function(){var t=localStorage.getItem('theme')==='dark'?'dark':'light';document.body.className=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0f1115':'#f7f8fa')})();
   </script>
-  <div class="cursor-glow" id="cursorGlow"></div>
-  <div class="scroll-progress" id="scrollProgress"></div>
-  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="Back to top">↑</button>
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="回到顶部" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+  </button>
   <header class="site-header">
     <div class="header-inner">
       <a class="site-title" href="../../../../">William A</a>
@@ -51,9 +52,17 @@
         
       </nav>
       <div class="header-actions">
-        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="Menu" title="Menu">☰</button>
-        <button class="btn-search" onclick="toggleSearch()" aria-label="Search" title="Search">🔍</button>
-        <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">🌓</button>
+        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="菜单" aria-expanded="false" title="菜单">
+          <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+        <button class="btn-search" onclick="toggleSearch()" aria-label="搜索" title="搜索（Ctrl/⌘ K）">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </button>
+        <button class="btn-theme" onclick="toggleTheme()" aria-label="切换明暗主题" title="切换明暗主题">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5Z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg>
+        </button>
       </div>
     </div>
   </header>
@@ -61,11 +70,11 @@
   <div class="search-overlay" id="searchOverlay">
     <div class="search-modal">
       <div class="search-header">
-        <input type="text" id="searchInput" class="search-input" placeholder="Search posts..." autocomplete="off">
+        <input type="text" id="searchInput" class="search-input" placeholder="搜索文章…" autocomplete="off">
         <button class="search-close" onclick="toggleSearch()">✕</button>
       </div>
       <div class="search-results" id="searchResults">
-        <div class="search-hint">Enter keywords to search...</div>
+        <div class="search-hint">输入关键词搜索文章</div>
       </div>
     </div>
   </div>

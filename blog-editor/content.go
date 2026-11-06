@@ -249,6 +249,67 @@ func (s *Site) SaveFile(rel, content string) error {
 	return os.WriteFile(abs, []byte(content), 0o644)
 }
 
+// RenamePost renames a Markdown file within its current directory.
+func (s *Site) RenamePost(rel, newName string) (string, error) {
+	abs, err := safeJoin(s.ContentRoot(), rel)
+	if err != nil {
+		return "", err
+	}
+	if !fileExists(abs) {
+		return "", errors.New("文章不存在")
+	}
+	oldExt := filepath.Ext(abs)
+	if !mdExts[strings.ToLower(oldExt)] {
+		return "", errors.New("只能修改 Markdown 文章的文件名")
+	}
+
+	newName = strings.TrimSpace(newName)
+	if newName == "" || newName == "." || newName == ".." {
+		return "", errors.New("文件名不能为空")
+	}
+	if strings.ContainsAny(newName, `/\`) {
+		return "", errors.New("文件名不能包含路径分隔符")
+	}
+	if filepath.Ext(newName) == "" {
+		newName += oldExt
+	}
+	if !mdExts[strings.ToLower(filepath.Ext(newName))] {
+		return "", errors.New("文章文件名必须以 .md、.markdown 或 .mdown 结尾")
+	}
+
+	targetAbs := filepath.Join(filepath.Dir(abs), newName)
+	targetRel, err := filepath.Rel(s.ContentRoot(), targetAbs)
+	if err != nil {
+		return "", err
+	}
+	targetRel = filepath.ToSlash(targetRel)
+	if targetRel == rel {
+		return targetRel, nil
+	}
+	if fileExists(targetAbs) {
+		return "", errors.New("同名文件已存在")
+	}
+	if err := os.Rename(abs, targetAbs); err != nil {
+		return "", err
+	}
+	return targetRel, nil
+}
+
+// DeletePost permanently removes a Markdown file under the content root.
+func (s *Site) DeletePost(rel string) error {
+	abs, err := safeJoin(s.ContentRoot(), rel)
+	if err != nil {
+		return err
+	}
+	if !fileExists(abs) {
+		return errors.New("文章不存在")
+	}
+	if !mdExts[strings.ToLower(filepath.Ext(abs))] {
+		return errors.New("只能删除 Markdown 文章")
+	}
+	return os.Remove(abs)
+}
+
 // NewPost creates a post like new_post.py does: content/posts/<year>/<date>-<slug>.md
 func (s *Site) NewPost(title, category string) (string, error) {
 	title = strings.TrimSpace(title)

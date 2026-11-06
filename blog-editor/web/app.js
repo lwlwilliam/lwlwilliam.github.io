@@ -11,10 +11,19 @@
   var saveStateEl = $("#saveState");
   var countersEl = $("#counters");
   var previewEl = $("#preview");
+  var editorEmptyEl = $("#editorEmpty");
   var imgInput = $("#imgInput");
   var fileInput = $("#fileInput");
   var newDialog = $("#newDialog");
   var newForm = $("#newForm");
+  var fileCtxMenu = $("#fileCtxMenu");
+  var fileCtxInfo = $("#fileCtxInfo");
+  var renameDialog = $("#renameDialog");
+  var renameForm = $("#renameForm");
+  var treeSearchEl = $("#treeSearch");
+  var treeSearchClearEl = $("#treeSearchClear");
+  var treeSearchStatusEl = $("#treeSearchStatus");
+  var treeSearchBoxEl = treeSearchEl.closest(".tree-search-box");
 
   var currentPath = null;
   var dirty = false;
@@ -22,6 +31,9 @@
   var previewTimer = null;
   var chromaCSS = "";
   var openYears = new Set();
+  var allFiles = [];
+  var fileCtxTarget = null;
+  var renameTargetPath = null;
 
   /* ---------------- 预览样式 ---------------- */
   var PREVIEW_CSS = [
@@ -93,6 +105,7 @@
     mode: "gfm",
     lineWrapping: true,
     styleActiveLine: { nonEmpty: true },
+    readOnly: "nocursor",
     extraKeys: {
       "Cmd-S": function () { saveCurrent(); },
       "Ctrl-S": function () { saveCurrent(); },
@@ -105,8 +118,13 @@
     }
   });
 
+  function setEditorReady(ready) {
+    cm.setOption("readOnly", ready ? false : "nocursor");
+    editorEmptyEl.classList.toggle("hidden", ready);
+  }
+
   cm.on("change", function () {
-    if (loadingFile) return;
+    if (loadingFile || !currentPath) return;
     setDirty(true);
     schedulePreview();
     updateCountersSoon();
@@ -217,7 +235,7 @@
 
   /* ---------------- 打开/保存 ---------------- */
   function openFile(path) {
-    if (dirty && !confirm("当前文章有未保存的修改，继续将丢弃。是否继续？")) {
+    if (dirty && currentPath && !confirm("当前文章有未保存的修改，继续将丢弃。是否继续？")) {
       markTreeActive(currentPath);
       return;
     }
@@ -226,6 +244,7 @@
       .then(function (d) {
         if (d.error) { toast(d.error, true); return; }
         currentPath = d.path;
+        setEditorReady(true);
         loadingFile = true;
         cm.setValue(d.content);
         loadingFile = false;
@@ -258,13 +277,14 @@
     }).catch(function (e) { toast("保存失败：" + e, true); });
   }
 
-  /* ---------------- 目录树 ---------------- */
+  /* ---------------- 目录树与模糊搜索 ---------------- */
   function loadTree(keepOpen) {
     var prevOpen = keepOpen ? openYears : null;
     document.querySelector("#refreshBtn").classList.add("spin");
     return fetch("/api/posts").then(function (r) { return r.json(); }).then(function (d) {
-      renderTree(d.posts || [], prevOpen);
-      saveBtn.disabled = true;
+      allFiles = (d.posts || []).concat(d.pages || []);
+      applyTreeSearch(prevOpen);
+      saveBtn.disabled = !currentPath || !dirty;
     }).catch(function (e) {
       treeEl.innerHTML = "<div class='tree-empty'>加载失败：" + e + "</div>";
     }).finally(function () {
@@ -272,45 +292,216 @@
     });
   }
 
-  function renderTree(posts, prevOpen) {
+  function normalizeSearch(s) {
+    return String(s || "").toLowerCase();
+  }
+
+  // 逐字符子序列匹配；连续命中、词首命中和标题命中权重更高。
+  function fuzzyMatch(text, token) {
+    var source = normalizeSearch(text);
+    var needle = normalizeSearch(token);
+    if (!needle) return { score: 0, positions: [] };
+    var positions = [];
+    var from = 0;
+    var score = 0;
+    for (var i = 0; i < needle.length; i++) {
+      var idx = source.indexOf(needle.charAt(i), from);
+      if (idx < 0) return null;
+      positions.push(idx);
+      if (i === 0) {
+        if (idx === 0) score += 18;
+        else if (/[\s/_.-]/.test(source.charAt(idx - 1))) score += 11;
+        else score += 3;
+      }
+      var gap = idx - from;
+      score += gap === 0 ? 9 : Math.max(1, 5 - Math.min(gap, 4));
+      from = idx + 1;
+    }
+    if (source.indexOf(needle) >= 0) score += 24;
+    var span = positions[positions.length - 1] - positions[0] + 1;
+    score += Math.max(0, 10 - (span - needle.length));
+    return { score: score, positions: positions };
+  }
+
+  function searchPosts(posts, query) {
+    var tokens = normalizeSearch(query).split(/\s+/).filter(function (t) { return t; });
+    if (!tokens.length) return posts.map(function (p) { return { post: p, score: 0 }; });
+    var out = [];
+    posts.forEach(function (p) {
+      var title = String(p.title || "");
+      var path = String(p.path || "");
+      var date = String(p.date || "");
+      var score = 0;
+      var matched = true;
+      tokens.forEach(function (token) {
+        var titleHit = fuzzyMatch(title, token);
+        var pathHit = fuzzyMatch(path, token);
+        var dateHit = fuzzyMatch(date, token);
+        var best = titleHit;
+        if (!best || (pathHit && pathHit.score > best.score + 16)) best = pathHit;
+        if (!best) best = dateHit;
+        if (!best) { matched = false; return; }
+        score += best.score + (titleHit === best ? 34 : (pathHit === best ? 6 : 2));
+      });
+      if (!matched) return;
+      if (normalizeSearch(title).indexOf(normalizeSearch(query)) >= 0) score += 70;
+      score -= Math.min(title.length, 80) * 0.04;
+      out.push({ post: p, score: score });
+    });
+    out.sort(function (a, b) {
+      if (b.score !== a.score) return b.score - a.score;
+      return String(a.post.title || "").localeCompare(String(b.post.title || ""), "zh-CN");
+    });
+    return out;
+  }
+
+  function highlightFuzzy(text, query) {
+    var tokens = normalizeSearch(query).split(/\s+/).filter(function (t) { return t; });
+    var hit = {};
+    tokens.forEach(function (token) {
+      var m = fuzzyMatch(text, token);
+      if (!m) return;
+      m.positions.forEach(function (i) { hit[i] = true; });
+    });
+    var raw = String(text || "");
+    if (!Object.keys(hit).length) return escHtml(raw);
+    var html = "";
+    var open = false;
+    for (var i = 0; i < raw.length; i++) {
+      var mark = !!hit[i];
+      if (mark && !open) { html += "<mark>"; open = true; }
+      if (!mark && open) { html += "</mark>"; open = false; }
+      html += escHtml(raw.charAt(i));
+    }
+    if (open) html += "</mark>";
+    return html;
+  }
+
+  function applyTreeSearch(prevOpen) {
+    var query = treeSearchEl.value.trim();
+    var searching = query.length > 0;
+    var matches = searching ? searchPosts(allFiles, query) : allFiles.map(function (p) { return { post: p }; });
+    var posts = matches.map(function (m) { return m.post; });
+
+    treeSearchClearEl.classList.toggle("hidden", !searching);
+    treeSearchBoxEl.classList.toggle("has-value", searching);
+    if (searching) {
+      treeSearchStatusEl.classList.remove("hidden");
+      treeSearchStatusEl.textContent = matches.length
+        ? "找到 " + matches.length + " 项匹配"
+        : "没有匹配项，试试更短的关键词";
+      treeSearchStatusEl.classList.toggle("empty", matches.length === 0);
+    } else {
+      treeSearchStatusEl.classList.add("hidden");
+      treeSearchStatusEl.textContent = "";
+    }
+
+    renderTree(posts, prevOpen, searching, query);
+  }
+
+  function renderTree(posts, prevOpen, searching, query) {
     var byYear = new Map();
     posts.forEach(function (p) {
-      var y = p.year || "未知";
+      var y = p.group === "page" ? "单页" : (p.year || "未知");
       if (!byYear.has(y)) byYear.set(y, []);
       byYear.get(y).push(p);
     });
-    var years = Array.from(byYear.keys()).sort().reverse();
+    var years = Array.from(byYear.keys()).sort(function (a, b) {
+      if (a === "单页") return 1;
+      if (b === "单页") return -1;
+      return b.localeCompare(a);
+    });
     var html = "";
     years.forEach(function (y) {
-      var isOpen = prevOpen ? prevOpen.has(y)
+      var isOpen = searching || (prevOpen ? prevOpen.has(y)
         : (y === String(new Date().getFullYear()) ||
-           (currentPath && byYear.get(y).some(function (p) { return p.path === currentPath; })));
+           (currentPath && byYear.get(y).some(function (p) { return p.path === currentPath; }))));
       html += "<details class='year'" + (isOpen ? " open" : "") + " data-year='" + escAttr(y) + "'>" +
         "<summary><svg class='chev' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='m9 6 6 6-6 6'/></svg>" +
         "<span>" + escHtml(y) + "</span><span class='count'>" + byYear.get(y).length + "</span></summary><ul class='files'>";
       byYear.get(y).forEach(function (p) {
-        html += "<li data-path='" + escAttr(p.path) + "' title='content/" + escAttr(p.path) + "'><span class='t'>" + escHtml(p.title) + "</span>" +
-          (p.draft ? "<span class='badge'>草稿</span>" : "") + "</li>";
+        var titleHtml = searching ? highlightFuzzy(p.title, query) : escHtml(p.title);
+        html += "<li data-path='" + escAttr(p.path) + "' title='content/" + escAttr(p.path) + "'><span class='t'>" + titleHtml + "</span>" +
+          (p.draft ? "<span class='badge'>草稿</span>" : "") +
+          "<button class='file-menu-btn' type='button' title='文章操作' aria-label='文章操作'>" +
+          "<svg viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'><circle cx='5' cy='12' r='1.6'/><circle cx='12' cy='12' r='1.6'/><circle cx='19' cy='12' r='1.6'/></svg></button></li>";
       });
       html += "</ul></details>";
     });
-    treeEl.innerHTML = html || "<div class='tree-empty'>暂无文章</div>";
+    if (!html) {
+      treeEl.innerHTML = searching
+        ? "<div class='tree-empty search-empty'>没有找到匹配项</div>"
+        : "<div class='tree-empty'>暂无文章</div>";
+    } else {
+      treeEl.innerHTML = html;
+    }
 
-    openYears = new Set(years.filter(function (y) {
-      var d = treeEl.querySelector("details[data-year='" + escAttr(y) + "']");
-      return d && d.open;
-    }));
+    if (!searching) {
+      openYears = new Set(years.filter(function (y) {
+        var d = treeEl.querySelector("details[data-year='" + escAttr(y) + "']");
+        return d && d.open;
+      }));
+    }
     markTreeActive(currentPath);
   }
 
+  treeSearchEl.addEventListener("input", function () { applyTreeSearch(openYears); });
+  treeSearchClearEl.addEventListener("click", function () {
+    treeSearchEl.value = "";
+    applyTreeSearch(openYears);
+    treeSearchEl.focus();
+  });
+  treeSearchEl.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      if (treeSearchEl.value) {
+        treeSearchEl.value = "";
+        applyTreeSearch(openYears);
+      } else {
+        treeSearchEl.blur();
+      }
+      e.preventDefault();
+    } else if (e.key === "Enter") {
+      var first = treeEl.querySelector("li[data-path]");
+      if (first) openFile(first.getAttribute("data-path"));
+    }
+  });
+  document.addEventListener("keydown", function (e) {
+    if (document.querySelector("dialog[open]")) return;
+    if ((e.metaKey || e.ctrlKey) && normalizeSearch(e.key) === "k") {
+      e.preventDefault();
+      treeSearchEl.focus();
+      treeSearchEl.select();
+      return;
+    }
+    var tag = (e.target && e.target.tagName || "").toLowerCase();
+    var typing = tag === "input" || tag === "textarea" || tag === "select" || (e.target && e.target.isContentEditable);
+    if (typing) return;
+    if (e.key === "/" && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      e.preventDefault();
+      treeSearchEl.focus();
+      treeSearchEl.select();
+    }
+  });
+
   treeEl.addEventListener("click", function (e) {
+    var menuBtn = e.target.closest(".file-menu-btn");
+    if (menuBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      var menuLi = menuBtn.closest("li[data-path]");
+      if (menuLi) {
+        var rect = menuBtn.getBoundingClientRect();
+        showFileCtxMenu(rect.left, rect.bottom + 4, menuLi.getAttribute("data-path"));
+      }
+      return;
+    }
     var li = e.target.closest("li[data-path]");
     if (li) {
       openFile(li.getAttribute("data-path"));
       return;
     }
     var d = e.target.closest("details.year");
-    if (d) {
+    if (d && !treeSearchEl.value.trim()) {
       var y = d.getAttribute("data-year");
       setTimeout(function () {
         openYears[d.open ? "add" : "delete"](y);
@@ -323,6 +514,130 @@
       li.classList.toggle("active", li.getAttribute("data-path") === path);
     });
   }
+
+  treeEl.addEventListener("contextmenu", function (e) {
+    var li = e.target.closest("li[data-path]");
+    if (!li) return;
+    e.preventDefault();
+    showFileCtxMenu(e.clientX, e.clientY, li.getAttribute("data-path"));
+  });
+
+  function showFileCtxMenu(x, y, path) {
+    fileCtxTarget = path;
+    fileCtxInfo.textContent = path;
+    fileCtxMenu.classList.remove("hidden");
+    fileCtxMenu.style.left = "0px";
+    fileCtxMenu.style.top = "0px";
+    fileCtxMenu.style.left = Math.max(8, Math.min(x, window.innerWidth - fileCtxMenu.offsetWidth - 10)) + "px";
+    fileCtxMenu.style.top = Math.max(8, Math.min(y + 4, window.innerHeight - fileCtxMenu.offsetHeight - 10)) + "px";
+  }
+
+  function hideFileCtx() {
+    fileCtxMenu.classList.add("hidden");
+    fileCtxTarget = null;
+  }
+
+  document.addEventListener("mousedown", function (e) {
+    if (!fileCtxMenu.classList.contains("hidden") && !fileCtxMenu.contains(e.target)) hideFileCtx();
+  }, true);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") hideFileCtx();
+  });
+  window.addEventListener("blur", hideFileCtx);
+
+  function openRenameDialog(path) {
+    renameTargetPath = path;
+    var input = renameForm.querySelector("input[name=filename]");
+    input.value = path.split("/").pop();
+    renameDialog.showModal();
+    setTimeout(function () {
+      input.focus();
+      var dot = input.value.lastIndexOf(".");
+      if (dot > 0) input.setSelectionRange(0, dot);
+      else input.select();
+    }, 30);
+  }
+
+  $("#fileCtxRename").addEventListener("click", function () {
+    var path = fileCtxTarget;
+    hideFileCtx();
+    if (path) openRenameDialog(path);
+  });
+
+  $("#renameCancel").addEventListener("click", function () {
+    renameDialog.close();
+  });
+
+  renameForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var input = renameForm.querySelector("input[name=filename]");
+    var name = input.value.trim();
+    if (!name) { toast("请填写新文件名"); return; }
+    if (!renameTargetPath) return;
+    var oldPath = renameTargetPath;
+    var submit = $("#renameSubmit");
+    submit.disabled = true;
+    fetch("/api/article/rename", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path: oldPath, name: name })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      submit.disabled = false;
+      if (d.error) { toast(d.error, true); return; }
+      renameDialog.close();
+      if (currentPath === oldPath) {
+        currentPath = d.path;
+        fileNameEl.textContent = d.path;
+        fileMetaEl.title = "content/" + d.path;
+      }
+      toast("已重命名为 " + d.path);
+      loadTree(true);
+    }).catch(function (err) {
+      submit.disabled = false;
+      toast("重命名失败：" + err, true);
+    });
+  });
+
+  function clearCurrentFile() {
+    currentPath = null;
+    loadingFile = true;
+    cm.setValue("");
+    loadingFile = false;
+    cm.clearHistory();
+    setEditorReady(false);
+    setDirty(false);
+    fileNameEl.textContent = "未打开文章";
+    fileMetaEl.title = "";
+    draftBadgeEl.classList.add("hidden");
+    countersEl.textContent = "";
+    previewEl.srcdoc = emptyDoc();
+    markTreeActive(null);
+  }
+
+  function deleteArticle(path) {
+    var isCurrent = currentPath === path;
+    var text = "将永久删除 content/" + path + "。\n\n此操作不可恢复。";
+    if (isCurrent && dirty) text += "\n\n当前文章还有未保存的修改，删除后会一并丢弃。";
+    askConfirm(text, "删除").then(function (go) {
+      if (!go) return;
+      fetch("/api/article/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: path })
+      }).then(function (r) { return r.json(); }).then(function (d) {
+        if (d.error) { toast(d.error, true); return; }
+        if (isCurrent) clearCurrentFile();
+        loadTree(true);
+        toast("已删除 " + path);
+      }).catch(function (err) { toast("删除失败：" + err, true); });
+    });
+  }
+
+  $("#fileCtxDelete").addEventListener("click", function () {
+    var path = fileCtxTarget;
+    hideFileCtx();
+    if (path) deleteArticle(path);
+  });
 
   /* ---------------- 上传 ---------------- */
   imgInput.addEventListener("change", function () {
@@ -694,7 +1009,7 @@
   saveBtn.addEventListener("click", saveCurrent);
 
   window.addEventListener("beforeunload", function (e) {
-    if (dirty) { e.preventDefault(); e.returnValue = ""; }
+    if (dirty && currentPath) { e.preventDefault(); e.returnValue = ""; }
   });
 
   var toastHost = $("#toastHost");
@@ -723,6 +1038,8 @@
     renderPreview();
   }).catch(function () { /* 预览仍可无高亮工作 */ });
 
+  setEditorReady(false);
+  setDirty(false);
   loadTree(false).then(function () {
     var p = new URLSearchParams(location.search).get("path");
     if (p) openFile(p);

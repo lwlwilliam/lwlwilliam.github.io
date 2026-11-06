@@ -1,29 +1,56 @@
 function toggleTheme() {
   var body = document.body;
-  var current = body.className;
-  var next = current === 'dark' ? 'light' : 'dark';
-  body.className = next;
+  var next = body.classList.contains('dark') ? 'light' : 'dark';
+  body.classList.toggle('dark', next === 'dark');
+  body.classList.toggle('light', next === 'light');
   localStorage.setItem('theme', next);
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', next === 'dark' ? '#0f1115' : '#f7f8fa');
+}
+
+function setMenuOpen(open) {
+  var nav = document.querySelector('.site-nav');
+  var btn = document.querySelector('.btn-hamburger');
+  if (!nav || !btn) return;
+  nav.classList.toggle('open', open);
+  btn.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
 
 function toggleMenu() {
   var nav = document.querySelector('.site-nav');
-  var btn = document.querySelector('.btn-hamburger');
-  nav.classList.toggle('open');
-  btn.textContent = nav.classList.contains('open') ? '✕' : '☰';
+  if (!nav) return;
+  setMenuOpen(!nav.classList.contains('open'));
 }
 
 document.addEventListener('click', function(e) {
   var nav = document.querySelector('.site-nav');
   if (!nav.classList.contains('open')) return;
   if (e.target.closest('.nav-link')) {
-    nav.classList.remove('open');
-    document.querySelector('.btn-hamburger').textContent = '☰';
+    setMenuOpen(false);
     return;
   }
   if (!e.target.closest('.site-nav') && !e.target.closest('.btn-hamburger')) {
-    nav.classList.remove('open');
-    document.querySelector('.btn-hamburger').textContent = '☰';
+    setMenuOpen(false);
+  }
+});
+
+/* 文章列表整块可点击（首页卡片、分类文章列表、归档列表）；
+   列表里的分类、标题等真实链接仍优先。 */
+document.addEventListener('click', function(e) {
+  var row = e.target.closest && e.target.closest('.post-card, .archive-item');
+  if (!row) return;
+  if (e.target.closest('a, button, input, select, textarea, label')) return;
+  var link = row.classList.contains('archive-item')
+    ? row.querySelector('a[href]:not(.category-pill-sm)')
+    : row.querySelector('.post-card-title a, .post-card-readmore');
+  if (!link) return;
+  if (e.metaKey || e.ctrlKey) {
+    window.open(link.href, '_blank', 'noopener');
+  } else if (e.shiftKey) {
+    window.open(link.href, '_blank');
+  } else {
+    window.location.href = link.href;
   }
 });
 
@@ -33,7 +60,7 @@ function toggleSearch() {
   if (ov.classList.contains('active')) {
     ov.classList.remove('active');
     input.value = '';
-    document.getElementById('searchResults').innerHTML = '<div class="search-hint">Enter keywords to search...</div>';
+    document.getElementById('searchResults').innerHTML = '<div class="search-hint">输入关键词搜索文章</div>';
   } else {
     ov.classList.add('active');
     if (!searchData && !searchLoading) {
@@ -87,7 +114,7 @@ if (searchInput) {
     var query = self.value.trim().toLowerCase();
     clearTimeout(searchDebounceTimer);
     if (!query) {
-      document.getElementById('searchResults').innerHTML = '<div class="search-hint">Enter keywords to search...</div>';
+      document.getElementById('searchResults').innerHTML = '<div class="search-hint">输入关键词搜索文章</div>';
       return;
     }
     if (!searchData) {
@@ -174,7 +201,7 @@ function doSearch(query) {
   results.sort(function(a, b) { return b.score - a.score; });
 
   if (results.length === 0) {
-    document.getElementById('searchResults').innerHTML = '<div class="search-no-results">No results found for "' + escapeHtml(query) + '"</div>';
+    document.getElementById('searchResults').innerHTML = '<div class="search-no-results">没有找到与 "' + escapeHtml(query) + '" 相关的文章</div>';
     return;
   }
 
@@ -292,8 +319,7 @@ document.getElementById('pageJumpInput') && document.getElementById('pageJumpInp
     }
 
     document.body.classList.remove('nav-overflow');
-    nav.classList.remove('open');
-    btn.textContent = '☰';
+    setMenuOpen(false);
 
     var links = nav.querySelectorAll('.nav-link');
     if (!links.length) return;
@@ -389,16 +415,16 @@ function scrollToTop() {
   pres.forEach(function(pre) {
     var btn = document.createElement('button');
     btn.className = 'btn-copy';
-    btn.textContent = '📋';
-    btn.title = 'Copy code';
+    btn.textContent = '复制';
+    btn.title = '复制代码';
     btn.addEventListener('click', function() {
       var code = pre.querySelector('code');
       var text = code ? code.textContent : pre.textContent;
       var ta;
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(function() {
-          btn.textContent = '✅';
-          setTimeout(function() { btn.textContent = '📋'; }, 2000);
+          btn.textContent = '已复制';
+          setTimeout(function() { btn.textContent = '复制'; }, 2000);
         }).catch(function() {
           ta = document.createElement('textarea');
           ta.value = text;
@@ -408,8 +434,8 @@ function scrollToTop() {
           ta.select();
           document.execCommand('copy');
           document.body.removeChild(ta);
-          btn.textContent = '✅';
-          setTimeout(function() { btn.textContent = '📋'; }, 2000);
+          btn.textContent = '已复制';
+          setTimeout(function() { btn.textContent = '复制'; }, 2000);
         });
       } else {
         ta = document.createElement('textarea');
@@ -420,92 +446,16 @@ function scrollToTop() {
         ta.select();
         document.execCommand('copy');
         document.body.removeChild(ta);
-        btn.textContent = '✅';
-        setTimeout(function() { btn.textContent = '📋'; }, 2000);
+        btn.textContent = '已复制';
+        setTimeout(function() { btn.textContent = '复制'; }, 2000);
       }
     });
     pre.parentNode.appendChild(btn);
   });
 })();
 
-/* ============================================
-   NEW EFFECTS: Cursor Glow, 3D Tilt, Scroll Reveal
-   ============================================ */
-
+/* 归档页年份目录跟随滚动高亮 */
 (function() {
-  // Cursor Glow Effect
-  var glow = document.getElementById('cursorGlow');
-  if (glow) {
-    var glowVisible = false;
-    
-    document.addEventListener('mousemove', function(e) {
-      if (!glowVisible) {
-        glow.style.opacity = '1';
-        glowVisible = true;
-      }
-      glow.style.left = e.clientX + 'px';
-      glow.style.top = e.clientY + 'px';
-    });
-
-    document.addEventListener('mouseleave', function() {
-      glow.style.opacity = '0';
-      glowVisible = false;
-    });
-  }
-
-  // 3D Card Tilt Effect with Shine
-  var tiltCards = document.querySelectorAll('.post-card, .category-card, .tool-card, .book-card');
-  
-  tiltCards.forEach(function(card) {
-    card.addEventListener('mousemove', function(e) {
-      var rect = card.getBoundingClientRect();
-      var x = e.clientX - rect.left;
-      var y = e.clientY - rect.top;
-      var centerX = rect.width / 2;
-      var centerY = rect.height / 2;
-      
-      var rotateX = ((y - centerY) / centerY) * -6;
-      var rotateY = ((x - centerX) / centerX) * 6;
-      
-      // Calculate shine position
-      var shineX = (x / rect.width) * 100;
-      var shineY = (y / rect.height) * 100;
-      
-      card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-5px)';
-      card.style.background = 'linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card) 100%), radial-gradient(circle at ' + shineX + '% ' + shineY + '%, rgba(255,255,255,0.15) 0%, transparent 60%)';
-    });
-
-    card.addEventListener('mouseleave', function() {
-      card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0px)';
-      card.style.transition = 'transform 0.4s ease';
-      card.style.background = 'var(--bg-card)';
-    });
-
-    card.addEventListener('mouseenter', function() {
-      card.style.transition = 'transform 0.1s ease';
-    });
-  });
-
-  // Scroll Reveal Animation
-  if ('IntersectionObserver' in window) {
-    var revealObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.fade-in-up').forEach(function(el) {
-      revealObserver.observe(el);
-    });
-  } else {
-    document.querySelectorAll('.fade-in-up').forEach(function(el) {
-      el.classList.add('visible');
-    });
-  }
-
   // Year TOC Scroll Highlight & Close on Outside Click
   var yearToc = document.getElementById('yearToc');
   if (yearToc) {

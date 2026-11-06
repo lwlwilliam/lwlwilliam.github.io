@@ -25,6 +25,8 @@ func (a *APIService) Register(mux *http.ServeMux) {
 	mux.HandleFunc("GET /api/file", a.handleGetFile)
 	mux.HandleFunc("POST /api/save", a.handleSave)
 	mux.HandleFunc("POST /api/new", a.handleNew)
+	mux.HandleFunc("POST /api/article/rename", a.handleArticleRename)
+	mux.HandleFunc("POST /api/article/delete", a.handleArticleDelete)
 	mux.HandleFunc("POST /api/render", a.handleRender)
 	mux.HandleFunc("POST /api/upload", a.handleUpload)
 	mux.HandleFunc("POST /api/build", a.handleBuild)
@@ -98,6 +100,38 @@ func (a *APIService) handleNew(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, http.StatusOK, map[string]string{"path": rel})
+}
+
+func (a *APIService) handleArticleRename(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		Path string `json:"path"`
+		Name string `json:"name"`
+	}
+	if err := decodeBody(r, &body); err != nil {
+		writeErr(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	newPath, err := a.site.RenamePost(body.Path, body.Name)
+	if err != nil {
+		writeErr(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]string{"ok": "true", "path": newPath})
+}
+
+func (a *APIService) handleArticleDelete(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		Path string `json:"path"`
+	}
+	if err := decodeBody(r, &body); err != nil {
+		writeErr(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := a.site.DeletePost(body.Path); err != nil {
+		writeErr(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]string{"ok": "true", "path": body.Path})
 }
 
 func (a *APIService) handleRender(w http.ResponseWriter, r *http.Request) {
