@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>笔记编辑器</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5'/%3E%3Cpath d='M18 2.5a2.12 2.12 0 0 1 3 3L12 14.5l-4 1 1-4Z'/%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="lib/codemirror.min.css"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="app">
+  <aside id="sidebar">
+    <div id="brand">
+      <svg class="logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5"/><path d="M18 2.5a2.12 2.12 0 0 1 3 3L12 14.5l-4 1 1-4Z"/></svg>
+      <span>笔记编辑器</span>
+      <button id="refreshBtn" class="icon-btn" title="刷新目录（⌘R 可在编辑器内刷新）">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+      </button>
+    </div>
+    <button id="newBtn" class="primary-btn full">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      <span>新建文章</span>
+    </button>
+    <nav id="tree" aria-label="文章列表"></nav>
+  </aside>
+
+  <main id="main">
+    <header id="topbar">
+      <div id="fileMeta" title="">
+        <svg class="doc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+        <span id="fileName">未打开文章</span>
+        <span id="draftBadge" class="badge hidden">草稿</span>
+      </div>
+      <div id="actions">
+        <button id="imgBtn" class="tool-btn" title="上传图片到 static/assets/images/&lt;年月&gt;/">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.35-4.35a1.5 1.5 0 0 0-2.12 0L3 21"/></svg>
+          <span>图片</span>
+        </button>
+        <button id="fileBtn" class="tool-btn" title="上传文件到 static/assets/files/">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+          <span>文件</span>
+        </button>
+        <input id="imgInput" type="file" accept="image/*" multiple hidden/>
+        <input id="fileInput" type="file" multiple hidden/>
+        <span class="divider"></span>
+        <button id="buildBtn" class="tool-btn" title="清理并重新构建站点（hugo --cleanDestinationDir）">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 7v5c0 5 3.4 9.3 8 10 4.6-.7 8-5 8-10V7l-8-5Z"/><path d="M9 12.5 11.5 15 16 10"/></svg>
+          <span>构建</span>
+        </button>
+        <button id="saveBtn" class="primary-btn" disabled title="⌘S / Ctrl+S">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>
+          <span>保存</span>
+        </button>
+      </div>
+    </header>
+
+    <div id="split">
+      <section id="editorPane">
+        <div id="editorHost"><textarea id="md"></textarea></div>
+      </section>
+      <section id="previewPane">
+        <iframe id="preview" title="预览"></iframe>
+      </section>
+    </div>
+
+    <footer id="statusbar">
+      <span id="saveState">—</span>
+      <span class="spacer"></span>
+      <span id="counters"></span>
+    </footer>
+  </main>
+</div>
+
+<dialog id="newDialog">
+  <form method="dialog" id="newForm">
+    <h3>新建文章</h3>
+    <label class="field">标题
+      <input name="title" required autocomplete="off" placeholder="文章标题"/>
+    </label>
+    <label class="field">分类
+      <input name="category" autocomplete="off" placeholder="留空则不设置"/>
+    </label>
+    <div class="dialog-actions">
+      <button id="cancelBtn" class="tool-btn" type="button">取消</button>
+      <button id="createBtn" class="primary-btn" type="submit">创建</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="buildDialog">
+  <h3 id="buildTitle">构建输出</h3>
+  <pre id="buildOutput" class="build-out"></pre>
+  <div class="dialog-actions">
+    <button id="buildClose" class="tool-btn" type="button">关闭</button>
+  </div>
+</dialog>
+
+<dialog id="confirmDialog">
+  <h3 id="confirmTitle">确认删除</h3>
+  <p id="confirmText" class="confirm-text"></p>
+  <div class="dialog-actions">
+    <button id="confirmCancel" class="tool-btn" type="button">取消</button>
+    <button id="confirmOk" class="danger-btn" type="button">删除</button>
+  </div>
+</dialog>
+
+<div id="ctxMenu" class="hidden">
+  <div id="ctxInfo" class="ctx-info"></div>
+  <button id="ctxDelBoth" type="button">删除文件并移除引用</button>
+  <button id="ctxDelFile" type="button">仅删除文件</button>
+</div>
+
+<div id="toastHost"></div>
+
+<script src="lib/codemirror.min.js"></script>
+<script src="lib/meta.min.js"></script>
+<script src="lib/xml.min.js"></script>
+<script src="lib/javascript.min.js"></script>
+<script src="lib/css.min.js"></script>
+<script src="lib/clike.min.js"></script>
+<script src="lib/htmlmixed.min.js"></script>
+<script src="lib/markdown.min.js"></script>
+<script src="lib/overlay.min.js"></script>
+<script src="lib/gfm.min.js"></script>
+<script src="lib/active-line.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -81,6 +81,31 @@
     
     <article class="post-card fade-in-up">
       <h2 class="post-card-title">
+        <a href="../../2024/07/11/%E6%8E%A2%E7%B4%A2-php-%E6%BA%90%E7%A0%81%E4%BA%8C%E8%B0%83%E6%95%B4-phpinfo-%E5%9C%A8-cli-%E4%B8%8B%E7%9A%84%E6%A0%BC%E5%BC%8F/">探索 PHP 源码（二）——调整 phpinfo 在 cli 下的格式</a>
+      </h2>
+      <div class="post-card-meta">
+        <time datetime='2024-07-11'>2024年7月11日</time>
+        
+        <span class="post-card-categories">
+          
+          <a href='../../categories/php8.2.6-%E6%BA%90%E7%A0%81%E6%8E%A2%E7%B4%A2/' class="category-pill-sm">PHP8.2.6-源码探索</a>
+          
+        </span>
+        
+      </div>
+      <div class="post-card-excerpt">
+        
+        
+        php-cli下的phpinfo()并没有html格式，对于像reactphp、amphp等库就显示不是那么友好了，所以添加一个选项来开关html格式的phpinfo()显示比较有用。
+sapi/cli/php_cli.c的代码：
+int phpinfo_as_text = 1; while ((c …...
+        
+      </div>
+      <a href="../../2024/07/11/%E6%8E%A2%E7%B4%A2-php-%E6%BA%90%E7%A0%81%E4%BA%8C%E8%B0%83%E6%95%B4-phpinfo-%E5%9C%A8-cli-%E4%B8%8B%E7%9A%84%E6%A0%BC%E5%BC%8F/" class="post-card-readmore">Read more →</a>
+    </article>
+    
+    <article class="post-card fade-in-up">
+      <h2 class="post-card-title">
         <a href="../../2024/07/10/%E6%8E%A2%E7%B4%A2-php-%E6%BA%90%E7%A0%81%E5%AE%9A%E5%88%B6%E5%8F%AF%E8%B0%83%E8%AF%95%E7%9A%84-php-%E8%A7%A3%E9%87%8A%E5%99%A8/">探索 PHP 源码（〇）——定制可调试的 PHP 解释器</a>
       </h2>
       <div class="post-card-meta">
@@ -175,30 +200,6 @@ $ sudo apt install -y pkg-config build-essential autoconf bison re2c libxml2-dev
         
       </div>
       <a href="../../2024/01/24/%E7%94%A8%E5%8E%9F%E5%A7%8B%E6%96%B9%E6%B3%95%E6%89%93%E5%8C%85%E4%B8%80%E4%B8%AA-macos-%E4%B8%8B%E7%9A%84-gtk-%E6%A1%8C%E9%9D%A2%E7%A8%8B%E5%BA%8F/" class="post-card-readmore">Read more →</a>
-    </article>
-    
-    <article class="post-card fade-in-up">
-      <h2 class="post-card-title">
-        <a href="../../2023/11/27/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/">语法分析</a>
-      </h2>
-      <div class="post-card-meta">
-        <time datetime='2023-11-27'>2023年11月27日</time>
-        
-        <span class="post-card-categories">
-          
-          <a href='../../categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/' class="category-pill-sm">编译原理</a>
-          
-        </span>
-        
-      </div>
-      <div class="post-card-excerpt">
-        
-        
-        语法分析是编译前端部分的重要部分。
-# todo class PlusMinus: def __init__(self, left, op, right): self.left = left self.op = op self.right = right def __str__(self): …...
-        
-      </div>
-      <a href="../../2023/11/27/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" class="post-card-readmore">Read more →</a>
     </article>
     
   </div>
