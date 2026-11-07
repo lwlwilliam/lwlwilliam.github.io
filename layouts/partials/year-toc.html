@@ -1,0 +1,14 @@
+{{- if gt (len .links) 1 }}
+<details class="year-toc" id="{{ .id | default "yearToc" }}" data-year-toc>
+  <summary class="year-toc-toggle">
+    <svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 3.75A.75.75 0 0 1 2.75 3h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 3.75Zm0 4A.75.75 0 0 1 2.75 7h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 7.75Zm0 4a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75Z"/></svg>
+    <span>年份</span>
+    <span class="toc-icon-arrow" aria-hidden="true">▾</span>
+  </summary>
+  <nav class="year-toc-nav" aria-label="年份导航">
+    {{- range .links }}
+    <a href="{{ .href }}" class="year-toc-link" data-year="{{ .label }}">{{ .label }}</a>
+    {{- end }}
+  </nav>
+</details>
+{{- end }}

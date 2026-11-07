@@ -1,4 +1,8 @@
-.*
-!.gitignore
+.DS_Store
+.idea/
+.vscode/
+.hugo_build.lock
+public/
+resources/
 tests/
 blog-editor/blog-editor

@@ -1,0 +1,18 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <span>&copy; {{ now.Year }} {{ site.Title }}</span>
+      <span class="footer-sep" aria-hidden="true">|</span>
+      <span>{{ site.Params.description }}</span>
+      {{- with site.Params.beian }}
+      <span class="footer-sep" aria-hidden="true">|</span>
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="footer-link">{{ . }}</a>
+      {{- end }}
+    </div>
+    <div class="footer-right">
+      {{- with site.Home.OutputFormats.Get "rss" }}
+      <a href="{{ .RelPermalink }}" class="footer-link">RSS</a>
+      {{- end }}
+    </div>
+  </div>
+</footer>

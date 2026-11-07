@@ -1,93 +1,32 @@
 {{ define "main" }}
+{{- $books := hugo.Data.books.technical -}}
+{{- $otherBooks := hugo.Data.books.other -}}
+{{- $allYears := slice -}}
+{{- range $year, $_ := $books -}}
+  {{- $allYears = $allYears | append $year -}}
+{{- end -}}
+{{- range $year, $_ := $otherBooks -}}
+  {{- if not (in $allYears $year) -}}
+    {{- $allYears = $allYears | append $year -}}
+  {{- end -}}
+{{- end -}}
+
 <div class="books-page">
+  <h1 class="page-title">Books</h1>
 
-  {{ $books := hugo.Data.books }}
-  {{ $obooks := hugo.Data.other_books }}
+  {{- $links := slice -}}
+  {{- range sort $allYears "value" "desc" -}}
+    {{- $prefix := "technical" -}}
+    {{- if not (index $books .) -}}
+      {{- $prefix = "other" -}}
+    {{- end -}}
+    {{- $links = $links | append (dict "label" . "href" (printf "#%s-%v" $prefix .)) -}}
+  {{- end -}}
+  {{- partial "year-toc.html" (dict "id" "bookYearToc" "links" $links) }}
 
-  {{ $allYears := slice }}
-  {{ range $year, $_ := $books }}
-    {{ $allYears = $allYears | append $year }}
-  {{ end }}
-  {{ range $year, $_ := $obooks }}
-    {{ if not (in $allYears $year) }}
-      {{ $allYears = $allYears | append $year }}
-    {{ end }}
-  {{ end }}
-
-  {{ if gt (len $allYears) 1 }}
-  <details class="year-toc" id="yearToc">
-    <summary class="year-toc-toggle">
-      <svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3.75A.75.75 0 012.75 3h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zm0 4A.75.75 0 012.75 7h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 7.75zm0 4a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"/></svg>
-      <span class="toc-icon-arrow">▼</span>
-    </summary>
-    <nav class="year-toc-nav">
-      {{ range sort $allYears "value" "desc" }}
-      <a href="#book-year-{{ . }}" class="year-toc-link" data-year="{{ . }}">{{ . }}</a>
-      {{ end }}
-    </nav>
-  </details>
-  {{ end }}
-
-  <div class="books-section">
-    <h2 class="books-section-title">Technical Books</h2>
-    {{ $sortedYears := slice }}
-    {{ range $year, $_ := $books }}
-      {{ $sortedYears = $sortedYears | append $year }}
-    {{ end }}
-    {{ range sort $sortedYears "value" "desc" }}
-      {{ $year := . }}
-      {{ $yearBooks := index $books $year }}
-    <div id="book-year-{{ $year }}" class="book-year">
-      <h3 class="book-year-title">{{ $year }} <span class="book-year-count">{{ len $yearBooks }}</span></h3>
-      <div class="book-grid">
-        {{ range $yearBooks }}
-        <div class="book-card fade-in-up{{ if .collect }} collect{{ else }} neutral{{ end }}">
-          <div class="book-card-header">
-            <h4 class="book-name">{{ .name }}</h4>
-            <span class="book-status">
-              {{ if or .complete .remark }}✅{{ else }}📖{{ end }}
-            </span>
-          </div>
-          {{ if .info }}
-          <div class="book-info">{{ .info | safeHTML }}</div>
-          {{ end }}
-        </div>
-        {{ end }}
-      </div>
-    </div>
-    {{ end }}
-  </div>
-
-  {{ with $obooks }}
-  <div class="books-section">
-    <h2 class="books-section-title">Other Books</h2>
-    {{ $sortedOtherYears := slice }}
-    {{ range $year, $_ := . }}
-      {{ $sortedOtherYears = $sortedOtherYears | append $year }}
-    {{ end }}
-    {{ range sort $sortedOtherYears "value" "desc" }}
-      {{ $year := . }}
-      {{ $yearBooks := index $obooks $year }}
-    <div id="book-year-{{ $year }}" class="book-year">
-      <h3 class="book-year-title">{{ $year }} <span class="book-year-count">{{ len $yearBooks }}</span></h3>
-      <div class="book-grid">
-        {{ range $yearBooks }}
-        <div class="book-card fade-in-up{{ if .collect }} collect{{ else }} neutral{{ end }}">
-          <div class="book-card-header">
-            <h4 class="book-name">{{ .name }}</h4>
-            <span class="book-status">
-              {{ if or .complete .remark }}✅{{ else }}📖{{ end }}
-            </span>
-          </div>
-          {{ if .info }}
-          <div class="book-info">{{ .info | safeHTML }}</div>
-          {{ end }}
-        </div>
-        {{ end }}
-      </div>
-    </div>
-    {{ end }}
-  </div>
-  {{ end }}
+  {{- partial "book-section.html" (dict "title" "Technical Books" "books" $books "idPrefix" "technical") }}
+  {{- with $otherBooks }}
+    {{- partial "book-section.html" (dict "title" "Other Books" "books" . "idPrefix" "other") }}
+  {{- end }}
 </div>
 {{ end }}

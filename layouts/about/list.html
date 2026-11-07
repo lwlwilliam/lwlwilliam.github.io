@@ -1,8 +1,9 @@
 {{ define "main" }}
 <div class="about-page">
+  <h1 class="sr-only">{{ .Title }}</h1>
   <div class="about-card">
-    <p class="about-bio">{{ .Site.Params.description }}</p>
-    <p class="about-desc">{{ .Site.Params.about }}</p>
+    <p class="about-bio">{{ site.Params.description }}</p>
+    <p class="about-desc">{{ site.Params.about }}</p>
   </div>
 </div>
 {{ end }}

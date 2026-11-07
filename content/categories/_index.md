@@ -1,4 +1,3 @@
 ---
 title: Categories
-type: categories
 ---

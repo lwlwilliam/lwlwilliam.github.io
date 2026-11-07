@@ -1,75 +1,100 @@
 # lwlwilliam.github.io
 
-基于 [Hugo](https://gohugo.io/) 构建的个人博客，托管于 GitHub Pages。
+基于 [Hugo](https://gohugo.io/) 的个人博客，构建结果发布在 GitHub Pages。
 
 ## 快速开始
 
 ```bash
-# 安装 Hugo (extended 版本)
-# macOS:   brew install hugo
-# Windows: choco install hugo-extended
+# 安装 Hugo extended
+brew install hugo            # macOS
+choco install hugo-extended  # Windows
 
-# 克隆仓库
-git clone git@github.com:lwlwilliam/lwlwilliam.github.io.git
-cd lwlwilliam.github.io
-
-# 本地预览（默认端口 1313）
+# 本地预览
 hugo server -D
 
-# 构建（输出到 docs/ 目录）
-hugo
+# 构建到 docs/（GitHub Pages 发布目录）
+hugo --cleanDestinationDir --minify
 ```
 
-构建后的静态文件在 `docs/` 目录，该目录即是 GitHub Pages 的发布根目录。
+`docs/` 是生成产物，不要直接修改；所有源文件都在仓库根目录的其他目录中。
 
----
+## 目录结构
 
-## 写博客
+```
+.
+├── assets/                 # Hugo Pipes 资源（CSS / 页面级 JS）
+│   ├── css/main.css        # 全站设计变量、组件与响应式样式
+│   └── js/
+│       ├── main.js         # 主题、导航、搜索、TOC 等通用行为
+│       └── tools.js        # /tools/ 页面的 iframe 标签页行为
+├── content/
+│   ├── posts/              # 文章（按年份分目录）
+│   ├── about/              # 关于页
+│   ├── archives/           # 归档页
+│   ├── books/              # 书架页
+│   ├── categories/         # 分类总览页
+│   ├── links/              # 友情链接页
+│   ├── todo/               # 待办页
+│   └── tools/              # 工具总览页
+├── data/                   # 页面数据
+│   ├── books.yml           # technical / other 两组书架数据
+│   ├── links.yml
+│   ├── todo.yml
+│   └── tools.yml
+├── layouts/
+│   ├── _default/
+│   │   ├── baseof.html     # HTML 骨架
+│   │   ├── single.html     # 文章详情
+│   │   └── _markup/        # 图片与链接的 Markdown render hooks
+│   ├── partials/           # header / footer / search / card / year-toc 等
+│   ├── index.html          # 首页
+│   └── <section>/list.html # 各功能页模板
+├── static/                 # 原样复制到输出目录的静态资源
+│   ├── assets/images/      # 文章图片
+│   ├── assets/files/       # 下载文件
+│   ├── katex/              # 按需加载的 KaTeX
+│   └── tools/              # 可独立打开的工具页面
+├── blog-editor/            # 本地 Go 写作工具（不参与站点构建）
+├── _draft/                 # 未发布草稿（Hugo 不处理）
+├── hugo.toml               # 站点配置
+└── docs/                   # 构建产物（GitHub Pages）
+```
 
-所有文章放在 `content/posts/` 目录下，按年份分文件夹。文件名格式：`YYYY-MM-DD-slug.md`。
+## 写文章
 
-### 文章模板
+文章放在 `content/posts/<年份>/` 下，文件名推荐 `YYYY-MM-DD-slug.md`：
 
 ```markdown
 ---
-date: 2025-03-05
+date: 2026-01-07
 title: 文章标题
-categories: [分类1, 分类N]      # 可选，用于 /categories/ 页面分组
-keywords: [关键词1, 关键词N]    # 可选，文章中不显示，仅用于 SEO
+categories: [分类1, 分类N]
+keywords: [关键词1, 关键词N]
 ---
 
-正文从这里开始。支持标准 Markdown 语法。
+正文从这里开始。
 ```
 
-> **注意**：日期 `date` 是必填的，决定文章的时间排序。`slug` 从文件名自动提取，作为 URL 路径。
+- `date` 决定排序，并用于固定链接 `/:year/:month/:day/:slug/`。
+- `categories` 用于分类页与文章标签。
+- `keywords` 会显示在文章标题下方，同时写入 SEO meta。
+- 需要数学公式时添加 `enableKatex: true`，页面才会加载 KaTeX。
+- 文章目录（h2–h4）在存在标题时自动生成，并随阅读位置高亮。
 
-### 生成文章模板
+### 图片和下载文件
 
-`new_post.py`脚本用于生成统一格式的文章模板。
-
-```bash
-$ python new_post.py 文章标题 文章分类
-```
-
-以上脚本会在`./content/posts/年份/`目录和生成一个文件名为`年-月-日-标题.md`文章模板。
-
-### 图片
-
-将图片放到 `static/assets/images/` 目录，Markdown 中这样引用：
+推荐使用站点根路径，构建时会自动转换为适合当前页面的相对地址：
 
 ```markdown
 ![图片说明](/assets/images/example.png)
+[下载文件](/assets/files/example.zip)
 ```
 
-> `/assets/images/` 路径对应仓库根目录下的 `static/assets/images/` 文件夹。Hugo 构建时，`static/` 下的所有文件会原样复制到输出目录。
+对应的源文件位置分别是 `static/assets/images/` 和 `static/assets/files/`。旧的
+`../../../static/assets/...` 写法仍由 render hook 兼容。
 
-### 文件下载
-
-将文件放到 `static/assets/files/` 目录，在 Markdown 中这样提供下载：
-
-```markdown
-[下载 PDF 文档](/assets/files/document.pdf)
-```
+> 直接在 Markdown 中写 HTML 时不会经过 render hook，资源地址请使用
+> `/assets/...` 根路径，Hugo 会将其转换为相对地址。
 
 ### 代码块
 
@@ -77,182 +102,64 @@ $ python new_post.py 文章标题 文章分类
 ```php
 echo "Hello World";
 ```
-
-```python
-def hello():
-    print("Hello")
-```
 ````
 
-代码高亮使用 `monokai` 主题（配置在 `hugo.toml` 中）。
+代码高亮使用 `monokai` 主题，代码块右上角会自动出现“复制”按钮。
 
-### 使用 hugo 代码
-
-默认在文章面`*.md`文件中是无法使用`hugo`变量的，如果非要使用，可以通过如下方式：
-
-首先在`hugo.toml`中设置允许行内短代码。
-
-```toml
-[security]
-  enableInlineShortcodes = true
-```
-
-接着在文章中使用。
-
-```markdown
-今天的日期是：{{< year.inline >}}{{ now.Year }}{{< /year.inline >}}。
-```
-
-其中`{{< year.inline >}}`是内联代码的开始标签，`year`是标签名，随便起；`{{ /year.inline }}`是结束标签，`year`响应开始名称。两个标签之间的就是`hugo`代码。
-
----
-
-## 数学公式 (KaTeX)
-
-默认不加载 KaTeX，只在需要时按页面启用。在文章 frontmatter 中添加：
-
-```markdown
----
-date: 2025-03-05
-title: 某数学文章
-categories: [数学]
-keywords: [数学]
-enableKatex: true        # 仅这篇文章加载 KaTeX
----
-```
-
-然后正常书写 LaTeX：
-
-```markdown
-行内公式：$E = mc^2$
-
-块级公式：
-$$
-\sum_{i=1}^{n} x_i
-$$
-```
-
-已加载的文章示例：`content/posts/2019/2019-04-01-浮点数表示.md`
-
----
-
-## 文章目录 (TOC)
-
-文章会自动从标题提取目录（范围：h2 ~ h4）。目录以可滚动标签 pill 的形式出现在文章标题下方：
-
-- **移动端**（< 900px）：水平滚动的 pill 标签，只显示二级标题
-- **桌面端**（≥ 900px）：展开的纵向列表，含 h2/h3/h4 完整层级，点击跳转并高亮
-
-目录仅在有标题的文章中显示，无标题则自动隐藏。
-
----
-
-## 特殊页面
-
-以下页面通过 `data/` 目录下的 YAML 数据文件驱动，修改对应文件即可更新页面内容：
+## 页面与数据
 
 | 页面 | 数据文件 | 说明 |
 |------|----------|------|
-| `/links/` | `data/links.yml` | 友情链接，格式：`name: 名称`, `url: 地址` |
-| `/books/` | `data/books.yml`, `data/other_books.yml` | 书籍列表 |
-| `/tools/` | `data/tools.yml` | 工具卡片，格式：`file_name`, `name`, `desc` |
-| `/todo/` | `data/todo.yml` | 待办事项列表 |
+| `/links/` | `data/links.yml` | `name`、`url` |
+| `/books/` | `data/books.yml` | `technical`、`other` 两组，按年份组织 |
+| `/tools/` | `data/tools.yml` | `file_name`、`name`、`desc` |
+| `/todo/` | `data/todo.yml` | `name`、可选 `remark` |
 
-### 添加新工具
+### 添加工具
 
-1. 将工具的 HTML 文件放入 `static/tools/`
-2. 在 `data/tools.yml` 中添加条目：
+1. 在 `static/tools/` 放入独立 HTML 页面。
+2. 在 `data/tools.yml` 增加条目：
+
 ```yaml
-- file_name: my-tool        # 对应 static/tools/my-tool.html
+- file_name: my-tool
   name: 我的工具
   desc: 这个工具用来做某事
 ```
 
----
+工具页会优先在 `/tools/` 内用标签页打开；链接仍支持新标签页直接访问。
 
-## 导航栏
+## 导航与配置
 
-编辑 `hugo.toml` 中的 `[[params.navs]]` 数组即可增减导航项：
+导航使用 Hugo 标准菜单，在 `hugo.toml` 中增删 `[[menus.main]]`：
 
 ```toml
-[[params.navs]]
-  href = '/new-page/'
-  label = 'New Page'
+[[menus.main]]
+  name = 'New Page'
+  pageRef = '/new-page'
+  weight = 9
 ```
 
----
-
-## 配置说明 (hugo.toml)
-
-`hugo.toml` 已添加详细的中文注释，直接阅读文件即可理解每项配置的作用。关键配置项：
+主要配置：
 
 | 配置 | 作用 |
 |------|------|
-| `publishDir = "docs"` | 构建输出到 docs/（GitHub Pages 要求） |
-| `params.paginate` | 首页每页显示文章数 |
-| `params.paginationWindow` | 分页器显示的页码按钮数 |
-| `params.excerptLength` | 文章摘要截取字数 |
-| `markup.goldmark.renderer.unsafe` | 允许 Markdown 中直接写 HTML |
-| `markup.tableOfContents.startLevel/endLevel` | 目录提取的标题层级范围 |
+| `publishDir = "docs"` | 输出到 GitHub Pages 目录 |
+| `relativeURLs = true` | 生成可在子路径和本地文件协议下使用的相对链接 |
+| `pagination.pagerSize` | 首页与分类页每页文章数 |
+| `params.paginationWindow` | 分页器页码窗口 |
+| `params.excerptLength` | 文章摘要长度 |
 | `markup.highlight.style` | 代码高亮主题 |
-| `permalinks.posts` | 文章 URL 格式 |
+| `markup.tableOfContents` | 文章目录层级范围 |
+| `permalinks.posts` | 文章固定链接格式 |
 
----
+CSS 与 JS 通过 Hugo Pipes 自动压缩、添加内容哈希并带 SRI 校验，不需要手动维护版本参数。
 
-## 结构概览
+## 功能
 
-```
-.
-├── hugo.toml              # Hugo 配置（含中文注释）
-├── content/
-│   ├── posts/             # 博客文章（按年份分文件夹）
-│   ├── links/_index.md    # 友链页面
-│   ├── books/_index.md    # 书籍页面
-│   ├── tools/_index.md    # 工具页面
-│   ├── todo/_index.md     # 待办页面
-│   ├── about/_index.md    # 关于页面
-│   ├── archives/_index.md # 归档页面
-│   └── categories/_index.md # 分类页面
-├── layouts/               # 模板文件
-│   ├── _default/
-│   │   ├── baseof.html    # HTML 骨架（header、footer、搜索等）
-│   │   ├── single.html    # 文章详情页（含 TOC）
-│   │   └── list.html      # 默认列表页
-│   ├── index.html         # 首页
-│   ├── partials/          # 可复用部件
-│   ├── links/             # 友情链接模板
-│   ├── books/             # 书籍模板
-│   ├── tools/             # 工具模板
-│   ├── todo/              # 待办模板
-│   ├── about/             # 关于模板
-│   ├── archives/          # 归档模板
-│   └── categories/        # 分类模板
-├── static/
-│   ├── assets/
-│   │   ├── css/main.css   # 全局样式
-│   │   ├── js/main.js     # 全局脚本（搜索、主题切换）
-│   │   ├── images/        # 图片资源
-│   │   └── files/         # 可下载文件
-│   ├── katex/             # KaTeX 数学渲染库
-│   └── tools/             # 独立工具页面（HTML）
-├── data/                  # YAML 数据文件
-│   ├── links.yml
-│   ├── books.yml
-│   ├── other_books.yml
-│   ├── tools.yml
-│   └── todo.yml
-└── docs/                  # 构建输出（GitHub Pages 根目录）
-```
-
----
-
-## 功能特性
-
-- **暗色/亮色主题**：右上角切换，自动记住偏好
-- **全文搜索**：点击🔍或按 `Ctrl+K` 搜索所有文章内容
-- **分类归档**：`/categories/` 按分类浏览，`/archives/` 按年份归档
-- **RSS 订阅**：`/feed.xml`
-- **文章目录**：自动生成并固定显示，点击跳转
-- **上一页/下一页**：文章底部自动导航
-- **分页**：首页支持页码跳转
-- **数学公式**：按需加载 KaTeX（`enableKatex: true`）
+- 低饱和浅蓝主题，支持亮色 / 暗色模式并记忆偏好
+- 响应式导航与移动端菜单
+- 全站文章搜索（`Ctrl/⌘ K`），搜索索引在首次打开时加载
+- 分类、年份归档、文章目录与滚动高亮
+- 上一页 / 下一页、分页跳转、回到顶部
+- 图片懒加载、代码一键复制、视频按需加载
+- RSS 与按需 KaTeX

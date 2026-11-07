@@ -1,0 +1,5 @@
+{{- $class := .class | default "category-pill-sm" -}}
+{{- range .categories -}}
+  {{- $term := site.GetPage (printf "/categories/%s" (. | urlize)) -}}
+  <a href="{{ with $term }}{{ .RelPermalink }}{{ else }}{{ printf "/categories/%s/" (. | urlize) | relURL }}{{ end }}" class="{{ $class }}">{{ with $term }}{{ .LinkTitle }}{{ else }}{{ . }}{{ end }}</a>
+{{- end -}}

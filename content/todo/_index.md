@@ -1,4 +1,3 @@
 ---
 title: Todo
-type: todo
 ---

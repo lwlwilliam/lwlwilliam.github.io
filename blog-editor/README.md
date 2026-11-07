@@ -11,8 +11,8 @@
 - **空状态保护**：未打开或新建文章时编辑器保持只读，避免产生无法保存的临时内容。
 - **精确脏检查**：仅当当前内容与打开时或最近保存后的内容不一致时，才提示未保存。
 - **文章管理**：文件项右侧 `⋯` 或右键菜单支持修改文件名和删除文章；重命名保留原目录，删除不可恢复。
-- **新建文章**：按 `new_post.py` 的约定生成 `content/posts/<年>/<日期>-<slug>.md` 与 front matter（`date/title/categories/keywords`）。
-- **一键构建**：界面内直接运行 `hugo --cleanDestinationDir`（构建时自动清掉 `docs/` 里源码已不存在的陈旧文件），失败时弹窗显示 hugo 输出。
+- **新建文章**：按站点既有约定生成 `content/posts/<年>/<日期>-<slug>.md` 与 YAML 安全的 front matter（`date/title/categories/keywords`）。
+- **一键构建**：界面内直接运行 `hugo --cleanDestinationDir --minify`（清理陈旧产物并压缩 HTML），失败时弹窗显示 hugo 输出。
 - **行内删除**：右键文章里的图片/文件链接（指向 `static/assets`）→「删除文件并移除引用」会真删文件并清理该处 markdown；有确认弹窗，会提示其他文章引用、模板引用与“文件不存在”等情况；删空的年月目录自动回收。
 
 ## 运行

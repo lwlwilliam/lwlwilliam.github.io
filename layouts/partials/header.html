@@ -1,0 +1,29 @@
+{{- $current := .RelPermalink -}}
+{{- $home := site.Home.RelPermalink -}}
+<header class="site-header">
+  <div class="header-inner">
+    <a class="site-title" href="{{ $home }}" aria-label="{{ site.Title }} 首页">{{ site.Title }}</a>
+
+    <nav class="site-nav" id="siteNav" aria-label="主导航">
+      {{- range site.Menus.main }}
+        {{- $url := .URL | relURL -}}
+        {{- $active := or (eq $current $url) (and (ne $url $home) (hasPrefix $current $url)) }}
+        <a href="{{ $url }}" class="nav-link{{ if $active }} active{{ end }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
+      {{- end }}
+    </nav>
+
+    <div class="header-actions">
+      <button type="button" class="icon-button btn-hamburger" data-menu-toggle aria-label="打开导航" aria-expanded="false" aria-controls="siteNav">
+        <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <button type="button" class="icon-button" data-search-toggle aria-label="搜索文章" aria-expanded="false" title="搜索（Ctrl/⌘ K）" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </button>
+      <button type="button" class="icon-button btn-theme" data-theme-toggle aria-label="切换明暗主题" title="切换明暗主题">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5Z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </div>
+  </div>
+</header>

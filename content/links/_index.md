@@ -1,4 +1,3 @@
 ---
 title: Links
-type: links
 ---

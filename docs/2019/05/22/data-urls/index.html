@@ -1,273 +1,84 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-<head>
-  <meta charset='utf-8'>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data URLs - William A</title>
-  <meta name="description" content="Love sports, love programming, love life.">
-  <meta name="keywords" content='Data URLs,Go,William A'>
-  <meta name="author" content="William A">
-  <meta name="theme-color" content="#f7f8fa">
-  <link rel="icon" href='../../../../favicon.ico'>
-  
-
-  <link rel="stylesheet" href='../../../../assets/css/main.css'>
-  
-</head>
-<body>
-  <script>
-    (function(){var t=localStorage.getItem('theme')==='dark'?'dark':'light';document.body.className=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0f1115':'#f7f8fa')})();
-  </script>
-  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="回到顶部" aria-label="回到顶部">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
-  </button>
-  <header class="site-header">
-    <div class="header-inner">
-      <a class="site-title" href="../../../../">William A</a>
-      <nav class="site-nav">
-        
-        
-        <a href="../../../../" class="nav-link">cd ~</a>
-        
-        
-        <a href="../../../../categories/" class="nav-link">Categories</a>
-        
-        
-        <a href="../../../../archives/" class="nav-link">Archives</a>
-        
-        
-        <a href="../../../../books/" class="nav-link">Books</a>
-        
-        
-        <a href="../../../../links/" class="nav-link">Links</a>
-        
-        
-        <a href="../../../../tools/" class="nav-link">Tools</a>
-        
-        
-        <a href="../../../../todo/" class="nav-link">Todo</a>
-        
-        
-        <a href="../../../../about/" class="nav-link">About</a>
-        
-      </nav>
-      <div class="header-actions">
-        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="菜单" aria-expanded="false" title="菜单">
-          <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-        </button>
-        <button class="btn-search" onclick="toggleSearch()" aria-label="搜索" title="搜索（Ctrl/⌘ K）">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        </button>
-        <button class="btn-theme" onclick="toggleTheme()" aria-label="切换明暗主题" title="切换明暗主题">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5Z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <div class="search-overlay" id="searchOverlay">
-    <div class="search-modal">
-      <div class="search-header">
-        <input type="text" id="searchInput" class="search-input" placeholder="搜索文章…" autocomplete="off">
-        <button class="search-close" onclick="toggleSearch()">✕</button>
-      </div>
-      <div class="search-results" id="searchResults">
-        <div class="search-hint">输入关键词搜索文章</div>
-      </div>
-    </div>
-  </div>
-
-  <main class="main-content">
-    
-<article class="post-single">
-  <header class="post-header">
-    <h1 class="post-title">Data URLs</h1>
-    <div class="post-meta">
-      <time datetime='2019-05-22'>2019年5月22日</time>
-      
-      <span class="post-categories">
-        
-        <a href='../../../../categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/' class="category-pill">计算机网络</a>
-        
-      </span>
-      
-    </div>
-    
-    <div class="post-keywords">
-      
-      <span class="keyword-tag">Data URLs</span>
-      
-      <span class="keyword-tag">Go</span>
-      
-    </div>
-    
-  </header>
-  
-  
-  <details class="post-toc" id="post-toc">
-    <summary><svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3.75A.75.75 0 012.75 3h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zm0 4A.75.75 0 012.75 7h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 7.75zm0 4a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"/></svg></summary>
-    <nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#语法">语法</a></li>
-        <li><a href="#使用-go-语言生成-base64-编码数据">使用 Go 语言生成 base64 编码数据</a></li>
-        <li><a href="#常见问题">常见问题</a>
-          <ul>
-            <li><a href="#语法-1">语法</a></li>
-            <li><a href="#html-代码格式化">HTML 代码格式化</a></li>
-            <li><a href="#长度限制">长度限制</a></li>
-            <li><a href="#缺乏错误处理">缺乏错误处理</a></li>
-            <li><a href="#不支持查询字符串">不支持查询字符串</a></li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-  </details>
-  
-  <div class="post-content"><h3 id="语法">语法</h3>
-<p>Data URLs，即前缀为<code>data:</code>协议的 URL，其允许内容创建者向文档中嵌入小文件。</p>
-<p>Data URLs 由四个部分组成：前缀(<code>data:</code>)、指示数据类型的 MIME 类型、如果非文本则为可选的<code>base64</code>标记、数据本身：</p>
-<pre tabindex="0"><code>data:[&lt;mediatype&gt;][;base64],&lt;data&gt;
-</code></pre><p><code>mediatype</code>是 MIME 类型的字符串，例如<code>image/png</code>表示 PNG 图像文件。如果省略，则默认值为<code>text/plain;charset=US-ASCII</code>。</p>
-<p>如果数据是文本类型，可以直接将文本嵌入（根据文档类型，使用合适的实体字符或转义字符）。如果是二进制数据，可以将数据进行 base64 编码之后再进行嵌入，并且以数据前加上<code>;base64</code>表明编码。</p>
-<p>以下是一些示例：</p>
-<table>
-  <thead>
-      <tr>
-          <th style="text-align: center">Data URLs</th>
-          <th style="text-align: center">说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: center">data:,Hello%2C%20World!</td>
-          <td style="text-align: center">简单的 text/plain 类型数据</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">data:text/plain;base64,SGVsbG8sIFdvcmxkIQ%3D%3D</td>
-          <td style="text-align: center">上一条示例的 base64 编码版本</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">data:text/html,%3Ch1%3EHello%2C%20World!%3C%2Fh1%3E</td>
-          <td style="text-align: center">一个 HTML 文档源代码 <h1>Hello, World</h1></td>
-      </tr>
-      <tr>
-          <td style="text-align: center">data:text/html,&lt;script&gt;alert(&lsquo;hi&rsquo;);&lt;/script&gt;</td>
-          <td style="text-align: center">一个会执行 JavaScript alert 的 HTML 文档。注意 script 标签必须封闭</td>
-      </tr>
-  </tbody>
-</table>
-<h3 id="使用-go-语言生成-base64-编码数据">使用 Go 语言生成 base64 编码数据</h3>
-<p>Data URLs 常用于图片中，把一些小尺寸图片转为 Data URLs 可以减少 HTTP 请求，但对于大尺寸图片不建议转换。以下是 Go 语言生成 base64 编码格式图片的示例：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;encoding/base64&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;os&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;log&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;bytes&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;io&#34;</span>
-</span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">reader</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;./practice/images/test.png&#34;</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">reader</span>.<span style="color:#a6e22e">Close</span>()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">buf</span> <span style="color:#a6e22e">bytes</span>.<span style="color:#a6e22e">Buffer</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">b</span> = make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">1024</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reader</span>.<span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">b</span>)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">EOF</span> {
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">buf</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">b</span>[:<span style="color:#a6e22e">n</span>])
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">buf</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">b</span>[:<span style="color:#a6e22e">n</span>])
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">writer</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">OpenFile</span>(<span style="color:#e6db74">&#34;./test.html&#34;</span>, <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">O_CREATE</span>|<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">O_RDWR</span>,<span style="color:#ae81ff">0644</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">writer</span>.<span style="color:#a6e22e">Close</span>()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">writer</span>.<span style="color:#a6e22e">WriteString</span>(<span style="color:#e6db74">&#34;&lt;img src=&#39;data:image/png;base64,&#34;</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">encoder</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">base64</span>.<span style="color:#a6e22e">NewEncoder</span>(<span style="color:#a6e22e">base64</span>.<span style="color:#a6e22e">StdEncoding</span>, <span style="color:#a6e22e">writer</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">encoder</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">buf</span>.<span style="color:#a6e22e">Bytes</span>())
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">encoder</span>.<span style="color:#a6e22e">Close</span>()
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">writer</span>.<span style="color:#a6e22e">WriteString</span>(<span style="color:#e6db74">&#34;&#39;&gt;&#34;</span>)
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>以上代码对<code>./practice/image/test.png</code>中的内容进行 base64 编码，并输出到<code>./test.html</code>文件中。浏览器打开 test.html 文件即可看到效果。</p>
-<h3 id="常见问题">常见问题</h3>
-<h4 id="语法-1">语法</h4>
-<p>Data URLs 的格式很简单，但很容易会忘记<code>data:[&lt;mediatype&gt;][;base64],&lt;data&gt;</code>中的<code>&lt;data&gt;</code>前面是有<code>,</code>的。</p>
-<h4 id="html-代码格式化">HTML 代码格式化</h4>
-<p>Data URLs 是文件中的文件，相对文档来说这个文件可能非常长。因为 Data URLs 也是 URL，所以 data 会用空白符来对它进行格式化。但如果数据是经过 base64 编码的，就可能会遇到<a href="../../../../http://bugzilla.mozilla.org/show_bug.cgi?id=73026#c12">一些问题</a>
-。</p>
-<h4 id="长度限制">长度限制</h4>
-<h4 id="缺乏错误处理">缺乏错误处理</h4>
-<p>Data URLs 无法被解析时不会有任何相关提示。</p>
-<h4 id="不支持查询字符串">不支持查询字符串</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>data:text/html,lots of text...&lt;<span style="color:#f92672">p</span>&gt;&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">name</span><span style="color:#960050;background-color:#1e0010">%</span><span style="color:#a6e22e">3D</span><span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">bottom</span><span style="color:#960050;background-color:#1e0010">&#34;</span>&gt;bottom&lt;/<span style="color:#f92672">a</span>&gt;?arg=val
-</span></span></code></pre></div><p>这个 Data URL 代表的 HTMl 源文件内容为：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>lots of text...&lt;<span style="color:#f92672">p</span>&gt;&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">name</span><span style="color:#960050;background-color:#1e0010">%</span><span style="color:#a6e22e">3D</span><span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">bottom</span><span style="color:#960050;background-color:#1e0010">&#34;</span>&gt;bottom&lt;/<span style="color:#f92672">a</span>&gt;?arg=val
-</span></span></code></pre></div><blockquote>
-<p>本文整理自 <a href="../../../../https://developer.mozilla.org/zh-CN/docs/Web/HTTP/data_URIs">Data URLs</a>
-</p>
-</blockquote>
-</div>
-  <footer class="post-footer">
-    <nav class="post-nav">
-      
-      <a class="prev-post" href="../../../../2019/05/17/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E5%8E%9F%E7%90%86%E6%B5%85%E6%9E%90/">
-        <span class="nav-label">← Prev</span>
-        <span class="nav-title">内网穿透原理浅析</span>
-      </a>
-      
-      
-      <a class="next-post" href="../../../../2019/05/29/cookie-%E5%92%8C-session/">
-        <span class="nav-label">Next →</span>
-        <span class="nav-title">Cookie 和 Session</span>
-      </a>
-      
-    </nav>
-  </footer>
-</article>
-
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-left">
-        <span>&copy; 2026 William A</span>
-        <span class="footer-sep">|</span>
-        <span>Love sports, love programming, love life.</span>
-        <span class="footer-sep">|</span>
-        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">粤ICP备20026636号-1</a>
-      </div>
-      <div class="footer-right">
-        <a href='../../../../feed.xml' target="_blank" class="footer-link">RSS</a>
-      </div>
-    </div>
-  </footer>
-
-  <a id="search-index-url" href='../../../../search.json' hidden></a>
-
-  <script src='../../../../assets/js/main.js'></script>
-  
-</body>
-</html>
+<!doctype html><html lang=zh-cn class=no-js><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=generator content="Hugo 0.161.1"><title>Data URLs - William A</title><meta name=description content="Love sports, love programming, love life."><meta name=keywords content="Data URLs,Go,William A"><meta name=author content="William A"><meta name=theme-color content="#f7f8fa" data-theme-color><link rel=icon href=../../../../favicon.ico><link rel=alternate type=application/rss+xml title="William A" href=../../../../feed.xml><script>(function(){var e,n,s,t=document.documentElement;t.classList.replace("no-js","js");try{s=localStorage.getItem("theme"),e=s==="dark"?"dark":"light",t.dataset.theme=e,t.style.colorScheme=e,n=document.querySelector("meta[data-theme-color]"),n&&n.setAttribute("content",e==="dark"?"#0f1115":"#f7f8fa")}catch{}})()</script><link rel=stylesheet href=../../../../css/main.min.bcce8956c386fe3e5fda725391ed9f50e46b47879e10df784860543bf0370e90.css integrity="sha256-vM6JVsOG/j5f2nJTke2fUORrR4eeEN94SGBUO/A3DpA="></head><body><a class=skip-link href=#main-content>跳到正文</a><header class=site-header><div class=header-inner><a class=site-title href=../../../../ aria-label="William A 首页">William A</a><nav class=site-nav id=siteNav aria-label=主导航><a href=../../../../ class=nav-link>cd ~</a>
+<a href=../../../../categories/ class=nav-link>Categories</a>
+<a href=../../../../archives/ class=nav-link>Archives</a>
+<a href=../../../../books/ class=nav-link>Books</a>
+<a href=../../../../links/ class=nav-link>Links</a>
+<a href=../../../../tools/ class=nav-link>Tools</a>
+<a href=../../../../todo/ class=nav-link>Todo</a>
+<a href=../../../../about/ class=nav-link>About</a></nav><div class=header-actions><button type=button class="icon-button btn-hamburger" data-menu-toggle aria-label=打开导航 aria-expanded=false aria-controls=siteNav>
+<svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+<svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+</button>
+<button type=button class=icon-button data-search-toggle aria-label=搜索文章 aria-expanded=false title="搜索（Ctrl/⌘ K）" aria-haspopup=dialog>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+</button>
+<button type=button class="icon-button btn-theme" data-theme-toggle aria-label=切换明暗主题 title=切换明暗主题>
+<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15.5A8.5 8.5.0 018.5 4 8.5 8.5.0 1020 15.5z"/></svg>
+<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg></button></div></div></header><div class=search-overlay id=searchOverlay role=dialog aria-modal=true aria-labelledby=searchTitle aria-hidden=true><div class=search-modal><div class=search-header><label class=sr-only id=searchTitle for=searchInput>搜索文章</label>
+<input type=search id=searchInput class=search-input placeholder=搜索文章… autocomplete=off spellcheck=false>
+<button type=button class=search-close data-search-close aria-label=关闭搜索>✕</button></div><div class=search-results id=searchResults role=status aria-live=polite><p class=search-hint>输入关键词搜索文章</p></div></div></div><a id=search-index-url href=../../../../search.json hidden></a><main class=main-content id=main-content tabindex=-1><article class=post-single><header class=post-header><h1 class=post-title>Data URLs</h1><div class=post-meta><time datetime=2019-05-22>2019年5月22日</time>
+<span class=post-categories><a href=../../../../categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ class=category-pill>计算机网络</a>
+</span><span class=post-reading-time>1 分钟阅读</span></div><div class=post-keywords aria-label=关键词><span class=keyword-tag>Data URLs</span>
+<span class=keyword-tag>Go</span></div></header><details class=post-toc id=post-toc><summary><svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 3.75A.75.75.0 012.75 3h10.5a.75.75.0 010 1.5H2.75A.75.75.0 012 3.75zm0 4A.75.75.0 012.75 7h10.5a.75.75.0 010 1.5H2.75A.75.75.0 012 7.75zm0 4a.75.75.0 01.75-.75h10.5a.75.75.0 010 1.5H2.75A.75.75.0 012 11.75z"/></svg>
+<span>目录</span></summary><nav id=TableOfContents><ul><li><ul><li><a href=#语法>语法</a></li><li><a href=#使用-go-语言生成-base64-编码数据>使用 Go 语言生成 base64 编码数据</a></li><li><a href=#常见问题>常见问题</a><ul><li><a href=#语法-1>语法</a></li><li><a href=#html-代码格式化>HTML 代码格式化</a></li><li><a href=#长度限制>长度限制</a></li><li><a href=#缺乏错误处理>缺乏错误处理</a></li><li><a href=#不支持查询字符串>不支持查询字符串</a></li></ul></li></ul></li></ul></nav></details><div class=post-content><h3 id=语法>语法</h3><p>Data URLs，即前缀为<code>data:</code>协议的 URL，其允许内容创建者向文档中嵌入小文件。</p><p>Data URLs 由四个部分组成：前缀(<code>data:</code>)、指示数据类型的 MIME 类型、如果非文本则为可选的<code>base64</code>标记、数据本身：</p><pre tabindex=0><code>data:[&lt;mediatype&gt;][;base64],&lt;data&gt;
+</code></pre><p><code>mediatype</code>是 MIME 类型的字符串，例如<code>image/png</code>表示 PNG 图像文件。如果省略，则默认值为<code>text/plain;charset=US-ASCII</code>。</p><p>如果数据是文本类型，可以直接将文本嵌入（根据文档类型，使用合适的实体字符或转义字符）。如果是二进制数据，可以将数据进行 base64 编码之后再进行嵌入，并且以数据前加上<code>;base64</code>表明编码。</p><p>以下是一些示例：</p><table><thead><tr><th style=text-align:center>Data URLs</th><th style=text-align:center>说明</th></tr></thead><tbody><tr><td style=text-align:center>data:,Hello%2C%20World!</td><td style=text-align:center>简单的 text/plain 类型数据</td></tr><tr><td style=text-align:center>data:text/plain;base64,SGVsbG8sIFdvcmxkIQ%3D%3D</td><td style=text-align:center>上一条示例的 base64 编码版本</td></tr><tr><td style=text-align:center>data:text/html,%3Ch1%3EHello%2C%20World!%3C%2Fh1%3E</td><td style=text-align:center>一个 HTML 文档源代码<h1>Hello, World</h1></td></tr><tr><td style=text-align:center>data:text/html,&lt;script>alert(&lsquo;hi&rsquo;);&lt;/script></td><td style=text-align:center>一个会执行 JavaScript alert 的 HTML 文档。注意 script 标签必须封闭</td></tr></tbody></table><h3 id=使用-go-语言生成-base64-编码数据>使用 Go 语言生成 base64 编码数据</h3><p>Data URLs 常用于图片中，把一些小尺寸图片转为 Data URLs 可以减少 HTTP 请求，但对于大尺寸图片不建议转换。以下是 Go 语言生成 base64 编码格式图片的示例：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>main</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;encoding/base64&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;os&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;log&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;bytes&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;io&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>reader</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>os</span><span class=p>.</span><span class=nf>Open</span><span class=p>(</span><span class=s>&#34;./practice/images/test.png&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nx>log</span><span class=p>.</span><span class=nf>Fatal</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>defer</span><span class=w> </span><span class=nx>reader</span><span class=p>.</span><span class=nf>Close</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>var</span><span class=w> </span><span class=nx>buf</span><span class=w> </span><span class=nx>bytes</span><span class=p>.</span><span class=nx>Buffer</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>var</span><span class=w> </span><span class=nx>b</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nb>make</span><span class=p>([]</span><span class=kt>byte</span><span class=p>,</span><span class=w> </span><span class=mi>1024</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>for</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nx>n</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>reader</span><span class=p>.</span><span class=nf>Read</span><span class=p>(</span><span class=nx>b</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=nx>io</span><span class=p>.</span><span class=nx>EOF</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=nx>buf</span><span class=p>.</span><span class=nf>Write</span><span class=p>(</span><span class=nx>b</span><span class=p>[:</span><span class=nx>n</span><span class=p>])</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>break</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nx>log</span><span class=p>.</span><span class=nf>Fatal</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nx>n</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>buf</span><span class=p>.</span><span class=nf>Write</span><span class=p>(</span><span class=nx>b</span><span class=p>[:</span><span class=nx>n</span><span class=p>])</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nx>log</span><span class=p>.</span><span class=nf>Fatal</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>writer</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>os</span><span class=p>.</span><span class=nf>OpenFile</span><span class=p>(</span><span class=s>&#34;./test.html&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>os</span><span class=p>.</span><span class=nx>O_CREATE</span><span class=p>|</span><span class=nx>os</span><span class=p>.</span><span class=nx>O_RDWR</span><span class=p>,</span><span class=mo>0644</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nx>log</span><span class=p>.</span><span class=nf>Fatal</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>defer</span><span class=w> </span><span class=nx>writer</span><span class=p>.</span><span class=nf>Close</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>writer</span><span class=p>.</span><span class=nf>WriteString</span><span class=p>(</span><span class=s>&#34;&lt;img src=&#39;data:image/png;base64,&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>encoder</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>base64</span><span class=p>.</span><span class=nf>NewEncoder</span><span class=p>(</span><span class=nx>base64</span><span class=p>.</span><span class=nx>StdEncoding</span><span class=p>,</span><span class=w> </span><span class=nx>writer</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>encoder</span><span class=p>.</span><span class=nf>Write</span><span class=p>(</span><span class=nx>buf</span><span class=p>.</span><span class=nf>Bytes</span><span class=p>())</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>encoder</span><span class=p>.</span><span class=nf>Close</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>writer</span><span class=p>.</span><span class=nf>WriteString</span><span class=p>(</span><span class=s>&#34;&#39;&gt;&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><p>以上代码对<code>./practice/image/test.png</code>中的内容进行 base64 编码，并输出到<code>./test.html</code>文件中。浏览器打开 test.html 文件即可看到效果。</p><h3 id=常见问题>常见问题</h3><h4 id=语法-1>语法</h4><p>Data URLs 的格式很简单，但很容易会忘记<code>data:[&lt;mediatype>][;base64],&lt;data></code>中的<code>&lt;data></code>前面是有<code>,</code>的。</p><h4 id=html-代码格式化>HTML 代码格式化</h4><p>Data URLs 是文件中的文件，相对文档来说这个文件可能非常长。因为 Data URLs 也是 URL，所以 data 会用空白符来对它进行格式化。但如果数据是经过 base64 编码的，就可能会遇到<a href="http://bugzilla.mozilla.org/show_bug.cgi?id=73026#c12" target=_blank rel="noopener noreferrer">一些问题</a>
+。</p><h4 id=长度限制>长度限制</h4><h4 id=缺乏错误处理>缺乏错误处理</h4><p>Data URLs 无法被解析时不会有任何相关提示。</p><h4 id=不支持查询字符串>不支持查询字符串</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl>data:text/html,lots of text...<span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;&lt;</span><span class=nt>a</span> <span class=na>name</span><span class=err>%</span><span class=na>3D</span><span class=err>&#34;</span><span class=na>bottom</span><span class=err>&#34;</span><span class=p>&gt;</span>bottom<span class=p>&lt;/</span><span class=nt>a</span><span class=p>&gt;</span>?arg=val
+</span></span></code></pre></div><p>这个 Data URL 代表的 HTMl 源文件内容为：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl>lots of text...<span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;&lt;</span><span class=nt>a</span> <span class=na>name</span><span class=err>%</span><span class=na>3D</span><span class=err>&#34;</span><span class=na>bottom</span><span class=err>&#34;</span><span class=p>&gt;</span>bottom<span class=p>&lt;/</span><span class=nt>a</span><span class=p>&gt;</span>?arg=val
+</span></span></code></pre></div><blockquote><p>本文整理自 <a href=https://developer.mozilla.org/zh-CN/docs/Web/HTTP/data_URIs target=_blank rel="noopener noreferrer">Data URLs</a></p></blockquote></div><footer class=post-footer><nav class=post-nav aria-label=文章导航><a class=prev-post href=../../../../2019/05/17/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E5%8E%9F%E7%90%86%E6%B5%85%E6%9E%90/ rel=prev><span class=nav-label>← 上一篇</span>
+<span class=nav-title>内网穿透原理浅析</span>
+</a><a class=next-post href=../../../../2019/05/29/cookie-%E5%92%8C-session/ rel=next><span class=nav-label>下一篇 →</span>
+<span class=nav-title>Cookie 和 Session</span></a></nav></footer></article></main><footer class=site-footer><div class=footer-inner><div class=footer-left><span>&copy; 2026 William A</span>
+<span class=footer-sep aria-hidden=true>|</span>
+<span>Love sports, love programming, love life.</span>
+<span class=footer-sep aria-hidden=true>|</span>
+<a href=https://beian.miit.gov.cn/ target=_blank rel="noopener noreferrer" class=footer-link>粤ICP备20026636号-1</a></div><div class=footer-right><a href=../../../../feed.xml class=footer-link>RSS</a></div></div></footer><button type=button class=back-to-top id=backToTop data-back-to-top aria-label=回到顶部 title=回到顶部>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+</button>
+<script src=../../../../js/main.min.4cf3a756b96ad86df0852be0501346002e700dde96badd078781a698d8be15c1.js integrity="sha256-TPOnVrlq2G3whSvgUBNGAC5wDd6Wut0Hh4GmmNi+FcE=" defer></script></body></html>

@@ -1,342 +1,198 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-<head>
-  <meta charset='utf-8'>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>断点续传之上传 - William A</title>
-  <meta name="description" content="Love sports, love programming, love life.">
-  <meta name="keywords" content='计算机网络,断点续传,上传,William A'>
-  <meta name="author" content="William A">
-  <meta name="theme-color" content="#f7f8fa">
-  <link rel="icon" href='../../../../favicon.ico'>
-  
-
-  <link rel="stylesheet" href='../../../../assets/css/main.css'>
-  
-</head>
-<body>
-  <script>
-    (function(){var t=localStorage.getItem('theme')==='dark'?'dark':'light';document.body.className=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0f1115':'#f7f8fa')})();
-  </script>
-  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="回到顶部" aria-label="回到顶部">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
-  </button>
-  <header class="site-header">
-    <div class="header-inner">
-      <a class="site-title" href="../../../../">William A</a>
-      <nav class="site-nav">
-        
-        
-        <a href="../../../../" class="nav-link">cd ~</a>
-        
-        
-        <a href="../../../../categories/" class="nav-link">Categories</a>
-        
-        
-        <a href="../../../../archives/" class="nav-link">Archives</a>
-        
-        
-        <a href="../../../../books/" class="nav-link">Books</a>
-        
-        
-        <a href="../../../../links/" class="nav-link">Links</a>
-        
-        
-        <a href="../../../../tools/" class="nav-link">Tools</a>
-        
-        
-        <a href="../../../../todo/" class="nav-link">Todo</a>
-        
-        
-        <a href="../../../../about/" class="nav-link">About</a>
-        
-      </nav>
-      <div class="header-actions">
-        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="菜单" aria-expanded="false" title="菜单">
-          <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-        </button>
-        <button class="btn-search" onclick="toggleSearch()" aria-label="搜索" title="搜索（Ctrl/⌘ K）">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        </button>
-        <button class="btn-theme" onclick="toggleTheme()" aria-label="切换明暗主题" title="切换明暗主题">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5Z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <div class="search-overlay" id="searchOverlay">
-    <div class="search-modal">
-      <div class="search-header">
-        <input type="text" id="searchInput" class="search-input" placeholder="搜索文章…" autocomplete="off">
-        <button class="search-close" onclick="toggleSearch()">✕</button>
-      </div>
-      <div class="search-results" id="searchResults">
-        <div class="search-hint">输入关键词搜索文章</div>
-      </div>
-    </div>
-  </div>
-
-  <main class="main-content">
-    
-<article class="post-single">
-  <header class="post-header">
-    <h1 class="post-title">断点续传之上传</h1>
-    <div class="post-meta">
-      <time datetime='2020-01-09'>2020年1月9日</time>
-      
-      <span class="post-categories">
-        
-        <a href='../../../../categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/' class="category-pill">计算机网络</a>
-        
-      </span>
-      
-    </div>
-    
-    <div class="post-keywords">
-      
-      <span class="keyword-tag">计算机网络</span>
-      
-      <span class="keyword-tag">断点续传</span>
-      
-      <span class="keyword-tag">上传</span>
-      
-    </div>
-    
-  </header>
-  
-  
-  <details class="post-toc" id="post-toc">
-    <summary><svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3.75A.75.75 0 012.75 3h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zm0 4A.75.75 0 012.75 7h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 7.75zm0 4a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"/></svg></summary>
-    <nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#读取文件">读取文件</a></li>
-        <li><a href="#切分文件">切分文件</a></li>
-        <li><a href="#上传文件">上传文件</a></li>
-        <li><a href="#上传完成合并文件">上传完成，合并文件</a></li>
-        <li><a href="#完整的前端代码">完整的前端代码</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-  </details>
-  
-  <div class="post-content"><p>这篇文章主要讲断点续传的上传原理。</p>
-<p>断点续传指的是在文件传输时将文件进行切分，每个部分的传输都是独立的，并且在遇到网络故障时，可以在网络通畅之后继续传输的未曾传输的部分，并不需要重新传输。</p>
-<p>根据以上描述，Web 端的文件上传步骤如下。<strong>为了思路的清晰，以下代码十分简陋，没有进行相应的错误处理，而且是非并发安全的，千万不要在实际项目中这么写！</strong></p>
-<h3 id="读取文件">读取文件</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">fileEle</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;#file&#39;</span>);
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">readerFile</span>;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">file</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fileEle</span>.<span style="color:#a6e22e">onchange</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">rd</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FileReader</span>();
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">file</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">files</span>[<span style="color:#ae81ff">0</span>]; <span style="color:#75715e">// 这里默认只有一个文件，多文件的话可以自行扩展
-</span></span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">rd</span>.<span style="color:#a6e22e">onload</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">e</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">readerFile</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">result</span>;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">rd</span>.<span style="color:#a6e22e">readAsDataURL</span>(<span style="color:#a6e22e">file</span>);
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="切分文件">切分文件</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">start</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#75715e">// 切片头部偏移量
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">count</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#75715e">// 切片序号
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">step</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">10240</span>; <span style="color:#75715e">// 切片大小
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">piece</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getPiece</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">piece</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">readerFile</span>.<span style="color:#a6e22e">slice</span>(<span style="color:#a6e22e">start</span>, <span style="color:#a6e22e">start</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">step</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">piece</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="上传文件">上传文件</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">upload</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">fm</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FormData</span>();
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fm</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#39;name&#39;</span>, <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">name</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fm</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#39;cap&#39;</span>, <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">size</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fm</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#39;len&#39;</span>, <span style="color:#a6e22e">step</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fm</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#39;seq_&#39;</span> <span style="color:#f92672">+</span> String(<span style="color:#a6e22e">count</span>), <span style="color:#a6e22e">getPiece</span>());
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">xhr</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">XMLHttpRequest</span>();
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">xhr</span>.<span style="color:#a6e22e">onload</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">e</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">status</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">200</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">readyState</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">4</span>) {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">count</span> <span style="color:#f92672">++</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">start</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">step</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">start</span> <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">readerFile</span>.<span style="color:#a6e22e">length</span>) {
-</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// 这里自己决定怎么续传
-</span></span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">setTimeout</span>(<span style="color:#66d9ef">function</span>() {
-</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">upload</span>();
-</span></span><span style="display:flex;"><span>                }, <span style="color:#ae81ff">1000</span>);
-</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">alert</span>(<span style="color:#e6db74">&#39;上传成功&#39;</span>);
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">xhr</span>.<span style="color:#a6e22e">open</span>(<span style="color:#e6db74">&#39;post&#39;</span>, <span style="color:#e6db74">&#39;http://localhost:8888/upload&#39;</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">xhr</span>.<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">fm</span>);
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="上传完成合并文件">上传完成，合并文件</h3>
-<p>将前端传来的<code>seq_num</code>（num 为序列号）保存到数据库中，可以根据文件的大小来判断是否上传完毕，待确认文件上传完毕，即可进行合并。以下代码将这些复杂的步骤进行了简化，将每一段切片都直接追回到同一个临时文件中，并以一个特别的请求表示文件已经上传完毕。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> ($_POST <span style="color:#66d9ef">as</span> $k <span style="color:#f92672">=&gt;</span> $v) {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">preg_match</span>(<span style="color:#e6db74">&#39;/\d+$/&#39;</span>, $k) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">preg_match</span>(<span style="color:#e6db74">&#39;/[^\d]0$/&#39;</span>, $k)) {
-</span></span><span style="display:flex;"><span>            $fd <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(<span style="color:#e6db74">&#39;test.txt&#39;</span>, <span style="color:#e6db74">&#34;wb+&#34;</span>);
-</span></span><span style="display:flex;"><span>            $v <span style="color:#f92672">=</span> <span style="color:#a6e22e">preg_replace</span>(<span style="color:#e6db74">&#39;/data:.*?,/&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, $v);
-</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>            $fd <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(<span style="color:#e6db74">&#39;test.txt&#39;</span>, <span style="color:#e6db74">&#34;ab+&#34;</span>);
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fwrite</span>($fd, $v);
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fclose</span>($fd);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ($k <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;end&#39;</span>) {
-</span></span><span style="display:flex;"><span>        $content <span style="color:#f92672">=</span> <span style="color:#a6e22e">file_get_contents</span>(<span style="color:#e6db74">&#39;test.txt&#39;</span>);
-</span></span><span style="display:flex;"><span>        $content <span style="color:#f92672">=</span> <span style="color:#a6e22e">base64_decode</span>($content);
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">file_put_contents</span>(<span style="color:#e6db74">&#39;test.jpg&#39;</span>, $content);
-</span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#39;Content-type: image/jpeg&#39;</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">echo</span> $content;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="完整的前端代码">完整的前端代码</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!DOCTYPE html&gt;</span>
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span> <span style="color:#a6e22e">lang</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;en&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">head</span>&gt;
-</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">charset</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">title</span>&gt;Title&lt;/<span style="color:#f92672">title</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">head</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">form</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;file&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;file&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;button&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;sm&#34;</span>&gt;提交&lt;/<span style="color:#f92672">button</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">form</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">fileEle</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;#file&#39;</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">readerFile</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">file</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">start</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#75715e">// 切片偏移量
-</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">count</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#75715e">// 切片序号
-</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">step</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">10240</span>; <span style="color:#75715e">// 切片大小
-</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">piece</span>; <span style="color:#75715e">// 切片内容
-</span></span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">url</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://localhost:8888/upload&#39;</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fileEle</span>.<span style="color:#a6e22e">onchange</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> () {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">rd</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FileReader</span>();
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">file</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">files</span>[<span style="color:#ae81ff">0</span>]; <span style="color:#75715e">// 这里默认只有一个文件，多文件的话可以自行扩展
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">rd</span>.<span style="color:#a6e22e">onload</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">e</span>) {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">readerFile</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">result</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">rd</span>.<span style="color:#a6e22e">readAsDataURL</span>(<span style="color:#a6e22e">file</span>);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getPiece</span>() {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">piece</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">readerFile</span>.<span style="color:#a6e22e">slice</span>(<span style="color:#a6e22e">start</span>, <span style="color:#a6e22e">start</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">step</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">piece</span>;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">upload</span>() {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">fm</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FormData</span>();
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fm</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#39;name&#39;</span>, <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">name</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fm</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#39;cap&#39;</span>, <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">size</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fm</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#39;len&#39;</span>, <span style="color:#a6e22e">step</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fm</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#39;seq_&#39;</span> <span style="color:#f92672">+</span> String(<span style="color:#a6e22e">count</span>), <span style="color:#a6e22e">getPiece</span>());
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">xhr</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">XMLHttpRequest</span>();
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">xhr</span>.<span style="color:#a6e22e">onload</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">e</span>) {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">status</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">200</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">readyState</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">4</span>) {
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">count</span><span style="color:#f92672">++</span>;
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">start</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">step</span>;
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">start</span> <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">readerFile</span>.<span style="color:#a6e22e">length</span>) {
-</span></span><span style="display:flex;"><span>                    <span style="color:#75715e">// 这里自己决定怎么续传
-</span></span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">setTimeout</span>(<span style="color:#66d9ef">function</span> () {
-</span></span><span style="display:flex;"><span>                        <span style="color:#a6e22e">upload</span>();
-</span></span><span style="display:flex;"><span>                    }, <span style="color:#ae81ff">1000</span>);
-</span></span><span style="display:flex;"><span>                } <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">end</span>();
-</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">alert</span>(<span style="color:#e6db74">&#39;上传成功&#39;</span>);
-</span></span><span style="display:flex;"><span>                }
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">xhr</span>.<span style="color:#a6e22e">open</span>(<span style="color:#e6db74">&#39;post&#39;</span>, <span style="color:#a6e22e">url</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">xhr</span>.<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">fm</span>);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">end</span>() {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">fm</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FormData</span>();
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fm</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#39;end&#39;</span>, <span style="color:#e6db74">&#39;end&#39;</span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">xhr</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">XMLHttpRequest</span>();
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">xhr</span>.<span style="color:#a6e22e">onload</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">e</span>) {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">status</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">200</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">readyState</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">4</span>) {
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        };
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">xhr</span>.<span style="color:#a6e22e">open</span>(<span style="color:#e6db74">&#39;post&#39;</span>, <span style="color:#a6e22e">url</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">xhr</span>.<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">fm</span>);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sm</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;#sm&#39;</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sm</span>.<span style="color:#a6e22e">onclick</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> () {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">count</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">start</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">upload</span>();
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">script</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
-</span></span></code></pre></div></div>
-  <footer class="post-footer">
-    <nav class="post-nav">
-      
-      <a class="prev-post" href="../../../../2019/12/31/fastcgi-%E5%8D%8F%E8%AE%AE%E5%88%9D%E6%8E%A5%E8%A7%A6/">
-        <span class="nav-label">← Prev</span>
-        <span class="nav-title">FastCGI 协议初接触</span>
-      </a>
-      
-      
-      <a class="next-post" href="../../../../2020/01/10/m3u8-%E5%9C%A8%E7%BA%BF%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/">
-        <span class="nav-label">Next →</span>
-        <span class="nav-title">m3u8 在线视频播放</span>
-      </a>
-      
-    </nav>
-  </footer>
-</article>
-
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-left">
-        <span>&copy; 2026 William A</span>
-        <span class="footer-sep">|</span>
-        <span>Love sports, love programming, love life.</span>
-        <span class="footer-sep">|</span>
-        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">粤ICP备20026636号-1</a>
-      </div>
-      <div class="footer-right">
-        <a href='../../../../feed.xml' target="_blank" class="footer-link">RSS</a>
-      </div>
-    </div>
-  </footer>
-
-  <a id="search-index-url" href='../../../../search.json' hidden></a>
-
-  <script src='../../../../assets/js/main.js'></script>
-  
-</body>
-</html>
+<!doctype html><html lang=zh-cn class=no-js><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=generator content="Hugo 0.161.1"><title>断点续传之上传 - William A</title><meta name=description content="Love sports, love programming, love life."><meta name=keywords content="计算机网络,断点续传,上传,William A"><meta name=author content="William A"><meta name=theme-color content="#f7f8fa" data-theme-color><link rel=icon href=../../../../favicon.ico><link rel=alternate type=application/rss+xml title="William A" href=../../../../feed.xml><script>(function(){var e,n,s,t=document.documentElement;t.classList.replace("no-js","js");try{s=localStorage.getItem("theme"),e=s==="dark"?"dark":"light",t.dataset.theme=e,t.style.colorScheme=e,n=document.querySelector("meta[data-theme-color]"),n&&n.setAttribute("content",e==="dark"?"#0f1115":"#f7f8fa")}catch{}})()</script><link rel=stylesheet href=../../../../css/main.min.bcce8956c386fe3e5fda725391ed9f50e46b47879e10df784860543bf0370e90.css integrity="sha256-vM6JVsOG/j5f2nJTke2fUORrR4eeEN94SGBUO/A3DpA="></head><body><a class=skip-link href=#main-content>跳到正文</a><header class=site-header><div class=header-inner><a class=site-title href=../../../../ aria-label="William A 首页">William A</a><nav class=site-nav id=siteNav aria-label=主导航><a href=../../../../ class=nav-link>cd ~</a>
+<a href=../../../../categories/ class=nav-link>Categories</a>
+<a href=../../../../archives/ class=nav-link>Archives</a>
+<a href=../../../../books/ class=nav-link>Books</a>
+<a href=../../../../links/ class=nav-link>Links</a>
+<a href=../../../../tools/ class=nav-link>Tools</a>
+<a href=../../../../todo/ class=nav-link>Todo</a>
+<a href=../../../../about/ class=nav-link>About</a></nav><div class=header-actions><button type=button class="icon-button btn-hamburger" data-menu-toggle aria-label=打开导航 aria-expanded=false aria-controls=siteNav>
+<svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+<svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+</button>
+<button type=button class=icon-button data-search-toggle aria-label=搜索文章 aria-expanded=false title="搜索（Ctrl/⌘ K）" aria-haspopup=dialog>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+</button>
+<button type=button class="icon-button btn-theme" data-theme-toggle aria-label=切换明暗主题 title=切换明暗主题>
+<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15.5A8.5 8.5.0 018.5 4 8.5 8.5.0 1020 15.5z"/></svg>
+<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg></button></div></div></header><div class=search-overlay id=searchOverlay role=dialog aria-modal=true aria-labelledby=searchTitle aria-hidden=true><div class=search-modal><div class=search-header><label class=sr-only id=searchTitle for=searchInput>搜索文章</label>
+<input type=search id=searchInput class=search-input placeholder=搜索文章… autocomplete=off spellcheck=false>
+<button type=button class=search-close data-search-close aria-label=关闭搜索>✕</button></div><div class=search-results id=searchResults role=status aria-live=polite><p class=search-hint>输入关键词搜索文章</p></div></div></div><a id=search-index-url href=../../../../search.json hidden></a><main class=main-content id=main-content tabindex=-1><article class=post-single><header class=post-header><h1 class=post-title>断点续传之上传</h1><div class=post-meta><time datetime=2020-01-09>2020年1月9日</time>
+<span class=post-categories><a href=../../../../categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ class=category-pill>计算机网络</a>
+</span><span class=post-reading-time>2 分钟阅读</span></div><div class=post-keywords aria-label=关键词><span class=keyword-tag>计算机网络</span>
+<span class=keyword-tag>断点续传</span>
+<span class=keyword-tag>上传</span></div></header><details class=post-toc id=post-toc><summary><svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 3.75A.75.75.0 012.75 3h10.5a.75.75.0 010 1.5H2.75A.75.75.0 012 3.75zm0 4A.75.75.0 012.75 7h10.5a.75.75.0 010 1.5H2.75A.75.75.0 012 7.75zm0 4a.75.75.0 01.75-.75h10.5a.75.75.0 010 1.5H2.75A.75.75.0 012 11.75z"/></svg>
+<span>目录</span></summary><nav id=TableOfContents><ul><li><ul><li><a href=#读取文件>读取文件</a></li><li><a href=#切分文件>切分文件</a></li><li><a href=#上传文件>上传文件</a></li><li><a href=#上传完成合并文件>上传完成，合并文件</a></li><li><a href=#完整的前端代码>完整的前端代码</a></li></ul></li></ul></nav></details><div class=post-content><p>这篇文章主要讲断点续传的上传原理。</p><p>断点续传指的是在文件传输时将文件进行切分，每个部分的传输都是独立的，并且在遇到网络故障时，可以在网络通畅之后继续传输的未曾传输的部分，并不需要重新传输。</p><p>根据以上描述，Web 端的文件上传步骤如下。<strong>为了思路的清晰，以下代码十分简陋，没有进行相应的错误处理，而且是非并发安全的，千万不要在实际项目中这么写！</strong></p><h3 id=读取文件>读取文件</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>fileEle</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>querySelector</span><span class=p>(</span><span class=s1>&#39;#file&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kd>var</span> <span class=nx>readerFile</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kd>var</span> <span class=nx>file</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>fileEle</span><span class=p>.</span><span class=nx>onchange</span> <span class=o>=</span> <span class=kd>function</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>rd</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>FileReader</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=nx>file</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>files</span><span class=p>[</span><span class=mi>0</span><span class=p>];</span> <span class=c1>// 这里默认只有一个文件，多文件的话可以自行扩展
+</span></span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nx>rd</span><span class=p>.</span><span class=nx>onload</span> <span class=o>=</span> <span class=kd>function</span><span class=p>(</span><span class=nx>e</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>readerFile</span> <span class=o>=</span> <span class=nx>e</span><span class=p>.</span><span class=nx>target</span><span class=p>.</span><span class=nx>result</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nx>rd</span><span class=p>.</span><span class=nx>readAsDataURL</span><span class=p>(</span><span class=nx>file</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><h3 id=切分文件>切分文件</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>start</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>// 切片头部偏移量
+</span></span></span><span class=line><span class=cl><span class=kd>var</span> <span class=nx>count</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>// 切片序号
+</span></span></span><span class=line><span class=cl><span class=kd>var</span> <span class=nx>step</span> <span class=o>=</span> <span class=mi>10240</span><span class=p>;</span> <span class=c1>// 切片大小
+</span></span></span><span class=line><span class=cl><span class=kd>var</span> <span class=nx>piece</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>getPiece</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>piece</span> <span class=o>=</span> <span class=nx>readerFile</span><span class=p>.</span><span class=nx>slice</span><span class=p>(</span><span class=nx>start</span><span class=p>,</span> <span class=nx>start</span> <span class=o>+</span> <span class=nx>step</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>piece</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><h3 id=上传文件>上传文件</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>upload</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>fm</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>FormData</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=nx>fm</span><span class=p>.</span><span class=nx>append</span><span class=p>(</span><span class=s1>&#39;name&#39;</span><span class=p>,</span> <span class=nx>file</span><span class=p>.</span><span class=nx>name</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>fm</span><span class=p>.</span><span class=nx>append</span><span class=p>(</span><span class=s1>&#39;cap&#39;</span><span class=p>,</span> <span class=nx>file</span><span class=p>.</span><span class=nx>size</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>fm</span><span class=p>.</span><span class=nx>append</span><span class=p>(</span><span class=s1>&#39;len&#39;</span><span class=p>,</span> <span class=nx>step</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>fm</span><span class=p>.</span><span class=nx>append</span><span class=p>(</span><span class=s1>&#39;seq_&#39;</span> <span class=o>+</span> <span class=nb>String</span><span class=p>(</span><span class=nx>count</span><span class=p>),</span> <span class=nx>getPiece</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>xhr</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>XMLHttpRequest</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=nx>xhr</span><span class=p>.</span><span class=nx>onload</span> <span class=o>=</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>e</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>e</span><span class=p>.</span><span class=nx>target</span><span class=p>.</span><span class=nx>status</span> <span class=o>==</span> <span class=mi>200</span> <span class=o>&amp;&amp;</span> <span class=nx>e</span><span class=p>.</span><span class=nx>target</span><span class=p>.</span><span class=nx>readyState</span> <span class=o>==</span> <span class=mi>4</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>count</span> <span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=nx>start</span> <span class=o>+=</span> <span class=nx>step</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span><span class=nx>start</span> <span class=o>&lt;</span> <span class=nx>readerFile</span><span class=p>.</span><span class=nx>length</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=c1>// 这里自己决定怎么续传
+</span></span></span><span class=line><span class=cl>                <span class=nx>setTimeout</span><span class=p>(</span><span class=kd>function</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=nx>upload</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>                <span class=p>},</span> <span class=mi>1000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nx>alert</span><span class=p>(</span><span class=s1>&#39;上传成功&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nx>xhr</span><span class=p>.</span><span class=nx>open</span><span class=p>(</span><span class=s1>&#39;post&#39;</span><span class=p>,</span> <span class=s1>&#39;http://localhost:8888/upload&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>xhr</span><span class=p>.</span><span class=nx>send</span><span class=p>(</span><span class=nx>fm</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><h3 id=上传完成合并文件>上传完成，合并文件</h3><p>将前端传来的<code>seq_num</code>（num 为序列号）保存到数据库中，可以根据文件的大小来判断是否上传完毕，待确认文件上传完毕，即可进行合并。以下代码将这些复杂的步骤进行了简化，将每一段切片都直接追回到同一个临时文件中，并以一个特别的请求表示文件已经上传完毕。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-php data-lang=php><span class=line><span class=cl><span class=o>&lt;?</span><span class=nx>php</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>foreach</span> <span class=p>(</span><span class=nv>$_POST</span> <span class=k>as</span> <span class=nv>$k</span> <span class=o>=&gt;</span> <span class=nv>$v</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>preg_match</span><span class=p>(</span><span class=s1>&#39;/\d+$/&#39;</span><span class=p>,</span> <span class=nv>$k</span><span class=p>)</span> <span class=o>!=</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>preg_match</span><span class=p>(</span><span class=s1>&#39;/[^\d]0$/&#39;</span><span class=p>,</span> <span class=nv>$k</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nv>$fd</span> <span class=o>=</span> <span class=nx>fopen</span><span class=p>(</span><span class=s1>&#39;test.txt&#39;</span><span class=p>,</span> <span class=s2>&#34;wb+&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=nv>$v</span> <span class=o>=</span> <span class=nx>preg_replace</span><span class=p>(</span><span class=s1>&#39;/data:.*?,/&#39;</span><span class=p>,</span> <span class=s1>&#39;&#39;</span><span class=p>,</span> <span class=nv>$v</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nv>$fd</span> <span class=o>=</span> <span class=nx>fopen</span><span class=p>(</span><span class=s1>&#39;test.txt&#39;</span><span class=p>,</span> <span class=s2>&#34;ab+&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=nx>fwrite</span><span class=p>(</span><span class=nv>$fd</span><span class=p>,</span> <span class=nv>$v</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>fclose</span><span class=p>(</span><span class=nv>$fd</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nv>$k</span> <span class=o>==</span> <span class=s1>&#39;end&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nv>$content</span> <span class=o>=</span> <span class=nx>file_get_contents</span><span class=p>(</span><span class=s1>&#39;test.txt&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nv>$content</span> <span class=o>=</span> <span class=nx>base64_decode</span><span class=p>(</span><span class=nv>$content</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>file_put_contents</span><span class=p>(</span><span class=s1>&#39;test.jpg&#39;</span><span class=p>,</span> <span class=nv>$content</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=nx>header</span><span class=p>(</span><span class=s1>&#39;Content-type: image/jpeg&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>echo</span> <span class=nv>$content</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><h3 id=完整的前端代码>完整的前端代码</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=cp>&lt;!DOCTYPE html&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>html</span> <span class=na>lang</span><span class=o>=</span><span class=s>&#34;en&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>head</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>meta</span> <span class=na>charset</span><span class=o>=</span><span class=s>&#34;UTF-8&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>title</span><span class=p>&gt;</span>Title<span class=p>&lt;/</span><span class=nt>title</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>head</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>body</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>form</span> <span class=na>action</span><span class=o>=</span><span class=s>&#34;&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>input</span> <span class=na>type</span><span class=o>=</span><span class=s>&#34;file&#34;</span> <span class=na>id</span><span class=o>=</span><span class=s>&#34;file&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>button</span> <span class=na>type</span><span class=o>=</span><span class=s>&#34;button&#34;</span> <span class=na>id</span><span class=o>=</span><span class=s>&#34;sm&#34;</span><span class=p>&gt;</span>提交<span class=p>&lt;/</span><span class=nt>button</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>form</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>fileEle</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>querySelector</span><span class=p>(</span><span class=s1>&#39;#file&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>readerFile</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>file</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>start</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>// 切片偏移量
+</span></span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>count</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>// 切片序号
+</span></span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>step</span> <span class=o>=</span> <span class=mi>10240</span><span class=p>;</span> <span class=c1>// 切片大小
+</span></span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>piece</span><span class=p>;</span> <span class=c1>// 切片内容
+</span></span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>url</span> <span class=o>=</span> <span class=s1>&#39;http://localhost:8888/upload&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nx>fileEle</span><span class=p>.</span><span class=nx>onchange</span> <span class=o>=</span> <span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>var</span> <span class=nx>rd</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>FileReader</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=nx>file</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>files</span><span class=p>[</span><span class=mi>0</span><span class=p>];</span> <span class=c1>// 这里默认只有一个文件，多文件的话可以自行扩展
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=nx>rd</span><span class=p>.</span><span class=nx>onload</span> <span class=o>=</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>e</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>readerFile</span> <span class=o>=</span> <span class=nx>e</span><span class=p>.</span><span class=nx>target</span><span class=p>.</span><span class=nx>result</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=nx>rd</span><span class=p>.</span><span class=nx>readAsDataURL</span><span class=p>(</span><span class=nx>file</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>function</span> <span class=nx>getPiece</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>piece</span> <span class=o>=</span> <span class=nx>readerFile</span><span class=p>.</span><span class=nx>slice</span><span class=p>(</span><span class=nx>start</span><span class=p>,</span> <span class=nx>start</span> <span class=o>+</span> <span class=nx>step</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=nx>piece</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>function</span> <span class=nx>upload</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>var</span> <span class=nx>fm</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>FormData</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=nx>fm</span><span class=p>.</span><span class=nx>append</span><span class=p>(</span><span class=s1>&#39;name&#39;</span><span class=p>,</span> <span class=nx>file</span><span class=p>.</span><span class=nx>name</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>fm</span><span class=p>.</span><span class=nx>append</span><span class=p>(</span><span class=s1>&#39;cap&#39;</span><span class=p>,</span> <span class=nx>file</span><span class=p>.</span><span class=nx>size</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>fm</span><span class=p>.</span><span class=nx>append</span><span class=p>(</span><span class=s1>&#39;len&#39;</span><span class=p>,</span> <span class=nx>step</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>fm</span><span class=p>.</span><span class=nx>append</span><span class=p>(</span><span class=s1>&#39;seq_&#39;</span> <span class=o>+</span> <span class=nb>String</span><span class=p>(</span><span class=nx>count</span><span class=p>),</span> <span class=nx>getPiece</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>var</span> <span class=nx>xhr</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>XMLHttpRequest</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=nx>xhr</span><span class=p>.</span><span class=nx>onload</span> <span class=o>=</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>e</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span><span class=nx>e</span><span class=p>.</span><span class=nx>target</span><span class=p>.</span><span class=nx>status</span> <span class=o>==</span> <span class=mi>200</span> <span class=o>&amp;&amp;</span> <span class=nx>e</span><span class=p>.</span><span class=nx>target</span><span class=p>.</span><span class=nx>readyState</span> <span class=o>==</span> <span class=mi>4</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nx>count</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=nx>start</span> <span class=o>+=</span> <span class=nx>step</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=nx>start</span> <span class=o>&lt;</span> <span class=nx>readerFile</span><span class=p>.</span><span class=nx>length</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=c1>// 这里自己决定怎么续传
+</span></span></span><span class=line><span class=cl>                    <span class=nx>setTimeout</span><span class=p>(</span><span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=nx>upload</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>                    <span class=p>},</span> <span class=mi>1000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=nx>end</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>                    <span class=nx>alert</span><span class=p>(</span><span class=s1>&#39;上传成功&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=nx>xhr</span><span class=p>.</span><span class=nx>open</span><span class=p>(</span><span class=s1>&#39;post&#39;</span><span class=p>,</span> <span class=nx>url</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>xhr</span><span class=p>.</span><span class=nx>send</span><span class=p>(</span><span class=nx>fm</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>function</span> <span class=nx>end</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>var</span> <span class=nx>fm</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>FormData</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=nx>fm</span><span class=p>.</span><span class=nx>append</span><span class=p>(</span><span class=s1>&#39;end&#39;</span><span class=p>,</span> <span class=s1>&#39;end&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>var</span> <span class=nx>xhr</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>XMLHttpRequest</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=nx>xhr</span><span class=p>.</span><span class=nx>onload</span> <span class=o>=</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>e</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span><span class=nx>e</span><span class=p>.</span><span class=nx>target</span><span class=p>.</span><span class=nx>status</span> <span class=o>==</span> <span class=mi>200</span> <span class=o>&amp;&amp;</span> <span class=nx>e</span><span class=p>.</span><span class=nx>target</span><span class=p>.</span><span class=nx>readyState</span> <span class=o>==</span> <span class=mi>4</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=nx>xhr</span><span class=p>.</span><span class=nx>open</span><span class=p>(</span><span class=s1>&#39;post&#39;</span><span class=p>,</span> <span class=nx>url</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>xhr</span><span class=p>.</span><span class=nx>send</span><span class=p>(</span><span class=nx>fm</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>sm</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>querySelector</span><span class=p>(</span><span class=s1>&#39;#sm&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>sm</span><span class=p>.</span><span class=nx>onclick</span> <span class=o>=</span> <span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>count</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=nx>start</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=nx>upload</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>body</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>html</span><span class=p>&gt;</span>
+</span></span></code></pre></div></div><footer class=post-footer><nav class=post-nav aria-label=文章导航><a class=prev-post href=../../../../2019/12/31/fastcgi-%E5%8D%8F%E8%AE%AE%E5%88%9D%E6%8E%A5%E8%A7%A6/ rel=prev><span class=nav-label>← 上一篇</span>
+<span class=nav-title>FastCGI 协议初接触</span>
+</a><a class=next-post href=../../../../2020/01/10/m3u8-%E5%9C%A8%E7%BA%BF%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/ rel=next><span class=nav-label>下一篇 →</span>
+<span class=nav-title>m3u8 在线视频播放</span></a></nav></footer></article></main><footer class=site-footer><div class=footer-inner><div class=footer-left><span>&copy; 2026 William A</span>
+<span class=footer-sep aria-hidden=true>|</span>
+<span>Love sports, love programming, love life.</span>
+<span class=footer-sep aria-hidden=true>|</span>
+<a href=https://beian.miit.gov.cn/ target=_blank rel="noopener noreferrer" class=footer-link>粤ICP备20026636号-1</a></div><div class=footer-right><a href=../../../../feed.xml class=footer-link>RSS</a></div></div></footer><button type=button class=back-to-top id=backToTop data-back-to-top aria-label=回到顶部 title=回到顶部>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+</button>
+<script src=../../../../js/main.min.4cf3a756b96ad86df0852be0501346002e700dde96badd078781a698d8be15c1.js integrity="sha256-TPOnVrlq2G3whSvgUBNGAC5wDd6Wut0Hh4GmmNi+FcE=" defer></script></body></html>

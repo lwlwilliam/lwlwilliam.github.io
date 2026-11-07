@@ -1,0 +1,33 @@
+{{- $books := .books -}}
+{{- $prefix := .idPrefix -}}
+{{- $years := slice -}}
+{{- range $year, $_ := $books -}}
+  {{- $years = $years | append $year -}}
+{{- end -}}
+<section class="books-section">
+  <h2 class="books-section-title">{{ .title }}</h2>
+  {{- range sort $years "value" "desc" }}
+    {{- $year := . }}
+    {{- $yearBooks := index $books $year }}
+  <div id="{{ $prefix }}-{{ $year }}" class="book-year">
+    <h3 class="book-year-title">{{ $year }} <span class="book-year-count">{{ len $yearBooks }}</span></h3>
+    <div class="book-grid">
+      {{- range $yearBooks }}
+      <article class="book-card {{ if .collect }}collect{{ else }}neutral{{ end }}">
+        <div class="book-card-header">
+          <h4 class="book-name">{{ .name }}</h4>
+          {{- if or .complete .remark }}
+          <span class="book-status is-read">已读</span>
+          {{- else }}
+          <span class="book-status is-reading">在读</span>
+          {{- end }}
+        </div>
+        {{- with .info }}
+        <div class="book-info">{{ . | safeHTML }}</div>
+        {{- end }}
+      </article>
+      {{- end }}
+    </div>
+  </div>
+  {{- end }}
+</section>

@@ -3,50 +3,57 @@
   <header class="post-header">
     <h1 class="post-title">{{ .Title }}</h1>
     <div class="post-meta">
-      <time datetime='{{ .Date.Format "2006-01-02" }}'>{{ .Date.Format "2006年1月2日" }}</time>
-      {{ with .Params.categories }}
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006年1月2日" }}</time>
+      {{- with .Params.categories }}
       <span class="post-categories">
-        {{ range . }}
-        <a href='{{ "categories" | relURL }}/{{ . | urlize }}/' class="category-pill">{{ . }}</a>
-        {{ end }}
+        {{- partial "category-links.html" (dict "categories" . "class" "category-pill") }}
       </span>
-      {{ end }}
+      {{- end }}
+      {{- with .ReadingTime }}
+      <span class="post-reading-time">{{ . }} 分钟阅读</span>
+      {{- end }}
     </div>
-    {{ with .Params.keywords }}
-    <div class="post-keywords">
-      {{ range . }}
+    {{- with .Params.keywords }}
+    <div class="post-keywords" aria-label="关键词">
+      {{- range . }}
       <span class="keyword-tag">{{ . }}</span>
-      {{ end }}
+      {{- end }}
     </div>
-    {{ end }}
+    {{- end }}
   </header>
-  {{ $toc := .TableOfContents }}
-  {{ if and $toc (findRE "<li>" $toc) }}
+
+  {{- $toc := .TableOfContents }}
+  {{- if and $toc (findRE "<li>" $toc) }}
   <details class="post-toc" id="post-toc">
-    <summary><svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3.75A.75.75 0 012.75 3h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zm0 4A.75.75 0 012.75 7h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 7.75zm0 4a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"/></svg></summary>
+    <summary>
+      <svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 3.75A.75.75 0 0 1 2.75 3h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 3.75Zm0 4A.75.75 0 0 1 2.75 7h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 7.75Zm0 4a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75Z"/></svg>
+      <span>目录</span>
+    </summary>
     {{ $toc }}
   </details>
-  {{ end }}
+  {{- end }}
+
   <div class="post-content">
-    {{- $content := .Content -}}
-    {{- $content = replaceRE `(\.\./)+static/` "/" $content -}}
-    {{- $content | safeHTML -}}
+    {{- .Content -}}
   </div>
+
+  {{- if or .PrevInSection .NextInSection }}
   <footer class="post-footer">
-    <nav class="post-nav">
-      {{ with .PrevInSection }}
-      <a class="prev-post" href="{{ .RelPermalink }}">
-        <span class="nav-label">← Prev</span>
+    <nav class="post-nav" aria-label="文章导航">
+      {{- with .PrevInSection }}
+      <a class="prev-post" href="{{ .RelPermalink }}" rel="prev">
+        <span class="nav-label">← 上一篇</span>
         <span class="nav-title">{{ .Title }}</span>
       </a>
-      {{ end }}
-      {{ with .NextInSection }}
-      <a class="next-post" href="{{ .RelPermalink }}">
-        <span class="nav-label">Next →</span>
+      {{- end }}
+      {{- with .NextInSection }}
+      <a class="next-post" href="{{ .RelPermalink }}" rel="next">
+        <span class="nav-label">下一篇 →</span>
         <span class="nav-title">{{ .Title }}</span>
       </a>
-      {{ end }}
+      {{- end }}
     </nav>
   </footer>
+  {{- end }}
 </article>
 {{ end }}

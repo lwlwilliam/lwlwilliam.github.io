@@ -1,4 +1,3 @@
 ---
 title: Tools
-type: tools
 ---

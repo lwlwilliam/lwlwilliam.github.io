@@ -1,6 +1,7 @@
 {{- $url := .Destination -}}
-{{- $url = replaceRE `(\.\./)+static/` "/" $url -}}
-{{- if not (strings.HasPrefix $url "/") -}}
-{{- $url = print "/" $url -}}
+{{- if findRE `^(?:\.\./)+static/` $url -}}
+  {{- $url = replaceRE `^(?:\.\./)+static/` "" $url -}}
+  {{- $url = printf "/%s" $url -}}
 {{- end -}}
-<a href="{{ $url }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>
+{{- $isWebLink := or (strings.HasPrefix $url "http://") (strings.HasPrefix $url "https://") -}}
+<a href="{{ $url }}"{{ if $isWebLink }} target="_blank" rel="noopener noreferrer"{{ end }}{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>

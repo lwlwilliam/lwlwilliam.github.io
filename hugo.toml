@@ -1,104 +1,105 @@
-# ===== 站点基础设置 =====
-baseURL = 'https://pages.lwlinux.cn/'   # 网站域名
-publishDir = "docs"                      # 构建输出目录（GitHub Pages 用）
-relativeURLs = true                      # 使用相对路径，支持部署到子目录
+# ===== 站点 =====
+baseURL = 'https://pages.lwlinux.cn/'
+publishDir = 'docs'
+relativeURLs = true
 locale = 'zh-cn'
 title = 'William A'
 
 [params]
-  keywords = 'William A'                 # 全局 SEO 关键词
-  encoding = 'utf-8'
+  description = 'Love sports, love programming, love life.'
+  keywords = [ 'William A' ]
   about = 'Just for fun.'
-  description = 'Love sports, love programming, love life.'  # 全局站点描述
-  beian = '粤ICP备20026636号-1'                                # ICP 备案号
-
+  beian = '粤ICP备20026636号-1'
   author = 'William A'
+  paginationWindow = 2
+  excerptLength = 150
 
-  paginate = 5                           # 首页每页文章数
-  paginationWindow = 2                   # 分页器显示的页码数量
-  excerptLength = 150                    # 摘要字数
-  dateFormat = '2006-01-02'
+# ===== 导航（Hugo 标准菜单）=====
+[[menus.main]]
+  name = 'cd ~'
+  pageRef = '/'
+  weight = 1
 
-  # ===== 导航栏菜单 =====
-  [[params.navs]]
-    href = '/'
-    label = 'cd ~'
+[[menus.main]]
+  name = 'Categories'
+  pageRef = '/categories'
+  weight = 2
 
-  [[params.navs]]
-    href = '/categories/'
-    label = 'Categories'
+[[menus.main]]
+  name = 'Archives'
+  pageRef = '/archives'
+  weight = 3
 
-  [[params.navs]]
-    href = '/archives/'
-    label = 'Archives'
+[[menus.main]]
+  name = 'Books'
+  pageRef = '/books'
+  weight = 4
 
-  [[params.navs]]
-    href = '/books/'
-    label = 'Books'
+[[menus.main]]
+  name = 'Links'
+  pageRef = '/links'
+  weight = 5
 
-  [[params.navs]]
-    href = '/links/'
-    label = 'Links'
+[[menus.main]]
+  name = 'Tools'
+  pageRef = '/tools'
+  weight = 6
 
-  [[params.navs]]
-    href = '/tools/'
-    label = 'Tools'
+[[menus.main]]
+  name = 'Todo'
+  pageRef = '/todo'
+  weight = 7
 
-  [[params.navs]]
-    href = '/todo/'
-    label = 'Todo'
+[[menus.main]]
+  name = 'About'
+  pageRef = '/about'
+  weight = 8
 
-  [[params.navs]]
-    href = '/about/'
-    label = 'About'
+[pagination]
+  pagerSize = 5
 
-# ===== 分类法：将 posts 按 categories 分组 =====
+# ===== 分类与固定链接 =====
 [taxonomies]
   category = 'categories'
 
-# ===== 输出格式 =====
+[permalinks]
+  posts = '/:year/:month/:day/:slug/'
+
+# ===== 输出 =====
 [outputs]
-  home = ['HTML', 'RSS', 'SearchJSON']   # 首页额外输出 RSS 和搜索 JSON
-  page = ['HTML']                        # 文章页只输出 HTML
+  home = ['HTML', 'RSS', 'SearchJSON']
+  page = ['HTML']
   section = ['HTML']
   taxonomy = ['HTML']
   term = ['HTML']
 
-[outputFormats]
-  [outputFormats.RSS]
-    baseName = 'feed'
-  [outputFormats.SearchJSON]
-    mediaType = 'application/json'
-    baseName = 'search'                  # 输出 /search.json 供前端搜索
-    isPlainText = true
-    notAlternative = true
+[outputFormats.RSS]
+  baseName = 'feed'
 
-[services]
-  [services.rss]
-    limit = 20                           # RSS 最多包含 20 篇文章
+[outputFormats.SearchJSON]
+  mediaType = 'application/json'
+  baseName = 'search'
+  isPlainText = true
+  notAlternative = true
 
-# ===== 标记语言配置 =====
+[services.rss]
+  limit = 20
+
+# ===== Markdown =====
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
-      unsafe = true                      # 允许在 Markdown 中直接写 HTML
+      unsafe = true
     [markup.goldmark.extensions]
       [markup.goldmark.extensions.passthrough]
-        enable = true                    # 允许 LaTeX 等 passthrough 块
+        enable = true
         [markup.goldmark.extensions.passthrough.delimiters]
-          block = [['$$', '$$'], ['\\[', '\\]']]
-          inline = [['$', '$'], ['\\(', '\\)']]
-
+          block = [['$$', '$$'], ['\[', '\]']]
+          inline = [['$', '$'], ['\(', '\)']]
   [markup.highlight]
-    style = 'monokai'                    # 代码块高亮主题
-
+    # 使用 class 高亮；亮/暗主题的配比在 assets/css/syntax.css。
+    noClasses = false
+    style = 'github'
   [markup.tableOfContents]
-    startLevel = 2                       # 目录从 h2 开始
-    endLevel = 4                         # 目录到 h4 为止
-    ordered = false                      # 无序列表
-
-[permalinks]
-  posts = '/:year/:month/:day/:slug/'    # 文章固定链接格式
-
-[security]
-  enableInlineShortcodes = false          # 设置是否可用内联代码
+    startLevel = 2
+    endLevel = 4

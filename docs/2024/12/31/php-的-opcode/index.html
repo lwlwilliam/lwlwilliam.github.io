@@ -1,208 +1,83 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-<head>
-  <meta charset='utf-8'>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PHP 的 opcode - William A</title>
-  <meta name="description" content="Love sports, love programming, love life.">
-  <meta name="keywords" content='php,PHP,opcode,William A'>
-  <meta name="author" content="William A">
-  <meta name="theme-color" content="#f7f8fa">
-  <link rel="icon" href='../../../../favicon.ico'>
-  
-
-  <link rel="stylesheet" href='../../../../assets/css/main.css'>
-  
-</head>
-<body>
-  <script>
-    (function(){var t=localStorage.getItem('theme')==='dark'?'dark':'light';document.body.className=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0f1115':'#f7f8fa')})();
-  </script>
-  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="回到顶部" aria-label="回到顶部">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
-  </button>
-  <header class="site-header">
-    <div class="header-inner">
-      <a class="site-title" href="../../../../">William A</a>
-      <nav class="site-nav">
-        
-        
-        <a href="../../../../" class="nav-link">cd ~</a>
-        
-        
-        <a href="../../../../categories/" class="nav-link">Categories</a>
-        
-        
-        <a href="../../../../archives/" class="nav-link">Archives</a>
-        
-        
-        <a href="../../../../books/" class="nav-link">Books</a>
-        
-        
-        <a href="../../../../links/" class="nav-link">Links</a>
-        
-        
-        <a href="../../../../tools/" class="nav-link">Tools</a>
-        
-        
-        <a href="../../../../todo/" class="nav-link">Todo</a>
-        
-        
-        <a href="../../../../about/" class="nav-link">About</a>
-        
-      </nav>
-      <div class="header-actions">
-        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="菜单" aria-expanded="false" title="菜单">
-          <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-        </button>
-        <button class="btn-search" onclick="toggleSearch()" aria-label="搜索" title="搜索（Ctrl/⌘ K）">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        </button>
-        <button class="btn-theme" onclick="toggleTheme()" aria-label="切换明暗主题" title="切换明暗主题">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5Z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <div class="search-overlay" id="searchOverlay">
-    <div class="search-modal">
-      <div class="search-header">
-        <input type="text" id="searchInput" class="search-input" placeholder="搜索文章…" autocomplete="off">
-        <button class="search-close" onclick="toggleSearch()">✕</button>
-      </div>
-      <div class="search-results" id="searchResults">
-        <div class="search-hint">输入关键词搜索文章</div>
-      </div>
-    </div>
-  </div>
-
-  <main class="main-content">
-    
-<article class="post-single">
-  <header class="post-header">
-    <h1 class="post-title">PHP 的 opcode</h1>
-    <div class="post-meta">
-      <time datetime='2024-12-31'>2024年12月31日</time>
-      
-      <span class="post-categories">
-        
-        <a href='../../../../categories/php/' class="category-pill">PHP</a>
-        
-      </span>
-      
-    </div>
-    
-    <div class="post-keywords">
-      
-      <span class="keyword-tag">php</span>
-      
-      <span class="keyword-tag">PHP</span>
-      
-      <span class="keyword-tag">opcode</span>
-      
-    </div>
-    
-  </header>
-  
-  
-  <details class="post-toc" id="post-toc">
-    <summary><svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3.75A.75.75 0 012.75 3h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zm0 4A.75.75 0 012.75 7h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 7.75zm0 4a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"/></svg></summary>
-    <nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#使用-zend-opcache">使用 Zend Opcache</a></li>
-        <li><a href="#使用-phpdbg">使用 phpdbg</a></li>
-        <li><a href="#通过-opcode-解决疑问">通过 opcode 解决疑问</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-  </details>
-  
-  <div class="post-content"><p><code>opcode</code>跟<code>PHP</code>，类似于<code>bytecode</code>跟<code>Java</code>的关系，相当于<code>机器码</code>和编译型语言的关系。</p>
-<p><code>PHP</code>是一门解释型语言，它的执行单元就是<code>opcode</code>，<code>Zend Engine</code>就是执行<code>opcode</code>的地方，<code>Zend Engine</code>也就是常说的<code>VM</code>。<code>JVM</code>比较出名，它就是针对<code>Java</code>设计的<code>VM</code>，这样说应该理解了<code>PHP</code>的<code>Zend Engine</code>和<code>opcode</code>是什么东西了吧。</p>
-<p>看看如下代码：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// opcode1.php
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;Hello world&#34;</span>;
-</span></span></code></pre></div><p>以上代码的<code>opcode</code>是这样的：</p>
-<pre tabindex="0"><code>0000 ECHO string(&#34;Hello world&#34;)
+<!doctype html><html lang=zh-cn class=no-js><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=generator content="Hugo 0.161.1"><title>PHP 的 opcode - William A</title><meta name=description content="Love sports, love programming, love life."><meta name=keywords content="php,PHP,opcode,William A"><meta name=author content="William A"><meta name=theme-color content="#f7f8fa" data-theme-color><link rel=icon href=../../../../favicon.ico><link rel=alternate type=application/rss+xml title="William A" href=../../../../feed.xml><script>(function(){var e,n,s,t=document.documentElement;t.classList.replace("no-js","js");try{s=localStorage.getItem("theme"),e=s==="dark"?"dark":"light",t.dataset.theme=e,t.style.colorScheme=e,n=document.querySelector("meta[data-theme-color]"),n&&n.setAttribute("content",e==="dark"?"#0f1115":"#f7f8fa")}catch{}})()</script><link rel=stylesheet href=../../../../css/main.min.bcce8956c386fe3e5fda725391ed9f50e46b47879e10df784860543bf0370e90.css integrity="sha256-vM6JVsOG/j5f2nJTke2fUORrR4eeEN94SGBUO/A3DpA="></head><body><a class=skip-link href=#main-content>跳到正文</a><header class=site-header><div class=header-inner><a class=site-title href=../../../../ aria-label="William A 首页">William A</a><nav class=site-nav id=siteNav aria-label=主导航><a href=../../../../ class=nav-link>cd ~</a>
+<a href=../../../../categories/ class=nav-link>Categories</a>
+<a href=../../../../archives/ class=nav-link>Archives</a>
+<a href=../../../../books/ class=nav-link>Books</a>
+<a href=../../../../links/ class=nav-link>Links</a>
+<a href=../../../../tools/ class=nav-link>Tools</a>
+<a href=../../../../todo/ class=nav-link>Todo</a>
+<a href=../../../../about/ class=nav-link>About</a></nav><div class=header-actions><button type=button class="icon-button btn-hamburger" data-menu-toggle aria-label=打开导航 aria-expanded=false aria-controls=siteNav>
+<svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+<svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+</button>
+<button type=button class=icon-button data-search-toggle aria-label=搜索文章 aria-expanded=false title="搜索（Ctrl/⌘ K）" aria-haspopup=dialog>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+</button>
+<button type=button class="icon-button btn-theme" data-theme-toggle aria-label=切换明暗主题 title=切换明暗主题>
+<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15.5A8.5 8.5.0 018.5 4 8.5 8.5.0 1020 15.5z"/></svg>
+<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg></button></div></div></header><div class=search-overlay id=searchOverlay role=dialog aria-modal=true aria-labelledby=searchTitle aria-hidden=true><div class=search-modal><div class=search-header><label class=sr-only id=searchTitle for=searchInput>搜索文章</label>
+<input type=search id=searchInput class=search-input placeholder=搜索文章… autocomplete=off spellcheck=false>
+<button type=button class=search-close data-search-close aria-label=关闭搜索>✕</button></div><div class=search-results id=searchResults role=status aria-live=polite><p class=search-hint>输入关键词搜索文章</p></div></div></div><a id=search-index-url href=../../../../search.json hidden></a><main class=main-content id=main-content tabindex=-1><article class=post-single><header class=post-header><h1 class=post-title>PHP 的 opcode</h1><div class=post-meta><time datetime=2024-12-31>2024年12月31日</time>
+<span class=post-categories><a href=../../../../categories/php/ class=category-pill>PHP</a>
+</span><span class=post-reading-time>2 分钟阅读</span></div><div class=post-keywords aria-label=关键词><span class=keyword-tag>php</span>
+<span class=keyword-tag>PHP</span>
+<span class=keyword-tag>opcode</span></div></header><details class=post-toc id=post-toc><summary><svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 3.75A.75.75.0 012.75 3h10.5a.75.75.0 010 1.5H2.75A.75.75.0 012 3.75zm0 4A.75.75.0 012.75 7h10.5a.75.75.0 010 1.5H2.75A.75.75.0 012 7.75zm0 4a.75.75.0 01.75-.75h10.5a.75.75.0 010 1.5H2.75A.75.75.0 012 11.75z"/></svg>
+<span>目录</span></summary><nav id=TableOfContents><ul><li><ul><li><a href=#使用-zend-opcache>使用 Zend Opcache</a></li><li><a href=#使用-phpdbg>使用 phpdbg</a></li><li><a href=#通过-opcode-解决疑问>通过 opcode 解决疑问</a></li></ul></li></ul></nav></details><div class=post-content><p><code>opcode</code>跟<code>PHP</code>，类似于<code>bytecode</code>跟<code>Java</code>的关系，相当于<code>机器码</code>和编译型语言的关系。</p><p><code>PHP</code>是一门解释型语言，它的执行单元就是<code>opcode</code>，<code>Zend Engine</code>就是执行<code>opcode</code>的地方，<code>Zend Engine</code>也就是常说的<code>VM</code>。<code>JVM</code>比较出名，它就是针对<code>Java</code>设计的<code>VM</code>，这样说应该理解了<code>PHP</code>的<code>Zend Engine</code>和<code>opcode</code>是什么东西了吧。</p><p>看看如下代码：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-php data-lang=php><span class=line><span class=cl><span class=o>&lt;?</span><span class=nx>php</span>
+</span></span><span class=line><span class=cl><span class=c1>// opcode1.php
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span> <span class=s2>&#34;Hello world&#34;</span><span class=p>;</span>
+</span></span></code></pre></div><p>以上代码的<code>opcode</code>是这样的：</p><pre tabindex=0><code>0000 ECHO string(&#34;Hello world&#34;)
 0001 RETURN int(1)
-</code></pre><p>如果多个输出呢？</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// opcode2.php
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;Hello world&#34;</span>;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;Hello world&#34;</span>;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;Hello world&#34;</span>;
-</span></span></code></pre></div><p>这个问题先暂且不管。</p>
-<p>有多种方法可以查看<code>opcode</code>，如<code>Zend Opcache(opcache)</code>扩展、<code>phpdbg</code>接口以及<code>Vulcan Login Dumper(VLD)</code>扩展。</p>
-<h3 id="使用-zend-opcache">使用 Zend Opcache</h3>
-<p>前提要求：<code>Zend Opcache</code>扩展必须安装并启用。</p>
-<p><code>opcache.opt_debug_level</code>接收一个十六进制值用于配置<code>opcode</code>的输出，设置为<code>0</code>时会禁用输出。</p>
-<ul>
-<li><code>opcache.opt_debug_level=0x10000</code>：输出未优化的<code>opcode</code>；</li>
-<li><code>opcache.opt_debug_level=0x20000</code>：输出优化后的<code>opcode</code>；</li>
-<li><code>opcache.opt_debug_level=0x40000</code>：以上下文无关方法形式输出<code>opcode</code>；</li>
-<li><code>opcache.opt_debug_level=0x200000</code>：以<code>Static Single Assignments</code>形式输出<code>opcode</code>；</li>
-</ul>
-<p>再次以上述的<code>opcode2.php</code>为例。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ php -d opcache.enable<span style="color:#f92672">=</span>On -d opcache.enable_cli<span style="color:#f92672">=</span>On -d opcache.opt_debug_level<span style="color:#f92672">=</span>0x10000 opcode2.php
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$_main:
-</span></span><span style="display:flex;"><span>     ; <span style="color:#f92672">(</span>lines<span style="color:#f92672">=</span>4, args<span style="color:#f92672">=</span>0, vars<span style="color:#f92672">=</span>0, tmps<span style="color:#f92672">=</span>0<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>     ; <span style="color:#f92672">(</span>before optimizer<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>     ; /root/opcode.php:1-6
-</span></span><span style="display:flex;"><span>     ; <span style="color:#66d9ef">return</span>  <span style="color:#f92672">[]</span> RANGE<span style="color:#f92672">[</span>0..0<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0000</span> ECHO string<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello world&#34;</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0001</span> ECHO string<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello world&#34;</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0002</span> ECHO string<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello world&#34;</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0003</span> RETURN int<span style="color:#f92672">(</span>1<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>$ php -d opcache.enable<span style="color:#f92672">=</span>On -d opcache.enable_cli<span style="color:#f92672">=</span>On -d opcache.opt_debug_level<span style="color:#f92672">=</span>0x20000 opcode2.php
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$_main:
-</span></span><span style="display:flex;"><span>     ; <span style="color:#f92672">(</span>lines<span style="color:#f92672">=</span>2, args<span style="color:#f92672">=</span>0, vars<span style="color:#f92672">=</span>0, tmps<span style="color:#f92672">=</span>0<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>     ; <span style="color:#f92672">(</span>after optimizer<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>     ; /root/opcode.php:1-6
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0000</span> ECHO string<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello worldHello worldHello world&#34;</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0001</span> RETURN int<span style="color:#f92672">(</span>1<span style="color:#f92672">)</span>
-</span></span></code></pre></div><p>这就是对“如果多个输出呢？”这个问题的回答，未经优化时，三个<code>echo</code>语句解析为三条<code>ECHO string(&quot;Hello world)</code>指令，优化后合并为一条指令。</p>
-<h3 id="使用-phpdbg">使用 phpdbg</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ phpdbg -p opcode2.php
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$_main:
-</span></span><span style="display:flex;"><span>     ; <span style="color:#f92672">(</span>lines<span style="color:#f92672">=</span>4, args<span style="color:#f92672">=</span>0, vars<span style="color:#f92672">=</span>0, tmps<span style="color:#f92672">=</span>0<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>     ; /root/opcode.php:1-6
-</span></span><span style="display:flex;"><span>L0003 <span style="color:#ae81ff">0000</span> ECHO string<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello world&#34;</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>L0004 <span style="color:#ae81ff">0001</span> ECHO string<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello world&#34;</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>L0005 <span style="color:#ae81ff">0002</span> ECHO string<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello world&#34;</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>L0006 <span style="color:#ae81ff">0003</span> RETURN int<span style="color:#f92672">(</span>1<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Script ended normally<span style="color:#f92672">]</span>
-</span></span></code></pre></div><p><code>VLD</code>是第三方扩展，暂且不表。</p>
-<h3 id="通过-opcode-解决疑问">通过 opcode 解决疑问</h3>
-<p>思考以下代码的输出结果：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$arr <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;c&#39;</span>];
-</span></span><span style="display:flex;"><span>$arr2 <span style="color:#f92672">=</span> $arr;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> ($arr <span style="color:#66d9ef">as</span> <span style="color:#f92672">&amp;</span>$item) {
-</span></span><span style="display:flex;"><span>    $item <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;x&#39;</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> ($arr2 <span style="color:#66d9ef">as</span> $item) {
-</span></span><span style="display:flex;"><span>    $item <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;y&#39;</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">print_r</span>($arr);
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">print_r</span>($arr2);
-</span></span></code></pre></div><p>不理解引用的话，可能会觉得很疑惑。我们来看看以上代码的<code>opcode</code>分析一下为什么结果会如下所示。</p>
-<pre tabindex="0"><code>Array
+</code></pre><p>如果多个输出呢？</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-php data-lang=php><span class=line><span class=cl><span class=o>&lt;?</span><span class=nx>php</span>
+</span></span><span class=line><span class=cl><span class=c1>// opcode2.php
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span> <span class=s2>&#34;Hello world&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span> <span class=s2>&#34;Hello world&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span> <span class=s2>&#34;Hello world&#34;</span><span class=p>;</span>
+</span></span></code></pre></div><p>这个问题先暂且不管。</p><p>有多种方法可以查看<code>opcode</code>，如<code>Zend Opcache(opcache)</code>扩展、<code>phpdbg</code>接口以及<code>Vulcan Login Dumper(VLD)</code>扩展。</p><h3 id=使用-zend-opcache>使用 Zend Opcache</h3><p>前提要求：<code>Zend Opcache</code>扩展必须安装并启用。</p><p><code>opcache.opt_debug_level</code>接收一个十六进制值用于配置<code>opcode</code>的输出，设置为<code>0</code>时会禁用输出。</p><ul><li><code>opcache.opt_debug_level=0x10000</code>：输出未优化的<code>opcode</code>；</li><li><code>opcache.opt_debug_level=0x20000</code>：输出优化后的<code>opcode</code>；</li><li><code>opcache.opt_debug_level=0x40000</code>：以上下文无关方法形式输出<code>opcode</code>；</li><li><code>opcache.opt_debug_level=0x200000</code>：以<code>Static Single Assignments</code>形式输出<code>opcode</code>；</li></ul><p>再次以上述的<code>opcode2.php</code>为例。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ php -d opcache.enable<span class=o>=</span>On -d opcache.enable_cli<span class=o>=</span>On -d opcache.opt_debug_level<span class=o>=</span>0x10000 opcode2.php
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>$_main</span>:
+</span></span><span class=line><span class=cl>     <span class=p>;</span> <span class=o>(</span><span class=nv>lines</span><span class=o>=</span>4, <span class=nv>args</span><span class=o>=</span>0, <span class=nv>vars</span><span class=o>=</span>0, <span class=nv>tmps</span><span class=o>=</span>0<span class=o>)</span>
+</span></span><span class=line><span class=cl>     <span class=p>;</span> <span class=o>(</span>before optimizer<span class=o>)</span>
+</span></span><span class=line><span class=cl>     <span class=p>;</span> /root/opcode.php:1-6
+</span></span><span class=line><span class=cl>     <span class=p>;</span> <span class=k>return</span>  <span class=o>[]</span> RANGE<span class=o>[</span>0..0<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=m>0000</span> ECHO string<span class=o>(</span><span class=s2>&#34;Hello world&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=m>0001</span> ECHO string<span class=o>(</span><span class=s2>&#34;Hello world&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=m>0002</span> ECHO string<span class=o>(</span><span class=s2>&#34;Hello world&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=m>0003</span> RETURN int<span class=o>(</span>1<span class=o>)</span>
+</span></span><span class=line><span class=cl>$ php -d opcache.enable<span class=o>=</span>On -d opcache.enable_cli<span class=o>=</span>On -d opcache.opt_debug_level<span class=o>=</span>0x20000 opcode2.php
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>$_main</span>:
+</span></span><span class=line><span class=cl>     <span class=p>;</span> <span class=o>(</span><span class=nv>lines</span><span class=o>=</span>2, <span class=nv>args</span><span class=o>=</span>0, <span class=nv>vars</span><span class=o>=</span>0, <span class=nv>tmps</span><span class=o>=</span>0<span class=o>)</span>
+</span></span><span class=line><span class=cl>     <span class=p>;</span> <span class=o>(</span>after optimizer<span class=o>)</span>
+</span></span><span class=line><span class=cl>     <span class=p>;</span> /root/opcode.php:1-6
+</span></span><span class=line><span class=cl><span class=m>0000</span> ECHO string<span class=o>(</span><span class=s2>&#34;Hello worldHello worldHello world&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=m>0001</span> RETURN int<span class=o>(</span>1<span class=o>)</span>
+</span></span></code></pre></div><p>这就是对“如果多个输出呢？”这个问题的回答，未经优化时，三个<code>echo</code>语句解析为三条<code>ECHO string("Hello world)</code>指令，优化后合并为一条指令。</p><h3 id=使用-phpdbg>使用 phpdbg</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ phpdbg -p opcode2.php
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>$_main</span>:
+</span></span><span class=line><span class=cl>     <span class=p>;</span> <span class=o>(</span><span class=nv>lines</span><span class=o>=</span>4, <span class=nv>args</span><span class=o>=</span>0, <span class=nv>vars</span><span class=o>=</span>0, <span class=nv>tmps</span><span class=o>=</span>0<span class=o>)</span>
+</span></span><span class=line><span class=cl>     <span class=p>;</span> /root/opcode.php:1-6
+</span></span><span class=line><span class=cl>L0003 <span class=m>0000</span> ECHO string<span class=o>(</span><span class=s2>&#34;Hello world&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>L0004 <span class=m>0001</span> ECHO string<span class=o>(</span><span class=s2>&#34;Hello world&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>L0005 <span class=m>0002</span> ECHO string<span class=o>(</span><span class=s2>&#34;Hello world&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>L0006 <span class=m>0003</span> RETURN int<span class=o>(</span>1<span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>Script ended normally<span class=o>]</span>
+</span></span></code></pre></div><p><code>VLD</code>是第三方扩展，暂且不表。</p><h3 id=通过-opcode-解决疑问>通过 opcode 解决疑问</h3><p>思考以下代码的输出结果：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-php data-lang=php><span class=line><span class=cl><span class=o>&lt;?</span><span class=nx>php</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>$arr</span> <span class=o>=</span> <span class=p>[</span><span class=s1>&#39;a&#39;</span><span class=p>,</span> <span class=s1>&#39;b&#39;</span><span class=p>,</span> <span class=s1>&#39;c&#39;</span><span class=p>];</span>
+</span></span><span class=line><span class=cl><span class=nv>$arr2</span> <span class=o>=</span> <span class=nv>$arr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>foreach</span> <span class=p>(</span><span class=nv>$arr</span> <span class=k>as</span> <span class=o>&amp;</span><span class=nv>$item</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$item</span> <span class=o>=</span> <span class=s1>&#39;x&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>foreach</span> <span class=p>(</span><span class=nv>$arr2</span> <span class=k>as</span> <span class=nv>$item</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$item</span> <span class=o>=</span> <span class=s1>&#39;y&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>print_r</span><span class=p>(</span><span class=nv>$arr</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>print_r</span><span class=p>(</span><span class=nv>$arr2</span><span class=p>);</span>
+</span></span></code></pre></div><p>不理解引用的话，可能会觉得很疑惑。我们来看看以上代码的<code>opcode</code>分析一下为什么结果会如下所示。</p><pre tabindex=0><code>Array
 (
     [0] =&gt; x
     [1] =&gt; x
@@ -214,8 +89,7 @@ Array
     [1] =&gt; b
     [2] =&gt; c
 )
-</code></pre><p>使用<code>opcache</code>或<code>phpdbg</code>输出<code>opcode</code>如下，其中使用空行将代码进行了分割便于分析。</p>
-<pre tabindex="0"><code>0000 ASSIGN CV0($arr) array(...)
+</code></pre><p>使用<code>opcache</code>或<code>phpdbg</code>输出<code>opcode</code>如下，其中使用空行将代码进行了分割便于分析。</p><pre tabindex=0><code>0000 ASSIGN CV0($arr) array(...)
 0001 ASSIGN CV1($arr2) CV0($arr)
 
 0002 V5 = FE_RESET_RW CV0($arr) 0006
@@ -237,70 +111,31 @@ Array
 0016 SEND_VAR CV1($arr2) 1
 0017 DO_ICALL
 0018 RETURN int(1)
-</code></pre><p>其中第二和第三部分的<code>opcode</code>正是两段<code>foreach</code>代码，也就是<code>0002-0006</code>和<code>0007-0011</code>，主要差异如下：</p>
-<ol>
-<li>第一个<code>foreach</code>使用了<code>RE_RESET_RW</code>，对<code>$arr</code>和<code>$item</code>可读可写，第二个<code>foreach</code>使用了<code>RE_FETCH_R</code>，对<code>$arr2</code>和<code>$item</code>只读；</li>
-<li><code>$item</code>对应的标识符都是<code>CV2</code>，对相当地址的数据进行读写；</li>
-</ol>
-<p>通过以上对比，应该可以得到结论，第一个<code>foreach</code>循环时，对<code>$item</code>的修改影响<code>$arr</code>，因此，循环结束后，<code>$arr</code>的值应为：</p>
-<pre tabindex="0"><code>Array
+</code></pre><p>其中第二和第三部分的<code>opcode</code>正是两段<code>foreach</code>代码，也就是<code>0002-0006</code>和<code>0007-0011</code>，主要差异如下：</p><ol><li>第一个<code>foreach</code>使用了<code>RE_RESET_RW</code>，对<code>$arr</code>和<code>$item</code>可读可写，第二个<code>foreach</code>使用了<code>RE_FETCH_R</code>，对<code>$arr2</code>和<code>$item</code>只读；</li><li><code>$item</code>对应的标识符都是<code>CV2</code>，对相当地址的数据进行读写；</li></ol><p>通过以上对比，应该可以得到结论，第一个<code>foreach</code>循环时，对<code>$item</code>的修改影响<code>$arr</code>，因此，循环结束后，<code>$arr</code>的值应为：</p><pre tabindex=0><code>Array
 (
     [0] =&gt; x
     [1] =&gt; x
     [2] =&gt; x
 )
-</code></pre><p>与此同时，<code>$item</code>仍然指向<code>$arr[2]</code>，第二个<code>foreach</code>循环时，对<code>$item</code>的修改并不会影响<code>$arr2</code>，但由于<code>$item</code>的指向，<code>$arr[2]</code>的值随着<code>$item</code>的改变而改变，最终跟最后一轮循环时的值一致，因此，<code>$arr</code>最终为：</p>
-<pre tabindex="0"><code>Array
+</code></pre><p>与此同时，<code>$item</code>仍然指向<code>$arr[2]</code>，第二个<code>foreach</code>循环时，对<code>$item</code>的修改并不会影响<code>$arr2</code>，但由于<code>$item</code>的指向，<code>$arr[2]</code>的值随着<code>$item</code>的改变而改变，最终跟最后一轮循环时的值一致，因此，<code>$arr</code>最终为：</p><pre tabindex=0><code>Array
 (
     [0] =&gt; x
     [1] =&gt; x
     [2] =&gt; y
 )
-</code></pre><p><code>PHP</code>的<code>opcode</code>并没有详细的文档记录，也没有提供向后兼容性，不像<code>Java</code>那样经过精心设计，因此在内部有如“直接运行<code>opcode</code>”之类的<code>RFC</code>都遭到了一致否决，类似的讨论如 <a href="../../../../https://externals.io/message/111965">https://externals.io/message/111965</a>
-，还可以在 <a href="../../../../https://externals.io">https://externals.io</a>
- 查阅更多相关信息。可能关于<code>opcode</code>最权威的资料就在源码中，例如 <a href="../../../../https://github.com/php/php-src/blob/PHP-8.4.2/Zend/zend_vm_opcodes.h">https://github.com/php/php-src/blob/PHP-8.4.2/Zend/zend_vm_opcodes.h</a>
-。或许 <a href="../../../../https://github.com/phpinternalsbook/PHP-Internals-Book">https://github.com/phpinternalsbook/PHP-Internals-Book</a>
-、<a href="../../../../https://github.com/tpunt/php-internals-docs">https://github.com/tpunt/php-internals-docs</a>
- 对了解也有一定帮助。</p>
-</div>
-  <footer class="post-footer">
-    <nav class="post-nav">
-      
-      <a class="prev-post" href="../../../../2024/12/29/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84-rpc-%E7%A4%BA%E4%BE%8B/">
-        <span class="nav-label">← Prev</span>
-        <span class="nav-title">一个简单的 RPC 示例</span>
-      </a>
-      
-      
-      <a class="next-post" href="../../../../2025/01/02/python-%E7%9A%84-bytecode/">
-        <span class="nav-label">Next →</span>
-        <span class="nav-title">Python 的 bytecode</span>
-      </a>
-      
-    </nav>
-  </footer>
-</article>
-
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-left">
-        <span>&copy; 2026 William A</span>
-        <span class="footer-sep">|</span>
-        <span>Love sports, love programming, love life.</span>
-        <span class="footer-sep">|</span>
-        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">粤ICP备20026636号-1</a>
-      </div>
-      <div class="footer-right">
-        <a href='../../../../feed.xml' target="_blank" class="footer-link">RSS</a>
-      </div>
-    </div>
-  </footer>
-
-  <a id="search-index-url" href='../../../../search.json' hidden></a>
-
-  <script src='../../../../assets/js/main.js'></script>
-  
-</body>
-</html>
+</code></pre><p><code>PHP</code>的<code>opcode</code>并没有详细的文档记录，也没有提供向后兼容性，不像<code>Java</code>那样经过精心设计，因此在内部有如“直接运行<code>opcode</code>”之类的<code>RFC</code>都遭到了一致否决，类似的讨论如 <a href=https://externals.io/message/111965 target=_blank rel="noopener noreferrer">https://externals.io/message/111965</a>
+，还可以在 <a href=https://externals.io target=_blank rel="noopener noreferrer">https://externals.io</a>
+查阅更多相关信息。可能关于<code>opcode</code>最权威的资料就在源码中，例如 <a href=https://github.com/php/php-src/blob/PHP-8.4.2/Zend/zend_vm_opcodes.h target=_blank rel="noopener noreferrer">https://github.com/php/php-src/blob/PHP-8.4.2/Zend/zend_vm_opcodes.h</a>
+。或许 <a href=https://github.com/phpinternalsbook/PHP-Internals-Book target=_blank rel="noopener noreferrer">https://github.com/phpinternalsbook/PHP-Internals-Book</a>
+、<a href=https://github.com/tpunt/php-internals-docs target=_blank rel="noopener noreferrer">https://github.com/tpunt/php-internals-docs</a>
+对了解也有一定帮助。</p></div><footer class=post-footer><nav class=post-nav aria-label=文章导航><a class=prev-post href=../../../../2024/12/29/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84-rpc-%E7%A4%BA%E4%BE%8B/ rel=prev><span class=nav-label>← 上一篇</span>
+<span class=nav-title>一个简单的 RPC 示例</span>
+</a><a class=next-post href=../../../../2025/01/02/python-%E7%9A%84-bytecode/ rel=next><span class=nav-label>下一篇 →</span>
+<span class=nav-title>Python 的 bytecode</span></a></nav></footer></article></main><footer class=site-footer><div class=footer-inner><div class=footer-left><span>&copy; 2026 William A</span>
+<span class=footer-sep aria-hidden=true>|</span>
+<span>Love sports, love programming, love life.</span>
+<span class=footer-sep aria-hidden=true>|</span>
+<a href=https://beian.miit.gov.cn/ target=_blank rel="noopener noreferrer" class=footer-link>粤ICP备20026636号-1</a></div><div class=footer-right><a href=../../../../feed.xml class=footer-link>RSS</a></div></div></footer><button type=button class=back-to-top id=backToTop data-back-to-top aria-label=回到顶部 title=回到顶部>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+</button>
+<script src=../../../../js/main.min.4cf3a756b96ad86df0852be0501346002e700dde96badd078781a698d8be15c1.js integrity="sha256-TPOnVrlq2G3whSvgUBNGAC5wDd6Wut0Hh4GmmNi+FcE=" defer></script></body></html>

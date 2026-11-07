@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -310,7 +311,24 @@ func (s *Site) DeletePost(rel string) error {
 	return os.Remove(abs)
 }
 
-// NewPost creates a post like new_post.py does: content/posts/<year>/<date>-<slug>.md
+// renderPostFrontMatter produces YAML-safe front matter for a new post.
+// Scalar values are quoted with strconv.Quote; Go's escape sequences are a
+// subset of YAML double-quoted scalar escapes (including quotes, backslashes,
+// newlines and unicode), so titles such as `A: "B" # [x]` stay intact.
+func renderPostFrontMatter(date, title, category string) string {
+	var b strings.Builder
+	b.WriteString("---\n")
+	fmt.Fprintf(&b, "date: %s\n", date)
+	fmt.Fprintf(&b, "title: %s\n", strconv.Quote(title))
+	if category != "" {
+		fmt.Fprintf(&b, "categories: [%s]\n", strconv.Quote(category))
+		fmt.Fprintf(&b, "keywords: [%s]\n", strconv.Quote(category))
+	}
+	b.WriteString("---\n\n")
+	return b.String()
+}
+
+// NewPost creates a post at content/posts/<year>/<date>-<slug>.md.
 func (s *Site) NewPost(title, category string) (string, error) {
 	title = strings.TrimSpace(title)
 	if title == "" {
@@ -332,13 +350,7 @@ func (s *Site) NewPost(title, category string) (string, error) {
 		target = filepath.Join(dir, fmt.Sprintf("%s-%s-%d.md", date, slugify(title), i))
 	}
 
-	cats := ""
-	if category != "" {
-		cats = strings.TrimSpace(category)
-	}
-	content := fmt.Sprintf("---\ndate: %s\ntitle: %s\ncategories: [%s]\nkeywords: [%s]\n---\n\n",
-		date, title, cats, cats)
-
+	content := renderPostFrontMatter(date, title, strings.TrimSpace(category))
 	if err := os.WriteFile(target, []byte(content), 0o644); err != nil {
 		return "", err
 	}
@@ -389,6 +401,16 @@ func (s *Site) Upload(kind, fileName string, r io.Reader, postRel string) (strin
 	ext := strings.ToLower(filepath.Ext(name))
 	stem := strings.TrimSuffix(name, filepath.Ext(name))
 
+	// Validate the post target before touching static/. This prevents an
+	// upload with no open post from leaving an orphan file behind.
+	if strings.TrimSpace(postRel) == "" {
+		return "", errors.New("请先打开一篇文章再上传")
+	}
+	postAbs, err := safeJoin(s.ContentRoot(), postRel)
+	if err != nil {
+		return "", fmt.Errorf("请先打开一篇文章再上传")
+	}
+
 	var dir string
 	if kind == "image" {
 		if !imageExtRe.MatchString(ext) {
@@ -409,29 +431,31 @@ func (s *Site) Upload(kind, fileName string, r io.Reader, postRel string) (strin
 	}
 
 	abs := filepath.Join(dir, target)
-	f, err := os.Create(abs)
-	if err != nil {
-		return "", err
-	}
-	_, cpErr := io.Copy(f, r)
-	closeErr := f.Close()
-	if cpErr != nil {
-		return "", cpErr
-	}
-	if closeErr != nil {
-		return "", closeErr
-	}
-
-	// markdown path relative to the current post file
-	postAbs, err := safeJoin(s.ContentRoot(), postRel)
-	if err != nil {
-		return "", fmt.Errorf("请先打开一篇文章再上传")
-	}
 	rel, err := filepath.Rel(filepath.Dir(postAbs), abs)
 	if err != nil {
 		return "", err
 	}
 	rel = filepath.ToSlash(rel)
+
+	tmp, err := os.CreateTemp(dir, ".upload-*")
+	if err != nil {
+		return "", err
+	}
+	tmpName := tmp.Name()
+
+	if _, err := io.Copy(tmp, r); err != nil {
+		_ = tmp.Close()
+		_ = os.Remove(tmpName)
+		return "", err
+	}
+	if err := tmp.Close(); err != nil {
+		_ = os.Remove(tmpName)
+		return "", err
+	}
+	if err := os.Rename(tmpName, abs); err != nil {
+		_ = os.Remove(tmpName)
+		return "", err
+	}
 
 	if kind == "image" {
 		return fmt.Sprintf("![%s](%s)", stem, rel), nil

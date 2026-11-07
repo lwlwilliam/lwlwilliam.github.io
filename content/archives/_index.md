@@ -1,4 +1,3 @@
 ---
 title: Archives
-type: archives
 ---

@@ -1,4 +1,3 @@
 ---
 title: Books
-type: books
 ---

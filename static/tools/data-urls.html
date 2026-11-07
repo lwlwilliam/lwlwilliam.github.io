@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data URLs 生成器</title>
     <style>
+        *,
+        *::before,
+        *::after { box-sizing: border-box; }
+
         :root {
             --primary-color: #2563eb;
             --primary-hover: #1d4ed8;
@@ -108,6 +112,13 @@
         .copy-btn { background: #4a5568; padding: 8px 15px; font-size: 0.8rem; width: auto; }
 
         .hidden { display: none; }
+
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .container { padding: 10px; }
+            .card { padding: 1.25rem; }
+            .checkbox-group { flex-direction: column; gap: 8px; }
+        }
     </style>
 </head>
 <body>

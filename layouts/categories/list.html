@@ -1,20 +1,15 @@
 {{ define "main" }}
 <div class="categories-page">
+  <h1 class="page-title">Categories</h1>
   <div class="category-grid">
-    {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
-    {{ $title := $name }}
-    {{ range first 1 $taxonomy }}
-      {{ range .Params.categories }}
-        {{ if eq (. | urlize) ($name | urlize) }}
-          {{ $title = . }}
-        {{ end }}
-      {{ end }}
-    {{ end }}
-    <a href='{{ "categories" | relURL }}/{{ $name | urlize }}/' class="category-card fade-in-up">
-      <span class="category-card-name">{{ $title }}</span>
+    {{- range $name, $taxonomy := site.Taxonomies.categories }}
+      {{- with site.GetPage (printf "/categories/%s" $name) }}
+    <a href="{{ .RelPermalink }}" class="category-card">
+      <h2 class="category-card-name" title="{{ .LinkTitle }}">{{ .LinkTitle }}</h2>
       <span class="category-card-count">{{ len $taxonomy }}</span>
     </a>
-    {{ end }}
+      {{- end }}
+    {{- end }}
   </div>
 </div>
 {{ end }}

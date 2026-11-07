@@ -1,46 +1,14 @@
 {{ define "main" }}
-{{ $paginator := .Paginate .Pages .Site.Params.paginate }}
-{{ $termTitle := .Data.Term }}
-{{ range first 1 .Pages }}
-  {{ range .Params.categories }}
-    {{ if eq (. | urlize) ($.Data.Term | urlize) }}
-      {{ $termTitle = . }}
-    {{ end }}
-  {{ end }}
-{{ end }}
+{{- $paginator := .Paginate .Pages }}
 <div class="category-term-page">
-  <h1 class="page-title">{{ $termTitle }} <span class="category-term-count">{{ len .Pages }}</span></h1>
+  <h1 class="page-title">{{ .Title }} <span class="category-term-count">{{ len .Pages }}</span></h1>
   <div class="post-list">
-    {{ range $paginator.Pages }}
-    <article class="post-card fade-in-up">
-      <h2 class="post-card-title">
-        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-      </h2>
-      <div class="post-card-meta">
-        <time datetime='{{ .Date.Format "2006-01-02" }}'>{{ .Date.Format "2006年1月2日" }}</time>
-        {{ with .Params.categories }}
-        <span class="post-card-categories">
-          {{ range . }}
-          <a href='{{ "categories" | relURL }}/{{ . | urlize }}/' class="category-pill-sm">{{ . }}</a>
-          {{ end }}
-        </span>
-        {{ end }}
-      </div>
-      <div class="post-card-excerpt">
-        {{ $excerpt := .Summary | plainify | truncate .Site.Params.excerptLength }}
-        {{ if ge (len .Summary) .Site.Params.excerptLength }}
-        {{ $excerpt }}...
-        {{ else }}
-        {{ $excerpt }}
-        {{ end }}
-      </div>
-      <a href="{{ .RelPermalink }}" class="post-card-readmore">Read more →</a>
-    </article>
-    {{ end }}
+    {{- range $paginator.Pages }}
+      {{- partial "post-card.html" . }}
+    {{- end }}
   </div>
-
-  {{ if gt $paginator.TotalPages 1 }}
-  {{ partial "pagination.html" $paginator }}
-  {{ end }}
+  {{- if gt $paginator.TotalPages 1 }}
+    {{- partial "pagination.html" $paginator }}
+  {{- end }}
 </div>
 {{ end }}

@@ -1,0 +1,60 @@
+{{- $title := site.Title -}}
+{{- if not .IsHome -}}
+  {{- $title = printf "%s - %s" .Title site.Title -}}
+{{- end -}}
+{{- $description := .Description | default site.Params.description -}}
+{{- $keywords := slice -}}
+{{- range .Params.keywords -}}
+  {{- $keywords = $keywords | append . -}}
+{{- end -}}
+{{- range site.Params.keywords -}}
+  {{- $keywords = $keywords | append . -}}
+{{- end -}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{ hugo.Generator }}
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $description }}">
+{{- with $keywords }}
+<meta name="keywords" content="{{ delimit . ", " }}">
+{{- end }}
+<meta name="author" content="{{ site.Params.author }}">
+<meta name="theme-color" content="#f7f8fa" data-theme-color>
+<link rel="icon" href="{{ "favicon.ico" | relURL }}">
+{{- with site.Home.OutputFormats.Get "rss" }}
+<link rel="alternate" type="application/rss+xml" title="{{ site.Title }}" href="{{ .RelPermalink }}">
+{{- end }}
+<script>
+  (function () {
+    var root = document.documentElement;
+    root.classList.replace('no-js', 'js');
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved === 'dark' ? 'dark' : 'light';
+      root.dataset.theme = theme;
+      root.style.colorScheme = theme;
+      var meta = document.querySelector('meta[data-theme-color]');
+      if (meta) meta.setAttribute('content', theme === 'dark' ? '#0f1115' : '#f7f8fa');
+    } catch (e) {}
+  }());
+</script>
+{{- $styles := slice (resources.Get "css/syntax.css") (resources.Get "css/main.css") | resources.Concat "css/main.css" }}
+{{- $css := $styles | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{- if .Params.enableKatex }}
+<link rel="stylesheet" href="{{ "katex/katex.min.css" | relURL }}?v=0.16.9">
+<script defer src="{{ "katex/katex.min.js" | relURL }}?v=0.16.9"></script>
+<script defer src="{{ "katex/auto-render.min.js" | relURL }}?v=0.16.9"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+        { left: '\\[', right: '\\]', display: true },
+        { left: '\\(', right: '\\)', display: false }
+      ]
+    });
+  });
+</script>
+{{- end }}

@@ -1,0 +1,15 @@
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-labelledby="searchTitle" aria-hidden="true">
+  <div class="search-modal">
+    <div class="search-header">
+      <label class="sr-only" id="searchTitle" for="searchInput">搜索文章</label>
+      <input type="search" id="searchInput" class="search-input" placeholder="搜索文章…" autocomplete="off" spellcheck="false">
+      <button type="button" class="search-close" data-search-close aria-label="关闭搜索">✕</button>
+    </div>
+    <div class="search-results" id="searchResults" role="status" aria-live="polite">
+      <p class="search-hint">输入关键词搜索文章</p>
+    </div>
+  </div>
+</div>
+{{- with site.Home.OutputFormats.Get "SearchJSON" }}
+<a id="search-index-url" href="{{ .RelPermalink }}" hidden></a>
+{{- end }}

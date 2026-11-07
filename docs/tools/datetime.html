@@ -171,9 +171,11 @@
 
         /* 移动端适配 */
         @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
+            .grid { grid-template-columns: minmax(0, 1fr); min-width: 0; }
+            .grid > * { min-width: 0; }
+            .format-grid { grid-template-columns: 1fr; }
             main { padding: 1rem; }
-            .container { padding: 1.25rem; }
+            .container { min-width: 0; padding: 1.25rem; }
             .clock-time { font-size: 2.25rem; }
             .clock-ts-item { min-width: 140px; }
         }

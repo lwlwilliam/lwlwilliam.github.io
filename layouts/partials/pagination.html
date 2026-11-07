@@ -1,46 +1,46 @@
-{{ $window := site.Params.paginationWindow | default 2 }}
-{{ $current := .PageNumber }}
-{{ $total := .TotalPages }}
-{{ $start := sub $current $window }}
-{{ if lt $start 1 }}{{ $start = 1 }}{{ end }}
-{{ $end := add $current $window }}
-{{ if gt $end $total }}{{ $end = $total }}{{ end }}
-
-<nav class="pagination">
+{{- $window := site.Params.paginationWindow | default 2 -}}
+{{- $current := .PageNumber -}}
+{{- $total := .TotalPages -}}
+{{- $start := math.Max 1 (sub $current $window) -}}
+{{- $end := math.Min $total (add $current $window) -}}
+<nav class="pagination" aria-label="分页">
   <div class="pagination-controls">
-    {{ if .HasPrev }}
-    <a href="{{ .First.URL }}" class="page-btn" title="First">««</a>
-    <a href="{{ .Prev.URL }}" class="page-btn" title="Previous">«</a>
-    {{ else }}
-    <span class="page-btn disabled">««</span>
-    <span class="page-btn disabled">«</span>
-    {{ end }}
+    {{- if .HasPrev }}
+    <a href="{{ .First.URL }}" class="page-btn" title="第一页" aria-label="第一页">««</a>
+    <a href="{{ .Prev.URL }}" class="page-btn" title="上一页" aria-label="上一页">«</a>
+    {{- else }}
+    <span class="page-btn disabled" aria-disabled="true">««</span>
+    <span class="page-btn disabled" aria-disabled="true">«</span>
+    {{- end }}
 
-    {{ range seq $start $end }}
-      {{ if eq . $current }}
-      <span class="page-btn current">{{ . }}</span>
-      {{ else }}
-        {{ if eq . 1 }}
-        <a href="{{ $.First.URL }}" class="page-btn">{{ . }}</a>
-        {{ else }}
-        <a href="{{ $.First.URL }}page/{{ . }}/" class="page-btn">{{ . }}</a>
-        {{ end }}
-      {{ end }}
-    {{ end }}
+    {{- range $index, $pager := .Pagers }}
+      {{- $number := add $index 1 }}
+      {{- if and (ge $number $start) (le $number $end) }}
+        {{- if eq $number $current }}
+    <span class="page-btn current" aria-current="page">{{ $number }}</span>
+        {{- else }}
+    <a href="{{ $pager.URL }}" class="page-btn">{{ $number }}</a>
+        {{- end }}
+      {{- end }}
+    {{- end }}
 
-    {{ if .HasNext }}
-    <a href="{{ .Next.URL }}" class="page-btn" title="Next">»</a>
-    <a href="{{ .Last.URL }}" class="page-btn" title="Last">»»</a>
-    {{ else }}
-    <span class="page-btn disabled">»</span>
-    <span class="page-btn disabled">»»</span>
-    {{ end }}
+    {{- if .HasNext }}
+    <a href="{{ .Next.URL }}" class="page-btn" title="下一页" aria-label="下一页">»</a>
+    <a href="{{ .Last.URL }}" class="page-btn" title="最后一页" aria-label="最后一页">»»</a>
+    {{- else }}
+    <span class="page-btn disabled" aria-disabled="true">»</span>
+    <span class="page-btn disabled" aria-disabled="true">»»</span>
+    {{- end }}
   </div>
-  <div class="pagination-jump">
+
+  <form class="pagination-jump" data-pagination-form>
     <span>Page</span>
-    <a id="pagination-base" href="{{ .First.URL }}" hidden></a>
-    <input type="number" id="pageJumpInput" min="1" max="{{ $total }}" value="{{ $current }}" class="page-jump-input">
+    <label class="sr-only" for="pageJumpInput">页码</label>
+    <input type="number" id="pageJumpInput" min="1" max="{{ $total }}" value="{{ $current }}" class="page-jump-input" inputmode="numeric">
     <span>of {{ $total }}</span>
-    <button class="page-btn page-jump-btn" onclick="jumpToPage()">Go</button>
+    <button type="submit" class="page-btn page-jump-btn">Go</button>
+  </form>
+  <div id="pagination-urls" hidden>
+    {{- range .Pagers }}<a href="{{ .URL }}"></a>{{ end }}
   </div>
 </nav>

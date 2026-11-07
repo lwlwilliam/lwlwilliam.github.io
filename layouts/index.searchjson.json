@@ -1,5 +1,4 @@
-{{- $pages := where .Site.RegularPages "Type" "posts" -}}
-{{- $len := len $pages -}}
+{{- $pages := where site.RegularPages "Type" "posts" -}}
 [{{ range $index, $page := $pages -}}
   {{- if $index }},{{ end -}}
   {
@@ -8,7 +7,6 @@
     "date": {{ $page.Date.Format "2006-01-02" | jsonify }},
     "categories": {{ $page.Params.categories | jsonify }},
     "keywords": {{ $page.Params.keywords | jsonify }},
-    "content": {{ $page.Plain | jsonify }},
-    "summary": {{ $page.Summary | plainify | jsonify }}
+    "content": {{ $page.Plain | jsonify }}
   }
 {{- end -}}]

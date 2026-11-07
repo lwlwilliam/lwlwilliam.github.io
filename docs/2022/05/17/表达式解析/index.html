@@ -1,425 +1,181 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-<head>
-  <meta charset='utf-8'>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>表达式解析 - William A</title>
-  <meta name="description" content="Love sports, love programming, love life.">
-  <meta name="keywords" content='栈,编译,stack,parser,William A'>
-  <meta name="author" content="William A">
-  <meta name="theme-color" content="#f7f8fa">
-  <link rel="icon" href='../../../../favicon.ico'>
-  
-
-  <link rel="stylesheet" href='../../../../assets/css/main.css'>
-  
-</head>
-<body>
-  <script>
-    (function(){var t=localStorage.getItem('theme')==='dark'?'dark':'light';document.body.className=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0f1115':'#f7f8fa')})();
-  </script>
-  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="回到顶部" aria-label="回到顶部">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
-  </button>
-  <header class="site-header">
-    <div class="header-inner">
-      <a class="site-title" href="../../../../">William A</a>
-      <nav class="site-nav">
-        
-        
-        <a href="../../../../" class="nav-link">cd ~</a>
-        
-        
-        <a href="../../../../categories/" class="nav-link">Categories</a>
-        
-        
-        <a href="../../../../archives/" class="nav-link">Archives</a>
-        
-        
-        <a href="../../../../books/" class="nav-link">Books</a>
-        
-        
-        <a href="../../../../links/" class="nav-link">Links</a>
-        
-        
-        <a href="../../../../tools/" class="nav-link">Tools</a>
-        
-        
-        <a href="../../../../todo/" class="nav-link">Todo</a>
-        
-        
-        <a href="../../../../about/" class="nav-link">About</a>
-        
-      </nav>
-      <div class="header-actions">
-        <button class="btn-hamburger" onclick="toggleMenu()" aria-label="菜单" aria-expanded="false" title="菜单">
-          <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-        </button>
-        <button class="btn-search" onclick="toggleSearch()" aria-label="搜索" title="搜索（Ctrl/⌘ K）">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        </button>
-        <button class="btn-theme" onclick="toggleTheme()" aria-label="切换明暗主题" title="切换明暗主题">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5Z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <div class="search-overlay" id="searchOverlay">
-    <div class="search-modal">
-      <div class="search-header">
-        <input type="text" id="searchInput" class="search-input" placeholder="搜索文章…" autocomplete="off">
-        <button class="search-close" onclick="toggleSearch()">✕</button>
-      </div>
-      <div class="search-results" id="searchResults">
-        <div class="search-hint">输入关键词搜索文章</div>
-      </div>
-    </div>
-  </div>
-
-  <main class="main-content">
-    
-<article class="post-single">
-  <header class="post-header">
-    <h1 class="post-title">表达式解析</h1>
-    <div class="post-meta">
-      <time datetime='2022-05-17'>2022年5月17日</time>
-      
-      <span class="post-categories">
-        
-        <a href='../../../../categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/' class="category-pill">编译原理</a>
-        
-      </span>
-      
-    </div>
-    
-    <div class="post-keywords">
-      
-      <span class="keyword-tag">栈</span>
-      
-      <span class="keyword-tag">编译</span>
-      
-      <span class="keyword-tag">stack</span>
-      
-      <span class="keyword-tag">parser</span>
-      
-    </div>
-    
-  </header>
-  
-  
-  <details class="post-toc" id="post-toc">
-    <summary><svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3.75A.75.75 0 012.75 3h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zm0 4A.75.75 0 012.75 7h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 7.75zm0 4a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"/></svg></summary>
-    <nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#中缀表示法infix-notation">中缀表示法(Infix Notation)</a></li>
-        <li><a href="#前缀表示法prefix-notation">前缀表示法(Prefix Notation)</a></li>
-        <li><a href="#后缀表示法postfix-notation">后缀表示法(Postfix Notation)</a></li>
-        <li><a href="#解析表达式">解析表达式</a>
-          <ul>
-            <li><a href="#优先级">优先级</a></li>
-            <li><a href="#结合性">结合性</a></li>
-          </ul>
-        </li>
-        <li><a href="#后缀算法">后缀算法</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-  </details>
-  
-  <div class="post-content"><p>之前想写一篇《栈实现的表达式求值》，鸽了。这段时间又在学习编译原理，也有了一些想法，恰好看见<a href="../../../../https://www.tutorialspoint.com/data_structures_algorithms/expression_parsing_using_statck.htm">Data Structure - Expression Parsing</a>
-，如获至宝，感觉有点意思。</p>
-<p>算术表达式可以使用三种不同但效果等效的的表示法来表示。这些表示法如下：</p>
-<ul>
-<li>中缀表示法</li>
-<li>前缀表示法（波兰表示法）</li>
-<li>后缀表示法（逆波兰表示法）</li>
-</ul>
-<h3 id="中缀表示法infix-notation">中缀表示法(Infix Notation)</h3>
-<p>例如<code>a - b + c</code>，操作符位于操作数之间，这种表示法对人类友好，但对计算机不友好。处理中缀表示法的算法可能难度比较高并且在消耗大量时间和空间。</p>
-<h3 id="前缀表示法prefix-notation">前缀表示法(Prefix Notation)</h3>
-<p>这种表示法的操作符位于操作数之前，例如<code>+ a b</code>等同于中缀表示法的<code>a + b</code>。中缀表示法也叫<code>波兰表示法</code>。</p>
-<h3 id="后缀表示法postfix-notation">后缀表示法(Postfix Notation)</h3>
-<p>这种表示法也叫<code>逆波兰表示法</code>，操作符在操作数之后，例如<code>a b +</code>等于同中缀表示法的<code>a + b</code>。</p>
-<p>以下表格简明地展示了三种表示法的差异。</p>
-<table>
-  <thead>
-      <tr>
-          <th style="text-align: center">Sr.No</th>
-          <th style="text-align: center">Infix Notation</th>
-          <th style="text-align: center">Prefix Notation</th>
-          <th style="text-align: center">Postfix Notation</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: center">1</td>
-          <td style="text-align: center">a + b</td>
-          <td style="text-align: center">+ a b</td>
-          <td style="text-align: center">a b +</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">2</td>
-          <td style="text-align: center">(a + b) * c)</td>
-          <td style="text-align: center">* + a b c</td>
-          <td style="text-align: center">a b + c *</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">3</td>
-          <td style="text-align: center">a * (b + c)</td>
-          <td style="text-align: center">* a + b c</td>
-          <td style="text-align: center">a b c + *</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">4</td>
-          <td style="text-align: center">a / b + c / d</td>
-          <td style="text-align: center">+ / a b / c d</td>
-          <td style="text-align: center">a b / c d / +</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">5</td>
-          <td style="text-align: center">(a + b) * (c + d)</td>
-          <td style="text-align: center">* + a b + c d</td>
-          <td style="text-align: center">a b + c d + *</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">6</td>
-          <td style="text-align: center">((a + b) * c) - d</td>
-          <td style="text-align: center">- * + a b c d</td>
-          <td style="text-align: center">a b + c * d -</td>
-      </tr>
-  </tbody>
-</table>
-<h3 id="解析表达式">解析表达式</h3>
-<p>专门为中缀表示法设计算法或程序并不是高效的方式。事实上，这些中缀表示法会先转化为后缀或前缀表示法再进行计算。</p>
-<h4 id="优先级">优先级</h4>
-<p>当一个操作数位于两个不同的操作符之间时，哪个操作符先获得操作数取决于哪个操作符的优先级比其它操作符高。例如：</p>
-<pre tabindex="0"><code>a + b * c  -----&gt;  a + (b * c)
-</code></pre><p>由于乘法(<code>*</code>)的优先级高于加法(<code>+</code>)，所以<code>b * c</code>会先计算。</p>
-<h4 id="结合性">结合性</h4>
-<p>结合性描述了表达式中存在相同优先级操作符时的规则。例如<code>a + b - </code>中，<code>+</code>和<code>-</code>拥有相同的优先级，表达式中哪个部分先被计算取决于这些操作符的结合性。这里的<code>+</code>和<code>-</code>都是左结合，所以表达式会以<code>(a + b) - c</code>的形式计算。</p>
-<p>优先级和结合性决定了表达式计算的顺序。以下是有关操作符优先级和结合性的表格（从高到低）：</p>
-<table>
-  <thead>
-      <tr>
-          <th style="text-align: center">Sr.No.</th>
-          <th style="text-align: center">Operator</th>
-          <th style="text-align: center">Precedence</th>
-          <th style="text-align: center">Associativity</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: center">1</td>
-          <td style="text-align: center">乘方(<code>^</code>)</td>
-          <td style="text-align: center">最高(Highest)</td>
-          <td style="text-align: center">右结合(Right Associative)</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">2</td>
-          <td style="text-align: center">乘法(<code>*</code>) &amp; 除法(<code>/</code>)</td>
-          <td style="text-align: center">第二高(Second Highest)</td>
-          <td style="text-align: center">右结合(Left Associative)</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">3</td>
-          <td style="text-align: center">加法(<code>+</code>) &amp; 减法(<code>-</code>)</td>
-          <td style="text-align: center">最低(Lowest)</td>
-          <td style="text-align: center">右结合(Left Associative)</td>
-      </tr>
-  </tbody>
-</table>
-<p>以上表格展示了操作符的默认行为。在表达式计算过程中，计算顺序可以通过小括号来改变。例如<code>a + b * c</code>中，<code>b * c</code>会首先计算，<code>*</code>的优先级比<code>+</code>高。我们可以使用小括号让<code>a + b</code>先计算，<code>(a + b) * c</code>。</p>
-<h3 id="后缀算法">后缀算法</h3>
-<pre tabindex="0"><code>Step 1 - scan the expression from left to right(从左到右扫描表达式)
+<!doctype html><html lang=zh-cn class=no-js><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=generator content="Hugo 0.161.1"><title>表达式解析 - William A</title><meta name=description content="Love sports, love programming, love life."><meta name=keywords content="栈,编译,stack,parser,William A"><meta name=author content="William A"><meta name=theme-color content="#f7f8fa" data-theme-color><link rel=icon href=../../../../favicon.ico><link rel=alternate type=application/rss+xml title="William A" href=../../../../feed.xml><script>(function(){var e,n,s,t=document.documentElement;t.classList.replace("no-js","js");try{s=localStorage.getItem("theme"),e=s==="dark"?"dark":"light",t.dataset.theme=e,t.style.colorScheme=e,n=document.querySelector("meta[data-theme-color]"),n&&n.setAttribute("content",e==="dark"?"#0f1115":"#f7f8fa")}catch{}})()</script><link rel=stylesheet href=../../../../css/main.min.bcce8956c386fe3e5fda725391ed9f50e46b47879e10df784860543bf0370e90.css integrity="sha256-vM6JVsOG/j5f2nJTke2fUORrR4eeEN94SGBUO/A3DpA="></head><body><a class=skip-link href=#main-content>跳到正文</a><header class=site-header><div class=header-inner><a class=site-title href=../../../../ aria-label="William A 首页">William A</a><nav class=site-nav id=siteNav aria-label=主导航><a href=../../../../ class=nav-link>cd ~</a>
+<a href=../../../../categories/ class=nav-link>Categories</a>
+<a href=../../../../archives/ class=nav-link>Archives</a>
+<a href=../../../../books/ class=nav-link>Books</a>
+<a href=../../../../links/ class=nav-link>Links</a>
+<a href=../../../../tools/ class=nav-link>Tools</a>
+<a href=../../../../todo/ class=nav-link>Todo</a>
+<a href=../../../../about/ class=nav-link>About</a></nav><div class=header-actions><button type=button class="icon-button btn-hamburger" data-menu-toggle aria-label=打开导航 aria-expanded=false aria-controls=siteNav>
+<svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+<svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+</button>
+<button type=button class=icon-button data-search-toggle aria-label=搜索文章 aria-expanded=false title="搜索（Ctrl/⌘ K）" aria-haspopup=dialog>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+</button>
+<button type=button class="icon-button btn-theme" data-theme-toggle aria-label=切换明暗主题 title=切换明暗主题>
+<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15.5A8.5 8.5.0 018.5 4 8.5 8.5.0 1020 15.5z"/></svg>
+<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg></button></div></div></header><div class=search-overlay id=searchOverlay role=dialog aria-modal=true aria-labelledby=searchTitle aria-hidden=true><div class=search-modal><div class=search-header><label class=sr-only id=searchTitle for=searchInput>搜索文章</label>
+<input type=search id=searchInput class=search-input placeholder=搜索文章… autocomplete=off spellcheck=false>
+<button type=button class=search-close data-search-close aria-label=关闭搜索>✕</button></div><div class=search-results id=searchResults role=status aria-live=polite><p class=search-hint>输入关键词搜索文章</p></div></div></div><a id=search-index-url href=../../../../search.json hidden></a><main class=main-content id=main-content tabindex=-1><article class=post-single><header class=post-header><h1 class=post-title>表达式解析</h1><div class=post-meta><time datetime=2022-05-17>2022年5月17日</time>
+<span class=post-categories><a href=../../../../categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/ class=category-pill>编译原理</a>
+</span><span class=post-reading-time>3 分钟阅读</span></div><div class=post-keywords aria-label=关键词><span class=keyword-tag>栈</span>
+<span class=keyword-tag>编译</span>
+<span class=keyword-tag>stack</span>
+<span class=keyword-tag>parser</span></div></header><details class=post-toc id=post-toc><summary><svg class="toc-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 3.75A.75.75.0 012.75 3h10.5a.75.75.0 010 1.5H2.75A.75.75.0 012 3.75zm0 4A.75.75.0 012.75 7h10.5a.75.75.0 010 1.5H2.75A.75.75.0 012 7.75zm0 4a.75.75.0 01.75-.75h10.5a.75.75.0 010 1.5H2.75A.75.75.0 012 11.75z"/></svg>
+<span>目录</span></summary><nav id=TableOfContents><ul><li><ul><li><a href=#中缀表示法infix-notation>中缀表示法(Infix Notation)</a></li><li><a href=#前缀表示法prefix-notation>前缀表示法(Prefix Notation)</a></li><li><a href=#后缀表示法postfix-notation>后缀表示法(Postfix Notation)</a></li><li><a href=#解析表达式>解析表达式</a><ul><li><a href=#优先级>优先级</a></li><li><a href=#结合性>结合性</a></li></ul></li><li><a href=#后缀算法>后缀算法</a></li></ul></li></ul></nav></details><div class=post-content><p>之前想写一篇《栈实现的表达式求值》，鸽了。这段时间又在学习编译原理，也有了一些想法，恰好看见<a href=https://www.tutorialspoint.com/data_structures_algorithms/expression_parsing_using_statck.htm target=_blank rel="noopener noreferrer">Data Structure - Expression Parsing</a>
+，如获至宝，感觉有点意思。</p><p>算术表达式可以使用三种不同但效果等效的的表示法来表示。这些表示法如下：</p><ul><li>中缀表示法</li><li>前缀表示法（波兰表示法）</li><li>后缀表示法（逆波兰表示法）</li></ul><h3 id=中缀表示法infix-notation>中缀表示法(Infix Notation)</h3><p>例如<code>a - b + c</code>，操作符位于操作数之间，这种表示法对人类友好，但对计算机不友好。处理中缀表示法的算法可能难度比较高并且在消耗大量时间和空间。</p><h3 id=前缀表示法prefix-notation>前缀表示法(Prefix Notation)</h3><p>这种表示法的操作符位于操作数之前，例如<code>+ a b</code>等同于中缀表示法的<code>a + b</code>。中缀表示法也叫<code>波兰表示法</code>。</p><h3 id=后缀表示法postfix-notation>后缀表示法(Postfix Notation)</h3><p>这种表示法也叫<code>逆波兰表示法</code>，操作符在操作数之后，例如<code>a b +</code>等于同中缀表示法的<code>a + b</code>。</p><p>以下表格简明地展示了三种表示法的差异。</p><table><thead><tr><th style=text-align:center>Sr.No</th><th style=text-align:center>Infix Notation</th><th style=text-align:center>Prefix Notation</th><th style=text-align:center>Postfix Notation</th></tr></thead><tbody><tr><td style=text-align:center>1</td><td style=text-align:center>a + b</td><td style=text-align:center>+ a b</td><td style=text-align:center>a b +</td></tr><tr><td style=text-align:center>2</td><td style=text-align:center>(a + b) * c)</td><td style=text-align:center>* + a b c</td><td style=text-align:center>a b + c *</td></tr><tr><td style=text-align:center>3</td><td style=text-align:center>a * (b + c)</td><td style=text-align:center>* a + b c</td><td style=text-align:center>a b c + *</td></tr><tr><td style=text-align:center>4</td><td style=text-align:center>a / b + c / d</td><td style=text-align:center>+ / a b / c d</td><td style=text-align:center>a b / c d / +</td></tr><tr><td style=text-align:center>5</td><td style=text-align:center>(a + b) * (c + d)</td><td style=text-align:center>* + a b + c d</td><td style=text-align:center>a b + c d + *</td></tr><tr><td style=text-align:center>6</td><td style=text-align:center>((a + b) * c) - d</td><td style=text-align:center>- * + a b c d</td><td style=text-align:center>a b + c * d -</td></tr></tbody></table><h3 id=解析表达式>解析表达式</h3><p>专门为中缀表示法设计算法或程序并不是高效的方式。事实上，这些中缀表示法会先转化为后缀或前缀表示法再进行计算。</p><h4 id=优先级>优先级</h4><p>当一个操作数位于两个不同的操作符之间时，哪个操作符先获得操作数取决于哪个操作符的优先级比其它操作符高。例如：</p><pre tabindex=0><code>a + b * c  -----&gt;  a + (b * c)
+</code></pre><p>由于乘法(<code>*</code>)的优先级高于加法(<code>+</code>)，所以<code>b * c</code>会先计算。</p><h4 id=结合性>结合性</h4><p>结合性描述了表达式中存在相同优先级操作符时的规则。例如<code>a + b - </code>中，<code>+</code>和<code>-</code>拥有相同的优先级，表达式中哪个部分先被计算取决于这些操作符的结合性。这里的<code>+</code>和<code>-</code>都是左结合，所以表达式会以<code>(a + b) - c</code>的形式计算。</p><p>优先级和结合性决定了表达式计算的顺序。以下是有关操作符优先级和结合性的表格（从高到低）：</p><table><thead><tr><th style=text-align:center>Sr.No.</th><th style=text-align:center>Operator</th><th style=text-align:center>Precedence</th><th style=text-align:center>Associativity</th></tr></thead><tbody><tr><td style=text-align:center>1</td><td style=text-align:center>乘方(<code>^</code>)</td><td style=text-align:center>最高(Highest)</td><td style=text-align:center>右结合(Right Associative)</td></tr><tr><td style=text-align:center>2</td><td style=text-align:center>乘法(<code>*</code>) & 除法(<code>/</code>)</td><td style=text-align:center>第二高(Second Highest)</td><td style=text-align:center>右结合(Left Associative)</td></tr><tr><td style=text-align:center>3</td><td style=text-align:center>加法(<code>+</code>) & 减法(<code>-</code>)</td><td style=text-align:center>最低(Lowest)</td><td style=text-align:center>右结合(Left Associative)</td></tr></tbody></table><p>以上表格展示了操作符的默认行为。在表达式计算过程中，计算顺序可以通过小括号来改变。例如<code>a + b * c</code>中，<code>b * c</code>会首先计算，<code>*</code>的优先级比<code>+</code>高。我们可以使用小括号让<code>a + b</code>先计算，<code>(a + b) * c</code>。</p><h3 id=后缀算法>后缀算法</h3><pre tabindex=0><code>Step 1 - scan the expression from left to right(从左到右扫描表达式)
 Step 2 - if it is an operand push it to stack(将操作数 push 到 stack)
 Step 3 - if it is an operator pull operand from stack and perform operation(遇到操作符，从 stack 中 pull 操作数并执行操作)
 Step 4 - store the output of step 3, back to stack(将 Step 3 中的结果 push 回 stack 中)
 Step 5 - scan the expression until all operands are consumed(继续扫描表达式直至所有操作数都被消费)
 Step 6 - pop the stack and perform operation(将 stack 的数据 pop 出来执行操作)
-</code></pre><p>以下是用 Go 语言改写的的算法实现：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// go version go1.16.7 darwin/amd64</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;fmt&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;unicode&#34;</span>
-</span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">size</span> = <span style="color:#ae81ff">25</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// char stack</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stack</span> = make([]<span style="color:#66d9ef">byte</span>, <span style="color:#a6e22e">size</span>)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">top</span> = <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">push</span>(<span style="color:#a6e22e">item</span> <span style="color:#66d9ef">byte</span>) {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">top</span><span style="color:#f92672">++</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">stack</span>[<span style="color:#a6e22e">top</span>] = <span style="color:#a6e22e">item</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">pop</span>() <span style="color:#66d9ef">byte</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ret</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">stack</span>[<span style="color:#a6e22e">top</span>]
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">top</span><span style="color:#f92672">--</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ret</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">precedence</span>(<span style="color:#a6e22e">symbol</span> <span style="color:#66d9ef">byte</span>) <span style="color:#66d9ef">int</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">symbol</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;+&#39;</span>, <span style="color:#e6db74">&#39;-&#39;</span>:
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">2</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;*&#39;</span>, <span style="color:#e6db74">&#39;/&#39;</span>:
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">3</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;^&#39;</span>:
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">4</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;(&#39;</span>, <span style="color:#e6db74">&#39;)&#39;</span>, <span style="color:#e6db74">&#39;#&#39;</span>:
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isOperator</span>(<span style="color:#a6e22e">symbol</span> <span style="color:#66d9ef">byte</span>) <span style="color:#66d9ef">int</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">symbol</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;+&#39;</span>, <span style="color:#e6db74">&#39;-&#39;</span>, <span style="color:#e6db74">&#39;*&#39;</span>, <span style="color:#e6db74">&#39;/&#39;</span>, <span style="color:#e6db74">&#39;^&#39;</span>, <span style="color:#e6db74">&#39;(&#39;</span>, <span style="color:#e6db74">&#39;)&#39;</span>:
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">default</span>:
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">convert</span>(<span style="color:#a6e22e">infix</span> []<span style="color:#66d9ef">byte</span>, <span style="color:#a6e22e">postfix</span> <span style="color:#f92672">*</span>[]<span style="color:#66d9ef">byte</span>) {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">symbol</span> <span style="color:#66d9ef">byte</span> = <span style="color:#ae81ff">0</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">top</span><span style="color:#f92672">++</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">stack</span>[<span style="color:#a6e22e">top</span>] = <span style="color:#e6db74">&#39;#&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">infix</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">symbol</span> = <span style="color:#a6e22e">infix</span>[<span style="color:#a6e22e">i</span>]
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">isOperator</span>(<span style="color:#a6e22e">symbol</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">*</span><span style="color:#a6e22e">postfix</span> = append(<span style="color:#f92672">*</span><span style="color:#a6e22e">postfix</span>, <span style="color:#a6e22e">symbol</span>)
-</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">symbol</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;(&#39;</span> {
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">push</span>(<span style="color:#a6e22e">symbol</span>)
-</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">symbol</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;)&#39;</span> {
-</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">stack</span>[<span style="color:#a6e22e">top</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;(&#39;</span> {
-</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">*</span><span style="color:#a6e22e">postfix</span> = append(<span style="color:#f92672">*</span><span style="color:#a6e22e">postfix</span>, <span style="color:#a6e22e">pop</span>())
-</span></span><span style="display:flex;"><span>                    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">pop</span>() <span style="color:#75715e">// pop put (.</span>
-</span></span><span style="display:flex;"><span>                } <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">precedence</span>(<span style="color:#a6e22e">symbol</span>) &gt; <span style="color:#a6e22e">precedence</span>(<span style="color:#a6e22e">stack</span>[<span style="color:#a6e22e">top</span>]) {
-</span></span><span style="display:flex;"><span>                        <span style="color:#a6e22e">push</span>(<span style="color:#a6e22e">symbol</span>)
-</span></span><span style="display:flex;"><span>                    } <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">precedence</span>(<span style="color:#a6e22e">symbol</span>) <span style="color:#f92672">&lt;=</span> <span style="color:#a6e22e">precedence</span>(<span style="color:#a6e22e">stack</span>[<span style="color:#a6e22e">top</span>]) {
-</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">*</span><span style="color:#a6e22e">postfix</span> = append(<span style="color:#f92672">*</span><span style="color:#a6e22e">postfix</span>, <span style="color:#a6e22e">pop</span>())
-</span></span><span style="display:flex;"><span>                        }
-</span></span><span style="display:flex;"><span>                        <span style="color:#a6e22e">push</span>(<span style="color:#a6e22e">symbol</span>)
-</span></span><span style="display:flex;"><span>                    }
-</span></span><span style="display:flex;"><span>                }
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">stack</span>[<span style="color:#a6e22e">top</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;#&#39;</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">*</span><span style="color:#a6e22e">postfix</span> = append(<span style="color:#f92672">*</span><span style="color:#a6e22e">postfix</span>, <span style="color:#a6e22e">pop</span>())
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// int stack</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stackInt</span> = make([]<span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">size</span>)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">topInt</span> = <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">pushInt</span>(<span style="color:#a6e22e">item</span> <span style="color:#66d9ef">int</span>) {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">topInt</span><span style="color:#f92672">++</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">stackInt</span>[<span style="color:#a6e22e">topInt</span>] = <span style="color:#a6e22e">item</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">popInt</span>() <span style="color:#66d9ef">int</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">tmp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">stackInt</span>[<span style="color:#a6e22e">topInt</span>]
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">topInt</span><span style="color:#f92672">--</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">tmp</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">evaluate</span>(<span style="color:#a6e22e">postfix</span> []<span style="color:#66d9ef">byte</span>) <span style="color:#66d9ef">int</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">operand1</span>, <span style="color:#a6e22e">operand2</span> <span style="color:#66d9ef">int</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">postfix</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">unicode</span>.<span style="color:#a6e22e">IsDigit</span>(rune(<span style="color:#a6e22e">ch</span>)) {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">pushInt</span>(int(<span style="color:#a6e22e">ch</span>) <span style="color:#f92672">-</span> <span style="color:#e6db74">&#39;0&#39;</span>)
-</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">operand2</span> = <span style="color:#a6e22e">popInt</span>()
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">operand1</span> = <span style="color:#a6e22e">popInt</span>()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">ch</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;+&#39;</span>:
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">pushInt</span>(<span style="color:#a6e22e">operand1</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">operand2</span>)
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;-&#39;</span>:
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">pushInt</span>(<span style="color:#a6e22e">operand1</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">operand2</span>)
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;*&#39;</span>:
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">pushInt</span>(<span style="color:#a6e22e">operand1</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">operand2</span>)
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;/&#39;</span>:
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">pushInt</span>(<span style="color:#a6e22e">operand1</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">operand2</span>)
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">stackInt</span>[<span style="color:#a6e22e">topInt</span>]
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">infix</span> <span style="color:#f92672">:=</span> []byte(<span style="color:#e6db74">&#34;(1+2)*(4+5)&#34;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">postfix</span> []<span style="color:#66d9ef">byte</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">convert</span>(<span style="color:#a6e22e">infix</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">postfix</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Infix expression is: %s(%v)\n&#34;</span>, <span style="color:#a6e22e">infix</span>, <span style="color:#a6e22e">infix</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Postfix expression is: %s(%v)\n&#34;</span>, <span style="color:#a6e22e">postfix</span>, <span style="color:#a6e22e">postfix</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Evaluated expression is: %d\n&#34;</span>, <span style="color:#a6e22e">evaluate</span>(<span style="color:#a6e22e">postfix</span>))
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div></div>
-  <footer class="post-footer">
-    <nav class="post-nav">
-      
-      <a class="prev-post" href="../../../../2021/12/29/%E5%AF%B9-coroutine-%E7%9A%84%E4%B8%8D%E6%88%90%E7%86%9F%E7%90%86%E8%A7%A3/">
-        <span class="nav-label">← Prev</span>
-        <span class="nav-title">对 Coroutine 的不成熟理解</span>
-      </a>
-      
-      
-      <a class="next-post" href="../../../../2022/08/10/%E7%BB%99-php-%E5%86%99-c-%E6%89%A9%E5%B1%95/">
-        <span class="nav-label">Next →</span>
-        <span class="nav-title">给 PHP 写 C 扩展</span>
-      </a>
-      
-    </nav>
-  </footer>
-</article>
-
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-left">
-        <span>&copy; 2026 William A</span>
-        <span class="footer-sep">|</span>
-        <span>Love sports, love programming, love life.</span>
-        <span class="footer-sep">|</span>
-        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-beian">粤ICP备20026636号-1</a>
-      </div>
-      <div class="footer-right">
-        <a href='../../../../feed.xml' target="_blank" class="footer-link">RSS</a>
-      </div>
-    </div>
-  </footer>
-
-  <a id="search-index-url" href='../../../../search.json' hidden></a>
-
-  <script src='../../../../assets/js/main.js'></script>
-  
-</body>
-</html>
+</code></pre><p>以下是用 Go 语言改写的的算法实现：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=c1>// go version go1.16.7 darwin/amd64</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>main</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;fmt&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;unicode&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>const</span><span class=w> </span><span class=nx>size</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=mi>25</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// char stack</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=nx>stack</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nb>make</span><span class=p>([]</span><span class=kt>byte</span><span class=p>,</span><span class=w> </span><span class=nx>size</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=nx>top</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=o>-</span><span class=mi>1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>push</span><span class=p>(</span><span class=nx>item</span><span class=w> </span><span class=kt>byte</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>top</span><span class=o>++</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>stack</span><span class=p>[</span><span class=nx>top</span><span class=p>]</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>item</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>pop</span><span class=p>()</span><span class=w> </span><span class=kt>byte</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>ret</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>stack</span><span class=p>[</span><span class=nx>top</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>top</span><span class=o>--</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>return</span><span class=w> </span><span class=nx>ret</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>precedence</span><span class=p>(</span><span class=nx>symbol</span><span class=w> </span><span class=kt>byte</span><span class=p>)</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>switch</span><span class=w> </span><span class=nx>symbol</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>case</span><span class=w> </span><span class=sc>&#39;+&#39;</span><span class=p>,</span><span class=w> </span><span class=sc>&#39;-&#39;</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=mi>2</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>case</span><span class=w> </span><span class=sc>&#39;*&#39;</span><span class=p>,</span><span class=w> </span><span class=sc>&#39;/&#39;</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=mi>3</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>case</span><span class=w> </span><span class=sc>&#39;^&#39;</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=mi>4</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>case</span><span class=w> </span><span class=sc>&#39;(&#39;</span><span class=p>,</span><span class=w> </span><span class=sc>&#39;)&#39;</span><span class=p>,</span><span class=w> </span><span class=sc>&#39;#&#39;</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=mi>1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>return</span><span class=w> </span><span class=mi>0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>isOperator</span><span class=p>(</span><span class=nx>symbol</span><span class=w> </span><span class=kt>byte</span><span class=p>)</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>switch</span><span class=w> </span><span class=nx>symbol</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>case</span><span class=w> </span><span class=sc>&#39;+&#39;</span><span class=p>,</span><span class=w> </span><span class=sc>&#39;-&#39;</span><span class=p>,</span><span class=w> </span><span class=sc>&#39;*&#39;</span><span class=p>,</span><span class=w> </span><span class=sc>&#39;/&#39;</span><span class=p>,</span><span class=w> </span><span class=sc>&#39;^&#39;</span><span class=p>,</span><span class=w> </span><span class=sc>&#39;(&#39;</span><span class=p>,</span><span class=w> </span><span class=sc>&#39;)&#39;</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=mi>1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>default</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=mi>0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>convert</span><span class=p>(</span><span class=nx>infix</span><span class=w> </span><span class=p>[]</span><span class=kt>byte</span><span class=p>,</span><span class=w> </span><span class=nx>postfix</span><span class=w> </span><span class=o>*</span><span class=p>[]</span><span class=kt>byte</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>var</span><span class=w> </span><span class=nx>symbol</span><span class=w> </span><span class=kt>byte</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=mi>0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>top</span><span class=o>++</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>stack</span><span class=p>[</span><span class=nx>top</span><span class=p>]</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=sc>&#39;#&#39;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>for</span><span class=w> </span><span class=nx>i</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=mi>0</span><span class=p>;</span><span class=w> </span><span class=nx>i</span><span class=w> </span><span class=p>&lt;</span><span class=w> </span><span class=nb>len</span><span class=p>(</span><span class=nx>infix</span><span class=p>);</span><span class=w> </span><span class=nx>i</span><span class=o>++</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nx>symbol</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>infix</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=nf>isOperator</span><span class=p>(</span><span class=nx>symbol</span><span class=p>)</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=o>*</span><span class=nx>postfix</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nb>append</span><span class=p>(</span><span class=o>*</span><span class=nx>postfix</span><span class=p>,</span><span class=w> </span><span class=nx>symbol</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>if</span><span class=w> </span><span class=nx>symbol</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=sc>&#39;(&#39;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=nf>push</span><span class=p>(</span><span class=nx>symbol</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>if</span><span class=w> </span><span class=nx>symbol</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=sc>&#39;)&#39;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=k>for</span><span class=w> </span><span class=nx>stack</span><span class=p>[</span><span class=nx>top</span><span class=p>]</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=sc>&#39;(&#39;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                        </span><span class=o>*</span><span class=nx>postfix</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nb>append</span><span class=p>(</span><span class=o>*</span><span class=nx>postfix</span><span class=p>,</span><span class=w> </span><span class=nf>pop</span><span class=p>())</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=nf>pop</span><span class=p>()</span><span class=w> </span><span class=c1>// pop put (.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=k>if</span><span class=w> </span><span class=nf>precedence</span><span class=p>(</span><span class=nx>symbol</span><span class=p>)</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=nf>precedence</span><span class=p>(</span><span class=nx>stack</span><span class=p>[</span><span class=nx>top</span><span class=p>])</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                        </span><span class=nf>push</span><span class=p>(</span><span class=nx>symbol</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                        </span><span class=k>for</span><span class=w> </span><span class=nf>precedence</span><span class=p>(</span><span class=nx>symbol</span><span class=p>)</span><span class=w> </span><span class=o>&lt;=</span><span class=w> </span><span class=nf>precedence</span><span class=p>(</span><span class=nx>stack</span><span class=p>[</span><span class=nx>top</span><span class=p>])</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                            </span><span class=o>*</span><span class=nx>postfix</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nb>append</span><span class=p>(</span><span class=o>*</span><span class=nx>postfix</span><span class=p>,</span><span class=w> </span><span class=nf>pop</span><span class=p>())</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                        </span><span class=nf>push</span><span class=p>(</span><span class=nx>symbol</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>for</span><span class=w> </span><span class=nx>stack</span><span class=p>[</span><span class=nx>top</span><span class=p>]</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=sc>&#39;#&#39;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=o>*</span><span class=nx>postfix</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nb>append</span><span class=p>(</span><span class=o>*</span><span class=nx>postfix</span><span class=p>,</span><span class=w> </span><span class=nf>pop</span><span class=p>())</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// int stack</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=nx>stackInt</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nb>make</span><span class=p>([]</span><span class=kt>int</span><span class=p>,</span><span class=w> </span><span class=nx>size</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=nx>topInt</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=o>-</span><span class=mi>1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>pushInt</span><span class=p>(</span><span class=nx>item</span><span class=w> </span><span class=kt>int</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>topInt</span><span class=o>++</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>stackInt</span><span class=p>[</span><span class=nx>topInt</span><span class=p>]</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>item</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>popInt</span><span class=p>()</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>tmp</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>stackInt</span><span class=p>[</span><span class=nx>topInt</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>topInt</span><span class=o>--</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>return</span><span class=w> </span><span class=nx>tmp</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>evaluate</span><span class=p>(</span><span class=nx>postfix</span><span class=w> </span><span class=p>[]</span><span class=kt>byte</span><span class=p>)</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>var</span><span class=w> </span><span class=nx>operand1</span><span class=p>,</span><span class=w> </span><span class=nx>operand2</span><span class=w> </span><span class=kt>int</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>for</span><span class=w> </span><span class=nx>_</span><span class=p>,</span><span class=w> </span><span class=nx>ch</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>postfix</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=nx>unicode</span><span class=p>.</span><span class=nf>IsDigit</span><span class=p>(</span><span class=nb>rune</span><span class=p>(</span><span class=nx>ch</span><span class=p>))</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nf>pushInt</span><span class=p>(</span><span class=nb>int</span><span class=p>(</span><span class=nx>ch</span><span class=p>)</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=sc>&#39;0&#39;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nx>operand2</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nf>popInt</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nx>operand1</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nf>popInt</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>switch</span><span class=w> </span><span class=nx>ch</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>case</span><span class=w> </span><span class=sc>&#39;+&#39;</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=nf>pushInt</span><span class=p>(</span><span class=nx>operand1</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=nx>operand2</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>case</span><span class=w> </span><span class=sc>&#39;-&#39;</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=nf>pushInt</span><span class=p>(</span><span class=nx>operand1</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=nx>operand2</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>case</span><span class=w> </span><span class=sc>&#39;*&#39;</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=nf>pushInt</span><span class=p>(</span><span class=nx>operand1</span><span class=w> </span><span class=o>*</span><span class=w> </span><span class=nx>operand2</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>case</span><span class=w> </span><span class=sc>&#39;/&#39;</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=nf>pushInt</span><span class=p>(</span><span class=nx>operand1</span><span class=w> </span><span class=o>/</span><span class=w> </span><span class=nx>operand2</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>return</span><span class=w> </span><span class=nx>stackInt</span><span class=p>[</span><span class=nx>topInt</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>infix</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=p>[]</span><span class=nb>byte</span><span class=p>(</span><span class=s>&#34;(1+2)*(4+5)&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>var</span><span class=w> </span><span class=nx>postfix</span><span class=w> </span><span class=p>[]</span><span class=kt>byte</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nf>convert</span><span class=p>(</span><span class=nx>infix</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=nx>postfix</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;Infix expression is: %s(%v)\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>infix</span><span class=p>,</span><span class=w> </span><span class=nx>infix</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;Postfix expression is: %s(%v)\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>postfix</span><span class=p>,</span><span class=w> </span><span class=nx>postfix</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;Evaluated expression is: %d\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nf>evaluate</span><span class=p>(</span><span class=nx>postfix</span><span class=p>))</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div></div><footer class=post-footer><nav class=post-nav aria-label=文章导航><a class=prev-post href=../../../../2021/12/29/%E5%AF%B9-coroutine-%E7%9A%84%E4%B8%8D%E6%88%90%E7%86%9F%E7%90%86%E8%A7%A3/ rel=prev><span class=nav-label>← 上一篇</span>
+<span class=nav-title>对 Coroutine 的不成熟理解</span>
+</a><a class=next-post href=../../../../2022/08/10/%E7%BB%99-php-%E5%86%99-c-%E6%89%A9%E5%B1%95/ rel=next><span class=nav-label>下一篇 →</span>
+<span class=nav-title>给 PHP 写 C 扩展</span></a></nav></footer></article></main><footer class=site-footer><div class=footer-inner><div class=footer-left><span>&copy; 2026 William A</span>
+<span class=footer-sep aria-hidden=true>|</span>
+<span>Love sports, love programming, love life.</span>
+<span class=footer-sep aria-hidden=true>|</span>
+<a href=https://beian.miit.gov.cn/ target=_blank rel="noopener noreferrer" class=footer-link>粤ICP备20026636号-1</a></div><div class=footer-right><a href=../../../../feed.xml class=footer-link>RSS</a></div></div></footer><button type=button class=back-to-top id=backToTop data-back-to-top aria-label=回到顶部 title=回到顶部>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+</button>
+<script src=../../../../js/main.min.4cf3a756b96ad86df0852be0501346002e700dde96badd078781a698d8be15c1.js integrity="sha256-TPOnVrlq2G3whSvgUBNGAC5wDd6Wut0Hh4GmmNi+FcE=" defer></script></body></html>

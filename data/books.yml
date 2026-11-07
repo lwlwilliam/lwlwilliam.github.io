@@ -1,4 +1,6 @@
-2026:
+# 书架数据：technical = 技术书，other = 其他书
+technical:
+  2026:
   - name: 人工智能核心：神经网络（青少科普版）
     info: ISBN 9787302578437
     complete: false
@@ -11,7 +13,7 @@
     info: ISBN 9787115598134
     complete: false
     collect: true
-2025:
+  2025:
   - name: Linux 是怎样工作的
     info: ISBN 9787115581617
     complete: true
@@ -24,12 +26,12 @@
     info: ISBN 9787302643937
     complete: true
     collect: true
-2024:
+  2024:
   - name: Learn C the Hard Way
     info: ISBN 9787115477309
     complete: false
     collect: true
-2023:
+  2023:
   - name: Crafting Interpreters
     info: ISBN 9780990582939
     complete: false
@@ -62,13 +64,14 @@
     info: ISBN 9787115537973
     complete: false
     collect: false
-2022:
+  2022:
   - name: Python编程：从入门到实践
     info: ISBN 9787115428028
     complete: true
     collect: true
   - name: PHP Internals Book
-    info: <a href="https://www.phpinternalsbook.com" target="_blank">PHP Internals Book</a>
+    info: <a href="https://www.phpinternalsbook.com" target="_blank">PHP Internals
+      Book</a>
     complete: false
     collect: true
   - name: 编译器设计（第2版）
@@ -95,7 +98,7 @@
     info: ISBN 9787562836681
     complete: true
     collect: false
-2021:
+  2021:
   - name: Linux C编程一站式学习
     info: ISBN 9787121097713
     complete: true
@@ -188,7 +191,7 @@
     info: 宫文学 / 极客时间
     complete: true
     collect: true
-2020:
+  2020:
   - name: Go 语言学习笔记
     info: ISBN 9787121291609
     complete: true
@@ -253,8 +256,7 @@
     info: ISBN 9787115447630
     complete: true
     collect: true
-
-2019:
+  2019:
   - name: 计算机网络：自顶向下方法(第5版影印版)
     info: ISBN 9787040449518
     complete: false
@@ -327,8 +329,7 @@
     info: ISBN 9780201079814 / Alfred V. Aho / Brian W. Kernighan / Peter J. Weinberger
     complete: true
     collect: true
-
-2018:
+  2018:
   - name: PHP 核心技术与最佳实践
     info: ISBN 9787111401926
     complete: false
@@ -365,8 +366,7 @@
     info: ISBN 9787115351531
     complete: true
     collect: false
-
-2017:
+  2017:
   - name: JavaScript 高级程序设计(第3版)
     info: ISBN 9787115275790
     complete: false
@@ -387,3 +387,9 @@
     info: ISBN 9781593279523 / William Shotts
     complete: true
     collect: false
+other:
+  2025:
+  - name: 小岛经济学
+    info: ISBN 9787508649221
+    remark: true
+    collect: true

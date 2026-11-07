@@ -1,14 +1,13 @@
 {{ define "main" }}
 <div class="links-page">
+  <h1 class="page-title">{{ .Title }}</h1>
   <div class="link-grid">
-    {{ range $index, $link := hugo.Data.links }}
-    <a href="{{ $link.url }}" target="_blank" class="link-card fade-in-up" rel="noopener noreferrer">
-      <div class="link-card-body">
-        <h3 class="link-card-name">{{ $link.name }}</h3>
-        <span class="link-card-arrow">→</span>
-      </div>
+    {{- range hugo.Data.links }}
+    <a href="{{ .url }}" target="_blank" rel="noopener noreferrer" class="link-card">
+      <h2 class="link-card-name">{{ .name }}</h2>
+      <span class="link-card-arrow" aria-hidden="true">↗</span>
     </a>
-    {{ end }}
+    {{- end }}
   </div>
 </div>
 {{ end }}

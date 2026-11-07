@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -198,8 +197,8 @@ func (a *APIService) handleBuild(w http.ResponseWriter, r *http.Request) {
 	}
 
 	start := time.Now()
-	// --cleanDestinationDir：构建时清掉产物里源码已不存在的文件
-	cmd := exec.Command(hugoPath, "--cleanDestinationDir", "--quiet")
+	// --cleanDestinationDir 清理陈旧产物，--minify 压缩生成的 HTML。
+	cmd := exec.Command(hugoPath, "--cleanDestinationDir", "--minify", "--quiet")
 	cmd.Dir = a.site.Root
 	out, err := cmd.CombinedOutput()
 	secs := time.Since(start).Seconds()
@@ -288,5 +287,3 @@ func decodeBody(r *http.Request, v any) error {
 	}
 	return nil
 }
-
-var _ = log.Printf

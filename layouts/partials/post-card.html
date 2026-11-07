@@ -1,0 +1,16 @@
+{{- $page := . -}}
+<article class="post-card">
+  <h2 class="post-card-title">
+    <a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="{{ $page.Date.Format "2006-01-02" }}">{{ $page.Date.Format "2006年1月2日" }}</time>
+    {{- with $page.Params.categories }}
+    <span class="post-card-categories">
+      {{- partial "category-links.html" (dict "categories" $page.Params.categories "class" "category-pill-sm") }}
+    </span>
+    {{- end }}
+  </div>
+  <p class="post-card-excerpt">{{ $page.Summary | plainify | truncate site.Params.excerptLength }}</p>
+  <a href="{{ $page.RelPermalink }}" class="post-card-readmore" aria-label="阅读全文：{{ $page.Title }}">Read more <span aria-hidden="true">→</span></a>
+</article>

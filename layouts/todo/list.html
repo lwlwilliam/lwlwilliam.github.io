@@ -1,17 +1,18 @@
 {{ define "main" }}
 <div class="todo-page">
+  <h1 class="page-title">{{ .Title }}</h1>
   <div class="todo-grid">
-    {{ range hugo.Data.todo }}
-    <div class="todo-card fade-in-up">
+    {{- range hugo.Data.todo }}
+    <article class="todo-card">
       <div class="todo-card-header">
-        <span class="todo-checkbox">📋</span>
-        <h3 class="todo-name">{{ .name }}</h3>
+        <span class="todo-checkbox" aria-hidden="true"></span>
+        <h2 class="todo-name">{{ .name }}</h2>
       </div>
-      {{ with .remark }}
+      {{- with .remark }}
       <p class="todo-remark">{{ . }}</p>
-      {{ end }}
-    </div>
-    {{ end }}
+      {{- end }}
+    </article>
+    {{- end }}
   </div>
 </div>
 {{ end }}
